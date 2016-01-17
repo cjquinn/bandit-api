@@ -1,2 +1,2 @@
-# bandit
-Be the Bandit
+# Bandit
+_Be the Bandit_

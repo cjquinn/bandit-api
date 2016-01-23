@@ -21,6 +21,11 @@ class LoginsTable extends Table
      */
     public function initialize(array $config)
     {
+        $this->addAssociations([
+            'hasOne' => [
+                'Players'
+            ]
+        ]);
         $this->addBehavior('Timestamp');
     }
 

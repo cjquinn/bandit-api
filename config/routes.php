@@ -33,6 +33,14 @@ Router::scope('/', function ($routes) {
         'controller' => 'Logins',
         'action' => 'resetPassword'
     ]);
+
+    /**
+     * Players
+     */
+    $routes->connect('/invite-player', [
+        'controller' => 'Players',
+        'action' => 'invite'
+    ]);
 });
 
 Plugin::routes();

@@ -203,3 +203,10 @@ Configure::write('Email', [
     'support' => 'support@bandit.localhost',
     'welcome' => 'welcome@bandit.localhost',
 ]);
+
+/**
+ * Bandit config
+ */
+Configure::write('Bandit', [
+    'initialRating' => 1200
+]);

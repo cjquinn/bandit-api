@@ -2,6 +2,12 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Player;
+
+use ArrayObject;
+
+use Cake\Core\Configure;
+use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -44,5 +50,15 @@ class PlayersTable extends Table
     {
         $rules->add($rules->existsIn(['login_id'], 'Logins'));
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function beforeSave(Event $event, Player $player, ArrayObject $options)
+    {
+        if ($player->isNew()) {
+            $player->set('rating', Configure::read('Bandit.initialRating'));
+        }
     }
 }

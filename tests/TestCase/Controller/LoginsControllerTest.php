@@ -2,11 +2,9 @@
 
 namespace App\Test\TestCase\Controller;
 
-use Cake\Auth\DefaultPasswordHasher;
 use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
-use Lighthouse\Logins\Controller\UsersController;
 
 class LoginsControllerTest extends IntegrationTestCase
 {

@@ -39,7 +39,7 @@ Router::scope('/', function ($routes) {
      */
     $routes->connect('/invite-player', [
         'controller' => 'Players',
-        'action' => 'invite'
+        'action' => 'add'
     ]);
 });
 

@@ -8,7 +8,7 @@ class PlayersController extends AppController
     /**
      * @return void
      */
-    public function invite()
+    public function add()
     {
     	$player = $this->Players->newEntity();
 
@@ -17,7 +17,7 @@ class PlayersController extends AppController
 
     		if ($this->Players->save($player)) {
     			return $this->redirect([
-    				'action' => 'invite'
+    				'action' => 'add'
     			]);
     		}
 

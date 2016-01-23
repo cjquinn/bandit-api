@@ -12,7 +12,7 @@ class PlayersControllerTest extends IntegrationTestCase
 	/**
 	 * @return void
 	 */
-	public function testInviteUnauthorised()
+	public function testAddUnauthorised()
 	{
 		$this->get('/invite-player');
 
@@ -25,7 +25,7 @@ class PlayersControllerTest extends IntegrationTestCase
 	/**
 	 * @return void
 	 */
-	public function testInviteGet()
+	public function testAddGet()
 	{
 		$this->_setAuthSession('1');
 
@@ -37,7 +37,7 @@ class PlayersControllerTest extends IntegrationTestCase
 	/**
 	 * @return void
 	 */
-	public function testInviteBadData()
+	public function testAddBadData()
 	{
 		$this->_setAuthSession('1');
 
@@ -54,7 +54,7 @@ class PlayersControllerTest extends IntegrationTestCase
 	/**
 	 * @return void
 	 */
-	public function testInvitePost()
+	public function testAddPost()
 	{
 		$this->_setAuthSession('1');
 
@@ -67,7 +67,7 @@ class PlayersControllerTest extends IntegrationTestCase
 
 		$this->assertRedirect([
 			'controller' => 'Players',
-			'action' => 'invite'
+			'action' => 'add'
 		]);
 	}
 }

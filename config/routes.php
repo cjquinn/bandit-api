@@ -6,6 +6,33 @@ use Cake\Routing\Router;
 Router::defaultRouteClass('DashedRoute');
 
 Router::scope('/', function ($routes) {
+    /**
+     * Logins
+     */
+    $routes->connect('/activate-account', [
+        'controller' => 'Logins',
+        'action' => 'activateAccount'
+    ]);
+
+    $routes->connect('/login', [
+        'controller' => 'Logins',
+        'action' => 'login'
+    ]);
+
+    $routes->connect('/logout', [
+        'controller' => 'Logins',
+        'action' => 'logout'
+    ]);
+
+    $routes->connect('/request-password-reset', [
+        'controller' => 'Logins',
+        'action' => 'requestPasswordReset'
+    ]);
+
+    $routes->connect('/reset-password', [
+        'controller' => 'Logins',
+        'action' => 'resetPassword'
+    ]);
 });
 
 Plugin::routes();

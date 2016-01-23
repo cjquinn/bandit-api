@@ -24,7 +24,7 @@ class CreateLogins extends AbstractMigration
         $table->addColumn('password', 'string', [
             'default' => null,
             'limit' => 255,
-            'null' => false,
+            'null' => true,
         ]);
         $table->addColumn('token', 'string', [
             'default' => null,

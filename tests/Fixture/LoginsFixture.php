@@ -11,15 +11,17 @@ class LoginsFixture extends TestFixture
         'table' => 'logins'
     ];
 
-    public $records = [
-        [
-            'id' => 1,
-            'email' => 'christyjquinn@gmail.com',
-            'password' => 'password',
-            'token' => null,
-            'token_sent' => null,
-            'created' => '2015-10-19 12:26:09',
-            'modified' => '2015-10-19 12:26:09'
-        ]
-    ];
+    public function init()
+    {
+    	$this->records = [
+    		[
+		    	'id' => 1,
+		    	'email' => 'christy@bandit.localhost',
+		    	'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
+    		]
+	    ];
+
+	    parent::init();
+    }
 }

@@ -51,7 +51,7 @@ class LoginsController extends AppController
             $this->Logins->createToken($login);
             $this->Logins->save($login);
 
-            // $this->getMailer('Login')->send('activateAccount', [$login]);
+            $this->getMailer('Login')->send('activateAccount', [$login]);
 
             $this->Flash->info('Your account activation link has expired, please check your email for your new link');
 
@@ -138,7 +138,7 @@ class LoginsController extends AppController
                 $this->Logins->createToken($login);
                 $this->Logins->save($login);
 
-                // $this->getMailer('Login')->send('resetPassword', [$login]);
+                $this->getMailer('Login')->send('resetPassword', [$login]);
 
                 $this->Flash->success('Password reset requested, please check your email');
                 

@@ -16,6 +16,8 @@ class PlayersController extends AppController
     		$this->Players->patchEntity($player, $this->request->data);
 
     		if ($this->Players->save($player)) {
+                $this->Flash->success('Player invited');
+
     			return $this->redirect([
     				'action' => 'add'
     			]);
@@ -25,5 +27,33 @@ class PlayersController extends AppController
     	}
 
     	$this->set('player', $player);
+    }
+
+    /**
+     * @return void
+     */
+    public function edit()
+    {
+        $player = $this->Players->get($this->Auth->user('player.id'), [
+            'contain' => [
+                'Logins'
+            ]
+        ]);
+
+        if ($this->request->is('put')) {
+            $this->Players->patchEntity($player, $this->request->data);
+
+            if ($this->Players->save($player)) {
+                $this->Flash->success('Profile updated');
+
+                return $this->redirect([
+                    'action' => 'edit'
+                ]);
+            }
+
+            $this->Flash->error('There was an error, please try again');
+        }
+
+        $this->set('player', $player);
     }
 }

@@ -21,7 +21,10 @@ trait ControllerTestTrait
         $this->session([
             'Auth' => [
                 'User' => [
-                    'id' => $id
+                    'id' => $id,
+                    'player' => [
+                        'id' => $id
+                    ]
                 ]
             ]
         ]);

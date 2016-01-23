@@ -70,4 +70,66 @@ class PlayersControllerTest extends IntegrationTestCase
 			'action' => 'add'
 		]);
 	}
+
+	/**
+	 * @return void
+	 */
+	public function testEditUnauthorised()
+	{
+		$this->get('/profile');
+
+		$this->assertRedirect([
+			'controller' => 'Logins',
+			'action' => 'login'
+		]);
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testEditGet()
+	{
+		$this->_setAuthSession('1');
+
+		$this->get('/profile');
+
+		$this->assertResponseOk();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testEditBadData()
+	{
+		$this->_setAuthSession('1');
+
+		$this->put('/profile', [
+			'name' => '',
+			'login' => [
+				'email' => ''
+			]
+		]);
+
+		$this->assertNoRedirect();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function testEditPut()
+	{
+		$this->_setAuthSession('1');
+
+		$this->put('/profile', [
+			'name' => 'Christy Quinn',
+			'login' => [
+				'email' => 'christy@bandit.localhost'
+			]
+		]);
+
+		$this->assertRedirect([
+			'controller' => 'Players',
+			'action' => 'edit'
+		]);
+	}
 }

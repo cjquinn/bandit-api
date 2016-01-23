@@ -41,6 +41,11 @@ Router::scope('/', function ($routes) {
         'controller' => 'Players',
         'action' => 'add'
     ]);
+
+    $routes->connect('/profile', [
+        'controller' => 'Players',
+        'action' => 'edit'
+    ]);
 });
 
 Plugin::routes();

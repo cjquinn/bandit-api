@@ -100,6 +100,7 @@ class LoginsTable extends Table
     public function findAuth(Query $query, array $options)
     {
         $query
+            ->contain(['Players'])
             ->where(['password IS NOT' => null]);
 
         return $query;

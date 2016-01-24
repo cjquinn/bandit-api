@@ -6,6 +6,7 @@ trait ControllerTestTrait
 {
 
     public $fixtures = [
+        'app.files',
         'app.logins',
         'app.players'
     ];

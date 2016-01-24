@@ -22,7 +22,11 @@ class PlayersTable extends Table
     {
         $this->addAssociations([
             'belongsTo' => [
-                'Logins'
+                'Logins',
+                'ProfilePictures' => [
+                    'className' => 'Files',
+                    'foreignKey' => 'profile_picture_id'
+                ]
             ]
         ]);
     }

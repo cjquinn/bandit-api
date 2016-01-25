@@ -167,5 +167,6 @@ class PlayersControllerTest extends IntegrationTestCase
 
         $this->assertResponseOk();
         $this->assertNotEmpty($player->winning_profile_picture);
+        $this->assertEquals('winning_profile_picture.png', $player->winning_profile_picture->name);
     }
 }

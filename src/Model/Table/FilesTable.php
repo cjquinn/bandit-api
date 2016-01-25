@@ -70,8 +70,14 @@ class FilesTable extends Table
             ) {
                 $avatar = $this->_createAvatar($file->tmp_name);
 
+                $file->set([
+                    'name' => ($file->source() === 'LosingProfilePictures' ? 'losing' : 'winning') . '_profile_picture.png',
+                    'size' => strlen($avatar),
+                    'type' => 'image/png'
+                ]);
+
                 // REPLACE WITH A BUCKET YOU DIRK
-                file_put_contents(WWW_ROOT . 'img' . DS . 'test.png', $avatar);
+                // file_put_contents(WWW_ROOT . 'img' . DS . 'test.png', $avatar);
             }
         }
     }

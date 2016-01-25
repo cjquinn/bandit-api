@@ -36,7 +36,9 @@ class PlayersController extends AppController
     {
         $player = $this->Players->get($this->Auth->user('player.id'), [
             'contain' => [
-                'Logins'
+                'Logins',
+                'LosingProfilePictures',
+                'WinningProfilePictures'
             ]
         ]);
 

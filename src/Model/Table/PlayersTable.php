@@ -96,6 +96,10 @@ class PlayersTable extends Table
             $player->set('rating', Configure::read('Bandit.initialRating'));
         }
 
+        if ($player->losing_profile_picture && $player->losing_profile_picture->isNew()) {
+            $player->losing_profile_picture->set('player_id', $player->id);
+        }
+
         if ($player->winning_profile_picture && $player->winning_profile_picture->isNew()) {
             $player->winning_profile_picture->set('player_id', $player->id);
         }

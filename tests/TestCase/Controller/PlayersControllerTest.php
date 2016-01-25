@@ -59,12 +59,14 @@ class PlayersControllerTest extends IntegrationTestCase
     {
         $this->_setAuthSession('1');
 
-        $this->post('/invite-player', [
+        $data = [
             'name' => 'Russell Bishop',
             'login' => [
                 'email' => 'russell@bandit.localhost'
             ]
-        ]);
+        ];
+
+        $this->post('/invite-player', $data);
 
         $this->assertRedirect([
             'controller' => 'Players',

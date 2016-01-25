@@ -64,6 +64,16 @@ class FilesTable extends Table
      */
     public function beforeSave(Event $event, File $file, ArrayObject $options)
     {
+        if ($file->isNew()) {
+            if ($file->source() === 'LosingProfilePictures' ||
+                $file->source() === 'WinningProfilePictures'
+            ) {
+                $avatar = $this->_createAvatar($file->tmp_name);
+
+                // REPLACE WITH A BUCKET YOU DIRK
+                file_put_contents(WWW_ROOT . 'img' . DS . 'test.png', $avatar);
+            }
+        }
     }
 
     /**
@@ -81,11 +91,11 @@ class FilesTable extends Table
         $aspectRatio = $width / $height;
 
         if ($aspectRatio > 1) {
+            $resizedWidth = 150 / $aspectRatio;
             $resizedHeight = 150;
-            $resizedWidth = $width * $aspectRatio;
         } else {
-            $resizedHeight = $height * $aspectRatio;
             $resizedWidth = 150;
+            $resizedHeight = 150 / $aspectRatio;
         }
 
         $resizedImage = imagecreatetruecolor($resizedWidth, $resizedHeight);

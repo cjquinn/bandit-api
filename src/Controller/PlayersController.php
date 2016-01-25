@@ -10,23 +10,23 @@ class PlayersController extends AppController
      */
     public function add()
     {
-    	$player = $this->Players->newEntity();
+        $player = $this->Players->newEntity();
 
-    	if ($this->request->is('post')) {
-    		$this->Players->patchEntity($player, $this->request->data);
+        if ($this->request->is('post')) {
+            $this->Players->patchEntity($player, $this->request->data);
 
-    		if ($this->Players->save($player)) {
+            if ($this->Players->save($player)) {
                 $this->Flash->success('Player invited');
 
-    			return $this->redirect([
-    				'action' => 'add'
-    			]);
-    		}
+                return $this->redirect([
+                    'action' => 'add'
+                ]);
+            }
 
-    		$this->Flash->error('There was an error, please try again');
-    	}
+            $this->Flash->error('There was an error, please try again');
+        }
 
-    	$this->set('player', $player);
+        $this->set('player', $player);
     }
 
     /**
@@ -45,13 +45,9 @@ class PlayersController extends AppController
 
             if ($this->Players->save($player)) {
                 $this->Flash->success('Profile updated');
-
-                return $this->redirect([
-                    'action' => 'edit'
-                ]);
+            } else {
+                $this->Flash->error('There was an error, please try again');
             }
-
-            $this->Flash->error('There was an error, please try again');
         }
 
         $this->set('player', $player);

@@ -17,6 +17,8 @@ class Player extends Entity
     protected $_accessible = [
         'name' => true,
         'login' => true,
+        'losing_profile_picture' => true,
+        'winning_profile_picture' => true,
         '*' => false
     ];
 }

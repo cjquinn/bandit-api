@@ -55,8 +55,8 @@ class LoginsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->requirePresence('email')
-            ->notEmpty('email', 'You must enter an email')
+            ->requirePresence('email', 'create')
+            ->notEmpty('email')
             ->add('email', 'valid', [
                 'message' => 'You must enter a valid email',
                 'rule' => 'email'

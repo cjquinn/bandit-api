@@ -48,6 +48,30 @@ class PlayersTable extends Table
             ->requirePresence('login', 'create')
             ->notEmpty('login');
 
+        $validator->add('losing_profile_picture', 'file', [
+            'rule' => [
+                'uploadedFile',
+                [
+                    'types' => [
+                        'image/jpeg',
+                        'image/png'
+                    ]
+                ]
+            ]
+        ]);
+
+        $validator->add('winning_profile_picture', 'file', [
+            'rule' => [
+                'uploadedFile',
+                [
+                    'types' => [
+                        'image/jpeg',
+                        'image/png'
+                    ]
+                ]
+            ]
+        ]);
+
         return $validator;
     }
 
@@ -57,6 +81,9 @@ class PlayersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['login_id'], 'Logins'));
+        $rules->add($rules->existsIn(['losing_profile_picture_id'], 'LosingProfilePictures'));
+        $rules->add($rules->existsIn(['winning_profile_picture_id'], 'WinningProfilePictures'));
+
         return $rules;
     }
 
@@ -67,6 +94,10 @@ class PlayersTable extends Table
     {
         if ($player->isNew()) {
             $player->set('rating', Configure::read('Bandit.initialRating'));
+        }
+
+        if ($player->winning_profile_picture && $player->winning_profile_picture->isNew()) {
+            $player->winning_profile_picture->set('player_id', $player->id);
         }
     }
 }

@@ -59,14 +59,12 @@ class PlayersControllerTest extends IntegrationTestCase
     {
         $this->_setAuthSession('1');
 
-        $data = [
+        $this->post('/invite-player', [
             'name' => 'Russell Bishop',
             'login' => [
                 'email' => 'russell@bandit.localhost'
             ]
-        ];
-
-        $this->post('/invite-player', $data);
+        ]);
 
         $this->assertRedirect([
             'controller' => 'Players',
@@ -102,24 +100,7 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditBadData()
-    {
-        $this->_setAuthSession('1');
-
-        $this->put('/profile', [
-            'name' => '',
-            'login' => [
-                'email' => ''
-            ]
-        ]);
-
-        $this->assertNoRedirect();
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditPutBasic()
+    public function testEditPut()
     {
         $this->_setAuthSession('1');
 
@@ -130,43 +111,6 @@ class PlayersControllerTest extends IntegrationTestCase
             ]
         ]);
 
-        $player = TableRegistry::get('Players')->get(1, [
-            'contain' => [
-                'Logins'
-            ]
-        ]);
-
         $this->assertResponseOk();
-
-        $this->assertEquals('Christy J Quinn', $player->name);
-        $this->assertEquals('quinn@bandit.localhost', $player->login->email);
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditPutFile()
-    {
-        $this->_setAuthSession('1');
-
-        $this->put('/profile', [
-            'winning_profile_picture' => [
-                'name' => 'test.jpg',
-                'tmp_name' => TESTS . 'test.jpg',
-                'type' => 'image/jpeg',
-                'error' => 0,
-                'size' => 127807
-            ]
-        ]);
-
-        $player = TableRegistry::get('Players')->get(1, [
-            'contain' => [
-                'WinningProfilePictures'
-            ]
-        ]);
-
-        $this->assertResponseOk();
-        $this->assertNotEmpty($player->winning_profile_picture);
-        $this->assertEquals('winning_profile_picture.png', $player->winning_profile_picture->name);
     }
 }

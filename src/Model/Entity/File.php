@@ -2,6 +2,7 @@
 
 namespace App\Model\Entity;
 
+use Cake\Core\Configure;
 use Cake\ORM\Entity;
 
 /**
@@ -20,4 +21,12 @@ class File extends Entity
         'player' => false,
         '*' => true,
     ];
+
+    /**
+     * @return string
+     */
+    protected function _getKey()
+    {
+        return Configure::read('Aws.S3.keyBase') . DS . $this->player_id . DS . $this->name;
+    }
 }

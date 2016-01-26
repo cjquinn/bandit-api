@@ -197,11 +197,17 @@ Type::build('date')->useLocaleParser();
 Type::build('datetime')->useLocaleParser();
 
 /**
- * Email addresses
+ * Environment
  */
-Configure::write('Email', [
-    'support' => 'support@bandit.localhost',
-    'welcome' => 'welcome@bandit.localhost',
+Configure::write('env', isset($_SERVER['DEVELOPMENT_ENV']) ? $_SERVER['DEVELOPMENT_ENV'] : 'local');
+
+/**
+ * Aws
+ */
+Configure::write('Aws.region', 'eu-west-1');
+Configure::write('Aws.S3', [
+    'bucket' => 'bandit-bucket',
+    'keyBase' => Configure::read('env')
 ]);
 
 /**
@@ -209,4 +215,12 @@ Configure::write('Email', [
  */
 Configure::write('Bandit', [
     'initialRating' => 1200
+]);
+
+/**
+ * Email addresses
+ */
+Configure::write('Email', [
+    'support' => 'support@bandit.localhost',
+    'welcome' => 'welcome@bandit.localhost',
 ]);

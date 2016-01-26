@@ -8,6 +8,7 @@ use ArrayObject;
 
 use Aws\S3\S3Client;
 
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -76,8 +77,7 @@ class FilesTable extends Table
                     'type' => 'image/png'
                 ]);
 
-                // REPLACE WITH A BUCKET YOU DIRK
-                // file_put_contents(WWW_ROOT . 'img' . DS . 'test.png', $avatar);
+                $this->_putFile($file->key, $avatar);
             }
         }
     }
@@ -97,7 +97,7 @@ class FilesTable extends Table
         $aspectRatio = $width / $height;
 
         if ($aspectRatio > 1) {
-            $resizedWidth = 150 / $aspectRatio;
+            $resizedWidth = 150 * $aspectRatio;
             $resizedHeight = 150;
         } else {
             $resizedWidth = 150;
@@ -113,5 +113,34 @@ class FilesTable extends Table
         ob_start();
         imagepng($croppedImage);
         return ob_get_clean();
+    }
+
+    /**
+     * Puts a file in an S3 bucket
+     *
+     * @param string $key The key of the file
+     * @param string $body The body of the file
+     * @return \Aws\Result
+     */
+    private function _putFile($key, $body)
+    {
+        $s3 = new S3Client([
+            'credentials' => Configure::read('Aws.credentials'),
+            'region' => Configure::read('Aws.region'),
+            'version' => 'latest'
+        ]);
+
+        $result = $s3->putObject([
+            'Bucket' => Configure::read('Aws.S3.bucket'),
+            'Key' => $key,
+            'Body' => $body
+        ]);
+
+        $s3->waitUntil('ObjectExists', [
+            'Bucket' => Configure::read('Aws.S3.bucket'),
+            'Key' => $key
+        ]);
+
+        return $result;
     }
 }

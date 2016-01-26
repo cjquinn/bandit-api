@@ -29,4 +29,25 @@ class File extends Entity
     {
         return Configure::read('Aws.S3.keyBase') . DS . $this->player_id . DS . $this->name;
     }
+
+    /**
+     * @return string
+     */
+    protected function _getUrl()
+    {
+        $s3 = new S3Client([
+            'credentials' => Configure::read('Aws.credentials'),
+            'region' => Configure::read('Aws.region'),
+            'version' => 'latest'
+        ]);
+
+        $command = $s3->getCommand('GetObject', [
+            'Bucket' => Configure::read('Aws.S3.bucketName'),
+            'Key' => $this->key
+        ]);
+
+        $request = $s3->createPresignedRequest($command, '+20 minutes');
+
+        return (string)$request->getUri();
+    }
 }

@@ -27,6 +27,10 @@ class PlayersTable extends Table
                     'className' => 'Files',
                     'foreignKey' => 'losing_profile_picture_id'
                 ],
+                'ProfilePictures' => [
+                    'className' => 'Files',
+                    'foreignKey' => 'profile_picture_id'
+                ],
                 'WinningProfilePictures' => [
                     'className' => 'Files',
                     'foreignKey' => 'winning_profile_picture_id'
@@ -49,6 +53,18 @@ class PlayersTable extends Table
             ->notEmpty('login');
 
         $validator->add('losing_profile_picture', 'file', [
+            'rule' => [
+                'uploadedFile',
+                [
+                    'types' => [
+                        'image/jpeg',
+                        'image/png'
+                    ]
+                ]
+            ]
+        ]);
+
+        $validator->add('profile_picture', 'file', [
             'rule' => [
                 'uploadedFile',
                 [

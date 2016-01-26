@@ -13,6 +13,15 @@ class AddProfilePictureIdToPlayers extends AbstractMigration
     public function change()
     {
         $table = $this->table('players');
+        $table->addColumn('profile_picture_id', 'integer', [
+            'default' => null,
+            'limit' => 11,
+            'null' => true,
+        ]);
+        $table->addForeignKey('profile_picture_id', 'files', 'id', [
+            'update' => 'RESTRICT',
+            'delete' => 'RESTRICT'
+        ]);
         $table->addColumn('losing_profile_picture_id', 'integer', [
             'default' => null,
             'limit' => 11,

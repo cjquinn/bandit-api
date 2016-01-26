@@ -12,6 +12,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Utility\Inflector;
 use Cake\Validation\Validator;
 
 class FilesTable extends Table
@@ -65,20 +66,19 @@ class FilesTable extends Table
      */
     public function beforeSave(Event $event, File $file, ArrayObject $options)
     {
-        if ($file->isNew()) {
-            if ($file->source() === 'LosingProfilePictures' ||
-                $file->source() === 'WinningProfilePictures'
-            ) {
-                $avatar = $this->_createAvatar($file->tmp_name);
+        if ($file->isNew() &&
+            $file->source() !== 'Files'
+        ) {
+            $avatar = $this->_createAvatar($file->tmp_name);
+            $name = Inflector::singularize(Infelctor::underscore($this->source()));
 
-                $file->set([
-                    'name' => ($file->source() === 'LosingProfilePictures' ? 'losing' : 'winning') . '_profile_picture.png',
-                    'size' => strlen($avatar),
-                    'type' => 'image/png'
-                ]);
+            $file->set([
+                'name' => $name . '.jpg',
+                'size' => strlen($avatar),
+                'type' => 'image/jpeg'
+            ]);
 
-                $this->_putFile($file->key, $avatar);
-            }
+            $this->_putFile($file->key, $avatar);
         }
     }
 
@@ -111,7 +111,7 @@ class FilesTable extends Table
         imagecopy($croppedImage, $resizedImage, 0, 0, ($resizedWidth - 150) / 2, ($resizedHeight - 150) / 2, 150, 150);
 
         ob_start();
-        imagepng($croppedImage);
+        imagejpeg($croppedImage);
         return ob_get_clean();
     }
 

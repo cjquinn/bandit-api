@@ -38,6 +38,7 @@ class PlayersController extends AppController
             'contain' => [
                 'Logins',
                 'LosingProfilePictures',
+                'ProfilePictures',
                 'WinningProfilePictures'
             ]
         ]);

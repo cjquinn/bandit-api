@@ -52,41 +52,47 @@ class PlayersTable extends Table
             ->requirePresence('login', 'create')
             ->notEmpty('login');
 
-        $validator->add('losing_profile_picture', 'file', [
-            'rule' => [
-                'uploadedFile',
-                [
-                    'types' => [
-                        'image/jpeg',
-                        'image/png'
+        $validator
+            ->allowEmpty('losing_profile_picture')
+            ->add('losing_profile_picture', 'file', [
+                'rule' => [
+                    'uploadedFile',
+                    [
+                        'types' => [
+                            'image/jpeg',
+                            'image/png'
+                        ]
                     ]
                 ]
-            ]
-        ]);
+            ]);
 
-        $validator->add('profile_picture', 'file', [
-            'rule' => [
-                'uploadedFile',
-                [
-                    'types' => [
-                        'image/jpeg',
-                        'image/png'
+        $validator
+            ->allowEmpty('profile_picture')
+            ->add('profile_picture', 'file', [
+                'rule' => [
+                    'uploadedFile',
+                    [
+                        'types' => [
+                            'image/jpeg',
+                            'image/png'
+                        ]
                     ]
                 ]
-            ]
-        ]);
+            ]);
 
-        $validator->add('winning_profile_picture', 'file', [
-            'rule' => [
-                'uploadedFile',
-                [
-                    'types' => [
-                        'image/jpeg',
-                        'image/png'
+        $validator
+            ->allowEmpty('winning_profile_picture')
+            ->add('winning_profile_picture', 'file', [
+                'rule' => [
+                    'uploadedFile',
+                    [
+                        'types' => [
+                            'image/jpeg',
+                            'image/png'
+                        ]
                     ]
                 ]
-            ]
-        ]);
+            ]);
 
         return $validator;
     }

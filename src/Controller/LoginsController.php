@@ -68,7 +68,7 @@ class LoginsController extends AppController
             ]);
         }
 
-        if ($this->request->is('post')) {
+        if ($this->request->is('put')) {
             $this->Logins->setPassword($login, $this->request->data['password']);
 
             if ($this->Logins->save($login)) {
@@ -84,6 +84,7 @@ class LoginsController extends AppController
 
             $this->Flash->error('You must enter a password, please try again');
         }
+
 
         $this->set('login', $login);
     }

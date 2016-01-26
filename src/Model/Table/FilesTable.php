@@ -70,7 +70,7 @@ class FilesTable extends Table
             $file->source() !== 'Files'
         ) {
             $avatar = $this->_createAvatar($file->tmp_name);
-            $name = Inflector::singularize(Infelctor::underscore($this->source()));
+            $name = Inflector::singularize(Inflector::underscore($file->source()));
 
             $file->set([
                 'name' => $name . '.jpg',

@@ -42,7 +42,7 @@ Router::scope('/', function ($routes) {
         'action' => 'add'
     ]);
 
-    $routes->connect('/profile', [
+    $routes->connect('/account', [
         'controller' => 'Players',
         'action' => 'edit'
     ]);

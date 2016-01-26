@@ -2,6 +2,8 @@
 
 namespace App\Model\Entity;
 
+use Aws\S3\S3Client;
+
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
 
@@ -42,7 +44,7 @@ class File extends Entity
         ]);
 
         $command = $s3->getCommand('GetObject', [
-            'Bucket' => Configure::read('Aws.S3.bucketName'),
+            'Bucket' => Configure::read('Aws.S3.bucket'),
             'Key' => $this->key
         ]);
 

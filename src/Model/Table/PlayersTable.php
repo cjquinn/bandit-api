@@ -10,6 +10,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 
 class PlayersTable extends Table
@@ -58,6 +59,7 @@ class PlayersTable extends Table
                 'rule' => [
                     'uploadedFile',
                     [
+                        'optional' => true,
                         'types' => [
                             'image/jpeg',
                             'image/png'
@@ -72,6 +74,7 @@ class PlayersTable extends Table
                 'rule' => [
                     'uploadedFile',
                     [
+                        'optional' => true,
                         'types' => [
                             'image/jpeg',
                             'image/png'
@@ -86,6 +89,7 @@ class PlayersTable extends Table
                 'rule' => [
                     'uploadedFile',
                     [
+                        'optional' => true,
                         'types' => [
                             'image/jpeg',
                             'image/png'
@@ -104,9 +108,28 @@ class PlayersTable extends Table
     {
         $rules->add($rules->existsIn(['login_id'], 'Logins'));
         $rules->add($rules->existsIn(['losing_profile_picture_id'], 'LosingProfilePictures'));
+        $rules->add($rules->existsIn(['profile_picture_id'], 'ProfilePictures'));
         $rules->add($rules->existsIn(['winning_profile_picture_id'], 'WinningProfilePictures'));
 
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    {
+        if (Hash::get($data, 'losing_profile_picture.error') === 4) {
+            unset($data['losing_profile_picture']);
+        }
+
+        if (Hash::get($data, 'profile_picture.error') === 4) {
+            unset($data['profile_picture']);
+        }
+
+        if (Hash::get($data, 'winning_profile_picture.error') === 4) {
+            unset($data['winning_profile_picture']);
+        }
     }
 
     /**
@@ -120,6 +143,10 @@ class PlayersTable extends Table
 
         if ($player->losing_profile_picture && $player->losing_profile_picture->isNew()) {
             $player->losing_profile_picture->set('player_id', $player->id);
+        }
+
+        if ($player->profile_picture && $player->profile_picture->isNew()) {
+            $player->profile_picture->set('player_id', $player->id);
         }
 
         if ($player->winning_profile_picture && $player->winning_profile_picture->isNew()) {

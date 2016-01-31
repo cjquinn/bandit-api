@@ -46,7 +46,7 @@ class LoginMailer extends Mailer
      */
     public function implementedEvents()
     {
-        return ['Model.afterSave' => 'afterRegister'];
+        return defined('TESTING') ? [] : ['Model.afterSave' => 'afterRegister'];
     }
 
     /**

@@ -1,4 +1,7 @@
 <?php
+
+define('TESTING', true);
+
 /**
  * Test runner bootstrap.
  *

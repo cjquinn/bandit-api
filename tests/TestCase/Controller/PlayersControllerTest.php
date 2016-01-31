@@ -77,7 +77,7 @@ class PlayersControllerTest extends IntegrationTestCase
      */
     public function testEditUnauthorised()
     {
-        $this->get('/profile');
+        $this->get('/account');
 
         $this->assertRedirect([
             'controller' => 'Logins',
@@ -92,7 +92,7 @@ class PlayersControllerTest extends IntegrationTestCase
     {
         $this->_setAuthSession('1');
 
-        $this->get('/profile');
+        $this->get('/account');
 
         $this->assertResponseOk();
     }
@@ -104,7 +104,7 @@ class PlayersControllerTest extends IntegrationTestCase
     {
         $this->_setAuthSession('1');
 
-        $this->put('/profile', [
+        $this->put('/account', [
             'name' => 'Christy J Quinn',
             'login' => [
                 'email' => 'quinn@bandit.localhost'

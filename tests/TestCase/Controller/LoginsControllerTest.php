@@ -91,7 +91,7 @@ class LoginsControllerTest extends IntegrationTestCase
         ]);
         $logins->save($login);
 
-        $this->post('/activate-account?token=123', [
+        $this->put('/activate-account?token=123', [
             'password' => ''
         ]);
         
@@ -115,7 +115,7 @@ class LoginsControllerTest extends IntegrationTestCase
         ]);
         $logins->save($login);
 
-        $this->post('/activate-account?token=123', [
+        $this->put('/activate-account?token=123', [
             'password' => 'password'
         ]);
         

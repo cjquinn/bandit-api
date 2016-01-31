@@ -78,7 +78,7 @@ class FilesTable extends Table
                 'type' => 'image/jpeg'
             ]);
 
-            $this->_putFile($file->key, $avatar);
+            $this->_putFile($file, $avatar);
         }
     }
 
@@ -122,7 +122,7 @@ class FilesTable extends Table
      * @param string $body The body of the file
      * @return \Aws\Result
      */
-    private function _putFile($key, $body)
+    private function _putFile(File $file, $body)
     {
         $s3 = new S3Client([
             'credentials' => Configure::read('Aws.credentials'),
@@ -132,13 +132,14 @@ class FilesTable extends Table
 
         $result = $s3->putObject([
             'Bucket' => Configure::read('Aws.S3.bucket'),
-            'Key' => $key,
+            'Key' => $file->key,
             'Body' => $body
         ]);
 
         $s3->waitUntil('ObjectExists', [
             'Bucket' => Configure::read('Aws.S3.bucket'),
-            'Key' => $key
+            'Key' => $file->key,
+            'ContentType' => $file->type
         ]);
 
         return $result;

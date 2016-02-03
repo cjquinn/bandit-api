@@ -46,6 +46,14 @@ Router::scope('/', function ($routes) {
         'controller' => 'Players',
         'action' => 'edit'
     ]);
+
+    /**
+     * Results
+     */
+    $routes->connect('/add-results', [
+        'controller' => 'Results',
+        'action' => 'addResults'
+    ]);
 });
 
 Plugin::routes();

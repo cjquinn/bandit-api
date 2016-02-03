@@ -8,7 +8,8 @@ trait ControllerTestTrait
     public $fixtures = [
         'app.files',
         'app.logins',
-        'app.players'
+        'app.players',
+        'app.results'
     ];
 
     /**

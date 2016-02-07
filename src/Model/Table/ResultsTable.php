@@ -6,7 +6,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class PlayersTable extends Table
+class ResultsTable extends Table
 {
 
     /**

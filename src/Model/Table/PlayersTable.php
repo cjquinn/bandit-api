@@ -23,19 +23,7 @@ class PlayersTable extends Table
     {
         $this->addAssociations([
             'belongsTo' => [
-                'Logins',
-                'LosingProfilePictures' => [
-                    'className' => 'Files',
-                    'foreignKey' => 'losing_profile_picture_id'
-                ],
-                'ProfilePictures' => [
-                    'className' => 'Files',
-                    'foreignKey' => 'profile_picture_id'
-                ],
-                'WinningProfilePictures' => [
-                    'className' => 'Files',
-                    'foreignKey' => 'winning_profile_picture_id'
-                ]
+                'Logins'
             ]
         ]);
     }
@@ -56,21 +44,6 @@ class PlayersTable extends Table
         $validator
             ->allowEmpty('losing_profile_picture')
             ->add('losing_profile_picture', 'file', [
-                'rule' => [
-                    'uploadedFile',
-                    [
-                        'optional' => true,
-                        'types' => [
-                            'image/jpeg',
-                            'image/png'
-                        ]
-                    ]
-                ]
-            ]);
-
-        $validator
-            ->allowEmpty('profile_picture')
-            ->add('profile_picture', 'file', [
                 'rule' => [
                     'uploadedFile',
                     [
@@ -107,29 +80,8 @@ class PlayersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['login_id'], 'Logins'));
-        $rules->add($rules->existsIn(['losing_profile_picture_id'], 'LosingProfilePictures'));
-        $rules->add($rules->existsIn(['profile_picture_id'], 'ProfilePictures'));
-        $rules->add($rules->existsIn(['winning_profile_picture_id'], 'WinningProfilePictures'));
-
+        
         return $rules;
-    }
-
-    /**
-     * @return void
-     */
-    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
-    {
-        if (Hash::get($data, 'losing_profile_picture.error') === 4) {
-            unset($data['losing_profile_picture']);
-        }
-
-        if (Hash::get($data, 'profile_picture.error') === 4) {
-            unset($data['profile_picture']);
-        }
-
-        if (Hash::get($data, 'winning_profile_picture.error') === 4) {
-            unset($data['winning_profile_picture']);
-        }
     }
 
     /**
@@ -140,17 +92,81 @@ class PlayersTable extends Table
         if ($player->isNew()) {
             $player->set('rating', Configure::read('Bandit.initialRating'));
         }
+    }
 
-        if ($player->losing_profile_picture && $player->losing_profile_picture->isNew()) {
-            $player->losing_profile_picture->set('player_id', $player->id);
+    /**
+     * @param \App\Model\Entity\Player $player The player object
+     * @param string $tmpName The tmp name
+     * @param string $type (Losing | winning)
+     * @return void
+     */
+    public function setProfilePicture(Player $player, $tmpName, $type)
+    {
+        $avatar = $this->_createAvatar($tmpName);
+        $this->_putFile($player->id . DS . $type . '_profile_picture.jpg', $avatar, 'image/jpeg');
+    }
+
+    /**
+     * Creates an avatar from an uploaded image
+     *
+     * @param string $tmpName The tmp_name of the file uploaded
+     * @return string
+     */
+    private function _createAvatar($tmpName)
+    {
+        list($width, $height, $type) = getimagesize($tmpName);
+
+        $image = $type === IMAGETYPE_JPEG ? imagecreatefromjpeg($tmpName) : imagecreatefrompng($tmpName);
+
+        $aspectRatio = $width / $height;
+
+        if ($aspectRatio > 1) {
+            $resizedWidth = 150 * $aspectRatio;
+            $resizedHeight = 150;
+        } else {
+            $resizedWidth = 150;
+            $resizedHeight = 150 / $aspectRatio;
         }
 
-        if ($player->profile_picture && $player->profile_picture->isNew()) {
-            $player->profile_picture->set('player_id', $player->id);
-        }
+        $resizedImage = imagecreatetruecolor($resizedWidth, $resizedHeight);
+        imagecopyresampled($resizedImage, $image, 0, 0, 0, 0, $resizedWidth, $resizedHeight, $width, $height);
 
-        if ($player->winning_profile_picture && $player->winning_profile_picture->isNew()) {
-            $player->winning_profile_picture->set('player_id', $player->id);
-        }
+        $croppedImage = imagecreatetruecolor(150, 150);
+        imagecopy($croppedImage, $resizedImage, 0, 0, ($resizedWidth - 150) / 2, ($resizedHeight - 150) / 2, 150, 150);
+
+        ob_start();
+        imagejpeg($croppedImage);
+        return ob_get_clean();
+    }
+
+    /**
+     * Puts a file in an S3 bucket
+     *
+     * @param string $key The key of the file
+     * @param string $body The body of the file
+     * @param string $type The type of the file
+     * @return \Aws\Result
+     */
+    private function _putFile($key, $body, $type)
+    {
+        $s3 = new S3Client([
+            'credentials' => Configure::read('Aws.credentials'),
+            'region' => Configure::read('Aws.region'),
+            'version' => 'latest'
+        ]);
+
+        $result = $s3->putObject([
+            'Bucket' => Configure::read('Aws.S3.bucket'),
+            'Key' => Configure::read('Aws.S3.keyBase') . DS . $key,
+            'Body' => $body
+        ]);
+
+        $s3->waitUntil('ObjectExists', [
+            'Bucket' => Configure::read('Aws.S3.bucket'),
+            'Key' => Configure::read('Aws.S3.keyBase') . DS . $key,
+            'ContentType' => $type
+        ]);
+
+        return $result;
     }
 }

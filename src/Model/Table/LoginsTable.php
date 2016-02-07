@@ -52,6 +52,48 @@ class LoginsTable extends Table
     /**
      * @return \Cake\Validation\Validator
      */
+    public function validationActivate(Validator $validator)
+    {
+        $validator = $this->validationPassword($validator);
+
+        if (!defined('TESTING')) {
+            $validator
+                ->requirePresence('losing_profile_picture')
+                ->notEmpty('losing_profile_picture')
+                ->add('losing_profile_picture', 'file', [
+                    'rule' => [
+                        'uploadedFile',
+                        [
+                            'types' => [
+                                'image/jpeg',
+                                'image/png'
+                            ]
+                        ]
+                    ]
+                ]);
+
+            $validator
+                ->requirePresence('winning_profile_picture')
+                ->notEmpty('winning_profile_picture')
+                ->add('winning_profile_picture', 'file', [
+                    'rule' => [
+                        'uploadedFile',
+                        [
+                            'types' => [
+                                'image/jpeg',
+                                'image/png'
+                            ]
+                        ]
+                    ]
+                ]);
+        }
+
+        return $validator;
+    }
+
+    /**
+     * @return \Cake\Validation\Validator
+     */
     public function validationDefault(Validator $validator)
     {
         $validator
@@ -68,13 +110,32 @@ class LoginsTable extends Table
     /**
      * @return \Cake\Validation\Validator
      */
-    public function validationSetPassword(Validator $validator)
+    public function validationPassword(Validator $validator)
     {
         $validator
             ->requirePresence('password')
             ->notEmpty('password');
 
         return $validator;
+    }
+
+    /**
+     * Activates an account
+     *
+     * @param \App\Model\Entity\Login $login The login object
+     * @param array $data The data array
+     * @return void
+     */
+    public function activateAccount(Login $login, array $data)
+    {
+        $this->patchEntity($login, $data, [
+            'validate' => 'activate'
+        ]);
+
+        $login->set([
+            'token' => null,
+            'token_sent' => null
+        ], ['guard' => false]);
     }
 
     /**
@@ -110,15 +171,13 @@ class LoginsTable extends Table
      * Sets a login's password
      *
      * @param \App\Model\Entity\Login $login The Login to update
-     * @param string $password The new password
+     * @param array $data The data array
      * @return void
      */
-    public function setPassword(Login $login, $password)
+    public function setPassword(Login $login, array $data)
     {
-        $this->patchEntity($login, [
-            'password' => $password
-        ], [
-            'validate' => 'setPassword'
+        $this->patchEntity($login, $data, [
+            'validate' => 'password'
         ]);
 
         $login->set([
@@ -137,6 +196,7 @@ class LoginsTable extends Table
     {
         $login = $this
             ->findByToken(Hash::get($query, 'token'))
+            ->contain(['Players'])
             ->first();
 
         return $login;

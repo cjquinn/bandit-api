@@ -8,7 +8,10 @@ class ResultsController extends AppController
     /**
      * @return void
      */
-    public function addResults()
+    public function initialize()
     {
+        parent::initialize();
+
+        $this->loadComponent('RequestHandler');
     }
 }

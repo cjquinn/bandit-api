@@ -47,13 +47,12 @@ Router::scope('/', function ($routes) {
         'action' => 'edit'
     ]);
 
+    $routes->extensions(['json']);
+    
     /**
      * Results
      */
-    $routes->connect('/add-results', [
-        'controller' => 'Results',
-        'action' => 'addResults'
-    ]);
+    $routes->resources('Results');
 });
 
 Plugin::routes();

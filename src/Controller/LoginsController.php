@@ -71,7 +71,16 @@ class LoginsController extends AppController
         }
 
         if ($this->request->is('put')) {
-            $this->Logins->setPassword($login, $this->request->data['password']);
+            $this->Logins->activateAccount($login, $this->request->data);
+
+            if (!$login->errors() &&
+                !empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name')) &&
+                !empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))
+            ) {
+                $this->Logins->Players->setProfilePicture($login->player, $this->request->data['losing_profile_picture']['tmp_name'], 'losing');
+
+                $this->Logins->Players->setProfilePicture($login->player, $this->request->data['winning_profile_picture']['tmp_name'], 'winning');
+            }
 
             if ($this->Logins->save($login)) {
                 $this->Flash->success('Account activated, please login with your password');
@@ -84,7 +93,7 @@ class LoginsController extends AppController
                 ]);
             }
 
-            $this->Flash->error('You must enter a password, please try again');
+            $this->Flash->error('There was an error, please try again');
         }
 
 
@@ -178,7 +187,7 @@ class LoginsController extends AppController
         }
 
         if ($this->request->is('post')) {
-            $this->Logins->setPassword($login, $this->request->data['password']);
+            $this->Logins->setPassword($login, $this->request->data);
 
             if ($this->Logins->save($login)) {
                 $this->Flash->success('Password reset, please login with your new password');

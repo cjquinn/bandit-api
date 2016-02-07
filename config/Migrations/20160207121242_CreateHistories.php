@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class CreateResults extends AbstractMigration
+class CreateHistories extends AbstractMigration
 {
     /**
      * Change Method.
@@ -12,27 +12,39 @@ class CreateResults extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('results');
-        $table->addColumn('loser_id', 'integer', [
+        $table = $this->table('histories', [
+            'id' => false,
+            'primary_key' => [
+                'player_id',
+                'result_id'
+            ]
+        ]);
+        $table->addColumn('player_id', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false,
         ]);
-        $table->addForeignKey('loser_id', 'players', 'id', [
+        $table->addForeignKey('player_id', 'players', 'id', [
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
-        $table->addColumn('winner_id', 'integer', [
+        $table->addColumn('result_id', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false,
         ]);
-        $table->addForeignKey('winner_id', 'players', 'id', [
+        $table->addForeignKey('result_id', 'results', 'id', [
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
-        $table->addColumn('date', 'datetime', [
+        $table->addColumn('difference', 'integer', [
             'default' => null,
+            'limit' => 11,
+            'null' => false,
+        ]);
+        $table->addColumn('rating', 'integer', [
+            'default' => null,
+            'limit' => 11,
             'null' => false,
         ]);
         $table->create();

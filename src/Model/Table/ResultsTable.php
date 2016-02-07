@@ -17,13 +17,9 @@ class PlayersTable extends Table
         $this->addAssociations([
             'belongsTo' => [
                 'Logins',
-                'Receivers' => [
+                'Losers' => [
                     'className' => 'Players',
-                    'foreignKey' => 'receiver_id'
-                ],
-                'Senders' => [
-                    'className' => 'Players',
-                    'foreignKey' => 'sender_id'
+                    'foreignKey' => 'loser_id'
                 ],
                 'Winners' => [
                     'className' => 'Players',
@@ -39,13 +35,15 @@ class PlayersTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->requirePresence('receiver_id', 'create')
-            ->notEmpty('receiver_id');
+            ->requirePresence('loser_id', 'create')
+            ->notEmpty('loser_id');
 
         $validator
             ->requirePresence('date', 'create')
             ->notEmpty('date')
-            ->add('date', 'valid', ['rule' => 'datetime']);
+            ->add('date', 'valid', [
+                'rule' => 'datetime'
+            ]);
 
         return $validator;
     }
@@ -55,8 +53,7 @@ class PlayersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['receiver_id'], 'Receivers'));
-        $rules->add($rules->existsIn(['sender_id'], 'Senders'));
+        $rules->add($rules->existsIn(['loser_id'], 'Losers'));
         $rules->add($rules->existsIn(['winner_id'], 'Winners'));
 
         return $rules;

@@ -160,7 +160,8 @@ class PlayersTable extends Table
         $result = $s3->putObject([
             'Bucket' => Configure::read('Aws.S3.bucket'),
             'Key' => Configure::read('Aws.S3.keyBase') . $key,
-            'Body' => $body
+            'Body' => $body,
+            'ContentType' => $type
         ]);
 
         $s3->waitUntil('ObjectExists', [

@@ -199,15 +199,21 @@ Type::build('datetime')->useLocaleParser();
 /**
  * Environment
  */
-Configure::write('env', isset($_SERVER['DEVELOPMENT_ENV']) ? $_SERVER['DEVELOPMENT_ENV'] : 'local');
+if (!Configure::check('env')) {
+    die('Add env');
+}
 
 /**
  * Aws
  */
+if (!Configure::check('Aws.credentials')) {
+    die('Add Amazon Web Services credentials');
+}
+
 Configure::write('Aws.region', 'eu-west-1');
 Configure::write('Aws.S3', [
     'bucket' => 'bandit-bucket',
-    'keyBase' => Configure::read('env')
+    'keyBase' => Configure::read('env') . DS
 ]);
 
 /**

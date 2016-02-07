@@ -6,6 +6,8 @@ use App\Model\Entity\Player;
 
 use ArrayObject;
 
+use Aws\S3\S3Client;
+
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
@@ -157,13 +159,13 @@ class PlayersTable extends Table
 
         $result = $s3->putObject([
             'Bucket' => Configure::read('Aws.S3.bucket'),
-            'Key' => Configure::read('Aws.S3.keyBase') . DS . $key,
+            'Key' => Configure::read('Aws.S3.keyBase') . $key,
             'Body' => $body
         ]);
 
         $s3->waitUntil('ObjectExists', [
             'Bucket' => Configure::read('Aws.S3.bucket'),
-            'Key' => Configure::read('Aws.S3.keyBase') . DS . $key,
+            'Key' => Configure::read('Aws.S3.keyBase') . $key,
             'ContentType' => $type
         ]);
 

@@ -6,6 +6,7 @@ use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Mailer\MailerAwareTrait;
 use Cake\Routing\Router;
+use Cake\Utility\Hash;
 
 class LoginsController extends AppController
 {

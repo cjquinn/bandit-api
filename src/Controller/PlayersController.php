@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Cake\Utility\Hash;
+
 class PlayersController extends AppController
 {
 
@@ -36,15 +38,22 @@ class PlayersController extends AppController
     {
         $player = $this->Players->get($this->Auth->user('player.id'), [
             'contain' => [
-                'Logins',
-                'LosingProfilePictures',
-                'ProfilePictures',
-                'WinningProfilePictures'
+                'Logins'
             ]
         ]);
 
         if ($this->request->is('put')) {
             $this->Players->patchEntity($player, $this->request->data);
+
+            if (!$player->errors()) {
+                if (!empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name'))) {
+                    $this->Players->setProfilePicture($player, $this->request->data['losing_profile_picture']['tmp_name'], 'losing');
+                }
+                
+                if (!empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))) {
+                    $this->Players->setProfilePicture($player, $this->request->data['winning_profile_picture']['tmp_name'], 'winning');
+                }
+            }
 
             if ($this->Players->save($player)) {
                 $this->Flash->success('Profile updated');

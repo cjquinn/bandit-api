@@ -13,15 +13,21 @@ class LoginsFixture extends TestFixture
 
     public function init()
     {
-    	$this->records = [
-    		[
-		    	'id' => 1,
-		    	'email' => 'christy@bandit.localhost',
-		    	'created' => date('Y-m-d H:i:s'),
+        $this->records = [
+            [
+                'id' => 1,
+                'email' => 'christy@bandit.localhost',
+                'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
-    		]
-	    ];
+            ],
+            [
+                'id' => 2,
+                'email' => 'russell@bandit.localhost',
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
+            ]
+        ];
 
-	    parent::init();
+        parent::init();
     }
 }

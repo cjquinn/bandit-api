@@ -60,9 +60,9 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAuthSession('1');
 
         $this->post('/invite-player', [
-            'name' => 'Russell Bishop',
+            'name' => 'Nathan Rathbone',
             'login' => [
-                'email' => 'russell@bandit.localhost'
+                'email' => 'nathan@bandit.localhost'
             ]
         ]);
 

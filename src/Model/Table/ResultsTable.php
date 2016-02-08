@@ -25,6 +25,22 @@ class ResultsTable extends Table
                     'className' => 'Players',
                     'foreignKey' => 'winner_id'
                 ]
+            ],
+            'hasMany' => [
+                'LosersHistories' => [
+                    'className' => 'Histories',
+                    'foreignKey' => [
+                        'loser_id',
+                        'result_id'
+                    ]
+                ],
+                'WinnersHistories' => [
+                    'className' => 'Histories',
+                    'foreignKey' => [
+                        'winner_id',
+                        'result_id'
+                    ]
+                ]
             ]
         ]);
     }

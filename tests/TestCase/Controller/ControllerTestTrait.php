@@ -6,8 +6,10 @@ trait ControllerTestTrait
 {
 
     public $fixtures = [
+        'app.histories',
         'app.logins',
-        'app.players'
+        'app.players',
+        'app.results'
     ];
 
     /**
@@ -26,6 +28,20 @@ trait ControllerTestTrait
                         'id' => $id
                     ]
                 ]
+            ]
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    private function _setAjaxRequest()
+    {
+        $_ENV['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
+
+        $this->configRequest([
+            'headers' => [
+                'Accept' => 'application/json'
             ]
         ]);
     }

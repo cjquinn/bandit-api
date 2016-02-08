@@ -52,7 +52,13 @@ Router::scope('/', function ($routes) {
     /**
      * Results
      */
-    $routes->resources('Results');
+    $routes->resources('Results', [
+        'only' => [
+            'create',
+            'index',
+            'view'
+        ]
+    ]);
 });
 
 Plugin::routes();

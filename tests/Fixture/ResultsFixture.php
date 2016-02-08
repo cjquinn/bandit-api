@@ -13,7 +13,14 @@ class ResultsFixture extends TestFixture
 
     public function init()
     {
-        $this->records = [];
+        $this->records = [
+            [
+                'id' => 1,
+                'loser_id' => 2,
+                'winner_id' => 1,
+                'date' => date('Y-m-d H:i:s')
+            ]
+        ];
 
         parent::init();
     }

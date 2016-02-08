@@ -55,31 +55,27 @@ class ResultsController extends AppController
 
     /**
      * @return void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException
-     */
-    public function delete($id)
-    {
-    }
-
-    /**
-     * @return void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException
-     */
-    public function edit($id)
-    {
-    }
-
-    /**
-     * @return void
      */
     public function index()
     {
+        $results = $this->Results->find();
+
+        $this->set([
+            'results' => $results,
+            '_serialize' => 'results'
+        ]);
     }
 
     /**
      * @return void
      */
-    public function view()
+    public function view($id)
     {
+        $result = $this->Results->get($id);
+
+        $this->set([
+            'result' => $result,
+            '_serialize' => 'result'
+        ]);
     }
 }

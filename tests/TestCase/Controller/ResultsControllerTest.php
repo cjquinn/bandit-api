@@ -68,4 +68,54 @@ class ResultsControllerTest extends IntegrationTestCase
 
         $this->assertResponseCode(200);
     }
+
+    /**
+     * @return void
+     */
+    public function testIndexUnauthorised()
+    {
+        $this->_setAjaxRequest();
+
+        $this->get('results.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testIndexGet()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->get('results.json');
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewUnauthorised()
+    {
+        $this->_setAjaxRequest();
+
+        $this->get('results/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewGet()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->get('results/1.json');
+
+        $this->assertResponseCode(200);
+    }
 }

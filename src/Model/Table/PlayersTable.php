@@ -109,6 +109,21 @@ class PlayersTable extends Table
     }
 
     /**
+     * @param \App\Model\Entity\Player $losingPlayer The losing player
+     * @param \App\Model\Entity\Player $winningPlayer The winning player
+     * @param bool $isDraw If the result was a draw
+     * @return void
+     */
+    public function updateRatings(Player $losingPlayer, Player $winningPlayer, $isDraw = false)
+    {
+        $score = $isDraw ? 0.5 : 0;
+        $this->_updateRating($losingPlayer, $score, $this->_expectedScore($winningPlayer, $losingPlayer));
+
+        $score = $isDraw ? 0.5 : 1;
+        $this->_updateRating($winningPlayer, $score, $this->_expectedScore($losingPlayer, $winningPlayer));
+    }
+
+    /**
      * Creates an avatar from an uploaded image
      *
      * @param string $tmpName The tmp_name of the file uploaded
@@ -142,6 +157,16 @@ class PlayersTable extends Table
     }
 
     /**
+     * @param \App\Model\Entity\Player $losingPlayer The losing player
+     * @param \App\Model\Entity\Player $winningPlayer The winning player
+     * @return float
+     */
+    private function _expectedScore(Player $losingPlayer, Player $winningPlayer)
+    {
+        return 1 / (1 + (pow(10, ($losingPlayer->rating - $winningPlayer->rating) / 400)));
+    }
+
+    /**
      * Puts a file in an S3 bucket
      *
      * @param string $key The key of the file
@@ -171,5 +196,17 @@ class PlayersTable extends Table
         ]);
 
         return $result;
+    }
+
+    /**
+     * @param \App\Model\Entity\Player $player The player
+     * @param float $score (0 | 0.5 | 1)
+     * @param float $expectedScore The players expected score
+     * @return void
+     */
+    private function _updateRating(Player $player, $score, $expectedScore)
+    {
+        $player->set('rating', $player->rating + (32 * ($score - $expectedScore)));
+        $this->save($player);
     }
 }

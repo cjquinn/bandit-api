@@ -116,11 +116,14 @@ class PlayersTable extends Table
      */
     public function updateRatings(Player $losingPlayer, Player $winningPlayer, $isDraw = false)
     {
+        $losingPlayersExpectedScore = $this->_expectedScore($winningPlayer, $losingPlayer);
+        $winningPlayersExpectedScore = $this->_expectedScore($losingPlayer, $winningPlayer);
+
         $score = $isDraw ? 0.5 : 0;
-        $this->_updateRating($losingPlayer, $score, $this->_expectedScore($winningPlayer, $losingPlayer));
+        $this->_updateRating($losingPlayer, $score, $losingPlayersExpectedScore);
 
         $score = $isDraw ? 0.5 : 1;
-        $this->_updateRating($winningPlayer, $score, $this->_expectedScore($losingPlayer, $winningPlayer));
+        $this->_updateRating($winningPlayer, $score, $winningPlayersExpectedScore);
     }
 
     /**
@@ -163,7 +166,7 @@ class PlayersTable extends Table
      */
     private function _expectedScore(Player $losingPlayer, Player $winningPlayer)
     {
-        return 1 / (1 + (pow(10, ($losingPlayer->rating - $winningPlayer->rating) / 400)));
+        return 1 / (1 + pow(10, ($losingPlayer->rating - $winningPlayer->rating) / 400));
     }
 
     /**
@@ -206,7 +209,7 @@ class PlayersTable extends Table
      */
     private function _updateRating(Player $player, $score, $expectedScore)
     {
-        $player->set('rating', $player->rating + (32 * ($score - $expectedScore)));
+        $player->set('rating', $player->rating + 32 * ($score - $expectedScore));
         $this->save($player);
     }
 }

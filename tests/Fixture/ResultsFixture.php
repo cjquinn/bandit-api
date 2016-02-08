@@ -16,8 +16,8 @@ class ResultsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'loser_id' => 2,
-                'winner_id' => 1,
+                'loser_id' => 1,
+                'winner_id' => 2,
                 'date' => date('Y-m-d H:i:s')
             ]
         ];

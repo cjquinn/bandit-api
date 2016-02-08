@@ -13,7 +13,20 @@ class HistoriesFixture extends TestFixture
 
     public function init()
     {
-        $this->records = [];
+        $this->records = [
+            [
+                'player_id' => 1,
+                'result_id' => 1,
+                'difference' => -32,
+                'rating' => 1168
+            ],
+            [
+                'player_id' => 2,
+                'result_id' => 1,
+                'difference' => 32,
+                'rating' => 1232
+            ]
+        ];
 
         parent::init();
     }

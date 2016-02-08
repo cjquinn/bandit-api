@@ -17,7 +17,7 @@ class PlayersFixture extends TestFixture
             [
                 'id' => 1,
                 'login_id' => 1,
-                'rating' => 1200,
+                'rating' => 1168,
                 'name' => 'Christy Quinn'
             ],
             [

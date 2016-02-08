@@ -74,25 +74,4 @@ class ResultsTable extends Table
 
         return $rules;
     }
-
-    /**
-     * @param \App\Model\Entity\Player $losingPlayer The losing player
-     * @param \App\Model\Entity\Player $winningPlayer The winning player
-     * @return float
-     */
-    public function expectedScore(Player $losingPlayer, Player $winningPlayer)
-    {
-        return 1 / (1 + (pow(10, ($losingPlayer->rating - $winningPlayer->rating) / 400)));
-    }
-
-    /**
-     * @param \App\Model\Entity\Player $player The player
-     * @param float $score (0 | 0.5 | 1)
-     * @param float $expectedScore The players expected score
-     * @return float
-     */
-    public function updateRating(Player $player, $score, $expectedScore)
-    {
-        return $player->rating + (32 * ($score - $expectedScore));
-    }
 }

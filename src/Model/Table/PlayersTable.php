@@ -97,6 +97,16 @@ class PlayersTable extends Table
     }
 
     /**
+     * @param \App\Model\Entity\Player $losingPlayer The losing player
+     * @param \App\Model\Entity\Player $winningPlayer The winning player
+     * @return float
+     */
+    public function expectedScore(Player $losingPlayer, Player $winningPlayer)
+    {
+        return 1 / (1 + pow(10, ($losingPlayer->rating - $winningPlayer->rating) / 400));
+    }
+
+    /**
      * @param \App\Model\Entity\Player $player The player object
      * @param string $tmpName The tmp name
      * @param string $type (Losing | winning)
@@ -116,8 +126,8 @@ class PlayersTable extends Table
      */
     public function updateRatings(Player $losingPlayer, Player $winningPlayer, $isDraw = false)
     {
-        $losingPlayersExpectedScore = $this->_expectedScore($winningPlayer, $losingPlayer);
-        $winningPlayersExpectedScore = $this->_expectedScore($losingPlayer, $winningPlayer);
+        $losingPlayersExpectedScore = $this->expectedScore($winningPlayer, $losingPlayer);
+        $winningPlayersExpectedScore = $this->expectedScore($losingPlayer, $winningPlayer);
 
         $score = $isDraw ? 0.5 : 0;
         $this->_updateRating($losingPlayer, $score, $losingPlayersExpectedScore);
@@ -157,16 +167,6 @@ class PlayersTable extends Table
         ob_start();
         imagejpeg($croppedImage);
         return ob_get_clean();
-    }
-
-    /**
-     * @param \App\Model\Entity\Player $losingPlayer The losing player
-     * @param \App\Model\Entity\Player $winningPlayer The winning player
-     * @return float
-     */
-    private function _expectedScore(Player $losingPlayer, Player $winningPlayer)
-    {
-        return 1 / (1 + pow(10, ($losingPlayer->rating - $winningPlayer->rating) / 400));
     }
 
     /**

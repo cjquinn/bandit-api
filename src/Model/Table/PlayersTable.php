@@ -3,6 +3,7 @@
 namespace App\Model\Table;
 
 use App\Model\Entity\Player;
+use App\Model\Entity\Result;
 
 use ArrayObject;
 
@@ -26,6 +27,9 @@ class PlayersTable extends Table
         $this->addAssociations([
             'belongsTo' => [
                 'Logins'
+            ],
+            'hasMany' => [
+                'Results'
             ]
         ]);
     }
@@ -119,21 +123,23 @@ class PlayersTable extends Table
     }
 
     /**
-     * @param \App\Model\Entity\Player $losingPlayer The losing player
-     * @param \App\Model\Entity\Player $winningPlayer The winning player
+     * @param \App\Model\Entity\Result $result The result object
      * @param bool $isDraw If the result was a draw
      * @return void
      */
-    public function updateRatings(Player $losingPlayer, Player $winningPlayer, $isDraw = false)
+    public function updateRatings(Result $result, $isDraw = false)
     {
-        $losingPlayersExpectedScore = $this->expectedScore($winningPlayer, $losingPlayer);
-        $winningPlayersExpectedScore = $this->expectedScore($losingPlayer, $winningPlayer);
+        $result->set('losing_player', $this->get($result->loser_id));
+        $result->set('winning_player', $this->get($result->winner_id));
+
+        $losingPlayersExpectedScore = $this->expectedScore($result->winning_player, $result->losing_player);
+        $winningPlayersExpectedScore = 1 - $losingPlayersExpectedScore;
 
         $score = $isDraw ? 0.5 : 0;
-        $this->_updateRating($losingPlayer, $score, $losingPlayersExpectedScore);
+        $this->_updateRating($result->losing_player, $score, $losingPlayersExpectedScore);
 
         $score = $isDraw ? 0.5 : 1;
-        $this->_updateRating($winningPlayer, $score, $winningPlayersExpectedScore);
+        $this->_updateRating($result->winning_player, $score, $winningPlayersExpectedScore);
     }
 
     /**
@@ -209,7 +215,7 @@ class PlayersTable extends Table
      */
     private function _updateRating(Player $player, $score, $expectedScore)
     {
-        $player->set('rating', $player->rating + 32 * ($score - $expectedScore));
+        $player->set('rating', round($player->rating + 32 * ($score - $expectedScore)));
         $this->save($player);
     }
 }

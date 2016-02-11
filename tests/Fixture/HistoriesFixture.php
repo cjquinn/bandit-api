@@ -17,14 +17,14 @@ class HistoriesFixture extends TestFixture
             [
                 'player_id' => 1,
                 'result_id' => 1,
-                'difference' => -32,
-                'rating' => 1168
+                'difference' => -16,
+                'rating' => 1184
             ],
             [
                 'player_id' => 2,
                 'result_id' => 1,
-                'difference' => 32,
-                'rating' => 1232
+                'difference' => 16,
+                'rating' => 1216
             ]
         ];
 

@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
 class ResultsControllerTest extends IntegrationTestCase
@@ -67,6 +68,17 @@ class ResultsControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(200);
+
+        $result = TableRegistry::get('Results')
+            ->find()
+            ->contain([
+                'LosersHistories',
+                'WinnersHistories'
+            ])
+            ->first();
+
+        $this->assertNotEmpty($result->winners_history);
+        $this->assertNotEmpty($result->losers_history);
     }
 
     /**

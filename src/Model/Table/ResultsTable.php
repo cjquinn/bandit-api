@@ -2,6 +2,11 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Result;
+
+use ArrayObject;
+
+use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -21,26 +26,28 @@ class ResultsTable extends Table
                     'className' => 'Players',
                     'foreignKey' => 'loser_id'
                 ],
+                'Players',
                 'Winners' => [
                     'className' => 'Players',
                     'foreignKey' => 'winner_id'
                 ]
             ],
-            'hasMany' => [
+            'hasOne' => [
                 'LosersHistories' => [
                     'className' => 'Histories',
-                    'foreignKey' => [
-                        'loser_id',
-                        'result_id'
+                    'conditions' => [
+                        'LosersHistories.difference <' => 0
                     ]
                 ],
                 'WinnersHistories' => [
                     'className' => 'Histories',
-                    'foreignKey' => [
-                        'winner_id',
-                        'result_id'
+                    'conditions' => [
+                        'WinnersHistories.difference >' => 0
                     ]
                 ]
+            ],
+            'hasMany' => [
+                'Histories'
             ]
         ]);
     }
@@ -73,5 +80,28 @@ class ResultsTable extends Table
         $rules->add($rules->existsIn(['winner_id'], 'Winners'));
 
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function beforeSave(Event $event, Result $result, ArrayObject $options)
+    {
+        if ($result->isNew()) {
+            $this->Players->updateRatings($result);
+
+            $this->patchEntity($result, [
+                'losers_history' => [
+                    'player_id' => $result->losing_player->id,
+                    'difference' => $result->losing_player->rating - $result->losing_player->getOriginal('rating'),
+                    'rating' => $result->losing_player->rating
+                ],
+                'winners_history' => [
+                    'player_id' => $result->winning_player->id,
+                    'difference' => $result->winning_player->rating - $result->winning_player->getOriginal('rating'),
+                    'rating' => $result->winning_player->rating
+                ]
+            ]);
+        }
     }
 }

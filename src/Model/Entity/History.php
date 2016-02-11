@@ -14,6 +14,6 @@ class History extends Entity
 {
 
     protected $_accessible = [
-        '*' => false
+        '*' => true
     ];
 }

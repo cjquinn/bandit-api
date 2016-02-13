@@ -25,6 +25,12 @@ class LoginsFixture extends TestFixture
                 'email' => 'russell@bandit.localhost',
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 3,
+                'email' => 'tom@bandit.localhost',
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
             ]
         ];
 

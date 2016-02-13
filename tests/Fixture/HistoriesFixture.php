@@ -25,6 +25,18 @@ class HistoriesFixture extends TestFixture
                 'result_id' => 1,
                 'difference' => 16,
                 'rating' => 1216
+            ],
+            [
+                'player_id' => 1,
+                'result_id' => 2,
+                'difference' => -15,
+                'rating' => 1169
+            ],
+            [
+                'player_id' => 2,
+                'result_id' => 2,
+                'difference' => 15,
+                'rating' => 1231
             ]
         ];
 

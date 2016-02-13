@@ -39,6 +39,10 @@ class Player extends Entity
                 }
             ])
             ->where([
+                'OR' => [
+                    ['losing_player_id' => $this->id],
+                    ['winning_player_id' => $this->id]
+                ],
                 'created <' => new DateTime('today')
             ])
             ->order([

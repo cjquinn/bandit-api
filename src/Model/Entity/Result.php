@@ -6,15 +6,14 @@ use Cake\ORM\Entity;
 
 /**
  * @property int $id
- * @property int $loser_id
- * @property int $winner_id
+ * @property int $losing_player_id
+ * @property int $winning_player_id
  * @property \Cake\I18n\Time $date
  */
 class Result extends Entity
 {
     protected $_accessible = [
-        'id' => false,
-        'winner_id' => false,
-        '*' => true
+        'losing_player_id' => true,
+        '*' => false
     ];
 }

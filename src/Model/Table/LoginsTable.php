@@ -26,6 +26,7 @@ class LoginsTable extends Table
                 'Players'
             ]
         ]);
+        
         $this->addBehavior('Timestamp');
     }
 

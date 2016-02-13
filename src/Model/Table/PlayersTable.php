@@ -3,7 +3,6 @@
 namespace App\Model\Table;
 
 use App\Model\Entity\Player;
-use App\Model\Entity\Result;
 
 use ArrayObject;
 
@@ -101,16 +100,6 @@ class PlayersTable extends Table
     }
 
     /**
-     * @param \App\Model\Entity\Player $losingPlayer The losing player
-     * @param \App\Model\Entity\Player $winningPlayer The winning player
-     * @return float
-     */
-    public function expectedScore(Player $losingPlayer, Player $winningPlayer)
-    {
-        return 1 / (1 + pow(10, ($losingPlayer->rating - $winningPlayer->rating) / 400));
-    }
-
-    /**
      * @param \App\Model\Entity\Player $player The player object
      * @param string $tmpName The tmp name
      * @param string $type (Losing | winning)
@@ -123,23 +112,17 @@ class PlayersTable extends Table
     }
 
     /**
-     * @param \App\Model\Entity\Result $result The result object
-     * @param bool $isDraw If the result was a draw
+     * @param \App\Model\Entity\Player $losingPlayer The losing player
+     * @param \App\Model\Entity\Player $winningPlayer The winning player
      * @return void
      */
-    public function updateRatings(Result $result, $isDraw = false)
+    public function updateRatings(Player $losingPlayer, Player $winningPlayer)
     {
-        $result->set('losing_player', $this->get($result->loser_id));
-        $result->set('winning_player', $this->get($result->winner_id));
-
-        $losingPlayersExpectedScore = $this->expectedScore($result->winning_player, $result->losing_player);
+        $losingPlayersExpectedScore = 1 / (1 + pow(10, ($losingPlayer->rating - $winningPlayer->rating) / 400));
         $winningPlayersExpectedScore = 1 - $losingPlayersExpectedScore;
 
-        $score = $isDraw ? 0.5 : 0;
-        $this->_updateRating($result->losing_player, $score, $losingPlayersExpectedScore);
-
-        $score = $isDraw ? 0.5 : 1;
-        $this->_updateRating($result->winning_player, $score, $winningPlayersExpectedScore);
+        $losingPlayer->set('rating', $losingPlayer->rating + round(32 * (0 - $losingPlayersExpectedScore)));
+        $winningPlayer->set('rating', $winningPlayer->rating + round(32 * (1 - $winningPlayersExpectedScore)));
     }
 
     /**
@@ -205,17 +188,5 @@ class PlayersTable extends Table
         ]);
 
         return $result;
-    }
-
-    /**
-     * @param \App\Model\Entity\Player $player The player
-     * @param float $score (0 | 0.5 | 1)
-     * @param float $expectedScore The players expected score
-     * @return void
-     */
-    private function _updateRating(Player $player, $score, $expectedScore)
-    {
-        $player->set('rating', round($player->rating + 32 * ($score - $expectedScore)));
-        $this->save($player);
     }
 }

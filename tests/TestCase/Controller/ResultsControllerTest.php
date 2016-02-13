@@ -31,8 +31,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAuthSession(1);
 
         $this->post('/results.json', [
-            'loser_id' => 1,
-            'date' => date('Y-m-d H:i:s')
+            'losing_player_id' => 1
         ]);
 
         $this->assertResponseCode(403);
@@ -47,8 +46,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAuthSession(1);
 
         $this->post('/results.json', [
-            'loser_id' => null,
-            'date' => null
+            'losing_player_id' => null
         ]);
 
         $this->assertResponseCode(400);
@@ -60,22 +58,20 @@ class ResultsControllerTest extends IntegrationTestCase
     public function testAddPost()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(2);
 
         $this->post('/results.json', [
-            'loser_id' => 2,
-            'date' => date('Y-m-d H:i:s')
+            'losing_player_id' => 1
         ]);
 
         $this->assertResponseCode(200);
 
-        $result = TableRegistry::get('Results')
-            ->find()
-            ->contain([
+        $result = TableRegistry::get('Results')->get(2, [
+            'contain' => [
                 'LosersHistories',
                 'WinnersHistories'
-            ])
-            ->first();
+            ]
+        ]);
 
         $this->assertNotEmpty($result->winners_history);
         $this->assertNotEmpty($result->losers_history);

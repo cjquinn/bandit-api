@@ -13,25 +13,29 @@ class CreateResults extends AbstractMigration
     public function change()
     {
         $table = $this->table('results');
-        $table->addColumn('loser_id', 'integer', [
+        $table->addColumn('losing_player_id', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false,
         ]);
-        $table->addForeignKey('loser_id', 'players', 'id', [
+        $table->addForeignKey('losing_player_id', 'players', 'id', [
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
-        $table->addColumn('winner_id', 'integer', [
+        $table->addColumn('winning_player_id', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false,
         ]);
-        $table->addForeignKey('winner_id', 'players', 'id', [
+        $table->addForeignKey('winning_player_id', 'players', 'id', [
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
-        $table->addColumn('date', 'datetime', [
+        $table->addColumn('created', 'datetime', [
+            'default' => null,
+            'null' => false,
+        ]);
+        $table->addColumn('modified', 'datetime', [
             'default' => null,
             'null' => false,
         ]);

@@ -23,7 +23,7 @@ class ResultsController extends AppController
     public function isAuthorized($user)
     {
         if ($this->request->action === 'add' &&
-            Hash::get($this->request->data, 'loser_id') === $this->Auth->user('player.id')
+            Hash::get($this->request->data, 'losing_player_id') === $this->Auth->user('player.id')
         ) {
             return false;
         }
@@ -37,7 +37,7 @@ class ResultsController extends AppController
     public function add()
     {
         $result = $this->Results->newEntity($this->request->data);
-        $result->set('winner_id', $this->Auth->user('player.id'));
+        $result->set('winning_player_id', $this->Auth->user('player.id'));
 
         $this->set('result', $result);
 

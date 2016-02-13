@@ -26,6 +26,7 @@ class ResultsTable extends Table
                 'Players'
             ],
             'hasOne' => [
+                'Histories',
                 'LosersHistories' => [
                     'className' => 'Histories',
                     'conditions' => [

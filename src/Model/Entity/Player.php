@@ -6,6 +6,9 @@ use Aws\S3\S3Client;
 
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
+use Cake\ORM\TableRegistry;
+
+use DateTime;
 
 /**
  * @property int $id
@@ -22,6 +25,29 @@ class Player extends Entity
         'login' => true,
         '*' => false
     ];
+
+    /**
+     * @return int
+     */
+    protected function _getDailyRating()
+    {
+        $result = TableRegistry::get('Results')
+            ->find()
+            ->contain([
+                'Histories' => function ($q) {
+                    return $q->where(['player_id' => $this->id]);
+                }
+            ])
+            ->where([
+                'created <' => new DateTime('today')
+            ])
+            ->order([
+                'created' => 'DESC'
+            ])
+            ->first();
+
+        return $result ? $result->history->rating : $this->rating;
+    }
 
     /**
      * @return string

@@ -9,7 +9,9 @@ class PlayersTableTest extends TestCase
 {
 
     public $fixtures = [
-        'app.players'
+        'app.histories',
+        'app.players',
+        'app.results'
     ];
 
     /**
@@ -39,25 +41,27 @@ class PlayersTableTest extends TestCase
      */
     public function testUpdateRatings()
     {
+        // 1184
         $playerA = $this->Players->get(1);
-        $playerB = $this->Players->get(1);
+        // 1216
+        $playerB = $this->Players->get(2);
 
-        $playerA->set('rating', 1200);
-        $playerB->set('rating', 1200);
-
-        $this->Players->updateRatings($playerA, $playerB);
-
-        $this->assertEquals(1184, $playerA->rating);
-        $this->assertEquals(1216, $playerB->rating);
-
+        // + 15 - 15
         $this->Players->updateRatings($playerA, $playerB);
 
         $this->assertEquals(1169, $playerA->rating);
         $this->assertEquals(1231, $playerB->rating);
 
+        // + 15 - 15
+        $this->Players->updateRatings($playerA, $playerB);
+
+        $this->assertEquals(1154, $playerA->rating);
+        $this->assertEquals(1246, $playerB->rating);
+
+        // + 17 - 17
         $this->Players->updateRatings($playerB, $playerA);
 
-        $this->assertEquals(1188, $playerA->rating);
-        $this->assertEquals(1212, $playerB->rating);
+        $this->assertEquals(1171, $playerA->rating);
+        $this->assertEquals(1229, $playerB->rating);
     }
 }

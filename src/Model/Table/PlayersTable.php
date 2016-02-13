@@ -118,7 +118,7 @@ class PlayersTable extends Table
      */
     public function updateRatings(Player $losingPlayer, Player $winningPlayer)
     {
-        $losingPlayersExpectedScore = 1 / (1 + pow(10, ($winningPlayer->rating - $losingPlayer->rating) / 400));
+        $losingPlayersExpectedScore = 1 / (1 + pow(10, ($winningPlayer->daily_rating - $losingPlayer->daily_rating) / 400));
         $winningPlayersExpectedScore = 1 - $losingPlayersExpectedScore;
 
         $losingPlayer->set('rating', round($losingPlayer->rating + 32 * (0 - $losingPlayersExpectedScore)));

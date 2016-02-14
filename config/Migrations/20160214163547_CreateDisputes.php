@@ -14,7 +14,19 @@ class CreateDisputes extends AbstractMigration
     {
         $table = $this->table('disputes', [
             'id' => false,
-            'primary_key' => 'result_id'
+            'primary_key' => [
+                'player_id',
+                'result_id'
+            ]
+        ]);
+        $table->addColumn('player_id', 'integer', [
+            'default' => null,
+            'limit' => 11,
+            'null' => false,
+        ]);
+        $table->addForeignKey('player_id', 'players', 'id', [
+            'update' => 'RESTRICT',
+            'delete' => 'RESTRICT'
         ]);
         $table->addColumn('result_id', 'integer', [
             'default' => null,
@@ -25,17 +37,9 @@ class CreateDisputes extends AbstractMigration
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
-        $table->addColumn('status', 'boolean', [
+        $table->addColumn('is_resolved', 'boolean', [
             'default' => null,
             'null' => true,
-        ]);
-        $table->addColumn('created', 'datetime', [
-            'default' => null,
-            'null' => false,
-        ]);
-        $table->addColumn('modified', 'datetime', [
-            'default' => null,
-            'null' => false,
         ]);
         $table->create();
     }

@@ -2,13 +2,10 @@
 
 namespace App\Model\Table;
 
-use ArrayObject;
-
-use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 
-class HistoriesTable extends Table
+class DisputesTable extends Table
 {
 
     /**
@@ -38,14 +35,5 @@ class HistoriesTable extends Table
         $rules->add($rules->existsIn(['result_id'], 'Results'));
 
         return $rules;
-    }
-
-    /**
-     * @return void
-     */
-    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
-    {
-        $data['difference'] = $data['player']->rating - $data['player']->getOriginal('rating');
-        $data['rating'] = $data['player']->rating;
     }
 }

@@ -23,6 +23,11 @@ class HistoriesTable extends Table
                 'Results'
             ]
         ]);
+
+        $this->primaryKey([
+            'player_id',
+            'result_id'
+        ]);
     }
 
     /**

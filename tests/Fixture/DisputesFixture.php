@@ -13,7 +13,14 @@ class DisputesFixture extends TestFixture
 
     public function init()
     {
-        $this->records = [];
+        $this->records = [
+            [
+                'player_id' => 3,
+                'result_id' => 3,
+                'message' => null,
+                'is_resolved' => 0
+            ]
+        ];
 
         parent::init();
     }

@@ -29,6 +29,13 @@ class ResultsFixture extends TestFixture
                 'winning_player_id' => 2,
                 'created' => new DateTime('today'),
                 'modified' => new DateTime('today')
+            ],
+            [
+                'id' => 3,
+                'losing_player_id' => 1,
+                'winning_player_id' => 3,
+                'created' => new DateTime('yesterday'),
+                'modified' => new DateTime('yesterday')
             ]
         ];
 

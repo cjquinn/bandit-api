@@ -35,8 +35,16 @@ class Player extends Entity
             ->find()
             ->contain([
                 'Histories' => function ($q) {
-                    return $q->where(['player_id' => $this->id]);
+                    $q->where([
+                        'Histories.player_id' => $this->id
+                    ]);
+
+                    return $q;
                 }
+            ])
+            ->innerJoinWith('Histories')
+            ->order([
+                'created' => 'DESC'
             ])
             ->where([
                 'OR' => [
@@ -44,9 +52,6 @@ class Player extends Entity
                     ['winning_player_id' => $this->id]
                 ],
                 'created <' => new DateTime('today')
-            ])
-            ->order([
-                'created' => 'DESC'
             ])
             ->first();
 

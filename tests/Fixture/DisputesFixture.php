@@ -18,7 +18,7 @@ class DisputesFixture extends TestFixture
                 'player_id' => 3,
                 'result_id' => 3,
                 'message' => null,
-                'is_resolved' => 1
+                'is_resolved' => null
             ]
         ];
 

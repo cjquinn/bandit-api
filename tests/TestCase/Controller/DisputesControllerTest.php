@@ -5,6 +5,8 @@ namespace App\Test\TestCase\Controller;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
+use DateTime;
+
 class DisputesControllerTest extends IntegrationTestCase
 {
 
@@ -16,6 +18,21 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testAddUnauthorised()
     {
         $this->_setAjaxRequest();
+
+        $this->post('/results/2/disputes.json', [
+            'message' => ''
+        ]);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddTimeExpired()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
 
         $this->post('/results/1/disputes.json', [
             'message' => ''
@@ -32,7 +49,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->post('/results/1/disputes.json', [
+        $this->post('/results/2/disputes.json', [
             'message' => ''
         ]);
 
@@ -47,7 +64,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->post('/results/1/disputes.json', [
+        $this->post('/results/2/disputes.json', [
             'message' => ''
         ]);
 
@@ -60,6 +77,26 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testEditUnauthorised()
     {
         $this->_setAjaxRequest();
+
+        $this->put('/results/3/disputes/3.json', [
+            'is_resolved' => 1
+        ]);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditTimeExpired()
+    {
+        $results = TableRegistry::get('Results');
+        $result = $results->get(3);
+        $result->set('created', new DateTime('3 days ago'));
+        $results->save($result);
+
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(3);
 
         $this->put('/results/3/disputes/3.json', [
             'is_resolved' => 1

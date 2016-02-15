@@ -23,16 +23,24 @@ class DisputesController extends AppController
      */
     public function isAuthorized($user)
     {
-        if ($this->request->action === 'add' &&
-            $this->_result->winning_player_id === $this->Auth->user('player.id')
-        ) {
-            return false;
+        if ($this->request->action === 'add') {
+            if (!$this->_result->created->wasWithinLast('24 hours')) {
+                return false;
+            }
+
+            if ($this->_result->winning_player_id === $this->Auth->user('player.id')) {
+                return false;
+            }
         }
 
-        if ($this->request->action === 'edit' &&
-            $this->_result->winning_player_id !== $this->Auth->user('player.id')
-        ) {
-            return false;
+        if ($this->request->action === 'edit') {
+            if (!$this->_result->created->wasWithinLast('48 hours')) {
+                return false;
+            }
+
+            if ($this->_result->winning_player_id !== $this->Auth->user('player.id')) {
+                return false;
+            }
         }
 
         return parent::isAuthorized($user);

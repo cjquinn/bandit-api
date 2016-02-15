@@ -52,11 +52,14 @@ Router::scope('/', function ($routes) {
     /**
      * Results
      */
-    $routes->resources('Results', [
-        'only' => [
-            'create',
-            'index',
-            'view'
+    $routes->resources(
+        'Results',
+        [
+            'only' => [
+                'create',
+                'index',
+                'view'
+            ]
         ],
         function ($routes) {
             $routes->resources('Disputes', [
@@ -66,7 +69,7 @@ Router::scope('/', function ($routes) {
                 ]
             ]);
         }
-    ]);
+    );
 });
 
 Plugin::routes();

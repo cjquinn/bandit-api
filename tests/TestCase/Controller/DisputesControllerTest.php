@@ -51,6 +51,6 @@ class DisputesControllerTest extends IntegrationTestCase
             'message' => ''
         ]);
 
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(200);
     }
 }

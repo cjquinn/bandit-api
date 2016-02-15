@@ -37,6 +37,7 @@ class ResultsController extends AppController
     public function add()
     {
         $result = $this->Results->newEntity($this->request->data);
+        
         $result->set('winning_player_id', $this->Auth->user('player.id'));
 
         $this->set('result', $result);

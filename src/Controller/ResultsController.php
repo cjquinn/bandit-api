@@ -69,6 +69,7 @@ class ResultsController extends AppController
 
     /**
      * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
     public function view($id)
     {

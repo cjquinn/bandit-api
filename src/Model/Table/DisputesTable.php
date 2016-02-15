@@ -36,6 +36,14 @@ class DisputesTable extends Table
             ->requirePresence('message', 'create')
             ->allowEmpty('message');
 
+        $validator
+            ->requirePresence('is_resolved', 'update')
+            ->notEmpty('is_resolved')
+            ->add('is_resolved', 'boolean', [
+                'rule' => 'boolean',
+                'message' => 'This is a boolean flag'
+            ]);
+
         return $validator;
     }
 

@@ -29,8 +29,8 @@ class DisputesControllerTest extends IntegrationTestCase
      */
     public function testAddInvalidPlayerId()
     {
-        $this->_setAuthSession(2);
         $this->_setAjaxRequest();
+        $this->_setAuthSession(2);
 
         $this->post('/results/1/disputes.json', [
             'message' => ''
@@ -44,11 +44,70 @@ class DisputesControllerTest extends IntegrationTestCase
      */
     public function testAddPost()
     {
-        $this->_setAuthSession(1);
         $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
 
         $this->post('/results/1/disputes.json', [
             'message' => ''
+        ]);
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditUnauthorised()
+    {
+        $this->_setAjaxRequest();
+
+        $this->put('/results/3/disputes/3.json', [
+            'is_resolved' => 1
+        ]);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditInvalidPlayerId()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->put('/results/3/disputes/3.json', [
+            'is_resolved' => 1
+        ]);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditBadData()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(3);
+
+        $this->put('/results/3/disputes/3.json', [
+            'is_resolved' => 'Not a boolean!'
+        ]);
+
+        $this->assertResponseCode(400);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditPut()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(3);
+
+        $this->put('/results/3/disputes/3.json', [
+            'is_resolved' => 1
         ]);
 
         $this->assertResponseCode(200);

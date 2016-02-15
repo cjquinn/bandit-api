@@ -4,6 +4,7 @@ namespace App\Model\Table;
 
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Validation\Validator;
 
 class DisputesTable extends Table
 {
@@ -24,6 +25,18 @@ class DisputesTable extends Table
             'player_id',
             'result_id'
         ]);
+    }
+
+    /**
+     * @return \Cake\Validation\Validator
+     */
+    public function validationDefault(Validator $validator)
+    {
+        $validator
+            ->requirePresence('message', 'create')
+            ->allowEmpty('message');
+
+        return $validator;
     }
 
     /**

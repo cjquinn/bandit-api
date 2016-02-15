@@ -57,7 +57,15 @@ Router::scope('/', function ($routes) {
             'create',
             'index',
             'view'
-        ]
+        ],
+        function ($routes) {
+            $routes->resources('Disputes', [
+                'only' => [
+                    'create',
+                    'update'
+                ]
+            ]);
+        }
     ]);
 });
 

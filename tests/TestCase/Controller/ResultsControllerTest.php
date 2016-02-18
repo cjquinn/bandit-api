@@ -40,6 +40,21 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testAddExistingDisputes()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(3);
+
+        $this->post('/results.json', [
+            'losing_player_id' => 1
+        ]);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testAddBadData()
     {
         $this->_setAjaxRequest();

@@ -28,6 +28,7 @@ class PlayersTable extends Table
                 'Logins'
             ],
             'hasMany' => [
+                'Disputes',
                 'Results'
             ]
         ]);
@@ -97,6 +98,17 @@ class PlayersTable extends Table
         if ($player->isNew()) {
             $player->set('rating', Configure::read('Bandit.initialRating'));
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasDisputes($id)
+    {
+        return $this->Disputes->exists([
+            'player_id' => $id,
+            'is_resolved IS' => null
+        ]);
     }
 
     /**

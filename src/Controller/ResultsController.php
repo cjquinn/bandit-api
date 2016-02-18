@@ -22,10 +22,14 @@ class ResultsController extends AppController
      */
     public function isAuthorized($user)
     {
-        if ($this->request->action === 'add' &&
-            Hash::get($this->request->data, 'losing_player_id') === $this->Auth->user('player.id')
-        ) {
-            return false;
+        if ($this->request->action === 'add') {
+            if (Hash::get($this->request->data, 'losing_player_id') === $this->Auth->user('player.id')) {
+                return false;
+            }
+
+            if ($this->Results->Players->hasDisputes($this->Auth->user('player.id'))) {
+                return false;
+            }
         }
 
         return parent::isAuthorized($user);

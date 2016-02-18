@@ -16,6 +16,13 @@ class DisputesController extends AppController
         $this->loadComponent('RequestHandler');
 
         $this->_result = $this->Disputes->Results->get($this->request->params['result_id']);
+
+        if (isset($this->request->params['id'])) {
+            $this->_dispute = $this->Disputes->get([
+                'player_id' => $this->request->params['id'],
+                'result_id' => $this->_result->id
+            ]);
+        }
     }
 
     /**
@@ -29,6 +36,16 @@ class DisputesController extends AppController
             }
 
             if ($this->_result->winning_player_id === $this->Auth->user('player.id')) {
+                return false;
+            }
+        }
+
+        if ($this->request->action === 'delete') {
+            if ($this->_dispute->is_resolved !== null) {
+                return false;
+            }
+
+            if ($this->_result->losing_player_id !== $this->Auth->user('player.id')) {
                 return false;
             }
         }
@@ -72,27 +89,31 @@ class DisputesController extends AppController
 
     /**
      * @return void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
-    public function edit($playerId)
+    public function delete()
     {
-        $dispute = $this->Disputes->get([
-            'player_id' => $playerId,
-            'result_id' => $this->_result->id
-        ]);
+        $this->Disputes->delete($this->_dispute);
 
-        $dispute->accessible('*', false);
-        $dispute->accessible('is_resolved', true);
+        $this->set('_serialize', true);
+    }
 
-        $this->Disputes->patchEntity($dispute, $this->request->data);
+    /**
+     * @return void
+     */
+    public function edit()
+    {
+        $this->_dispute->accessible('*', false);
+        $this->_dispute->accessible('is_resolved', true);
 
-        $this->set('dispute', $dispute);
+        $this->Disputes->patchEntity($this->_dispute, $this->request->data);
 
-        if ($this->Disputes->save($dispute)) {
+        $this->set('dispute', $this->_dispute);
+
+        if ($this->Disputes->save($this->_dispute)) {
             $this->set('_serialize', true);
         } else {
             $this->set([
-                'errors' => $dispute->errors(),
+                'errors' => $this->_dispute->errors(),
                 '_serialize' => true
             ]);
 

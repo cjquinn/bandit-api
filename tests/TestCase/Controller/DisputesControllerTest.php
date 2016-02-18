@@ -74,6 +74,65 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testDeleteUnauthorised()
+    {
+        $this->_setAjaxRequest();
+
+        $this->delete('/results/3/disputes/3.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteResolvedDispute()
+    {
+        $disputes = TableRegistry::get('Disputes');
+        $dispute = $disputes->get([
+            'player_id' => 3,
+            'result_id' => 3
+        ]);
+        $dispute->set('is_resolved', true);
+        $disputes->save($dispute);
+
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->delete('/results/3/disputes/3.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteInvalidPlayerId()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(3);
+
+        $this->delete('/results/3/disputes/3.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteDelete()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->delete('/results/3/disputes/3.json');
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
     public function testEditUnauthorised()
     {
         $this->_setAjaxRequest();

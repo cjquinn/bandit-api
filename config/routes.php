@@ -65,6 +65,7 @@ Router::scope('/', function ($routes) {
             $routes->resources('Disputes', [
                 'only' => [
                     'create',
+                    'delete',
                     'update'
                 ]
             ]);

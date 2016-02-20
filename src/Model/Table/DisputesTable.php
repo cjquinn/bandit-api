@@ -2,6 +2,11 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Dispute;
+
+use ArrayObject;
+
+use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -56,5 +61,19 @@ class DisputesTable extends Table
         $rules->add($rules->existsIn(['result_id'], 'Results'));
 
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function afterSave(Event $event, Dispute $dispute, ArrayObject $options)
+    {
+        if (!$dispute->isNew()) {
+            $this->Results->nullify($dispute);
+
+            // Recalculate ratings
+
+            // If not resolved give both players negative rep
+        }
     }
 }

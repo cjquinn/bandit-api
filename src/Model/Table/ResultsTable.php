@@ -2,7 +2,7 @@
 
 namespace App\Model\Table;
 
-use App\Model\Entity\Player;
+use App\Model\Entity\Dispute;
 use App\Model\Entity\Result;
 
 use ArrayObject;
@@ -75,9 +75,6 @@ class ResultsTable extends Table
     public function beforeSave(Event $event, Result $result, ArrayObject $options)
     {
         if ($result->isNew()) {
-            $result->accessible('losers_history', true);
-            $result->accessible('winners_history', true);
-
             $losingPlayer = $this->Players->get($result->losing_player_id);
             $winningPlayer = $this->Players->get($result->winning_player_id);
 
@@ -91,8 +88,26 @@ class ResultsTable extends Table
                     'player' => $winningPlayer
                 ]
             ], [
+                'fieldList' => [
+                    'losers_history',
+                    'winners_history'
+                ],
                 'validate' => false
             ]);
         }
+    }
+
+    /**
+     * @param \App\Model\Entity\Dispute $dispute The dispute object
+     * @return void
+     */
+    public function nullify(Dispute $dispute)
+    {
+        $result = $this->get($dispute->result_id, [
+            'contain' => [
+                'LosersHistories',
+                'WinnersHistories'
+            ]
+        ]);
     }
 }

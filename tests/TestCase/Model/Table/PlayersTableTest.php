@@ -43,23 +43,26 @@ class PlayersTableTest extends TestCase
     {
         $christy = $this->Players->get(1);
         $this->assertEquals(1184, $christy->daily_rating);
+        $this->assertEquals(1168, $christy->rating);
 
         $russell = $this->Players->get(2);
         $this->assertEquals(1216, $russell->daily_rating);
+        $this->assertEquals(1231, $russell->rating);
 
         $tom = $this->Players->get(3);
-        $this->assertEquals(1200, $tom->daily_rating);
+        $this->assertEquals(1216, $tom->daily_rating);
+        $this->assertEquals(1216, $tom->rating);
 
         // + 15 - 15
         $this->Players->updateRatings($christy, $russell);
 
-        $this->assertEquals(1154, $christy->rating);
+        $this->assertEquals(1153, $christy->rating);
         $this->assertEquals(1246, $russell->rating);
 
         // + 15 - 15
         $this->Players->updateRatings($christy, $tom);
 
-        $this->assertEquals(1139, $christy->rating);
-        $this->assertEquals(1215, $tom->rating);
+        $this->assertEquals(1138, $christy->rating);
+        $this->assertEquals(1231, $tom->rating);
     }
 }

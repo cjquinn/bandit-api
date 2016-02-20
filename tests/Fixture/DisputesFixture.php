@@ -16,7 +16,7 @@ class DisputesFixture extends TestFixture
         $this->records = [
             [
                 'player_id' => 3,
-                'result_id' => 3,
+                'result_id' => 2,
                 'message' => null,
                 'is_resolved' => null
             ]

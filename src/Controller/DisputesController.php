@@ -102,10 +102,11 @@ class DisputesController extends AppController
      */
     public function edit()
     {
-        $this->_dispute->accessible('*', false);
-        $this->_dispute->accessible('is_resolved', true);
-
-        $this->Disputes->patchEntity($this->_dispute, $this->request->data);
+        $this->Disputes->patchEntity($this->_dispute, $this->request->data, [
+            'fieldList' => [
+                'is_resolved'
+            ]
+        ]);
 
         $this->set('dispute', $this->_dispute);
 

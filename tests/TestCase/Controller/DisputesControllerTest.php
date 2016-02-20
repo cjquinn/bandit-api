@@ -49,7 +49,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->post('/results/2/disputes.json', [
+        $this->post('/results/3/disputes.json', [
             'message' => ''
         ]);
 
@@ -64,7 +64,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->post('/results/2/disputes.json', [
+        $this->post('/results/3/disputes.json', [
             'message' => ''
         ]);
 
@@ -78,7 +78,7 @@ class DisputesControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->delete('/results/3/disputes/3.json');
+        $this->delete('/results/2/disputes/3.json');
 
         $this->assertResponseCode(403);
     }
@@ -91,7 +91,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $disputes = TableRegistry::get('Disputes');
         $dispute = $disputes->get([
             'player_id' => 3,
-            'result_id' => 3
+            'result_id' => 2
         ]);
         $dispute->set('is_resolved', true);
         $disputes->save($dispute);
@@ -99,7 +99,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->delete('/results/3/disputes/3.json');
+        $this->delete('/results/2/disputes/3.json');
 
         $this->assertResponseCode(403);
     }
@@ -112,7 +112,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(3);
 
-        $this->delete('/results/3/disputes/3.json');
+        $this->delete('/results/2/disputes/3.json');
 
         $this->assertResponseCode(403);
     }
@@ -125,7 +125,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->delete('/results/3/disputes/3.json');
+        $this->delete('/results/2/disputes/3.json');
 
         $this->assertResponseCode(200);
     }
@@ -137,7 +137,7 @@ class DisputesControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->put('/results/3/disputes/3.json', [
+        $this->put('/results/2/disputes/3.json', [
             'is_resolved' => 1
         ]);
 
@@ -150,14 +150,14 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testEditTimeExpired()
     {
         $results = TableRegistry::get('Results');
-        $result = $results->get(3);
+        $result = $results->get(2);
         $result->set('created', new DateTime('3 days ago'));
         $results->save($result);
 
         $this->_setAjaxRequest();
         $this->_setAuthSession(3);
 
-        $this->put('/results/3/disputes/3.json', [
+        $this->put('/results/2/disputes/3.json', [
             'is_resolved' => 1
         ]);
 
@@ -172,7 +172,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/results/3/disputes/3.json', [
+        $this->put('/results/2/disputes/3.json', [
             'is_resolved' => 1
         ]);
 
@@ -187,7 +187,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(3);
 
-        $this->put('/results/3/disputes/3.json', [
+        $this->put('/results/2/disputes/3.json', [
             'is_resolved' => 'Not a boolean!'
         ]);
 
@@ -202,7 +202,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(3);
 
-        $this->put('/results/3/disputes/3.json', [
+        $this->put('/results/2/disputes/3.json', [
             'is_resolved' => 1
         ]);
 

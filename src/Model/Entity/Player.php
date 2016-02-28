@@ -27,38 +27,6 @@ class Player extends Entity
     ];
 
     /**
-     * @return int
-     */
-    protected function _getDailyRating()
-    {
-        $result = TableRegistry::get('Results')
-            ->find()
-            ->contain([
-                'Histories' => function ($q) {
-                    $q->where([
-                        'Histories.player_id' => $this->id
-                    ]);
-
-                    return $q;
-                }
-            ])
-            ->innerJoinWith('Histories')
-            ->order([
-                'created' => 'DESC'
-            ])
-            ->where([
-                'OR' => [
-                    ['losing_player_id' => $this->id],
-                    ['winning_player_id' => $this->id]
-                ],
-                'created <' => new DateTime('today')
-            ])
-            ->first();
-
-        return $result ? $result->history->rating : $this->rating;
-    }
-
-    /**
      * @return string
      */
     protected function _getLosingProfilePictureUrl()

@@ -25,8 +25,6 @@ class PlayersTableTest extends TestCase
     }
 
     /**
-     * tearDown method
-     *
      * @return void
      */
     public function tearDown()

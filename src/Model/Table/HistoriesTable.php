@@ -2,6 +2,8 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Result;
+
 use ArrayObject;
 
 use Cake\Event\Event;

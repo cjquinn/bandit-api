@@ -15,6 +15,8 @@ use Cake\ORM\Table;
 use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 
+use DateTime;
+
 class PlayersTable extends Table
 {
 
@@ -29,6 +31,7 @@ class PlayersTable extends Table
             ],
             'hasMany' => [
                 'Disputes',
+                'Histories',
                 'Results'
             ]
         ]);
@@ -101,6 +104,46 @@ class PlayersTable extends Table
     }
 
     /**
+     * @return int
+     */
+    public function dailyRating(Player $player, DateTime $date)
+    {
+        $result = $this->Results
+            ->find()
+            ->contain([
+                'Histories' => function ($q) use ($player) {
+                    $q->where([
+                        'Histories.player_id' => $player->id
+                    ]);
+
+                    return $q;
+                }
+            ])
+            ->innerJoinWith('Histories')
+            ->order([
+                'created' => 'DESC'
+            ])
+            ->where([
+                'OR' => [
+                    ['losing_player_id' => $player->id],
+                    ['winning_player_id' => $player->id]
+                ],
+                'created <' => $date
+            ])
+            ->first();
+
+        return $result ? $result->history->rating : Configure::read('Bandit.initialRating');
+    }
+
+    /**
+     * @return float
+     */
+    public function expectedScore($losingPlayersRating, $winningPlayersRating)
+    {
+        return 1 / (1 + pow(10, ($winningPlayersRating - $losingPlayersRating) / 400));
+    }
+
+    /**
      * @return bool
      */
     public function hasDisputes($id)
@@ -124,17 +167,26 @@ class PlayersTable extends Table
     }
 
     /**
+     * @return float
+     */
+    public function updatedRating($rating, $expectedScore, $score)
+    {
+        return round($rating + 32 * ($score - $expectedScore));
+    }
+
+    /**
      * @param \App\Model\Entity\Player $losingPlayer The losing player
      * @param \App\Model\Entity\Player $winningPlayer The winning player
+     * @param \DateTime $date The date of the result
      * @return void
      */
-    public function updateRatings(Player $losingPlayer, Player $winningPlayer)
+    public function updateRatings(Player $losingPlayer, Player $winningPlayer, DateTime $date)
     {
-        $losingPlayersExpectedScore = 1 / (1 + pow(10, ($winningPlayer->daily_rating - $losingPlayer->daily_rating) / 400));
+        $losingPlayersExpectedScore = $this->expectedScore($this->dailyRating($losingPlayer, $date), $this->dailyRating($winningPlayer, $date));
         $winningPlayersExpectedScore = 1 - $losingPlayersExpectedScore;
 
-        $losingPlayer->set('rating', round($losingPlayer->rating + 32 * (0 - $losingPlayersExpectedScore)));
-        $winningPlayer->set('rating', round($winningPlayer->rating + 32 * (1 - $winningPlayersExpectedScore)));
+        $losingPlayer->set('rating', $this->updatedRating($losingPlayer->rating, $losingPlayersExpectedScore, 0));
+        $winningPlayer->set('rating', $this->updatedRating($winningPlayer->rating, $winningPlayersExpectedScore, 1));
     }
 
     /**

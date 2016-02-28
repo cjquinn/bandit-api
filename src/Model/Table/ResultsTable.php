@@ -2,7 +2,6 @@
 
 namespace App\Model\Table;
 
-use App\Model\Entity\Dispute;
 use App\Model\Entity\Result;
 
 use ArrayObject;
@@ -12,6 +11,8 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
+
+use DateTime;
 
 class ResultsTable extends Table
 {
@@ -23,21 +24,29 @@ class ResultsTable extends Table
     {
         $this->addAssociations([
             'belongsTo' => [
-                'Players'
+                'LosingPlayers' => [
+                    'className' => 'Players',
+                    'foreignKey' => 'losing_player_id'
+                ],
+                'Players',
+                'WinningPlayers' => [
+                    'className' => 'Players',
+                    'foreignKey' => 'winning_player_id'
+                ]
             ],
             'hasOne' => [
                 'Disputes',
                 'Histories',
-                'LosersHistories' => [
+                'LosingPlayersHistories' => [
                     'className' => 'Histories',
                     'conditions' => [
-                        'LosersHistories.difference <' => 0
+                        'LosingPlayersHistories.difference <' => 0
                     ]
                 ],
-                'WinnersHistories' => [
+                'WinningPlayersHistories' => [
                     'className' => 'Histories',
                     'conditions' => [
-                        'WinnersHistories.difference >' => 0
+                        'WinningPlayersHistories.difference >' => 0
                     ]
                 ]
             ]
@@ -74,40 +83,83 @@ class ResultsTable extends Table
      */
     public function beforeSave(Event $event, Result $result, ArrayObject $options)
     {
-        if ($result->isNew()) {
-            $losingPlayer = $this->Players->get($result->losing_player_id);
-            $winningPlayer = $this->Players->get($result->winning_player_id);
+        $losingPlayer = $this->Players->get($result->losing_player_id);
+        $winningPlayer = $this->Players->get($result->winning_player_id);
 
-            $this->Players->updateRatings($losingPlayer, $winningPlayer);
+        $this->Players->updateRatings($losingPlayer, $winningPlayer, new DateTime($result->created->i18nFormat('Y-M-d')));
 
-            $this->patchEntity($result, [
-                'losers_history' => [
-                    'player' => $losingPlayer,
-                ],
-                'winners_history' => [
-                    'player' => $winningPlayer
-                ]
-            ], [
-                'fieldList' => [
-                    'losers_history',
-                    'winners_history'
-                ],
-                'validate' => false
-            ]);
-        }
+        $this->patchEntity($result, [
+            'losing_players_history' => [
+                'player' => $losingPlayer,
+            ],
+            'winning_players_history' => [
+                'player' => $winningPlayer
+            ]
+        ], [
+            'fieldList' => [
+                'losing_players_history',
+                'winning_players_history'
+            ],
+            'validate' => false
+        ]);
     }
 
     /**
-     * @param \App\Model\Entity\Dispute $dispute The dispute object
+     * @param \App\Model\Entity\Result $result The result object
      * @return void
      */
-    public function nullify(Dispute $dispute)
+    public function nullify(Result $result)
     {
-        $result = $this->get($dispute->result_id, [
-            'contain' => [
-                'LosersHistories',
-                'WinnersHistories'
-            ]
-        ]);
+        // Date of result
+        $date = new DateTime($result->created->i18nFormat('Y-M-d'));
+
+        // Get effected results
+        $results = $this
+            ->find()
+            ->contain([
+                'LosingPlayersHistories.Players',
+                'WinningPlayersHistories.Players'
+            ])
+            ->innerJoinWith('LosingPlayersHistories')
+            ->where([
+                'created >=' => $date
+            ]);
+
+        // Update ratings to daily rating of result
+        $nullifyId = $result->id;
+        $players = [];
+        $results = $results->map(function ($result) use ($date, $nullifyId, &$players) {
+            if (!isset($players[$result->losing_player_id])) {
+                $result->losing_players_history->player->set('rating', $this->Players->dailyRating($result->losing_players_history->player, $date));
+                $this->Players->save($result->losing_players_history->player);
+
+                $players[$result->losing_player_id] = $result->losing_players_history->player;
+            }
+
+            if (!isset($players[$result->winning_player_id])) {
+                $result->winning_players_history->player->set('rating', $this->Players->dailyRating($result->winning_players_history->player, $date));
+                $this->Players->save($result->winning_players_history->player);
+
+                $players[$result->winning_player_id] = $result->winning_players_history->player;
+            }
+
+            if ($result->id === $nullifyId) {
+                // Remove history
+                $this->Histories->delete($result->losing_players_history);
+                $this->Histories->delete($result->winning_players_history);
+                
+                return;
+            }
+            
+            return $result;
+        });
+
+        // Resave results
+        $results->each(function ($result) {
+            if ($result) {
+                $result->dirty('*', true);
+                $this->save($result);
+            }
+        });
     }
 }

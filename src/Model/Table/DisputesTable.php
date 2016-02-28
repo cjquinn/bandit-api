@@ -69,11 +69,7 @@ class DisputesTable extends Table
     public function afterSave(Event $event, Dispute $dispute, ArrayObject $options)
     {
         if (!$dispute->isNew()) {
-            $this->Results->nullify($dispute);
-
-            // Recalculate ratings
-
-            // If not resolved give both players negative rep
+            // $this->Results->nullify($dispute);
         }
     }
 }

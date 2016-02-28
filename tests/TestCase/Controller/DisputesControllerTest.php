@@ -2,10 +2,9 @@
 
 namespace App\Test\TestCase\Controller;
 
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
-
-use DateTime;
 
 class DisputesControllerTest extends IntegrationTestCase
 {
@@ -150,8 +149,13 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testEditTimeExpired()
     {
         $results = TableRegistry::get('Results');
-        $result = $results->get(2);
-        $result->set('created', new DateTime('3 days ago'));
+        $result = $results->get(2, [
+            'contain' => [
+                'LosingPlayersHistories',
+                'WinningPlayersHistories'
+            ]
+        ]);
+        $result->set('created', new Time('3 days ago'));
         $results->save($result);
 
         $this->_setAjaxRequest();

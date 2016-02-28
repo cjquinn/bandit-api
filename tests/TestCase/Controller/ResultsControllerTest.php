@@ -80,16 +80,6 @@ class ResultsControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(200);
-
-        $result = TableRegistry::get('Results')->get(2, [
-            'contain' => [
-                'LosersHistories',
-                'WinnersHistories'
-            ]
-        ]);
-
-        $this->assertNotEmpty($result->winners_history);
-        $this->assertNotEmpty($result->losers_history);
     }
 
     /**

@@ -86,7 +86,8 @@ class ResultsTable extends Table
         $losingPlayer = $this->Players->get($result->losing_player_id);
         $winningPlayer = $this->Players->get($result->winning_player_id);
 
-        $this->Players->updateRatings($losingPlayer, $winningPlayer, new DateTime($result->created->i18nFormat('Y-M-d')));
+        $date = $result->isNew() ? new DateTime('today') : new DateTime($result->created->i18nFormat('Y-M-d'));
+        $this->Players->updateRatings($losingPlayer, $winningPlayer, $date);
 
         $this->patchEntity($result, [
             'losing_players_history' => [
@@ -105,11 +106,13 @@ class ResultsTable extends Table
     }
 
     /**
-     * @param \App\Model\Entity\Result $result The result object
+     * @param int $id The result id
      * @return void
      */
-    public function nullify(Result $result)
+    public function nullify($id)
     {
+        $result = $this->get($id);
+
         // Date of result
         $date = new DateTime($result->created->i18nFormat('Y-M-d'));
 
@@ -126,9 +129,8 @@ class ResultsTable extends Table
             ]);
 
         // Update ratings to daily rating of result
-        $nullifyId = $result->id;
         $players = [];
-        $results = $results->map(function ($result) use ($date, $nullifyId, &$players) {
+        $results = $results->map(function ($result) use ($date, $id, &$players) {
             if (!isset($players[$result->losing_player_id])) {
                 $result->losing_players_history->player->set('rating', $this->Players->dailyRating($result->losing_players_history->player, $date));
                 $this->Players->save($result->losing_players_history->player);
@@ -143,11 +145,11 @@ class ResultsTable extends Table
                 $players[$result->winning_player_id] = $result->winning_players_history->player;
             }
 
-            if ($result->id === $nullifyId) {
+            if ($result->id === $id) {
                 // Remove history
                 $this->Histories->delete($result->losing_players_history);
                 $this->Histories->delete($result->winning_players_history);
-                
+
                 return;
             }
             

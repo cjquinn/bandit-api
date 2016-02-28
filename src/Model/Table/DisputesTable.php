@@ -69,7 +69,7 @@ class DisputesTable extends Table
     public function afterSave(Event $event, Dispute $dispute, ArrayObject $options)
     {
         if (!$dispute->isNew()) {
-            // $this->Results->nullify($dispute);
+            $this->Results->nullify($dispute->result_id);
         }
     }
 }

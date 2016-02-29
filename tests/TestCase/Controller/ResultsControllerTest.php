@@ -80,6 +80,12 @@ class ResultsControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(200);
+
+        $christy = TableRegistry::get('Players')->get(1);
+        $russell = TableRegistry::get('Players')->get(2);
+
+        $this->assertEquals(4, $christy->reputation);
+        $this->assertEquals(3, $russell->reputation);
     }
 
     /**

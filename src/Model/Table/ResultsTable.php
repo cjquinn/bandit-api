@@ -83,17 +83,18 @@ class ResultsTable extends Table
      */
     public function beforeSave(Event $event, Result $result, ArrayObject $options)
     {
-        if (!$result->isNew() &&
-           (!$result->losing_players_history || !$result->winning_player_id)
-        ) {
+        $losingPlayer = $this->Players->get($result->losing_player_id);
+        $winningPlayer = $this->Players->get($result->winning_player_id);
+
+        if ($result->isNew()) {
+            $this->Players->updateReputation($losingPlayer, 1);
+            $this->Players->updateReputation($winningPlayer, 1);
+        } elseif (!$result->losing_players_history || !$result->winning_player_id) {
             $this->loadInto($result, [
                 'LosingPlayersHistories',
                 'WinningPlayersHistories'
             ]);
         }
-
-        $losingPlayer = $this->Players->get($result->losing_player_id);
-        $winningPlayer = $this->Players->get($result->winning_player_id);
 
         $date = $result->isNew() ? new DateTime('today') : new DateTime($result->created->i18nFormat('Y-M-d'));
         $this->Players->updateRatings($losingPlayer, $winningPlayer, $date);

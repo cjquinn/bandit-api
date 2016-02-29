@@ -190,6 +190,14 @@ class PlayersTable extends Table
     }
 
     /**
+     * @return void
+     */
+    public function updateReputation(Player $player, $difference)
+    {
+        $player->set('reputation', $player->reputation + $difference);
+    }
+
+    /**
      * Creates an avatar from an uploaded image
      *
      * @param string $tmpName The tmp_name of the file uploaded

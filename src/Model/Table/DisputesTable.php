@@ -66,7 +66,7 @@ class DisputesTable extends Table
     /**
      * @return void
      */
-    public function beforeSave(Event $event, Dispute $dispute, ArrayObject $options)
+    public function afterSave(Event $event, Dispute $dispute, ArrayObject $options)
     {
         if (!$dispute->isNew()) {
             if (!$dispute->result) {
@@ -76,6 +76,14 @@ class DisputesTable extends Table
                         'WinningPlayers'
                     ]
                 ]);
+            }
+
+            if (!$dispute->is_resolved) {
+                $this->Players->updateReputation($dispute->result->losing_player, -11);
+                $this->Players->updateReputation($dispute->result->winning_player, -11);
+
+                $this->Players->save($dispute->result->losing_player);
+                $this->Players->save($dispute->result->winning_player);
             }
 
             $this->Results->nullify($dispute->result);

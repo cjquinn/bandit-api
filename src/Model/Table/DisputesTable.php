@@ -78,13 +78,12 @@ class DisputesTable extends Table
                 ]);
             }
 
-            if (!$dispute->is_resolved) {
-                $this->Players->updateReputation($dispute->result->losing_player, -11);
-                $this->Players->updateReputation($dispute->result->winning_player, -11);
+            $reputationDifference = $dispute->is_resolved ? -1 : -11;
+            $this->Players->updateReputation($dispute->result->losing_player, $reputationDifference);
+            $this->Players->updateReputation($dispute->result->winning_player, $reputationDifference);
 
-                $this->Players->save($dispute->result->losing_player);
-                $this->Players->save($dispute->result->winning_player);
-            }
+            $this->Players->save($dispute->result->losing_player);
+            $this->Players->save($dispute->result->winning_player);
 
             $this->Results->nullify($dispute->result);
         }

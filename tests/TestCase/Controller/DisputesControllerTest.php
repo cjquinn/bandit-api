@@ -149,12 +149,7 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testEditTimeExpired()
     {
         $results = TableRegistry::get('Results');
-        $result = $results->get(2, [
-            'contain' => [
-                'LosingPlayersHistories',
-                'WinningPlayersHistories'
-            ]
-        ]);
+        $result = $results->get(2);
         $result->set('created', new Time('3 days ago'));
         $results->save($result);
 

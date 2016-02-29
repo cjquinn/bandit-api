@@ -83,6 +83,15 @@ class ResultsTable extends Table
      */
     public function beforeSave(Event $event, Result $result, ArrayObject $options)
     {
+        if (!$result->isNew() &&
+           (!$result->losing_players_history || !$result->winning_player_id)
+        ) {
+            $this->loadInto($result, [
+                'LosingPlayersHistories',
+                'WinningPlayersHistories'
+            ]);
+        }
+
         $losingPlayer = $this->Players->get($result->losing_player_id);
         $winningPlayer = $this->Players->get($result->winning_player_id);
 
@@ -106,13 +115,11 @@ class ResultsTable extends Table
     }
 
     /**
-     * @param int $id The result id
+     * @param \App\Model\Entity\Result $result The result
      * @return void
      */
-    public function nullify($id)
+    public function nullify(Result $result)
     {
-        $result = $this->get($id);
-
         // Date of result
         $date = new DateTime($result->created->i18nFormat('Y-M-d'));
 
@@ -130,33 +137,35 @@ class ResultsTable extends Table
 
         // Update ratings to daily rating of result
         $players = [];
-        $results = $results->map(function ($result) use ($date, $id, &$players) {
-            if (!isset($players[$result->losing_player_id])) {
-                $result->losing_players_history->player->set('rating', $this->Players->dailyRating($result->losing_players_history->player, $date));
-                $this->Players->save($result->losing_players_history->player);
+        $results = $results->map(function ($r) use ($date, &$players, $result) {
+            // Update losing player if not already done
+            if (!isset($players[$r->losing_player_id])) {
+                $r->losing_players_history->player->set('rating', $this->Players->dailyRating($r->losing_players_history->player, $date));
+                $this->Players->save($r->losing_players_history->player);
 
-                $players[$result->losing_player_id] = $result->losing_players_history->player;
+                $players[$r->losing_player_id] = true;
             }
 
-            if (!isset($players[$result->winning_player_id])) {
-                $result->winning_players_history->player->set('rating', $this->Players->dailyRating($result->winning_players_history->player, $date));
-                $this->Players->save($result->winning_players_history->player);
+            // Update winning player if not already done
+            if (!isset($players[$r->winning_player_id])) {
+                $r->winning_players_history->player->set('rating', $this->Players->dailyRating($r->winning_players_history->player, $date));
+                $this->Players->save($r->winning_players_history->player);
 
-                $players[$result->winning_player_id] = $result->winning_players_history->player;
+                $players[$r->winning_player_id] = true;
             }
 
-            if ($result->id === $id) {
+            if ($r->id === $result->id) {
                 // Remove history
-                $this->Histories->delete($result->losing_players_history);
-                $this->Histories->delete($result->winning_players_history);
+                $this->Histories->delete($r->losing_players_history);
+                $this->Histories->delete($r->winning_players_history);
 
                 return;
             }
             
-            return $result;
+            return $r;
         });
 
-        // Resave results
+        // Re-save results
         $results->each(function ($result) {
             if ($result) {
                 $result->dirty('*', true);

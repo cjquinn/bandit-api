@@ -41,7 +41,8 @@ class ResultsTableTest extends TestCase
      */
     public function testNullify()
     {
-        $this->Results->nullify(2);
+        $result = $this->Results->get(2);
+        $this->Results->nullify($result);
 
         $christy = $this->Results->Players->get(1);
         $russell = $this->Results->Players->get(2);

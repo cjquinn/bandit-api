@@ -21,6 +21,13 @@ class DisputesController extends AppController
             $this->_dispute = $this->Disputes->get([
                 'player_id' => $this->request->params['id'],
                 'result_id' => $this->_result->id
+            ], [
+                'contain' => [
+                    'Results' => [
+                        'LosingPlayers',
+                        'WinningPlayers'
+                    ]
+                ]
             ]);
         }
     }

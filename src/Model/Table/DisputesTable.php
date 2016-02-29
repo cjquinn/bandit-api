@@ -66,10 +66,19 @@ class DisputesTable extends Table
     /**
      * @return void
      */
-    public function afterSave(Event $event, Dispute $dispute, ArrayObject $options)
+    public function beforeSave(Event $event, Dispute $dispute, ArrayObject $options)
     {
         if (!$dispute->isNew()) {
-            $this->Results->nullify($dispute->result_id);
+            if (!$dispute->result) {
+                $this->loadInto($dispute, [
+                    'Results' => [
+                        'LosingPlayers',
+                        'WinningPlayers'
+                    ]
+                ]);
+            }
+
+            $this->Results->nullify($dispute->result);
         }
     }
 }

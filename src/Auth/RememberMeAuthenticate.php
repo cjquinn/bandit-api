@@ -27,8 +27,10 @@ class RememberMeAuthenticate extends BaseAuthenticate
     {
         $request = $auth->_registry->getController()->request;
 
-        if ($request->data['remember_me']) {
-            $this->_registry->Cookie->write('remember_me', [
+        if (isset($request->data['remember_me']) &&
+            $request->data['remember_me']
+        ) {
+            $this->_registry->Cookie->write('BISCOTTI', [
                 'id' => $result['id'],
                 'userAgent' => $request->header('User-Agent')
             ]);
@@ -40,8 +42,8 @@ class RememberMeAuthenticate extends BaseAuthenticate
      */
     public function deleteRememberMeCookie(Event $event)
     {
-        if ($this->_registry->Cookie->check('remember_me')) {
-            $this->_registry->Cookie->delete('remember_me');
+        if ($this->_registry->Cookie->check('BISCOTTI')) {
+            $this->_registry->Cookie->delete('BISCOTTI');
         }
     }
 
@@ -50,11 +52,11 @@ class RememberMeAuthenticate extends BaseAuthenticate
      */
     public function getUser(Request $request)
     {
-        if (!$this->_registry->Cookie->check('remember_me')) {
+        if (!$this->_registry->Cookie->check('BISCOTTI')) {
             return false;
         }
 
-        $cookie = $this->_registry->Cookie->read('remember_me');
+        $cookie = $this->_registry->Cookie->read('BISCOTTI');
 
         $this->config('fields.username', 'id');
         $user = $this->_findUser($cookie['id']);

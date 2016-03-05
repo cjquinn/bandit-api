@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
@@ -91,11 +92,82 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testDeleteUnauthorised()
+    {
+        $this->_setAjaxRequest();
+
+        $this->delete('/results/3.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteInvalidPlayerId()
+    {
+        $this->_setAuthSession(1);
+        $this->_setAjaxRequest();
+
+        $this->delete('/results/3.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteExistingDispute()
+    {
+        $results = TableRegistry::get('Results');
+        
+        $result = $results->get(2);
+        $result->set('created', new Time('today'));
+
+        $results->save($result);
+
+        $this->_setAuthSession(3);
+        $this->_setAjaxRequest();
+
+        $this->delete('/results/2.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteTimeExpired()
+    {
+        $this->_setAuthSession(2);
+        $this->_setAjaxRequest();
+
+        $this->delete('/results/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteDelete()
+    {
+        $this->_setAuthSession(2);
+        $this->_setAjaxRequest();
+
+        $this->delete('/results/3.json');
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
     public function testIndexUnauthorised()
     {
         $this->_setAjaxRequest();
 
-        $this->get('results.json');
+        $this->get('/results.json');
 
         $this->assertResponseCode(403);
     }
@@ -108,7 +180,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->get('results.json');
+        $this->get('/results.json');
 
         $this->assertResponseCode(200);
     }
@@ -120,7 +192,7 @@ class ResultsControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->get('results/1.json');
+        $this->get('/results/1.json');
 
         $this->assertResponseCode(403);
     }
@@ -133,7 +205,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->get('results/1.json');
+        $this->get('/results/1.json');
 
         $this->assertResponseCode(200);
     }

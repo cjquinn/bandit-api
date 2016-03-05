@@ -57,6 +57,7 @@ Router::scope('/', function ($routes) {
         [
             'only' => [
                 'create',
+                'delete',
                 'index',
                 'view'
             ]

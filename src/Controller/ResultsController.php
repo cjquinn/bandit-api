@@ -32,6 +32,20 @@ class ResultsController extends AppController
             }
         }
 
+        if ($this->request->action === 'delete') {
+            if (!$this->Results->isOwnedBy($this->request->params['id'], $this->Auth->user('player.id'))) {
+                return false;
+            }
+
+            if ($this->Results->isDisputed($this->request->params['id'])) {
+                return false;
+            }
+
+            if (!$this->Results->wasWithinLast($this->request->params['id'], '24 hours')) {
+                return false;
+            }
+        }
+
         return parent::isAuthorized($user);
     }
 
@@ -56,6 +70,19 @@ class ResultsController extends AppController
 
             $this->response->statusCode(400);
         }
+    }
+
+    /**
+     * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     */
+    public function delete($id)
+    {
+        $result = $this->Results->get($id);
+
+        $this->Results->delete($result);
+
+        $this->set('_serialize', true);
     }
 
     /**

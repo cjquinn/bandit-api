@@ -81,6 +81,14 @@ class ResultsTable extends Table
     /**
      * @return void
      */
+    public function beforeDelete(Event $event, Result $result, ArrayObject $options)
+    {
+        $this->nullify($result);
+    }
+
+    /**
+     * @return void
+     */
     public function beforeSave(Event $event, Result $result, ArrayObject $options)
     {
         $losingPlayer = $this->Players->get($result->losing_player_id);
@@ -112,6 +120,27 @@ class ResultsTable extends Table
                 'winning_players_history'
             ],
             'validate' => false
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDisputed($id)
+    {
+        return $this->Disputes->exists([
+            'result_id' => $id
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOwnedBy($id, $winningPlayerId)
+    {
+        return $this->exists([
+            'id' => $id,
+            'winning_player_id' => $winningPlayerId
         ]);
     }
 
@@ -173,5 +202,16 @@ class ResultsTable extends Table
                 $this->save($result);
             }
         });
+    }
+
+    /**
+     * @return void
+     */
+    public function wasWithinLast($id, $period)
+    {
+        return $this->exists([
+            'id' => $id,
+            'created >=' => new DateTime('-' . $period)
+        ]);
     }
 }

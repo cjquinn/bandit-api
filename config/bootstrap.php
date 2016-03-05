@@ -220,13 +220,78 @@ Configure::write('Aws.S3', [
  * Bandit config
  */
 Configure::write('Bandit', [
-    'initialRating' => 1200
+    'initialRating' => 1200,
+    'levels' => [
+        [
+            'name' => 'Junior',
+            'to' => 849
+        ],
+        [
+            'name' => 'Rookie',
+            'from' => 850,
+            'to' => 1099
+        ],
+        [
+            'name' => 'Intermediate',
+            'from' => 1100,
+            'to' => 1199
+        ],
+        [
+            'name' => 'Scout',
+            'from' => 1200,
+            'to' => 1299
+        ],
+        [
+            'name' => 'Knight',
+            'from' => 1300,
+            'to' => 1399
+        ],
+        [
+            'name' => 'Assassin',
+            'from' => 1400,
+            'to' => 1499
+        ],
+        [
+            'name' => 'Ninja',
+            'from' => 1500,
+            'to' => 1599
+        ],
+        [
+            'name' => 'Warrior',
+            'from' => 1600,
+            'to' => 1699
+        ],
+        [
+            'name' => 'Mega',
+            'from' => 1700,
+            'to' => 1799
+        ],
+        [
+            'name' => 'Monster',
+            'from' => 1800,
+            'to' => 1899
+        ],
+        [
+            'name' => 'Legendary',
+            'from' => 1900,
+            'to' => 1999
+        ],
+        [
+            'name' => 'Lord',
+            'from' => 2000,
+            'to' => 2099
+        ],
+        [
+            'name' => 'God',
+            'from' => 2100
+        ]
+    ]
 ]);
 
 /**
  * Email addresses
  */
 Configure::write('Email', [
-    'support' => 'support@bandit.localhost',
-    'welcome' => 'welcome@bandit.localhost',
+    'support' => 'support@banditplay.com',
+    'welcome' => 'welcome@banditplay.com',
 ]);

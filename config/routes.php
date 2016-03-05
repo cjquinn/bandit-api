@@ -3,7 +3,7 @@
 use Cake\Core\Plugin;
 use Cake\Routing\Router;
 
-Router::defaultRouteClass('DashedRoute');
+Router::defaultRouteClass('ClubRoute');
 
 Router::scope('/', function ($routes) {
     /**
@@ -11,40 +11,45 @@ Router::scope('/', function ($routes) {
      */
     $routes->connect('/activate-account', [
         'controller' => 'Logins',
-        'action' => 'activateAccount'
+        'action' => 'activateAccount',
+        'club' => false
     ]);
 
     $routes->connect('/login', [
         'controller' => 'Logins',
-        'action' => 'login'
+        'action' => 'login',
+        'club' => false
     ]);
 
     $routes->connect('/logout', [
         'controller' => 'Logins',
-        'action' => 'logout'
+        'action' => 'logout',
+        'club' => false
     ]);
 
     $routes->connect('/request-password-reset', [
         'controller' => 'Logins',
-        'action' => 'requestPasswordReset'
+        'action' => 'requestPasswordReset',
+        'club' => false
     ]);
 
     $routes->connect('/reset-password', [
         'controller' => 'Logins',
-        'action' => 'resetPassword'
+        'action' => 'resetPassword',
+        'club' => false
     ]);
 
     /**
      * Players
      */
-    $routes->connect('/invite-player', [
-        'controller' => 'Players',
-        'action' => 'add'
-    ]);
-
     $routes->connect('/account', [
         'controller' => 'Players',
         'action' => 'edit'
+    ]);
+
+    $routes->connect('/invite-player', [
+        'controller' => 'Players',
+        'action' => 'add'
     ]);
 
     $routes->extensions(['json']);

@@ -20,7 +20,7 @@ class LoginMailer extends Mailer
         $this
             ->to($login->email)
             ->subject('Activate account')
-            ->from(Configure::read('Email.welcome'))
+            ->from(Configure::read('EmailAddresses.welcome'))
             ->set(['login' => $login])
             ->template('activateAccount')
             ->emailFormat('both');
@@ -35,7 +35,7 @@ class LoginMailer extends Mailer
         $this
             ->to($login->email)
             ->subject('Reset password')
-            ->from(Configure::read('Email.support'))
+            ->from(Configure::read('EmailAddresses.support'))
             ->set(['login' => $login])
             ->template('resetPassword')
             ->emailFormat('both');

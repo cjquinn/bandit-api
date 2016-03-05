@@ -291,7 +291,7 @@ Configure::write('Bandit', [
 /**
  * Email addresses
  */
-Configure::write('Email', [
+Configure::write('EmailAddresses', [
     'support' => 'support@banditplay.com',
     'welcome' => 'welcome@banditplay.com',
 ]);

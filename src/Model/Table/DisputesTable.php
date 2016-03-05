@@ -78,9 +78,14 @@ class DisputesTable extends Table
                 ]);
             }
 
-            $reputationDifference = $dispute->is_resolved ? -1 : -11;
-            $this->Players->updateReputation($dispute->result->losing_player, $reputationDifference);
-            $this->Players->updateReputation($dispute->result->winning_player, $reputationDifference);
+            if ($dispute->result->created->wasWithinLast('48 hours')) {
+                $reputationDifference = $dispute->is_resolved ? -1 : -11;
+
+                $this->Players->updateReputation($dispute->result->losing_player, $reputationDifference);
+                $this->Players->updateReputation($dispute->result->winning_player, $reputationDifference);
+            } else {
+                $this->Players->updateReputation($dispute->result->winning_player, -11);
+            }
 
             $this->Players->save($dispute->result->losing_player);
             $this->Players->save($dispute->result->winning_player);

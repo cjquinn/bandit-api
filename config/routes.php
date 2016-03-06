@@ -3,7 +3,7 @@
 use Cake\Core\Plugin;
 use Cake\Routing\Router;
 
-Router::defaultRouteClass('ClubRoute');
+Router::defaultRouteClass('DashedRoute');
 
 Router::scope('/', function ($routes) {
     /**
@@ -11,32 +11,27 @@ Router::scope('/', function ($routes) {
      */
     $routes->connect('/activate-account', [
         'controller' => 'Logins',
-        'action' => 'activateAccount',
-        'club' => false
+        'action' => 'activateAccount'
     ]);
 
     $routes->connect('/login', [
         'controller' => 'Logins',
-        'action' => 'login',
-        'club' => false
+        'action' => 'login'
     ]);
 
     $routes->connect('/logout', [
         'controller' => 'Logins',
-        'action' => 'logout',
-        'club' => false
+        'action' => 'logout'
     ]);
 
     $routes->connect('/request-password-reset', [
         'controller' => 'Logins',
-        'action' => 'requestPasswordReset',
-        'club' => false
+        'action' => 'requestPasswordReset'
     ]);
 
     $routes->connect('/reset-password', [
         'controller' => 'Logins',
-        'action' => 'resetPassword',
-        'club' => false
+        'action' => 'resetPassword'
     ]);
 
     /**

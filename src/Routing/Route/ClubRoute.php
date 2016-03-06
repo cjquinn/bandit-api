@@ -21,10 +21,7 @@ class ClubRoute extends DashedRoute
             return false;
         }
         
-        if ($this->_subdomain() &&
-            isset($params['club']) &&
-            !$params['club']
-        ) {
+        if (!$this->_isValidSubdomain($params)) {
             return false;
         }
 
@@ -38,23 +35,17 @@ class ClubRoute extends DashedRoute
      */
     public function match(array $url, array $context = [])
     {
-        if ($this->_subdomain($context['_host'])) {
-            if (isset($context['params']['club']) &&
-                !$context['params']['club']
-            ) {
-                return false;
-            }
-        } else {
-            $url['club'] = false;
+        if (!$this->_isValidSubdomain($context['params'], $context['_host'])) {
+            return false;
         }
 
         return parent::match($url, $context);
     }
 
     /**
-     * @return bool|string
+     * @return bool
      */
-    private function _subdomain($host = '')
+    private function _isValidSubdomain(array $params, $host = '')
     {
         if (empty($host)) {
             $request = Router::getRequest(true);
@@ -63,6 +54,11 @@ class ClubRoute extends DashedRoute
 
         $parts = explode('.', $host);
         $subdomain = current(array_slice($parts, 0, -2));
-        return $subdomain ? $subdomain : false;
+
+        if (!$subdomain && !isset($params['withoutClub'])) {
+            return false;
+        }
+
+        return true;
     }
 }

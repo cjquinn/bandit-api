@@ -14,7 +14,6 @@ use DateTime;
  * @property int $id
  * @property int $login_id
  * @property string $name
- * @property int $rating
  * @property int $reputation
  */
 class Player extends Entity

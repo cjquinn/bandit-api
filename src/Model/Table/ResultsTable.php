@@ -24,6 +24,7 @@ class ResultsTable extends Table
     {
         $this->addAssociations([
             'belongsTo' => [
+                'Clubs',
                 'LosingPlayers' => [
                     'className' => 'Players',
                     'foreignKey' => 'losing_player_id'

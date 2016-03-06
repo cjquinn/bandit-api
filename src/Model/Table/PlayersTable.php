@@ -29,6 +29,9 @@ class PlayersTable extends Table
             'belongsTo' => [
                 'Logins'
             ],
+            'belongsToMany' => [
+                'Clubs'
+            ],
             'hasMany' => [
                 'Disputes',
                 'Histories',

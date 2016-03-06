@@ -97,7 +97,7 @@ class ResultsTable extends Table
         if ($result->isNew()) {
             $this->Players->updateReputation($losingPlayer, 1);
             $this->Players->updateReputation($winningPlayer, 1);
-        } elseif (!$result->losing_players_history || !$result->winning_player_id) {
+        } elseif (!$result->losing_players_history || !$result->winning_players_history) {
             $this->loadInto($result, [
                 'LosingPlayersHistories',
                 'WinningPlayersHistories'

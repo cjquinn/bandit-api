@@ -49,27 +49,33 @@ Router::scope('/', function ($routes) {
 
     $routes->extensions(['json']);
     
-    /**
-     * Results
-     */
     $routes->resources(
-        'Results',
-        [
-            'only' => [
-                'create',
-                'delete',
-                'index',
-                'view'
-            ]
-        ],
+        'Clubs',
+        ['only' => ''],
         function ($routes) {
-            $routes->resources('Disputes', [
-                'only' => [
-                    'create',
-                    'delete',
-                    'update'
-                ]
-            ]);
+            $routes->resources(
+                /**
+                 * Results
+                 */
+                'Results',
+                [
+                    'only' => [
+                        'create',
+                        'delete',
+                        'index',
+                        'view'
+                    ]
+                ],
+                function ($routes) {
+                    $routes->resources('Disputes', [
+                        'only' => [
+                            'create',
+                            'delete',
+                            'update'
+                        ]
+                    ]);
+                }
+            );
         }
     );
 });

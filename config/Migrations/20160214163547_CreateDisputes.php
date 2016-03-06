@@ -1,16 +1,13 @@
 <?php
+
 use Migrations\AbstractMigration;
 
 class CreateDisputes extends AbstractMigration
 {
     /**
-     * Change Method.
-     *
-     * More information on this method is available here:
-     * http://docs.phinx.org/en/latest/migrations.html#the-change-method
      * @return void
      */
-    public function change()
+    public function up()
     {
         $table = $this->table('disputes', [
             'id' => false,
@@ -46,5 +43,15 @@ class CreateDisputes extends AbstractMigration
             'null' => true,
         ]);
         $table->create();
+        
+        $this->query('CREATE INDEX player_id ON disputes (player_id)');
+    }
+
+    /**
+     * @return void
+     */
+    public function down()
+    {
+        $this->dropTable('disputes');
     }
 }

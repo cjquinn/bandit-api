@@ -2,19 +2,28 @@
 
 use Migrations\AbstractMigration;
 
-class CreateHistories extends AbstractMigration
+class CreateClubsPlayers extends AbstractMigration
 {
     /**
      * @return void
      */
     public function up()
     {
-        $table = $this->table('histories', [
+        $table = $this->table('clubs_players', [
             'id' => false,
             'primary_key' => [
-                'player_id',
-                'result_id'
+                'club_id',
+                'player_id'
             ]
+        ]);
+        $table->addColumn('club_id', 'integer', [
+            'default' => null,
+            'limit' => 11,
+            'null' => false,
+        ]);
+        $table->addForeignKey('club_id', 'clubs', 'id', [
+            'update' => 'RESTRICT',
+            'delete' => 'RESTRICT'
         ]);
         $table->addColumn('player_id', 'integer', [
             'default' => null,
@@ -25,20 +34,6 @@ class CreateHistories extends AbstractMigration
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
-        $table->addColumn('result_id', 'integer', [
-            'default' => null,
-            'limit' => 11,
-            'null' => false,
-        ]);
-        $table->addForeignKey('result_id', 'results', 'id', [
-            'update' => 'RESTRICT',
-            'delete' => 'RESTRICT'
-        ]);
-        $table->addColumn('difference', 'integer', [
-            'default' => null,
-            'limit' => 11,
-            'null' => false,
-        ]);
         $table->addColumn('rating', 'integer', [
             'default' => null,
             'limit' => 11,
@@ -46,7 +41,7 @@ class CreateHistories extends AbstractMigration
         ]);
         $table->create();
 
-        $this->query('CREATE INDEX player_id ON histories (player_id)');
+        $this->query('CREATE INDEX club_id ON clubs_players (club_id)');
     }
 
     /**
@@ -54,6 +49,6 @@ class CreateHistories extends AbstractMigration
      */
     public function down()
     {
-        $this->dropTable('histories');
+        $this->dropTable('clubs_players');
     }
 }

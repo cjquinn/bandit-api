@@ -18,6 +18,7 @@ class ResultsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
+                'club_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 2,
                 'created' => new DateTime('yesterday'),
@@ -25,6 +26,7 @@ class ResultsFixture extends TestFixture
             ],
             [
                 'id' => 2,
+                'club_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 3,
                 'created' => new DateTime('25 hours ago'),
@@ -32,6 +34,7 @@ class ResultsFixture extends TestFixture
             ],
             [
                 'id' => 3,
+                'club_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 2,
                 'created' => new DateTime('today'),

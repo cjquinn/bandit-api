@@ -45,6 +45,10 @@ class DisputesController extends AppController
             if ($this->_result->winning_player_id === $this->Auth->user('player.id')) {
                 return false;
             }
+
+            if ($this->Disputes->Results->isDisputed($this->_result->id)) {
+                return false;
+            }
         }
 
         if ($this->request->action === 'delete') {

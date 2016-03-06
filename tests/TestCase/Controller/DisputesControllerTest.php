@@ -18,7 +18,7 @@ class DisputesControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/results/2/disputes.json', [
+        $this->post('/results/3/disputes.json', [
             'message' => ''
         ]);
 
@@ -49,6 +49,28 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAuthSession(2);
 
         $this->post('/results/3/disputes.json', [
+            'message' => ''
+        ]);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddExistingDispute()
+    {
+        $results = TableRegistry::get('Results');
+
+        $result = $results->get(2);
+        $result->set('created', new Time('today'));
+
+        $results->save($result);
+
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->post('/results/2/disputes.json', [
             'message' => ''
         ]);
 

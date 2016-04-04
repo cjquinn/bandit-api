@@ -1,0 +1,19 @@
+html, body {
+	min-height: 100%;
+}
+
+html {
+	overflow-x: hidden; overflow-y: scroll;
+	height: 100%;
+}
+
+body {
+	height: 100%; padding: $unit;
+	background: $body__background;
+}
+
+.app {
+	@include container; min-height: 200%; padding: 6px;
+	background-color: $app__base;
+	border-radius: 6px;
+}

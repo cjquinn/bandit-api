@@ -7,6 +7,16 @@ Router::defaultRouteClass('DashedRoute');
 
 Router::scope('/', function ($routes) {
     /**
+     * Templates
+     */
+    $routes->connect('/templates/:template', [
+        'controller' => 'Templates',
+        'action' => 'display'
+    ], [
+        'pass' => ['template']
+    ]);
+
+    /**
      * Logins
      */
     $routes->connect('/activate-account', [

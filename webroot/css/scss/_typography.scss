@@ -1,0 +1,27 @@
+$font-stack: 'Europa';
+
+body {
+	font: 16px/1 $font-stack; color: $text;
+}
+
+a {
+	color: $text--link;
+	
+	&:hover, &:focus {
+
+	}
+	
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+	color: $link-water;
+}
+
+li {
+	list-style: none;
+}

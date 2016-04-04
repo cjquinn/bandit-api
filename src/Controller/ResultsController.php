@@ -27,7 +27,7 @@ class ResultsController extends AppController
                 return false;
             }
 
-            if ($this->Results->Players->hasDisputes($this->Auth->user('player.id'))) {
+            if ($this->Results->Players->hasDisputes($this->Auth->user('player.id'), $this->request->params['club_id'])) {
                 return false;
             }
         }
@@ -56,6 +56,7 @@ class ResultsController extends AppController
     {
         $result = $this->Results->newEntity($this->request->data);
         
+        $result->set('club_id', $this->request->params['club_id']);
         $result->set('winning_player_id', $this->Auth->user('player.id'));
 
         $this->set('result', $result);

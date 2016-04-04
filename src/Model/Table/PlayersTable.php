@@ -149,12 +149,17 @@ class PlayersTable extends Table
     /**
      * @return bool
      */
-    public function hasDisputes($id)
+    public function hasDisputes($id, $clubId)
     {
-        return $this->Disputes->exists([
-            'player_id' => $id,
-            'is_resolved IS' => null
-        ]);
+        return
+            !$this->Results
+                ->find()
+                ->where([
+                    'club_id' => $clubId,
+                    'winning_player_id' => $id
+                ])
+                ->innerJoinWith('Disputes')
+                ->isEmpty();
     }
 
     /**

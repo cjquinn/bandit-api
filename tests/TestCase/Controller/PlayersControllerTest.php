@@ -15,24 +15,11 @@ class PlayersControllerTest extends IntegrationTestCase
      */
     public function testAddUnauthorised()
     {
-        $this->get('/invite-player');
+        $this->_setAjaxRequest();
 
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login'
-        ]);
-    }
+        $this->post('/api/clubs/1/players.json');
 
-    /**
-     * @return void
-     */
-    public function testAddGet()
-    {
-        $this->_setAuthSession('1');
-
-        $this->get('/invite-player');
-
-        $this->assertResponseOk();
+        $this->assertResponseCode(403);
     }
 
     /**
@@ -40,16 +27,17 @@ class PlayersControllerTest extends IntegrationTestCase
      */
     public function testAddBadData()
     {
-        $this->_setAuthSession('1');
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
 
-        $this->post('/invite-player', [
+        $this->post('/api/clubs/1/players.json', [
             'name' => '',
             'login' => [
                 'email' => ''
             ]
         ]);
 
-        $this->assertNoRedirect();
+        $this->assertResponseCode(400);
     }
 
     /**
@@ -57,19 +45,22 @@ class PlayersControllerTest extends IntegrationTestCase
      */
     public function testAddPost()
     {
-        $this->_setAuthSession('1');
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
 
-        $this->post('/invite-player', [
+        $this->post('/api/clubs/1/players.json', [
             'name' => 'Nathan Rathbone',
             'login' => [
                 'email' => 'nathan@bandit.localhost'
             ]
         ]);
 
-        $this->assertRedirect([
-            'controller' => 'Players',
-            'action' => 'add'
-        ]);
+        $this->assertResponseCode(200);
+
+        $this->assertTrue(TableRegistry::get('ClubsPlayers')->exists([
+            'club_id' => 1,
+            'player_id' => json_decode($this->_response->body(), true)['id']
+        ]));
     }
 
     /**
@@ -77,24 +68,26 @@ class PlayersControllerTest extends IntegrationTestCase
      */
     public function testEditUnauthorised()
     {
-        $this->get('/account');
+        $this->_setAjaxRequest();
 
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login'
-        ]);
+        $this->put('/api/players/1.json');
+
+        $this->assertResponseCode(403);
     }
 
     /**
      * @return void
      */
-    public function testEditGet()
+    public function testEditInvalidPlayerId()
     {
-        $this->_setAuthSession('1');
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
 
-        $this->get('/account');
+        $this->put('/api/players/2.json', [
+            'name' => 'Christy J Quinn'
+        ]);
 
-        $this->assertResponseOk();
+        $this->assertResponseCode(403);
     }
 
     /**
@@ -102,15 +95,13 @@ class PlayersControllerTest extends IntegrationTestCase
      */
     public function testEditPut()
     {
-        $this->_setAuthSession('1');
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
 
-        $this->put('/account', [
-            'name' => 'Christy J Quinn',
-            'login' => [
-                'email' => 'quinn@bandit.localhost'
-            ]
+        $this->put('/api/players/1.json', [
+            'name' => 'Christy J Quinn'
         ]);
 
-        $this->assertResponseOk();
+        $this->assertResponseCode(200);
     }
 }

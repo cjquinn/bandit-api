@@ -10,25 +10,63 @@ class PlayersController extends AppController
     /**
      * @return void
      */
-    public function add()
+    public function initialize()
     {
-        $player = $this->Players->newEntity();
+        parent::initialize();
 
-        if ($this->request->is('post')) {
-            $this->Players->patchEntity($player, $this->request->data);
+        $this->loadComponent('RequestHandler');
+    }
 
-            if ($this->Players->save($player)) {
-                $this->Flash->success('Player invited');
-
-                return $this->redirect([
-                    'action' => 'add'
-                ]);
-            }
-
-            $this->Flash->error('There was an error, please try again');
+    /**
+     * @return bool
+     */
+    public function isAuthorized($user)
+    {
+        if ($this->request->action === 'edit' &&
+            $this->Auth->user('player.id') !== (int)$this->request->params['id']
+        ) {
+            return false;
         }
 
+        return parent::isAuthorized($user);
+    }
+
+    /**
+     * @return void
+     */
+    public function add()
+    {
+        $this->request->data['clubs'] = [
+            '_ids' => [
+                $this->request->params['club_id']
+            ]
+        ];
+
+        $player = $this->Players->newEntity($this->request->data, [
+            'associated' => [
+                'Clubs' => [
+                    'onlyIds' => true
+                ]
+            ],
+            'fieldList' => [
+                'name',
+                'login',
+                'clubs'
+            ]
+        ]);
+
         $this->set('player', $player);
+
+        if ($this->Players->save($player)) {
+            $this->set('_serialize', 'player');
+        } else {
+            $this->set([
+                'errors' => $player->errors(),
+                '_serialize' => true
+            ]);
+
+            $this->response->statusCode(400);
+        }
     }
 
     /**
@@ -42,26 +80,29 @@ class PlayersController extends AppController
             ]
         ]);
 
-        if ($this->request->is('put')) {
-            $this->Players->patchEntity($player, $this->request->data);
+        $this->Players->patchEntity($player, $this->request->data);
 
-            if (!$player->errors()) {
-                if (!empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name'))) {
-                    $this->Players->setProfilePicture($player, $this->request->data['losing_profile_picture']['tmp_name'], 'losing');
-                }
-                
-                if (!empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))) {
-                    $this->Players->setProfilePicture($player, $this->request->data['winning_profile_picture']['tmp_name'], 'winning');
-                }
+        if (!$player->errors()) {
+            if (!empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name'))) {
+                $this->Players->setProfilePicture($player, $this->request->data['losing_profile_picture']['tmp_name'], 'losing');
             }
-
-            if ($this->Players->save($player)) {
-                $this->Flash->success('Profile updated');
-            } else {
-                $this->Flash->error('There was an error, please try again');
+            
+            if (!empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))) {
+                $this->Players->setProfilePicture($player, $this->request->data['winning_profile_picture']['tmp_name'], 'winning');
             }
         }
 
         $this->set('player', $player);
+
+        if ($this->Players->save($player)) {
+            $this->set('_serialize', 'player');
+        } else {
+            $this->set([
+                'errors' => $player->errors(),
+                '_serialize' => true
+            ]);
+
+            $this->response->statusCode(400);
+        }
     }
 }

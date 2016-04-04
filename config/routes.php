@@ -33,30 +33,30 @@ Router::scope('/', function ($routes) {
         'controller' => 'Logins',
         'action' => 'resetPassword'
     ]);
+});
 
-    /**
-     * Players
-     */
-    $routes->connect('/account', [
-        'controller' => 'Players',
-        'action' => 'edit'
-    ]);
-
-    $routes->connect('/invite-player', [
-        'controller' => 'Players',
-        'action' => 'add'
-    ]);
-
+/**
+ * RESTful API
+ */
+Router::scope('/api', function ($routes) {
     $routes->extensions(['json']);
     
+    /**
+     * Clubs
+     */
     $routes->resources(
         'Clubs',
         ['only' => ''],
         function ($routes) {
+            /**
+             * Players
+             */
+            $routes->resources('Players', ['only' => 'create']);
+
+            /**
+             * Results
+             */
             $routes->resources(
-                /**
-                 * Results
-                 */
                 'Results',
                 [
                     'only' => [
@@ -67,6 +67,9 @@ Router::scope('/', function ($routes) {
                     ]
                 ],
                 function ($routes) {
+                    /**
+                     * Disputes
+                     */
                     $routes->resources('Disputes', [
                         'only' => [
                             'create',
@@ -78,6 +81,11 @@ Router::scope('/', function ($routes) {
             );
         }
     );
+
+    /**
+     * Players
+     */
+    $routes->resources('Players', ['only' => 'update']);
 });
 
 Plugin::routes();

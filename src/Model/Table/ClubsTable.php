@@ -17,6 +17,7 @@ class ClubsTable extends Table
         $this->addAssociations([
             'belongsTo' => [
                 'FoundingPlayers' => [
+                    'className' => 'Players',
                     'foreignKey' => 'founding_player_id'
                 ]
             ],

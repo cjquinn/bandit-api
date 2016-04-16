@@ -12,6 +12,7 @@ use DateTime;
 
 /**
  * @property int $id
+ * @property int $current_club_id
  * @property int $login_id
  * @property string $name
  * @property int $reputation

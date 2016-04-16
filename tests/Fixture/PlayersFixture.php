@@ -16,18 +16,21 @@ class PlayersFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
+                'current_club_id' => 1,
                 'login_id' => 1,
                 'name' => 'Christy Quinn',
                 'reputation' => 3
             ],
             [
                 'id' => 2,
+                'current_club_id' => 1,
                 'login_id' => 2,
                 'name' => 'Russell Bishop',
                 'reputation' => 2
             ],
             [
                 'id' => 3,
+                'current_club_id' => 1,
                 'login_id' => 3,
                 'name' => 'Tom Lippitt',
                 'reputation' => 1

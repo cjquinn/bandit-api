@@ -10,6 +10,7 @@ use Aws\S3\S3Client;
 
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
@@ -27,6 +28,10 @@ class PlayersTable extends Table
     {
         $this->addAssociations([
             'belongsTo' => [
+                'CurrentClubs' => [
+                    'className' => 'Clubs',
+                    'foreignKey' => 'current_club_id'
+                ],
                 'Logins'
             ],
             'belongsToMany' => [
@@ -36,6 +41,13 @@ class PlayersTable extends Table
                 'Disputes',
                 'Histories',
                 'Results'
+            ],
+            'hasOne' => [
+                'Club' => [
+                    'className' => 'ClubsPlayers',
+                    'foreignKey' => 'player_id',
+                    'propertyName' => 'club'
+                ]
             ]
         ]);
     }
@@ -91,28 +103,19 @@ class PlayersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
+        $rules->add($rules->existsIn(['current_club_id'], 'Clubs'));
         $rules->add($rules->existsIn(['login_id'], 'Logins'));
         
         return $rules;
     }
 
     /**
-     * @return void
-     */
-    public function beforeSave(Event $event, Player $player, ArrayObject $options)
-    {
-        if ($player->isNew()) {
-            $player->set('rating', Configure::read('Bandit.initialRating'));
-        }
-    }
-
-    /**
      * @return int
      */
-    public function dailyRating(Player $player, DateTime $date)
+    public function dailyRating(Player $player, $clubId, DateTime $date)
     {
         $result = $this->Results
-            ->find()
+            ->findByClubId($clubId)
             ->contain([
                 'Histories' => function ($q) use ($player) {
                     $q->where([
@@ -144,6 +147,27 @@ class PlayersTable extends Table
     public function expectedScore($losingPlayersRating, $winningPlayersRating)
     {
         return 1 / (1 + pow(10, ($winningPlayersRating - $losingPlayersRating) / 400));
+    }
+
+    /**
+     * Find players with clubs_players row
+     *
+     * @param \Cake\ORM\Query $query The query object
+     * @param array $options The options array
+     */
+    public function findClub(Query $query, $options)
+    {
+        $query->contain([
+            'Club' => function ($q) use ($options) {
+                $q->where([
+                    'Club.club_id' => $options['clubId']
+                ]);
+
+                return $q;
+            }
+        ]);
+
+        return $query;
     }
 
     /**
@@ -185,16 +209,33 @@ class PlayersTable extends Table
     /**
      * @param \App\Model\Entity\Player $losingPlayer The losing player
      * @param \App\Model\Entity\Player $winningPlayer The winning player
+     * @param int $clubId The club id
      * @param \DateTime $date The date of the result
      * @return void
      */
-    public function updateRatings(Player $losingPlayer, Player $winningPlayer, DateTime $date)
+    public function updateRatings(Player $losingPlayer, Player $winningPlayer, $clubId, DateTime $date)
     {
-        $losingPlayersExpectedScore = $this->expectedScore($this->dailyRating($losingPlayer, $date), $this->dailyRating($winningPlayer, $date));
+        $this->loadInto([$losingPlayer, $winningPlayer], [
+            'Club' => function ($q) use ($clubId) {
+                $q->where([
+                    'Club.club_id' => $clubId
+                ]);
+
+                return $q;
+            }
+        ]);
+
+        $losingPlayersExpectedScore = $this->expectedScore(
+            $this->dailyRating($losingPlayer, $clubId, $date),
+            $this->dailyRating($winningPlayer, $clubId, $date)
+        );
         $winningPlayersExpectedScore = 1 - $losingPlayersExpectedScore;
 
-        $losingPlayer->set('rating', $this->updatedRating($losingPlayer->rating, $losingPlayersExpectedScore, 0));
-        $winningPlayer->set('rating', $this->updatedRating($winningPlayer->rating, $winningPlayersExpectedScore, 1));
+        $losingPlayer->club->set('rating', $this->updatedRating($losingPlayer->club->rating, $losingPlayersExpectedScore, 0));
+        $winningPlayer->club->set('rating', $this->updatedRating($winningPlayer->club->rating, $winningPlayersExpectedScore, 1));
+
+        $losingPlayer->dirty('club', true);
+        $winningPlayer->dirty('club', true);
     }
 
     /**

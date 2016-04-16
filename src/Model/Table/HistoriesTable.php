@@ -47,7 +47,7 @@ class HistoriesTable extends Table
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
-        $data['difference'] = $data['player']->rating - $data['player']->getOriginal('rating');
-        $data['rating'] = $data['player']->rating;
+        $data['difference'] = $data['player']->club->rating - $data['player']->club->getOriginal('rating');
+        $data['rating'] = $data['player']->club->rating;
     }
 }

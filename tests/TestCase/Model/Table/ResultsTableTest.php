@@ -9,6 +9,8 @@ class ResultsTableTest extends TestCase
 {
 
     public $fixtures = [
+        'app.clubs',
+        'app.clubs_players',
         'app.disputes',
         'app.histories',
         'app.logins',
@@ -42,14 +44,30 @@ class ResultsTableTest extends TestCase
     public function testNullify()
     {
         $result = $this->Results->get(2);
+
         $this->Results->nullify($result);
 
-        $christy = $this->Results->Players->get(1);
-        $russell = $this->Results->Players->get(2);
-        $tom = $this->Results->Players->get(3);
+        $christy = $this->Results->Players
+            ->findById(1)
+            ->find('club', [
+                'clubId' => 1
+            ])
+            ->firstOrFail();
+        $russell = $this->Results->Players
+            ->findById(2)
+            ->find('club', [
+                'clubId' => 1
+            ])
+            ->firstOrFail();
+        $tom = $this->Results->Players
+            ->findById(3)
+            ->find('club', [
+                'clubId' => 1
+            ])
+            ->firstOrFail();
 
-        $this->assertEquals(1170, $christy->rating);
-        $this->assertEquals(1230, $russell->rating);
-        $this->assertEquals(1200, $tom->rating);
+        $this->assertEquals(1170, $christy->club->rating);
+        $this->assertEquals(1230, $russell->club->rating);
+        $this->assertEquals(1200, $tom->club->rating);
     }
 }

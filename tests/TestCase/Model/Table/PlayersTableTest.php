@@ -11,6 +11,8 @@ class PlayersTableTest extends TestCase
 {
 
     public $fixtures = [
+        'app.clubs',
+        'app.clubs_players',
         'app.histories',
         'app.players',
         'app.results'
@@ -43,20 +45,38 @@ class PlayersTableTest extends TestCase
     {
         $date = new DateTime('today');
 
-        $christy = $this->Players->get(1);
-        $russell = $this->Players->get(2);
-        $tom = $this->Players->get(3);
+        $christy = $this->Players
+            ->findById(1)
+            ->find('club', [
+                'clubId' => 1
+            ])
+            ->firstOrFail();
+        $russell = $this->Players
+            ->findById(2)
+            ->find('club', [
+                'clubId' => 1
+            ])
+            ->firstOrFail();
+        $tom = $this->Players
+            ->findById(3)
+            ->find('club', [
+                'clubId' => 1
+            ])
+            ->firstOrFail();
 
         // +14 -14
-        $this->Players->updateRatings($christy, $russell, $date);
+        $this->Players->updateRatings($christy, $russell, 1, $date);
 
-        $this->assertEquals(1140, $christy->rating);
-        $this->assertEquals(1244, $russell->rating);
+        $this->assertEquals(1140, $christy->club->rating);
+        $this->assertEquals(1244, $russell->club->rating);
+
+        $this->Players->save($christy);
+        $this->Players->save($russell);
 
         // +16 -16
-        $this->Players->updateRatings($russell, $tom, $date);
+        $this->Players->updateRatings($russell, $tom, 1, $date);
 
-        $this->assertEquals(1228, $russell->rating);
-        $this->assertEquals(1232, $tom->rating);
+        $this->assertEquals(1228, $russell->club->rating);
+        $this->assertEquals(1232, $tom->club->rating);
     }
 }

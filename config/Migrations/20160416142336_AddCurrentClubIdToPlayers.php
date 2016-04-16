@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class CreateClubs extends AbstractMigration
+class AddCurrentClubIdToPlayers extends AbstractMigration
 {
     /**
      * Change Method.
@@ -12,21 +12,17 @@ class CreateClubs extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('clubs');
-        $table->addColumn('founding_player_id', 'integer', [
+        $table = $this->table('players');
+        $table->addColumn('current_club_id', 'integer', [
+            'after' => 'id',
             'default' => null,
             'limit' => 11,
-            'null' => false,
+            'null' => true,
         ]);
-        $table->addForeignKey('founding_player_id', 'players', 'id', [
+        $table->addForeignKey('current_club_id', 'clubs', 'id', [
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
-        $table->addColumn('name', 'string', [
-            'default' => null,
-            'limit' => 255,
-            'null' => false,
-        ]);
-        $table->create();
+        $table->update();
     }
 }

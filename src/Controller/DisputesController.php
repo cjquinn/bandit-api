@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-class DisputesController extends AppController
+class DisputesController extends ApiController
 {
 
     /**
@@ -12,9 +12,7 @@ class DisputesController extends AppController
     public function initialize()
     {
         parent::initialize();
-
-        $this->loadComponent('RequestHandler');
-
+        
         $this->_result = $this->Disputes->Results->get($this->request->params['result_id']);
 
         if (isset($this->request->params['id'])) {
@@ -37,6 +35,10 @@ class DisputesController extends AppController
      */
     public function isAuthorized($user)
     {
+        if (!parent::isAuthorized($user)) {
+            return false;
+        }
+
         if ($this->request->action === 'add') {
             if (!$this->_result->created->wasWithinLast('24 hours')) {
                 return false;
@@ -71,7 +73,7 @@ class DisputesController extends AppController
             }
         }
 
-        return parent::isAuthorized($user);
+        return true;
     }
 
     /**

@@ -4,18 +4,8 @@ namespace App\Controller;
 
 use Cake\Utility\Hash;
 
-class PlayersController extends AppController
+class PlayersController extends ApiController
 {
-
-    /**
-     * @return void
-     */
-    public function initialize()
-    {
-        parent::initialize();
-
-        $this->loadComponent('RequestHandler');
-    }
 
     /**
      * @return bool

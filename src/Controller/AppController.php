@@ -14,7 +14,6 @@ class AppController extends Controller
     public function initialize()
     {
         $this->loadComponent('Cookie');
-        $this->loadComponent('Flash');
         $this->loadComponent('Auth', [
             'authenticate' => [
                 'all' => [
@@ -30,7 +29,9 @@ class AppController extends Controller
             'authError' => false,
             'loginAction' => [
                 'controller' => 'Logins',
-                'action' => 'login'
+                'action' => 'login',
+                '_ext' => 'json',
+                '_method' => 'POST'
             ]
         ]);
     }

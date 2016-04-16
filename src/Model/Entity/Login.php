@@ -23,6 +23,12 @@ class Login extends Entity
         '*' => false,
     ];
 
+    protected $_hidden = [
+        'password',
+        'token',
+        'token_sent'
+    ];
+
     /**
      * @return string
      */

@@ -14,69 +14,6 @@ class LoginsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testActivateAccountNoToken()
-    {
-        $this->get('/activate-account');
-
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login'
-        ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testActivateAccountExpiredToken()
-    {
-        $logins = TableRegistry::get('Logins');
-        $login = $logins->get(1);
-
-        $login->set([
-            'password' => null,
-            'token' => 123,
-            'token_sent' => new Time('2 hours ago')
-        ], [
-            'guard' => false
-        ]);
-        $logins->save($login);
-
-        $this->get('/activate-account?token=123');
-
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login'
-        ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testActivateAccountActiveAccount()
-    {
-        $logins = TableRegistry::get('Logins');
-        $login = $logins->get(1);
-
-        $login->set([
-            'password' => 'password',
-            'token' => 123,
-            'token_sent' => Time::now()
-        ], [
-            'guard' => false
-        ]);
-        $logins->save($login);
-
-        $this->get('/activate-account?token=123');
-
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login'
-        ]);
-    }
-
-    /**
-     * @return void
-     */
     public function testActivateAccountBadData()
     {
         $logins = TableRegistry::get('Logins');
@@ -91,17 +28,19 @@ class LoginsControllerTest extends IntegrationTestCase
         ]);
         $logins->save($login);
 
-        $this->put('/activate-account?token=123', [
+        $this->_setAjaxRequest();
+
+        $this->put('/api/auth/activate-account.json?token=123', [
             'password' => ''
         ]);
         
-        $this->assertNoRedirect();
+        $this->assertResponseCode(400);
     }
 
     /**
      * @return void
      */
-    public function testActivateAccountPost()
+    public function testActivateAccountPut()
     {
         $logins = TableRegistry::get('Logins');
         $login = $logins->get(1);
@@ -115,39 +54,13 @@ class LoginsControllerTest extends IntegrationTestCase
         ]);
         $logins->save($login);
 
-        $this->put('/activate-account?token=123', [
+        $this->_setAjaxRequest();
+
+        $this->put('/api/auth/activate-account.json?token=123', [
             'password' => 'password'
         ]);
         
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login',
-            '?' => [
-                'email' => 'christy@bandit.localhost'
-            ]
-        ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testActivateAccountGet()
-    {
-        $logins = TableRegistry::get('Logins');
-        $login = $logins->get(1);
-
-        $login->set([
-            'password' => null,
-            'token' => 123,
-            'token_sent' => Time::now()
-        ], [
-            'guard' => false
-        ]);
-        $logins->save($login);
-
-        $this->get('/activate-account?token=123');
-
-        $this->assertResponseOk();
+        $this->assertResponseCode(200);
     }
 
     /**
@@ -163,13 +76,15 @@ class LoginsControllerTest extends IntegrationTestCase
         ]);
         $logins->save($login);
 
-        $this->post('/login', [
+        $this->_setAjaxRequest();
+
+        $this->post('/api/auth/login.json', [
             'email' => 'christy@bandit.localhost',
             'password' => 'incorrect password',
             'remember_me' => false
         ]);
 
-        $this->assertNoRedirect();
+        $this->assertResponseCode(400);
     }
 
     /**
@@ -185,23 +100,15 @@ class LoginsControllerTest extends IntegrationTestCase
         ]);
         $logins->save($login);
 
-        $this->post('/login', [
+        $this->_setAjaxRequest();
+
+        $this->post('/api/auth/login.json', [
             'email' => 'christy@bandit.localhost',
             'password' => 'password',
-            'remember_me' => true
+            'remember_me' => false
         ]);
 
-        $this->assertRedirect($this->_controller->Auth->redirectUrl());
-    }
-
-    /**
-     * @return void
-     */
-    public function testLoginGet()
-    {
-        $this->get('/login');
-
-        $this->assertResponseOk();
+        $this->assertResponseCode(200);
     }
 
     /**
@@ -209,12 +116,11 @@ class LoginsControllerTest extends IntegrationTestCase
      */
     public function testLogoutGet()
     {
-        $this->get('/logout');
+        $this->_setAjaxRequest();
 
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login'
-        ]);
+        $this->get('/api/auth/logout.json');
+
+        $this->assertResponseCode(200);
     }
 
 
@@ -223,11 +129,13 @@ class LoginsControllerTest extends IntegrationTestCase
      */
     public function testRequestPasswordResetInvalidEmail()
     {
-        $this->post('/request-password-reset', [
+        $this->_setAjaxRequest();
+
+        $this->put('/api/auth/request-password-reset.json', [
             'email' => 'incorrect@bandit.localhost'
         ]);
 
-        $this->assertNoRedirect();
+        $this->assertResponseCode(400);
     }
 
     /**
@@ -235,67 +143,19 @@ class LoginsControllerTest extends IntegrationTestCase
      */
     public function testRequestPasswordResetPost()
     {
-        $this->post('/request-password-reset', [
+        $this->_setAjaxRequest();
+
+        $this->put('/api/auth/request-password-reset.json', [
             'email' => 'christy@bandit.localhost'
         ]);
         
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login'
-        ]);
+        $this->assertResponseCode(200);
     }
 
     /**
      * @return void
      */
-    public function testRequestPasswordResetGet()
-    {
-        $this->get('/request-password-reset');
-
-        $this->assertResponseOk();
-    }
-
-    /**
-     * @return void
-     */
-    public function testResetPasswordNoToken()
-    {
-        $this->get('/reset-password');
-
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login'
-        ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testResetPasswordExpiredToken()
-    {
-        $logins = TableRegistry::get('Logins');
-        $login = $logins->get(1);
-
-        $login->set([
-            'token' => 123,
-            'token_sent' => new Time('2 hours ago')
-        ], [
-            'guard' => false
-        ]);
-        $logins->save($login);
-
-        $this->get('/reset-password?token=123');
-
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login'
-        ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testResetPasswordGetPost()
+    public function testResetPasswordBadData()
     {
         $logins = TableRegistry::get('Logins');
         $login = $logins->get(1);
@@ -308,17 +168,119 @@ class LoginsControllerTest extends IntegrationTestCase
         ]);
         $logins->save($login);
 
-        $this->get('/reset-password?token=123');
+        $this->_setAjaxRequest();
 
-        $this->assertResponseOk();
+        $this->put('/api/auth/reset-password.json?token=123', [
+            'password' => ''
+        ]);
+        
+        $this->assertResponseCode(400);
+    }
 
-        $this->post('/reset-password?token=123', [
+    /**
+     * @return void
+     */
+    public function testResetPasswordPut()
+    {
+        $logins = TableRegistry::get('Logins');
+        $login = $logins->get(1);
+
+        $login->set([
+            'token' => 123,
+            'token_sent' => Time::now()
+        ], [
+            'guard' => false
+        ]);
+        $logins->save($login);
+
+        $this->_setAjaxRequest();
+
+        $this->put('/api/auth/reset-password.json?token=123', [
             'password' => 'password'
         ]);
         
-        $this->assertRedirect([
-            'controller' => 'Logins',
-            'action' => 'login'
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function testValidateTokenNoToken()
+    {
+        $this->_setAjaxRequest();
+
+        $this->get('/api/auth/activate-account/validate-token.json');
+        
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testValidateTokenExpiredToken()
+    {
+        $logins = TableRegistry::get('Logins');
+        $login = $logins->get(1);
+
+        $login->set([
+            'password' => null,
+            'token' => 123,
+            'token_sent' => new Time('2 hours ago')
+        ], [
+            'guard' => false
         ]);
+        $logins->save($login);
+
+        $this->_setAjaxRequest();
+
+        $this->get('/api/auth/activate-account/validate-token.json?token=123');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testValidateTokenActiveAccount()
+    {
+        $logins = TableRegistry::get('Logins');
+        $login = $logins->get(1);
+
+        $login->set([
+            'password' => 'password',
+            'token' => 123,
+            'token_sent' => Time::now()
+        ], [
+            'guard' => false
+        ]);
+        $logins->save($login);
+
+        $this->get('/api/auth/activate-account/validate-token.json?token=123');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testValidateTokenGet()
+    {
+        $logins = TableRegistry::get('Logins');
+        $login = $logins->get(1);
+
+        $login->set([
+            'password' => null,
+            'token' => 123,
+            'token_sent' => Time::now()
+        ], [
+            'guard' => false
+        ]);
+        $logins->save($login);
+
+        $logins->save($login);
+
+        $this->get('/api/auth/activate-account/validate-token.json?token=123');
+
+        $this->assertResponseCode(200);
     }
 }

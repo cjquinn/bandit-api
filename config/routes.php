@@ -5,36 +5,6 @@ use Cake\Routing\Router;
 
 Router::defaultRouteClass('DashedRoute');
 
-Router::scope('/', function ($routes) {
-    /**
-     * Logins
-     */
-    $routes->connect('/activate-account', [
-        'controller' => 'Logins',
-        'action' => 'activateAccount'
-    ]);
-
-    $routes->connect('/login', [
-        'controller' => 'Logins',
-        'action' => 'login'
-    ]);
-
-    $routes->connect('/logout', [
-        'controller' => 'Logins',
-        'action' => 'logout'
-    ]);
-
-    $routes->connect('/request-password-reset', [
-        'controller' => 'Logins',
-        'action' => 'requestPasswordReset'
-    ]);
-
-    $routes->connect('/reset-password', [
-        'controller' => 'Logins',
-        'action' => 'resetPassword'
-    ]);
-});
-
 /**
  * RESTful API
  */
@@ -86,6 +56,70 @@ Router::scope('/api', function ($routes) {
      * Players
      */
     $routes->resources('Players', ['only' => 'update']);
+
+    /**
+     * Auth
+     */
+    $routes->scope('/auth', function ($routes) {
+        /**
+         * Logins
+         */
+        $routes->connect('/activate-account', [
+            'controller' => 'Logins',
+            'action' => 'activateAccount',
+            '_method' => 'PUT'
+        ]);
+
+        $routes->connect('/login', [
+            'controller' => 'Logins',
+            'action' => 'login',
+            '_method' => 'POST'
+        ]);
+
+        $routes->connect('/logout', [
+            'controller' => 'Logins',
+            'action' => 'logout',
+            '_method' => 'GET'
+        ]);
+
+        $routes->connect('/request-password-reset', [
+            'controller' => 'Logins',
+            'action' => 'requestPasswordReset',
+            '_method' => 'PUT'
+        ]);
+
+        $routes->connect('/reset-password', [
+            'controller' => 'Logins',
+            'action' => 'resetPassword',
+            '_method' => 'PUT'
+        ]);
+
+        $routes->connect(
+            '/activate-account/validate-token',
+            [
+                'controller' => 'Logins',
+                'action' => 'validateToken',
+                '_method' => 'GET',
+                'parentAction' => 'activateAccount'
+            ],
+            [
+                'pass' => ['parentAction']
+            ]
+        );
+
+        $routes->connect(
+            '/reset-password/validate-token',
+            [
+                'controller' => 'Logins',
+                'action' => 'validateToken',
+                '_method' => 'GET',
+                'parentAction' => 'resetPassword'
+            ],
+            [
+                'pass' => ['parentAction']
+            ]
+        );
+    });
 });
 
 Plugin::routes();

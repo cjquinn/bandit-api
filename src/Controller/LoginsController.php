@@ -5,10 +5,11 @@ namespace App\Controller;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\Mailer\MailerAwareTrait;
+use Cake\Network\Exception\ForbiddenException;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 
-class LoginsController extends AppController
+class LoginsController extends ApiController
 {
 
     use MailerAwareTrait;
@@ -24,14 +25,17 @@ class LoginsController extends AppController
             'activateAccount',
             'logout',
             'requestPasswordReset',
-            'resetPassword'
+            'resetPassword',
+            'validateToken'
         ];
         $bypassActions = array_replace($allowedActions, [1 => 'login']);
 
         $this->Auth->allow($allowedActions);
 
-        if ($this->Auth->user() && in_array($this->request->action, $bypassActions)) {
-            return $this->redirect($this->Auth->redirectUrl());
+        if ($this->Auth->user() &&
+            in_array($this->request->action, $bypassActions)
+        ) {
+            throw new ForbiddenException('You are not authorized to access that location.');
         }
     }
 
@@ -40,65 +44,32 @@ class LoginsController extends AppController
      */
     public function activateAccount()
     {
-        $login = $this->Logins->validateToken($this->request->query);
+        $login = $this->_validateToken('activateAccount');
 
-        if (!$login) {
-            return $this->redirect([
-                'action' => 'login'
-            ]);
+        $this->Logins->activateAccount($login, $this->request->data);
+
+        if (!$login->errors() &&
+            !empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name')) &&
+            !empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))
+        ) {
+            $this->Logins->Players->setProfilePicture($login->player, $this->request->data['losing_profile_picture']['tmp_name'], 'losing');
+
+            $this->Logins->Players->setProfilePicture($login->player, $this->request->data['winning_profile_picture']['tmp_name'], 'winning');
         }
 
-        if (!$login->token_sent->wasWithinLast('1 Hour')) {
-            $this->Logins->createToken($login);
-            $this->Logins->save($login);
-
-            if (!defined('TESTING')) {
-                $this->getMailer('Login')->send('activateAccount', [$login]);
-            }
-
-            $this->Flash->info('Your account activation link has expired, please check your email for your new link');
-
-            return $this->redirect([
-                'action' => 'login'
+        if ($this->Logins->save($login)) {
+            $this->set([
+                'email' => $login->email,
+                '_serialize' => 'email'
             ]);
-        }
-
-        if ($login->is_activated) {
-            $this->Flash->info('Your account is already active, <a href="' . Router::url(['controller' => 'Logins', 'action' => 'requestPasswordReset']) . '">forgotten password?</a>');
-
-            return $this->redirect([
-                'action' => 'login'
+        } else {
+            $this->set([
+                'errors' => $login->errors(),
+                '_serialize' => 'errors'
             ]);
-        }
-
-        if ($this->request->is('put')) {
-            $this->Logins->activateAccount($login, $this->request->data);
-
-            if (!$login->errors() &&
-                !empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name')) &&
-                !empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))
-            ) {
-                $this->Logins->Players->setProfilePicture($login->player, $this->request->data['losing_profile_picture']['tmp_name'], 'losing');
-
-                $this->Logins->Players->setProfilePicture($login->player, $this->request->data['winning_profile_picture']['tmp_name'], 'winning');
-            }
-
-            if ($this->Logins->save($login)) {
-                $this->Flash->success('Account activated, please login with your password');
             
-                return $this->redirect([
-                    'action' => 'login',
-                    '?' => [
-                        'email' => $login->email
-                    ]
-                ]);
-            }
-
-            $this->Flash->error('There was an error, please try again');
+            $this->response->statusCode(400);
         }
-
-
-        $this->set('login', $login);
     }
 
     /**
@@ -106,25 +77,20 @@ class LoginsController extends AppController
      */
     public function login()
     {
-        $login = $this->Logins->newEntity();
+        $login = $this->Auth->identify();
 
-        if ($this->request->is('post')) {
-            $login = $this->Auth->identify();
+        if ($login) {
+            $this->Auth->setUser($login);
 
-            if ($login) {
-                $this->Auth->setUser($login);
+            $this->set([
+                'login' => $login,
+                '_serialize' => 'login'
+            ]);
+        } else {
+            $this->set('_serialize', true);
 
-                return $this->redirect($this->Auth->redirectUrl());
-            }
-
-            $this->Flash->error('Invalid email or password, please try again');
+            $this->response->statusCode(400);
         }
-
-        if (isset($this->request->query['email'])) {
-            $this->request->data['email'] = $this->request->query['email'];
-        }
-
-        $this->set('login', $login);
     }
 
     /**
@@ -132,9 +98,9 @@ class LoginsController extends AppController
      */
     public function logout()
     {
-        $logoutRedirect = $this->Auth->logout();
+        $this->Auth->logout();
 
-        return $this->redirect($logoutRedirect);
+        $this->set('_serialize', true);
     }
 
     /**
@@ -142,28 +108,22 @@ class LoginsController extends AppController
      */
     public function requestPasswordReset()
     {
-        if ($this->request->is('post')) {
-            $login = $this->Logins
-                ->findByEmail($this->request->data['email'])
-                ->first();
+        $login = $this->Logins
+            ->findByEmail($this->request->data['email'])
+            ->first();
 
-            if ($login) {
-                $this->Logins->createToken($login);
-                $this->Logins->save($login);
+        if ($login) {
+            $this->Logins->createToken($login);
+            $this->Logins->save($login);
 
-                if (!defined('TESTING')) {
-                    $this->getMailer('Login')->send('resetPassword', [$login]);
-                }
-
-                $this->Flash->success('Password reset requested, please check your email');
-                
-                return $this->redirect([
-                    'action' => 'login'
-                ]);
+            if (!defined('TESTING')) {
+                $this->getMailer('Login')->send('resetPassword', [$login]);
             }
-
-            $this->Flash->error('Invalid email, please try again');
+        } else {
+            $this->response->statusCode(400);
         }
+
+        $this->set('_serialize', true);
     }
 
     /**
@@ -171,36 +131,61 @@ class LoginsController extends AppController
      */
     public function resetPassword()
     {
+        $login = $this->_validateToken('resetPassword');
+
+        $this->Logins->setPassword($login, $this->request->data);
+
+        if (!$this->Logins->save($login)) {
+            $this->response->statusCode(400);
+        }
+
+        $this->set('_serialize', true);
+    }
+
+    /**
+     * @return void
+     */
+    public function validateToken($parentAction)
+    {
+        $this->_validateToken($parentAction);
+
+        $this->set('_serialize', true);
+    }
+
+    /**
+     * @return \App\Model\Entity\Login
+     */
+    private function _validateToken($parentAction)
+    {
         $login = $this->Logins->validateToken($this->request->query);
 
-        if (!$login || !$login->token_sent->wasWithinLast('1 Hour')) {
-            return $this->redirect([
-                'action' => 'login'
-            ]);
+        if (!$login) {
+            throw new ForbiddenException('You are not authorized to access that location.');
         }
 
         if (!$login->token_sent->wasWithinLast('1 Hour')) {
-            $this->Flash->info('Your password reset request has expired, please enter your email to try again');
+            if ($parentAction === 'activateAccount') {
+                $this->Logins->createToken($login);
+                $this->Logins->save($login);
 
-            return $this->redirect([
-                'action' => 'requestPasswordReset'
-            ]);
-        }
+                if (!defined('TESTING')) {
+                    $this->getMailer('Login')->send('activateAccount', [$login]);
+                }
 
-        if ($this->request->is('post')) {
-            $this->Logins->setPassword($login, $this->request->data);
-
-            if ($this->Logins->save($login)) {
-                $this->Flash->success('Password reset, please login with your new password');
-            
-                return $this->redirect([
-                    'action' => 'login'
-                ]);
+                $message = 'Your account activation link has expired, please check your email for your new link.';
+            } else {
+                $message = 'Your password reset request has expired, please enter your email to try again.';
             }
 
-            $this->Flash->error('You must enter a password, please try again');
+            throw new ForbiddenException($message);
         }
 
-        $this->set('login', $login);
+        if ($parentAction === 'activateAccount' &&
+            $login->is_activated
+        ) {
+            throw new ForbiddenException('Your account is already active.');
+        }
+
+        return $login;
     }
 }

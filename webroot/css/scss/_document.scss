@@ -13,7 +13,7 @@ body {
 }
 
 .app {
-	@include container; min-height: 200%; padding: 6px;
+	@include container; padding: 6px;
 	background-color: $app__base;
 	border-radius: 6px;
 }

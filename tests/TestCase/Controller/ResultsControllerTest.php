@@ -209,4 +209,17 @@ class ResultsControllerTest extends IntegrationTestCase
 
         $this->assertResponseCode(200);
     }
+
+    /**
+     * @return void
+     */
+    public function testUnassigned()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(4);
+
+        $this->get('/api/clubs/1/results/1.json');
+
+        $this->assertResponseCode(403);
+    }
 }

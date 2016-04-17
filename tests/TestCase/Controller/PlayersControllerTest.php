@@ -17,7 +17,7 @@ class PlayersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/api/clubs/1/players.json');
+        $this->post('/api/clubs/1/players.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -103,5 +103,18 @@ class PlayersControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUnassigned()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(4);
+
+        $this->post('/api/clubs/1/players.json', []);
+
+        $this->assertResponseCode(403);
     }
 }

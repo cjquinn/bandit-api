@@ -235,4 +235,19 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->assertEquals(-8, $christy->reputation);
         $this->assertEquals(-10, $tom->reputation);
     }
+
+    /**
+     * @return void
+     */
+    public function testUnassigned()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(4);
+
+        $this->post('/api/clubs/1/results/3/disputes.json', [
+            'message' => ''
+        ]);
+
+        $this->assertResponseCode(403);
+    }
 }

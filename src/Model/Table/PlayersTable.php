@@ -187,6 +187,17 @@ class PlayersTable extends Table
     }
 
     /**
+     * @return bool
+     */
+    public function isAssignedTo($id, $clubId)
+    {
+        return $this->Club->exists([
+            'club_id' => $clubId,
+            'player_id' => $id
+        ]);
+    }
+
+    /**
      * @param \App\Model\Entity\Player $player The player object
      * @param string $tmpName The tmp name
      * @param string $type (Losing | winning)

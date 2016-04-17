@@ -11,7 +11,7 @@ module.exports = function(grunt) {
                 ]
             },
             dist: {
-                src: 'library/css/*.css'
+                src: 'webroot/css/*.css'
             }
 		},
 		sass: {
@@ -26,7 +26,7 @@ module.exports = function(grunt) {
 		},
 		watch: {
 			css: {
-				files: 'library/css/scss/**/*.scss',
+				files: 'webroot/css/**/*.scss',
 				tasks: ['sass', 'postcss:dist']
 			}
 		}

@@ -3,6 +3,10 @@
 /tmp/*
 /logs/*
 
-.css
+*.css
 .DS_Store
 *.scssc
+
+/node_modules/*
+*.css.map
+config.codekit

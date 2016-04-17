@@ -13,7 +13,13 @@ class ResultsController extends ApiController
     public function isAuthorized($user)
     {
         if ($this->request->action === 'add') {
-            if (Hash::get($this->request->data, 'losing_player_id') === $this->Auth->user('player.id')) {
+            $losingPlayerId = Hash::get($this->request->data, 'losing_player_id');
+
+            if ($losingPlayerId === $this->Auth->user('player.id')) {
+                return false;
+            }
+
+            if (!$this->Results->Players->isAssignedTo($losingPlayerId, $this->request->params['club_id'])) {
                 return false;
             }
 
@@ -69,7 +75,11 @@ class ResultsController extends ApiController
      */
     public function delete($id)
     {
-        $result = $this->Results->get($id);
+        $result = $this->Results->get($id, [
+            'conditions' => [
+                'club_id' => $this->request->params['club_id']
+            ]
+        ]);
 
         $this->Results->delete($result);
 
@@ -95,7 +105,11 @@ class ResultsController extends ApiController
      */
     public function view($id)
     {
-        $result = $this->Results->get($id);
+        $result = $this->Results->get($id, [
+            'conditions' => [
+                'club_id' => $this->request->params['club_id']
+            ]
+        ]);
 
         $this->set([
             'result' => $result,

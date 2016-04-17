@@ -41,6 +41,21 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testAddUnassignedLoserId()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->post('/api/clubs/1/results.json', [
+            'losing_player_id' => 4
+        ]);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testAddExistingDisputes()
     {
         $this->_setAjaxRequest();
@@ -51,21 +66,6 @@ class ResultsControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testAddBadData()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
-
-        $this->post('/api/clubs/1/results.json', [
-            'losing_player_id' => null
-        ]);
-
-        $this->assertResponseCode(400);
     }
 
     /**

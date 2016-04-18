@@ -17,3 +17,7 @@ body {
 	background-color: $app__base;
 	border-radius: 6px;
 }
+
+.display {
+	@include unit(padding-top, 2);
+}

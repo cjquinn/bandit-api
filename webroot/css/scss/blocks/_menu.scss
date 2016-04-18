@@ -1,4 +1,53 @@
 .menu {
 	background: $app__inset;
 	border-radius: 4px 0 0 4px; box-shadow: inset -1px 0px 2px $shadow, inset -3px 0px 19px rgba($shadow, 0.10);
+
+	&__logo {
+		display: block; @include unit(margin-left, 3);
+
+		&__svg {
+			width: 66px; height: auto; 
+		}
+
+		&__use {
+			
+		}
+
+	}
+
+	&__list {
+
+		&__item {
+			@include unit(margin-bottom, 1);
+
+			&.is--active {
+				
+			}
+
+		}
+
+		&__link {
+			display: block; @include unit(padding-left, 3); @include unit(padding-right, 3);
+			@include unit(line-height, 5);
+			transition: background .2s ease;
+
+			&:hover,
+			&:focus {
+				background-color: rgba($mirage, .25);
+			}
+
+
+			&.is--active {
+				background-color: rgba($mirage, .37);
+				color: $link-water;
+			}
+
+		}
+
+	}
+
+	&__button {
+		@include unit(margin-left, 3); @include unit(margin-right, 3);
+	}
+
 }

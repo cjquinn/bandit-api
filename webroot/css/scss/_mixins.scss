@@ -49,6 +49,12 @@ $unit: 12px;
 	}
 }
 
+@mixin unit($property, $multiplier) {
+
+	#{$property}: #{($multiplier * $unit)};
+
+}
+
 
 
 /*	

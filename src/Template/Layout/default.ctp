@@ -113,6 +113,12 @@
 
                                 <div class="match__player is--loser col gflex">
 
+                                    <figure class="match__player__player-photo player-photo">
+                                        <div class="player-photo__proportion">
+                                            <img src="/img/photos/photo1.jpg" alt="Photo 1" class="player-photo__image clip-hexagon" />
+                                        </div>
+                                    </figure>
+
                                     <dl>
 
                                         <dt class="match__player__name">Russell</dt>
@@ -121,11 +127,7 @@
 
                                     </dl>
 
-                                    <figure class="match__player__player-photo player-photo">
-                                        <div class="player-photo__proportion">
-                                            <img src="/img/photos/photo1.jpg" alt="Photo 1" class="player-photo__image clip-hexagon" />
-                                        </div>
-                                    </figure>
+                                    
 
                                 </div>
 

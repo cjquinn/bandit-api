@@ -77,17 +77,19 @@
 
 	@media (min-width: 900px) {
 
-		display: flex;
+		display: flex; align-items: center;
 
 		> .col {
 
+			flex: 1;
+
 			&:nth-child(odd) {
-				flex: 1;
+				
 			}
 			
 
 			&:nth-child(even) {
-				max-width: 80px; min-width: 80px; /* about the width of XY - YZ */
+				flex: 0 0 80px; /* about the width of XY - YZ */
 			}
 		}
 

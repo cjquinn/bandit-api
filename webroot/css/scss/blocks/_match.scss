@@ -1,14 +1,15 @@
 .match {
+	
 	background: $mirage3;
 
+
 	&__player {
-		@include inline-children;
-		display: flex; justify-content: space-between; @include unit(height, 7); padding: 0 0 0 22px;
+		display: flex; justify-content: space-between; @include unit(height, 7); 
 		font-size: 14px;
 
-
-
 		&:first-child {
+			padding: 0 0 0 22px;
+
 			&.is--winner {
 				border-left: 2px solid $win;
 				background-image: radial-gradient( circle farthest-corner at top left,
@@ -24,6 +25,7 @@
 		}
 
 		&:last-child {
+			padding: 0 22px 0 0;
 
 			&.is--loser {
 				border-right: 2px solid $loss;

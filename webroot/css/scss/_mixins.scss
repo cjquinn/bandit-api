@@ -49,6 +49,18 @@ $unit: 12px;
 	}
 }
 
+@mixin inline-children($up: false) {
+
+	> * {
+		display: inline-block; vertical-align: middle;
+		
+		@if $up {
+			position: relative; top: -2px;
+		}
+	}
+
+}
+
 @mixin unit($property, $multiplier) {
 
 	#{$property}: #{($multiplier * $unit)};
@@ -81,4 +93,13 @@ $unit: 12px;
 
 @mixin background-cover {
 	background-repeat: no-repeat; background-size: cover; background-position: center center;
+}
+
+
+/*
+	masks
+*/
+
+@mixin clip-hexagon {
+	clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }

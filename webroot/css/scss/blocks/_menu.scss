@@ -6,7 +6,7 @@
 		display: block; @include unit(margin-left, 3);
 
 		&__svg {
-			width: 66px; height: auto; 
+			width: 66px; height: auto; /* is this right? */
 		}
 
 		&__use {
@@ -27,15 +27,17 @@
 		}
 
 		&__link {
+			position: relative;
 			display: block; @include unit(padding-left, 3); @include unit(padding-right, 3);
 			@include unit(line-height, 5);
-			transition: background .2s ease;
+			transition: all .2s ease;
 
 			&:hover,
 			&:focus {
+				text-indent: 4px;
 				background-color: rgba($mirage, .25);
+				transform: translateY(-4px);
 			}
-
 
 			&.is--active {
 				background-color: rgba($mirage, .37);

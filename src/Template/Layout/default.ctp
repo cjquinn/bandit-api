@@ -12,174 +12,144 @@
     <?= $this->fetch('script') ?>
 </head>
 <body>
-    <?= $this->Flash->render() ?>
+<?= $this->Flash->render() ?>
 
-    <figure class="svg-library" style="display:none;">
-        <?= $this->Svg->display('brand/logo') ?>
-    </figure>
+<figure class="svg-library" style="display:none;">
+    <?= $this->Svg->display('brand/logo') ?>
+</figure>
 
-    <div class="app">
+<div class="app">
 
-        <div class="g1">
+    <div class="g1">
 
-        	<nav class="menu col">
+    	<nav class="menu col">
 
-                <a href="/" class="menu__logo">
-                    <svg class="menu__logo__svg"><use class="menu__logo__use" xlink:href="#brand-logo" /></svg>
-                </a>
+            <a href="/" class="menu__logo">
+                <svg class="menu__logo__svg"><use class="menu__logo__use" xlink:href="#brand-logo" /></svg>
+            </a>
 
-        		<ol class="menu__list">
+    		<ol class="menu__list">
 
-        			<li class="menu__list__item is--active">
-        				<a href="/" class="menu__list__link is--active">Dashboard</a>
-        			</li>
+    			<li class="menu__list__item is--active">
+    				<a href="/" class="menu__list__link is--active">Dashboard</a>
+    			</li>
 
-        			<li class="menu__list__item">
-        				<a href="/" class="menu__list__link">Leaderboards</a>
-        			</li>
+    			<li class="menu__list__item">
+    				<a href="/" class="menu__list__link">Leaderboards</a>
+    			</li>
 
-        			<li class="menu__list__item">
-        				<a href="/" class="menu__list__link">Box League</a>
-        			</li>
+    			<li class="menu__list__item">
+    				<a href="/" class="menu__list__link">Box League</a>
+    			</li>
 
-        			<li class="menu__list__item">
-        				<a href="/" class="menu__list__link">Players</a>
-        			</li>
+    			<li class="menu__list__item">
+    				<a href="/" class="menu__list__link">Players</a>
+    			</li>
 
-        			<li class="menu__list__item">
-        				<a href="/" class="menu__list__link">My Profile</a>
-        			</li>
+    			<li class="menu__list__item">
+    				<a href="/" class="menu__list__link">My Profile</a>
+    			</li>
 
-        		</ol>
+    		</ol>
 
-                <a class="button menu__button" href="/">
-                    Add Wins
-                </a>
+            <a class="button menu__button" href="/">
+                Add Wins
+            </a>
 
-        	</nav>
+    	</nav>
 
-            <article class="view col">
+        <article class="view col">
 
-                <div class="header g2">
+            <div class="header g2">
 
-                    <div class="col">
+                <div class="col">
 
-                        <h1 class="h1">Dashboard</h1>
-
-                    </div>
-
-                    <div class="col">
-
-                        <h1 class="h1">Notifications</h1>
-
-                    </div>
+                    <h1 class="header__title h1">Dashboard</h1>
 
                 </div>
 
-                <article class="display g2">
+                <div class="col">
 
-                    <section class="col">
+                    <h1 class="header__title h1">Notifications</h1>
 
-                        <section class="block">
+                </div>
 
-                            <header class="block__header">
-                                <h1 class="h2">Matches</h1>
-                            </header>
+            </div>
 
-                        </section>
+            <article class="display g2">
+
+                <section class="col">
+
+                    <section class="block">
+
+                        <header class="block__header">
+                            <h1 class="h2">Matches</h1>
+                        </header>
+
+                        <ol class="stream">
+                            <li class="match g3">
+
+
+                                <div class="match__player is--winner col gflex">
+
+                                    <dl>
+
+                                        <dt class="match__player__name">Russell</dt>
+                                        <dd class="match__player__rating">6085</dd>
+
+                                    </dl>
+
+                                    <figure class="match__player__player-photo">
+                                        <div class="player-photo__proportion">
+                                            <img src="/img/photos/photo1.jpg" alt="Photo 1" class="player-photo__image clip-hexagon" />
+                                        </div>
+                                    </figure>
+
+                                </div>
+
+                                <aside class="match__score col">
+                                    3<span class="match__score__hyphen">-</span>0
+                                </aside>
+
+                                <div class="match__player is--loser col gflex">
+
+                                    <dl>
+
+                                        <dt class="match__player__name">Russell</dt>
+
+                                        <dd class="match__player__rating">6085</dd>
+
+                                    </dl>
+
+                                    <figure class="match__player__player-photo player-photo">
+                                        <div class="player-photo__proportion">
+                                            <img src="/img/photos/photo1.jpg" alt="Photo 1" class="player-photo__image clip-hexagon" />
+                                        </div>
+                                    </figure>
+
+                                </div>
+
+                            </li> 
+                        </ol>
 
                     </section>
 
-                    <section class="col">
+                </section>
 
-                        <blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p></blockquote>
-
-                        <h3>Header Level 3</h3>
-
-                        <ul>
-                           <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-                           <li>Aliquam tincidunt mauris eu risus.</li>
-                        </ul>
-
-                        <pre><code>
-                        #header h1 a { 
-                            display: block; 
-                            width: 300px; 
-                            height: 80px; 
-                        }
-                        </code></pre><h1>HTML Ipsum Presents</h1>
-                                   
-                        <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
-
-                        <h2>Header Level 2</h2>
-                                   
-                        <ol>
-                           <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-                           <li>Aliquam tincidunt mauris eu risus.</li>
-                        </ol>
-
-                        <blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p></blockquote>
-
-                        <h3>Header Level 3</h3>
-
-                        <ul>
-                           <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-                           <li>Aliquam tincidunt mauris eu risus.</li>
-                        </ul>
-
-                        <pre><code>
-                        #header h1 a { 
-                            display: block; 
-                            width: 300px; 
-                            height: 80px; 
-                        }
-                        </code></pre><h1>HTML Ipsum Presents</h1>
-                                   
-                        <p><strong>Pellentesque habitant morbi tristique</strong> senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. <em>Aenean ultricies mi vitae est.</em> Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, <code>commodo vitae</code>, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. <a href="#">Donec non enim</a> in turpis pulvinar facilisis. Ut felis.</p>
-
-                        <h2>Header Level 2</h2>
-                                   
-                        <ol>
-                           <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-                           <li>Aliquam tincidunt mauris eu risus.</li>
-                        </ol>
-
-                        <blockquote><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus magna. Cras in mi at felis aliquet congue. Ut a est eget ligula molestie gravida. Curabitur massa. Donec eleifend, libero at sagittis mollis, tellus est malesuada tellus, at luctus turpis elit sit amet quam. Vivamus pretium ornare est.</p></blockquote>
-
-                        <h3>Header Level 3</h3>
-
-                        <ul>
-                           <li>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</li>
-                           <li>Aliquam tincidunt mauris eu risus.</li>
-                        </ul>
-
-                        <pre><code>
-                        #header h1 a { 
-                            display: block; 
-                            width: 300px; 
-                            height: 80px; 
-                        }
-                        </code></pre>
-
-                    </section>
-
-                </article>
+                <section class="col">
 
 
-
-                
-           
-
-
-
-
-        	    <?= $this->fetch('content') ?>
+                </section>
 
             </article>
 
-        </div><?/* .g1 */?>
+    	    <?= $this->fetch('content') ?>
 
-	</div>
+        </article>
+
+    </div><?/* .g1 */?>
+
+</div>
 
 </body>
 </html>

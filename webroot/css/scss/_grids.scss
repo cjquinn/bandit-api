@@ -57,3 +57,72 @@
 
 	}
 }
+
+
+
+
+/*
+
+	Grid 3
+	
+	[  ?  ] 80px [  ?  ]
+
+	Used for:
+	header, data
+
+*/
+
+.g3 {
+	@include clearfix;
+
+	@media (min-width: 900px) {
+
+		display: flex;
+
+		> .col {
+
+			&:nth-child(odd) {
+				flex: 1;
+			}
+			
+
+			&:nth-child(even) {
+				max-width: 80px; min-width: 80px; /* about the width of XY - YZ */
+			}
+		}
+
+	}
+}
+
+
+
+
+
+/*
+
+	Grid 3
+	
+	[  ?  ] 80px [  ?  ]
+
+	Used for:
+	header, data
+
+*/
+
+.gleftright {
+	@include clearfix;
+
+	@media (min-width: 900px) {
+
+		> * {
+			&:first-child {
+				float: left;
+			}
+
+			&:last-child {
+				float: right;
+			}
+		}
+
+	}
+}

@@ -1,0 +1,52 @@
+.match {
+	background: $mirage3;
+
+	&__player {
+		@include inline-children;
+		display: flex; justify-content: space-between; @include unit(height, 7); padding: 0 0 0 22px;
+		font-size: 14px;
+
+
+
+		&:first-child {
+			&.is--winner {
+				border-left: 2px solid $win;
+				background-image: radial-gradient( circle farthest-corner at top left,
+					rgba($win--glow, .07) 0%,
+					rgba($win--glow, 0) 84px
+
+					);
+			}
+
+			&.is--draw {
+				border-left: 2px solid $draw;
+			}
+		}
+
+		&:last-child {
+
+			&.is--loser {
+				border-right: 2px solid $loss;
+			}
+
+			&.is--draw {
+				border-right: 2px solid $draw;
+			}
+
+		}
+
+		&__player-photo {
+			width: 49px;
+
+			&__image {
+			}
+
+		}
+	}
+
+
+	&__score {
+		text-align: center;
+
+	}
+}

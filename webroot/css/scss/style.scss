@@ -24,12 +24,13 @@
 @import "blocks/block";
 
 @import "blocks/match";
+@import "blocks/tabs";
 
 
 /*
     views
 */
-
+@import "views/stream";
 
 @import "fonts";
 @import "animation";

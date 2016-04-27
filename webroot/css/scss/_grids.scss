@@ -37,7 +37,7 @@
 
 	Grid 2
 	
-	1 [ 6 ] 1 [ 6 ] 1 
+	1 [ 8 ] 1 [ 8 ] 1 
 
 	Used for:
 	header, data
@@ -49,10 +49,10 @@
 
 	@media (min-width: 900px) {
 
-		display: flex; padding-left: percentage(1/15);
+		display: flex; padding-left: percentage(1/19);
 
 		> .col {
-			flex: 1; margin-right: percentage(1/15);
+			flex: 1; margin-right: percentage(1/19);
 		}
 
 	}
@@ -99,15 +99,35 @@
 
 
 
+/*
+
+	Grid 4
+	
+	[  	50%  ][  50%  ]
+
+	Used for:
+	match,
+
+*/
+
+.g4 {
+	@include clearfix;
+
+	> .col {
+
+		float: left; width: 50%;
+
+	}
+
+}
+
+
+
+
 
 /*
 
-	Grid 3
-	
-	[  ?  ] 80px [  ?  ]
-
-	Used for:
-	header, data
+	Grid LeftRight
 
 */
 
@@ -127,4 +147,23 @@
 		}
 
 	}
+}
+
+
+
+
+
+/*
+
+	Grid flex
+
+*/
+
+.gflex {
+	display: flex;
+
+	> .col {
+		flex: 1;
+	}
+
 }

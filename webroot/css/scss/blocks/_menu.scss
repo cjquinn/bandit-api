@@ -29,7 +29,7 @@
 		&__link {
 			position: relative;
 			display: block; @include unit(padding-left, 3); @include unit(padding-right, 3);
-			@include unit(line-height, 5);
+			@include unit(line-height, 5); white-space: nowrap;
 			transition: all .2s ease;
 
 			&:hover,

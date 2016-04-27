@@ -1,6 +1,4 @@
 .player-photo {
-	
-
 
 	&__proportion {
 		position: relative;
@@ -10,4 +8,30 @@
 	&__image {
 		@include absolute-fill;
 	}
+
+	&__level__svg {
+		@include absolute-fill; z-index: 1;
+	}
+
+	&__level__use {
+
+		.is--level49 & {
+			fill: $level49;
+		}
+
+		.is--level50 & {
+			fill: $level50;
+		}
+
+		.is--level51 & {
+			fill: $level51;
+		}
+
+		.is--level52 & {
+			fill: $level52;
+		}
+
+	}
+
+	
 }

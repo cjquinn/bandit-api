@@ -4,19 +4,36 @@ $mirage: #1D2438;
 $mirage2: #171C2D;
 $mirage3: #131627;
 $pickled-bluewood: #27304A;
+$fiord: #3C4563;
 
 $link-water: #DCE4F7;
 $cornflower: #91AEE6;
+$sail: #ADC8FA;
+$gray-chateau: #A3A9B5;
 
 $win: #9CEB6E;
 $win--glow: #CAFFAD;
 $loss: #FA5741;
+$loss--glow: #F25440;
 $draw: #505466;
+
+$azure-radiance: #009BF0;
+$tory-blue: #0D5FA0;
+$cyan-aqua: #40DCFF;
+
+$spring-green: #00E26B;
 
 $level100: #FF7048;
 
+$level52: $cyan-aqua;
+$level51: $azure-radiance;
+$level50: $tory-blue;
+$level49: $spring-green;
+
+
 /**/
 
+$light: $link-water;
 $shadow: $blue-charcoal;
 
 /**/
@@ -38,6 +55,9 @@ $header__base: $mirage2;
 $button__base: $mirage;
 
 $match__base: $mirage3;
+
+$tabs__text: $sail;
+$tabs__text--active: $level100;
 
 
 /**/

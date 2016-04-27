@@ -105,7 +105,7 @@ input, select {
 }
 
 input, select, textarea, button {
-	font: inherit;
+	font: inherit; color: inherit;
 }
 
 input::-moz-focus-inner,

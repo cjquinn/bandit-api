@@ -24,14 +24,26 @@ h6, .h6 {
 
 h1, .h1 {
 	font-size: 31px; font-weight: 300;
+
+	&__small {
+		font-size: 21px;
+	}
 }
 
 h2, .h2 {
 	font-size: 28px; font-weight: 300;
+
+	&__small {
+		font-size: 20px;
+	}
 }
 
 h3, .h3 {
 	font-size: 24px; font-weight: 300;
+
+	&__small {
+		font-size: 17px;
+	}
 }
 
 li {

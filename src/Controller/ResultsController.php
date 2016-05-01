@@ -91,7 +91,11 @@ class ResultsController extends ApiController
      */
     public function index()
     {
-        $results = $this->Results->find();
+        $results = $this->Results
+            ->find()
+            ->where([
+                'club_id' => $this->request->params['club_id']
+            ]);
 
         $this->set([
             'results' => $results,

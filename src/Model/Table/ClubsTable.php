@@ -39,6 +39,12 @@ class ClubsTable extends Table
             ->requirePresence('name', 'create')
             ->notEmpty('name');
 
+        $validator
+            ->requirePresence('founding_player', function ($context) {
+                return !isset($context['data']['founding_player_id']) && $context['newRecord'];
+            })
+            ->notEmpty('founding_player');
+
         return $validator;
     }
 

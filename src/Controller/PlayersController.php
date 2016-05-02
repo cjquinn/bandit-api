@@ -33,11 +33,6 @@ class PlayersController extends ApiController
         ];
 
         $player = $this->Players->newEntity($this->request->data, [
-            'associated' => [
-                'Clubs' => [
-                    'onlyIds' => true
-                ]
-            ],
             'fieldList' => [
                 'name',
                 'login',

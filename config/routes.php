@@ -14,50 +14,68 @@ Router::scope('/api', function ($routes) {
     /**
      * Clubs
      */
-    $routes->resources(
-        'Clubs',
-        [
+    $routes->resources('Clubs', [
+        'only' => [
+            'create',
+            'index',
+            'update',
+            'view'
+        ]
+    ], function ($routes) {
+        /**
+         * ClubsPlayers
+         */
+        $connectOptions = [
+            'club_id' => '[0-9]+',
+            'player_id' => '[0-9]+',
+            'pass' => [
+                'club_id',
+                'player_id'
+            ]
+        ];
+
+        $routes->connect('/:player_id', [
+            'controller' => 'ClubsPlayers',
+            'action' => 'add',
+            '_method' => 'POST'
+        ], $connectOptions);
+
+        $routes->connect('/:player_id', [
+            'controller' => 'ClubsPlayers',
+            'action' => 'delete',
+            '_method' => 'DELETE'
+        ], $connectOptions);
+
+        /**
+         * Players
+         */
+        $routes->resources('Players', [
+            'only' => 'create',
+        ]);
+
+        /**
+         * Results
+         */
+        $routes->resources('Results', [
             'only' => [
                 'create',
+                'delete',
                 'index',
-                'update',
                 'view'
             ]
-        ],
-        function ($routes) {
+        ], function ($routes) {
             /**
-             * Players
+             * Disputes
              */
-            $routes->resources('Players', ['only' => 'create']);
-
-            /**
-             * Results
-             */
-            $routes->resources(
-                'Results',
-                [
-                    'only' => [
-                        'create',
-                        'delete',
-                        'index',
-                        'view'
-                    ]
-                ],
-                function ($routes) {
-                    /**
-                     * Disputes
-                     */
-                    $routes->resources('Disputes', [
-                        'only' => [
-                            'create',
-                            'delete',
-                            'update'
-                        ]
-                    ]);
-                }
-            );
-        }
-    );
+            $routes->resources('Disputes', [
+                'only' => [
+                    'create',
+                    'delete',
+                    'update'
+                ]
+            ]);
+        });
+    });
 
     /**
      * Players
@@ -101,31 +119,23 @@ Router::scope('/api', function ($routes) {
             '_method' => 'PUT'
         ]);
 
-        $routes->connect(
-            '/activate-account/validate-token',
-            [
-                'controller' => 'Logins',
-                'action' => 'validateToken',
-                '_method' => 'GET',
-                'parentAction' => 'activateAccount'
-            ],
-            [
-                'pass' => ['parentAction']
-            ]
-        );
+        $routes->connect('/activate-account/validate-token', [
+            'controller' => 'Logins',
+            'action' => 'validateToken',
+            '_method' => 'GET',
+            'parentAction' => 'activateAccount'
+        ], [
+            'pass' => ['parentAction']
+        ]);
 
-        $routes->connect(
-            '/reset-password/validate-token',
-            [
-                'controller' => 'Logins',
-                'action' => 'validateToken',
-                '_method' => 'GET',
-                'parentAction' => 'resetPassword'
-            ],
-            [
-                'pass' => ['parentAction']
-            ]
-        );
+        $routes->connect('/reset-password/validate-token', [
+            'controller' => 'Logins',
+            'action' => 'validateToken',
+            '_method' => 'GET',
+            'parentAction' => 'resetPassword'
+        ], [
+            'pass' => ['parentAction']
+        ]);
     });
 });
 

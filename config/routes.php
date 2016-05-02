@@ -16,7 +16,11 @@ Router::scope('/api', function ($routes) {
      */
     $routes->resources(
         'Clubs',
-        ['only' => ''],
+        [
+            'only' => [
+                'create'
+            ]
+        ],
         function ($routes) {
             /**
              * Players

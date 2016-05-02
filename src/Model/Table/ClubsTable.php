@@ -2,6 +2,10 @@
 
 namespace App\Model\Table;
 
+use ArrayObject;
+
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -56,5 +60,33 @@ class ClubsTable extends Table
         $rules->add($rules->existsIn(['founding_player_id'], 'Players'));
         
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function afterSave(Event $event, EntityInterface $club, ArrayObject $options)
+    {
+        if ($club->isNew()) {
+            $this->patchEntity($club, [
+                'players' => [
+                    '_ids' => [
+                        $club->founding_player_id
+                    ]
+                ]
+            ], [
+                'associated' => [
+                    'Players' => [
+                        'onlyIds' => true
+                    ]
+                ],
+                'fieldList' => [
+                    'players'
+                ],
+                'validate' => false
+            ]);
+
+            $this->save($club);
+        }
     }
 }

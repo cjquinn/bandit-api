@@ -13,21 +13,11 @@ class DisputesController extends ApiController
     {
         parent::initialize();
         
-        $this->_result = $this->Disputes->Results->get($this->request->params['result_id']);
-
-        if (isset($this->request->params['id'])) {
-            $this->_dispute = $this->Disputes->get([
-                'player_id' => $this->request->params['id'],
-                'result_id' => $this->_result->id
-            ], [
-                'contain' => [
-                    'Results' => [
-                        'LosingPlayers',
-                        'WinningPlayers'
-                    ]
-                ]
-            ]);
-        }
+        $this->_result = $this->Disputes->Results->get($this->request->params['result_id'], [
+            'contain' => [
+                'Disputes'
+            ]
+        ]);
     }
 
     /**
@@ -44,17 +34,17 @@ class DisputesController extends ApiController
                 return false;
             }
 
-            if ($this->_result->winning_player_id === $this->Auth->user('player.id')) {
+            if ($this->_result->losing_player_id !== $this->Auth->user('player.id')) {
                 return false;
             }
 
-            if ($this->Disputes->Results->isDisputed($this->_result->id)) {
+            if ($this->_result->dispute) {
                 return false;
             }
         }
 
         if ($this->request->action === 'delete') {
-            if ($this->_dispute->is_resolved !== null) {
+            if ($this->_result->dispute->is_resolved) {
                 return false;
             }
 
@@ -83,7 +73,6 @@ class DisputesController extends ApiController
     {
         $dispute = $this->Disputes->newEntity($this->request->data);
 
-        $dispute->set('player_id', $this->_result->winning_player_id);
         $dispute->set('result_id', $this->_result->id);
 
         $this->set('dispute', $dispute);
@@ -105,7 +94,7 @@ class DisputesController extends ApiController
      */
     public function delete()
     {
-        $this->Disputes->delete($this->_dispute);
+        $this->Disputes->delete($this->_result->dispute);
 
         $this->set('_serialize', true);
     }
@@ -115,19 +104,19 @@ class DisputesController extends ApiController
      */
     public function edit()
     {
-        $this->Disputes->patchEntity($this->_dispute, $this->request->data, [
+        $this->Disputes->patchEntity($this->_result->dispute, $this->request->data, [
             'fieldList' => [
                 'is_resolved'
             ]
         ]);
 
-        $this->set('dispute', $this->_dispute);
+        $this->set('dispute', $this->_result->dispute);
 
-        if ($this->Disputes->save($this->_dispute)) {
+        if ($this->Disputes->save($this->_result->dispute)) {
             $this->set('_serialize', true);
         } else {
             $this->set([
-                'errors' => $this->_dispute->errors(),
+                'errors' => $this->_result->dispute->errors(),
                 '_serialize' => true
             ]);
 

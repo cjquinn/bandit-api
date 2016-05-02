@@ -38,7 +38,6 @@ class PlayersTable extends Table
                 'Clubs'
             ],
             'hasMany' => [
-                'Disputes',
                 'Histories',
                 'Results'
             ],

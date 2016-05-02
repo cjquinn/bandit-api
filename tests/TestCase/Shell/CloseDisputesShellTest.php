@@ -56,10 +56,7 @@ class CloseDisputesShellTest extends TestCase
 
         $this->CloseDisputes->main();
 
-        $dipute = TableRegistry::get('Disputes')->get([
-            'player_id' => 3,
-            'result_id' => 2,
-        ], [
+        $dipute = TableRegistry::get('Disputes')->get(2, [
             'contain' => [
                 'Results' => [
                     'LosingPlayers',

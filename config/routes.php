@@ -25,55 +25,26 @@ Router::scope('/api', function ($routes) {
         /**
          * ClubsPlayers
          */
-        $connectOptions = [
-            'club_id' => '[0-9]+',
-            'player_id' => '[0-9]+',
-            'pass' => [
-                'club_id',
-                'player_id'
-            ]
-        ];
-
-        $routes->connect('/:player_id', [
-            'controller' => 'ClubsPlayers',
-            'action' => 'add',
-            '_method' => 'POST'
-        ], $connectOptions);
-
-        $routes->connect('/:player_id', [
-            'controller' => 'ClubsPlayers',
-            'action' => 'delete',
-            '_method' => 'DELETE'
-        ], $connectOptions);
-
-        /**
-         * Disputes
-         */
-        $routes->resources('Disputes', ['only' => 'create']);
-
-        $routes->scope('/disputes', function ($routes) {
+        $routes->scope('/players', function ($routes) {
             $connectOptions = [
+                'club_id' => '[0-9]+',
                 'player_id' => '[0-9]+',
-                'result_id' => '[0-9]+',
                 'pass' => [
-                    'player_id',
-                    'result_id'
+                    'club_id',
+                    'player_id'
                 ]
             ];
 
-            $routes->connect('/:player_id/:result_id', [
-                'controller' => 'Disputes',
-                'action' => 'delete',
-                '_method' => 'DELETE'
+            $routes->connect('/:player_id', [
+                'controller' => 'ClubsPlayers',
+                'action' => 'add',
+                '_method' => 'POST'
             ], $connectOptions);
 
-            $routes->connect('/:player_id/:result_id', [
-                'controller' => 'Disputes',
-                'action' => 'edit',
-                '_method' => [
-                    'PATCH',
-                    'PUT'
-                ]
+            $routes->connect('/:player_id', [
+                'controller' => 'ClubsPlayers',
+                'action' => 'delete',
+                '_method' => 'DELETE'
             ], $connectOptions);
         });
 
@@ -92,7 +63,29 @@ Router::scope('/api', function ($routes) {
                 'index',
                 'view'
             ]
-        ]);
+        ], function ($routes) {
+            /**
+             * Disputes
+             */
+            $routes->resources('Disputes', ['only' => 'create']);
+
+            $routes->scope('/disputes', function ($routes) {
+                $routes->connect('/', [
+                    'controller' => 'Disputes',
+                    'action' => 'delete',
+                    '_method' => 'DELETE'
+                ]);
+
+                $routes->connect('/', [
+                    'controller' => 'Disputes',
+                    'action' => 'edit',
+                    '_method' => [
+                        'PATCH',
+                        'PUT'
+                    ]
+                ]);
+            });
+        });
     });
 
     /**

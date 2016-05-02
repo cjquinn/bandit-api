@@ -21,15 +21,11 @@ class DisputesTable extends Table
     {
         $this->addAssociations([
             'belongsTo' => [
-                'Players',
                 'Results'
             ]
         ]);
 
-        $this->primaryKey([
-            'player_id',
-            'result_id'
-        ]);
+        $this->primaryKey('result_id');
     }
 
     /**
@@ -57,7 +53,6 @@ class DisputesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['player_id'], 'Players'));
         $rules->add($rules->existsIn(['result_id'], 'Results'));
 
         return $rules;
@@ -81,14 +76,14 @@ class DisputesTable extends Table
             if ($dispute->result->created->wasWithinLast('48 hours')) {
                 $reputationDifference = $dispute->is_resolved ? -1 : -11;
 
-                $this->Players->updateReputation($dispute->result->losing_player, $reputationDifference);
-                $this->Players->updateReputation($dispute->result->winning_player, $reputationDifference);
+                $this->Results->Players->updateReputation($dispute->result->losing_player, $reputationDifference);
+                $this->Results->Players->updateReputation($dispute->result->winning_player, $reputationDifference);
             } else {
-                $this->Players->updateReputation($dispute->result->winning_player, -11);
+                $this->Results->Players->updateReputation($dispute->result->winning_player, -11);
             }
 
-            $this->Players->save($dispute->result->losing_player);
-            $this->Players->save($dispute->result->winning_player);
+            $this->Results->Players->save($dispute->result->losing_player);
+            $this->Results->Players->save($dispute->result->winning_player);
 
             $this->Results->nullify($dispute->result);
         }

@@ -99,7 +99,7 @@ class DisputesControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->delete('/api/clubs/1/results/2/disputes/3.json');
+        $this->delete('/api/clubs/1/results/2/disputes.json');
 
         $this->assertResponseCode(403);
     }
@@ -110,17 +110,14 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testDeleteResolvedDispute()
     {
         $disputes = TableRegistry::get('Disputes');
-        $dispute = $disputes->get([
-            'player_id' => 3,
-            'result_id' => 2
-        ]);
+        $dispute = $disputes->get(2);
         $dispute->set('is_resolved', true);
         $disputes->save($dispute);
 
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->delete('/api/clubs/1/results/2/disputes/3.json');
+        $this->delete('/api/clubs/1/results/2/disputes.json');
 
         $this->assertResponseCode(403);
     }
@@ -133,7 +130,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(3);
 
-        $this->delete('/api/clubs/1/results/2/disputes/3.json');
+        $this->delete('/api/clubs/1/results/2/disputes.json');
 
         $this->assertResponseCode(403);
     }
@@ -146,7 +143,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->delete('/api/clubs/1/results/2/disputes/3.json');
+        $this->delete('/api/clubs/1/results/2/disputes.json');
 
         $this->assertResponseCode(200);
     }
@@ -158,7 +155,7 @@ class DisputesControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->put('/api/clubs/1/results/2/disputes/3.json', [
+        $this->put('/api/clubs/1/results/2/disputes.json', [
             'is_resolved' => 1
         ]);
 
@@ -178,7 +175,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(3);
 
-        $this->put('/api/clubs/1/results/2/disputes/3.json', [
+        $this->put('/api/clubs/1/results/2/disputes.json', [
             'is_resolved' => 1
         ]);
 
@@ -193,7 +190,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/api/clubs/1/results/2/disputes/3.json', [
+        $this->put('/api/clubs/1/results/2/disputes.json', [
             'is_resolved' => 1
         ]);
 
@@ -208,7 +205,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(3);
 
-        $this->put('/api/clubs/1/results/2/disputes/3.json', [
+        $this->put('/api/clubs/1/results/2/disputes.json', [
             'is_resolved' => 'Not a boolean!'
         ]);
 
@@ -223,7 +220,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(3);
 
-        $this->put('/api/clubs/1/results/2/disputes/3.json', [
+        $this->put('/api/clubs/1/results/2/disputes.json', [
             'is_resolved' => 0
         ]);
 

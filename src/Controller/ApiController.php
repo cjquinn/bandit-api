@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Cake\ORM\TableRegistry;
+
 class ApiController extends AppController
 {
 
@@ -27,9 +29,7 @@ class ApiController extends AppController
         }
 
         if (isset($this->request->params['club_id'])) {
-            $playersTable = $this->name === 'Players' ? $this->Players : $this->{$this->name}->Players;
-
-            if (!$playersTable->isAssignedTo($this->Auth->user('player.id'), $this->request->params['club_id'])) {
+            if (!TableRegistry::get('Players')->isAssignedTo($this->Auth->user('player.id'), $this->request->params['club_id'])) {
                 return false;
             }
         }

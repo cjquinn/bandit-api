@@ -12,18 +12,8 @@ class CreateDisputes extends AbstractMigration
         $table = $this->table('disputes', [
             'id' => false,
             'primary_key' => [
-                'player_id',
                 'result_id'
             ]
-        ]);
-        $table->addColumn('player_id', 'integer', [
-            'default' => null,
-            'limit' => 11,
-            'null' => false,
-        ]);
-        $table->addForeignKey('player_id', 'players', 'id', [
-            'update' => 'RESTRICT',
-            'delete' => 'RESTRICT'
         ]);
         $table->addColumn('result_id', 'integer', [
             'default' => null,
@@ -43,8 +33,6 @@ class CreateDisputes extends AbstractMigration
             'null' => true,
         ]);
         $table->create();
-        
-        $this->query('CREATE INDEX player_id ON disputes (player_id)');
     }
 
     /**

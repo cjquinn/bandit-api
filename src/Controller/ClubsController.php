@@ -22,6 +22,12 @@ class ClubsController extends ApiController
      */
     public function isAuthorized($user)
     {
+        if ($this->request->action === 'edit' &&
+            !$this->Clubs->Players->isFounder($this->Auth->user('player.id'), $this->request->params['id'])
+        ) {
+            return false;
+        }
+
         if ($this->request->action === 'view' &&
             !$this->Clubs->Players->isAssignedTo($this->Auth->user('player.id'), $this->request->params['id'])
         ) {
@@ -57,6 +63,30 @@ class ClubsController extends ApiController
         } else {
             $this->set([
                 'errors' => $club->errors(),
+                '_serialize' => true
+            ]);
+
+            $this->response->statusCode(400);
+        }
+    }
+
+    /**
+     * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     */
+    public function edit($id)
+    {
+        $club = $this->Clubs->get($id);
+
+        $this->Clubs->patchEntity($club, $this->request->data);
+
+        $this->set('club', $club);
+
+        if ($this->Clubs->save($club)) {
+            $this->set('_serialize', 'club');
+        } else {
+            $this->set([
+                'errors' => $club->errors,
                 '_serialize' => true
             ]);
 

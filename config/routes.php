@@ -20,6 +20,7 @@ Router::scope('/api', function ($routes) {
             'only' => [
                 'create',
                 'index',
+                'update',
                 'view'
             ]
         ],

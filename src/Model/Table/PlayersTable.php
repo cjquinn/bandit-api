@@ -198,6 +198,17 @@ class PlayersTable extends Table
     }
 
     /**
+     * @return bool
+     */
+    public function isFounder($id, $clubId)
+    {
+        return $this->Clubs->exists([
+            'id' => $clubId,
+            'founding_player_id' => $id
+        ]);
+    }
+
+    /**
      * @param \App\Model\Entity\Player $player The player object
      * @param string $tmpName The tmp name
      * @param string $type (Losing | winning)

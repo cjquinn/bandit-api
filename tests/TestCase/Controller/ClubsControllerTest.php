@@ -80,6 +80,65 @@ class ClubsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testEditUnauthorised()
+    {
+        $this->_setAjaxRequest();
+
+        $this->put('/api/clubs/1.json', [
+            'name' => 'Squelch Bandit'
+        ]);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditInvalidFoundingPlayerId()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(2);
+
+        $this->put('/api/clubs/1.json', [
+            'name' => 'Squelch Bandit'
+        ]);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditBadData()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->put('/api/clubs/1.json', [
+            'name' => ''
+        ]);
+
+        $this->assertResponseCode(400);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditPut()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->put('/api/clubs/1.json', [
+            'name' => 'Squelch Bandit'
+        ]);
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
     public function testIndexUnauthorised()
     {
         $this->_setAjaxRequest();

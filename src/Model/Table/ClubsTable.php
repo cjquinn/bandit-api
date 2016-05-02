@@ -75,11 +75,6 @@ class ClubsTable extends Table
                     ]
                 ]
             ], [
-                'associated' => [
-                    'Players' => [
-                        'onlyIds' => true
-                    ]
-                ],
                 'fieldList' => [
                     'players'
                 ],

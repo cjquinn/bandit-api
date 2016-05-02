@@ -18,6 +18,11 @@ class ClubsFixture extends TestFixture
                 'id' => 1,
                 'founding_player_id' => 1,
                 'name' => 'Squelch'
+            ],
+            [
+                'id' => 2,
+                'founding_player_id' => 1,
+                'name' => 'Ping Pong'
             ]
         ];
 

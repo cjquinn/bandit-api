@@ -28,6 +28,11 @@ class ClubsPlayersFixture extends TestFixture
                 'club_id' => 1,
                 'player_id' => 3,
                 'rating' => 1216
+            ],
+            [
+                'club_id' => 2,
+                'player_id' => 1,
+                'rating' => 1200
             ]
         ];
 

@@ -18,6 +18,20 @@ class ClubsController extends ApiController
     }
 
     /**
+     * @return bool
+     */
+    public function isAuthorized($user)
+    {
+        if ($this->request->action === 'view' &&
+            !$this->Clubs->Players->isAssignedTo($this->Auth->user('player.id'), $this->request->params['id'])
+        ) {
+            return false;
+        }
+
+        return parent::isAuthorized($user);
+    }
+
+    /**
      * @return void
      */
     public function add()
@@ -68,6 +82,20 @@ class ClubsController extends ApiController
         $this->set([
             'clubs' => $clubs,
             '_serialize' => 'clubs'
+        ]);
+    }
+
+    /**
+     * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     */
+    public function view($id)
+    {
+        $club = $this->Clubs->get($id);
+
+        $this->set([
+            'club' => $club,
+            '_serialize' => 'club'
         ]);
     }
 }

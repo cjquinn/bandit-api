@@ -101,4 +101,42 @@ class ClubsControllerTest extends IntegrationTestCase
 
         $this->assertResponseCode(200);
     }
+
+    /**
+     * @return void
+     */
+    public function testViewUnauthorised()
+    {
+        $this->_setAjaxRequest();
+
+        $this->get('/api/clubs/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewUnassigned()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(2);
+
+        $this->get('/api/clubs/2.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewGet()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->get('/api/clubs/1.json');
+
+        $this->assertResponseCode(200);
+    }
 }

@@ -49,4 +49,25 @@ class ClubsController extends ApiController
             $this->response->statusCode(400);
         }
     }
+
+    /**
+     * @return void
+     */
+    public function index()
+    {
+        $clubs = $this->Clubs
+            ->find()
+            ->innerJoinWith('Players', function ($q) {
+                $q->where([
+                    'Players.id' => $this->Auth->user('player.id')
+                ]);
+
+                return $q;
+            });
+
+        $this->set([
+            'clubs' => $clubs,
+            '_serialize' => 'clubs'
+        ]);
+    }
 }

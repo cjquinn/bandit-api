@@ -18,7 +18,8 @@ Router::scope('/api', function ($routes) {
         'Clubs',
         [
             'only' => [
-                'create'
+                'create',
+                'index'
             ]
         ],
         function ($routes) {

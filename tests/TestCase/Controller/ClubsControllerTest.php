@@ -76,4 +76,29 @@ class ClubsControllerTest extends IntegrationTestCase
             'player_id' => 1
         ]));
     }
+
+    /**
+     * @return void
+     */
+    public function testIndexUnauthorised()
+    {
+        $this->_setAjaxRequest();
+
+        $this->get('/api/clubs.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testIndexGet()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->get('/api/clubs.json');
+
+        $this->assertResponseCode(200);
+    }
 }

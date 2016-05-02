@@ -47,11 +47,40 @@ Router::scope('/api', function ($routes) {
         ], $connectOptions);
 
         /**
+         * Disputes
+         */
+        $routes->resources('Disputes', ['only' => 'create']);
+
+        $routes->scope('/disputes', function ($routes) {
+            $connectOptions = [
+                'player_id' => '[0-9]+',
+                'result_id' => '[0-9]+',
+                'pass' => [
+                    'player_id',
+                    'result_id'
+                ]
+            ];
+
+            $routes->connect('/:player_id/:result_id', [
+                'controller' => 'Disputes',
+                'action' => 'delete',
+                '_method' => 'DELETE'
+            ], $connectOptions);
+
+            $routes->connect('/:player_id/:result_id', [
+                'controller' => 'Disputes',
+                'action' => 'edit',
+                '_method' => [
+                    'PATCH',
+                    'PUT'
+                ]
+            ], $connectOptions);
+        });
+
+        /**
          * Players
          */
-        $routes->resources('Players', [
-            'only' => 'create',
-        ]);
+        $routes->resources('Players', ['only' => 'create']);
 
         /**
          * Results
@@ -63,18 +92,7 @@ Router::scope('/api', function ($routes) {
                 'index',
                 'view'
             ]
-        ], function ($routes) {
-            /**
-             * Disputes
-             */
-            $routes->resources('Disputes', [
-                'only' => [
-                    'create',
-                    'delete',
-                    'update'
-                ]
-            ]);
-        });
+        ]);
     });
 
     /**
@@ -92,7 +110,10 @@ Router::scope('/api', function ($routes) {
         $routes->connect('/activate-account', [
             'controller' => 'Logins',
             'action' => 'activateAccount',
-            '_method' => 'PUT'
+            '_method' => [
+                'PATCH',
+                'PUT'
+            ]
         ]);
 
         $routes->connect('/login', [
@@ -110,13 +131,19 @@ Router::scope('/api', function ($routes) {
         $routes->connect('/request-password-reset', [
             'controller' => 'Logins',
             'action' => 'requestPasswordReset',
-            '_method' => 'PUT'
+            '_method' => [
+                'PATCH',
+                'PUT'
+            ]
         ]);
 
         $routes->connect('/reset-password', [
             'controller' => 'Logins',
             'action' => 'resetPassword',
-            '_method' => 'PUT'
+            '_method' => [
+                'PATCH',
+                'PUT'
+            ]
         ]);
 
         $routes->connect('/activate-account/validate-token', [

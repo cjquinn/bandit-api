@@ -25,28 +25,18 @@ Router::scope('/api', function ($routes) {
         /**
          * ClubsPlayers
          */
-        $routes->scope('/players', function ($routes) {
-            $connectOptions = [
-                'club_id' => '[0-9]+',
-                'player_id' => '[0-9]+',
-                'pass' => [
-                    'club_id',
-                    'player_id'
-                ]
-            ];
-
-            $routes->connect('/:player_id', [
-                'controller' => 'ClubsPlayers',
-                'action' => 'add',
-                '_method' => 'POST'
-            ], $connectOptions);
-
-            $routes->connect('/:player_id', [
-                'controller' => 'ClubsPlayers',
-                'action' => 'delete',
-                '_method' => 'DELETE'
-            ], $connectOptions);
-        });
+        $routes->connect('/players/:player_id', [
+            'controller' => 'ClubsPlayers',
+            'action' => 'add',
+            '_method' => 'POST'
+        ], [
+            'club_id' => '[0-9]+',
+            'player_id' => '[0-9]+',
+            'pass' => [
+                'club_id',
+                'player_id'
+            ]
+        ]);
 
         /**
          * Players

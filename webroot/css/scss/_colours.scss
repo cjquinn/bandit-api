@@ -17,18 +17,38 @@ $loss: #FA5741;
 $loss--glow: #F25440;
 $draw: #505466;
 
-$azure-radiance: #009BF0;
-$tory-blue: #0D5FA0;
-$cyan-aqua: #40DCFF;
+/*
+	levels
 
-$spring-green: #00E26B;
+
+start @ 50
+
+bandit
+
+53, 54, 55 (purple - dark to light)
+50, 51, 52 (blue - dark to light)
+47, 48, 49 (green - dark to light)
+47, 48, 49 (red - dark to light)
+
+*/
 
 $level100: #FF7048;
 
-$level52: $cyan-aqua;
-$level51: $azure-radiance;
-$level50: $tory-blue;
-$level49: $spring-green;
+$level55: #D03CE0;
+$level54: #9C2FD6;
+$level53: #482D96;
+
+$level52: #40DCFF;
+$level51: #009BF0;
+$level50: #0D5FA0;
+
+$level49: #00E26B;
+$level48: #00B359;
+$level47: #0F743D;
+
+$level46: #F72531;
+$level45: #CF1F45;
+$level44: #7A134C;
 
 
 /**/

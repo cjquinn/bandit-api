@@ -1,8 +1,5 @@
 .match {
 	$block: #{&};
-	position: relative; cursor: pointer;
-	background: $mirage3;
-	
 
 	&__backgrounds {
 		@include absolute-fill; opacity: .07;
@@ -50,9 +47,6 @@
 	}
 
 	&:hover {
-		// width: calc(100% + 6px); margin-left: -3px;
-		background: $mirage;
-		transition: background .1s ease;
 
 		#{$block}__backgrounds {
 			opacity: .14;
@@ -68,31 +62,6 @@
 			&:first-child {
 				// padding-right: 35px;
 			}
-		}
-	}
-
-	&:not(:first-child) {
-		animation: swing .8s ease-out forwards;
-
-		&:before {
-			position: absolute; top: 0px; left: 0; z-index: 100;
-			width: 100%; height: 1px; background: rgba($light, .04);
-			@include no-content;
-		}
-	}
-
-	&:not(:last-child) {
-
-		&:after {
-			position: absolute; bottom: 0px; left: 0; z-index: 200;
-			width: 100%; height: 1px; background: rgba($shadow, .5);
-			@include no-content;
-		}
-	}
-
-	&:hover {
-		#{$block}__player.is--winner:first-child {
-			
 		}
 	}
 
@@ -114,7 +83,7 @@
 		}
 
 		&__rating {
-			color: $gray-chateau; font-weight: normal;
+			color: $gray-chateau;
 		}
 
 		&:first-child {
@@ -182,7 +151,7 @@
 
 	&__score {
 		@include absolute-centre;
-		font-size: 24px; font-weight: bold; text-align: center; white-space: nowrap;
+		@include font-size($size:xxlarge); text-align: center; white-space: nowrap;
 
 		&__hyphen {
 			margin: 0 4px 0; display: inline-block;

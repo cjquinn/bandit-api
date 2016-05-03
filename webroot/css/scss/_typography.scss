@@ -39,6 +39,14 @@ h2, .h2 {
 }
 
 h3, .h3 {
+	font-size: 24px; font-weight: bold;
+
+	&__small {
+		font-size: 17px;
+	}
+}
+
+h4, .h4 {
 	font-size: 24px; font-weight: 300;
 
 	&__small {

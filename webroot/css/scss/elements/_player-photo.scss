@@ -2,7 +2,7 @@
 
 	&__proportion {
 		position: relative;
-		width: 100%; height: 0; padding-bottom: percentage(170/150);
+		width: 100%; height: 0; padding-bottom: 113%/* percentage(170/150) want a whole number */;
 	}
 
 	&__image {
@@ -11,27 +11,63 @@
 
 	&__level__svg {
 		@include absolute-fill; z-index: 1;
+
+		&.is--level100 {
+			transform: scaleX(-1);
+		}
 	}
 
 	&__level__use {
 
-		.is--level49 & {
+		&.is--level47  {
+			fill: $level47;
+		}
+
+		&.is--level48 {
+			fill: $level48;
+		}
+
+		&.is--level49 {
 			fill: $level49;
 		}
 
-		.is--level50 & {
+		&.is--level50 {
 			fill: $level50;
 		}
 
-		.is--level51 & {
+		&.is--level51 {
 			fill: $level51;
 		}
 
-		.is--level52 & {
+		&.is--level52 {
 			fill: $level52;
+		}
+
+		&.is--level53 {
+			fill: $level53;
+		}
+
+		&.is--level54 {
+			fill: $level54;
+		}
+
+		&.is--level55 {
+			fill: $level55;
+		}
+
+		&.is--level100 {
+			fill: $level100;
 		}
 
 	}
 
+	&__knot__svg {
+		position: absolute; right: 100%; top: 5px;
+		width: 18px; height: 17px;
+	}
+
+	&__knot__use {
+		@include absolute-fill;
+	}
 	
 }

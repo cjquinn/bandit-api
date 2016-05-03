@@ -19,5 +19,5 @@ body {
 }
 
 .display {
-	@include unit(padding-top, 2);
+	@include unit(padding-top, 2); @include unit(padding-bottom, 2);
 }

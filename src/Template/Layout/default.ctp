@@ -33,7 +33,7 @@
     		<ol class="menu__list">
 
     			<li class="menu__list__item is--active">
-    				<a href="/" class="menu__list__link <?php /* is--active */ ?>">Dashboard</a>
+    				<a href="/templates/dashboard" class="menu__list__link <?php /* is--active */ ?>">Dashboard</a>
     			</li>
 
     			<li class="menu__list__item">

@@ -2,24 +2,18 @@
 
     <div class="col">
 
-        <h1 class="header__title h1">Matches</h1>
+        <h1 class="header__title h1">Dashboard</h1>
 
         <ol class="tabs">
-        	<li class="tabs__tab is--disabled"><button class="tabs__tab__button">&laquo;</li>
-            <li class="tabs__tab is--active"><button class="tabs__tab__button">Monday</li>
-            <li class="tabs__tab"><button class="tabs__tab__button">&raquo;</li>
+            <li class="tabs__tab is--active"><button class="tabs__tab__button">This Week</li>
+            <li class="tabs__tab"><button class="tabs__tab__button">All Time</li>
         </ol>
 
     </div>
 
     <div class="col">
 
-        <h1 class="header__title h1">Leaderboard</h1>
-
-        <ol class="tabs">
-            <li class="tabs__tab is--active"><button class="tabs__tab__button">This Week</li>
-            <li class="tabs__tab"><button class="tabs__tab__button">All Time</li>
-        </ol>
+        <h1 class="header__title h1">Notifications</h1>
 
     </div>
 
@@ -39,7 +33,7 @@
 
                 <?php
 
-                    $stream = 1;
+                    $stream = 6;
 
                     for ($k = 0; $k < $stream; $k++) {
 

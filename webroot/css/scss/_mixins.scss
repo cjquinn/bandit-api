@@ -67,6 +67,18 @@ $unit: 12px;
 
 }
 
+@mixin font-size($size) {
+
+	@if $size == small { font-size: 14px; }
+
+	@else if $size == xsmall { font-size: 14px; font-weight: bold; }
+
+	@else if $size == xxsmall { font-size: 16px; }
+
+	@else if $size == xxlarge { font-size: 24px; font-weight: bold; }
+
+}
+
 
 
 /*	
@@ -85,6 +97,7 @@ $unit: 12px;
 	overflow: hidden;
 	text-overflow: ellipsis; white-space: nowrap;
 }
+
 
 
 /*

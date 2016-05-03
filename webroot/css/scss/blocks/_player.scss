@@ -1,0 +1,73 @@
+.player {
+	$block: #{&};	
+	display: flex; justify-content: space-between; align-items: center; @include unit(height, 7); padding: 0 22px;
+
+	&__id {
+		display: flex; align-items: center;
+		line-height: 20px;
+
+		&__stats {
+			@include font-size($size:small); color: $gray-chateau;
+		}
+
+		&__level {
+
+			&.is--level47 {
+				color: $level47;
+			}
+
+			&.is--level48 {
+				color: $level48;
+			}
+
+			&.is--level49 {
+				color: $level49;
+			}
+
+			&.is--level50 {
+				color: $level50;
+			}
+
+			&.is--level51 {
+				color: $level51;
+			}
+
+			&.is--level52 {
+				color: $level52;
+			}
+
+			&.is--level53 {
+				color: $level53;
+			}
+
+			&.is--level54 {
+				color: $level54;
+			}
+
+			&.is--level55 {
+				color: $level55;
+			}
+
+			&.is--level100 {
+				color: $level100;
+			}
+
+		}
+
+		&__rating {
+
+		}
+	}
+
+	&__player-photo {
+		width: 49px; margin-right: 10px;
+
+		&__image {
+		}
+
+	}
+
+	&__number {
+	}
+
+}

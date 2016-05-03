@@ -15,6 +15,17 @@
 
 		&:not(.is--active) {
 			height: 47px /* magicnumber */;
+
+			&:hover, &:focus {
+				color: $light;
+				transition: all .1s ease;
+				box-shadow: inset 0 1px 0 $fiord;
+
+				#{$block}__button {
+					background: rgba($app__base, .5);
+					transition: all .1s ease;
+				}
+			}
 		}
 
 		&.is--active {
@@ -23,16 +34,7 @@
 			box-shadow: inset 0 1px 0 $fiord;
 		}
 
-		&:hover, &:focus {
-			color: $light;
-			transition: all .1s ease;
-			box-shadow: inset 0 1px 0 $fiord;
-
-			#{$block}__button {
-				background: rgba($app__base, .5);
-				transition: all .1s ease;
-			}
-		}
+		
 
 	}
 

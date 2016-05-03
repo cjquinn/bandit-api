@@ -34,9 +34,7 @@
 
 			&:hover,
 			&:focus {
-				text-indent: 4px;
 				background-color: rgba($mirage, .25);
-				transform: translateY(-4px);
 			}
 
 			&.is--active {

@@ -51,8 +51,8 @@
                         <figure class="match__player__player-photo">
                             <div class="player-photo__proportion clip-hexagon">
 
-                                <div class="player-photo__level is--level50"></div>
-                                <img src="http://userphoto.localhost/get.php?id=1" alt="Photo 1" class="player-photo__image" />
+                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
+                                <img src="http://userphoto.localhost/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
 
                             </div>
                         </figure>
@@ -69,8 +69,8 @@
 
                             <div class="player-photo__proportion clip-hexagon">
 
-                                <div class="player-photo__level is--level49"></div>
-                                <img src="http://userphoto.localhost/get.php?id=2" alt="Photo 1" class="player-photo__image" />
+                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
+                                <img src="http://userphoto.localhost/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
 
                             </div>
 
@@ -226,7 +226,7 @@
                         <header>
 
                             <dt class="player__id__name">Cody Morton</dt>
-                            <dd class="player__id__stats">4 wins 0 losses</dd>
+                            <dd class="player__id__stats">6 wins 0 losses</dd>
 
                         </header>
 
@@ -236,7 +236,7 @@
 
                 </li>
 
-                <li class="player block__slab is--level50">
+                <li class="player block__slab">
 
                     <dl class="player__id">
 
@@ -244,8 +244,8 @@
 
                             <div class="player-photo__proportion clip-hexagon">
 
-                                <div class="player-photo__level is--level54"></div>
-                                <img src="http://userphoto.localhost/get.php?id=67" alt="Photo 1" class="player-photo__image" />
+                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
+                                <img src="http://userphoto.localhost/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
 
                             </div>
 
@@ -254,7 +254,7 @@
                         <header>
 
                             <dt class="player__id__name">Cody Morton</dt>
-                            <dd class="player__id__stats"><?php /* <span class="player__id__level">Ninja</span> */ ?>4 wins 0 losses</dd>
+                            <dd class="player__id__stats">4 wins 0 losses</dd>
 
                         </header>
 
@@ -264,21 +264,25 @@
 
                 </li>
 
-                <li class="player block__slab is--level50">
+                <li class="player block__slab">
 
                     <dl class="player__id">
 
                         <figure class="player__player-photo player-photo">
-                            <div class="player-photo__proportion">
-                                <svg class="player-photo__level__svg"><use class="player-photo__level__use" xlink:href="#player-level" /></svg>
-                                <img src="http://userphoto.localhost/get.php?id=21" alt="Photo 1" class="player-photo__image clip-hexagon" />
+
+                            <div class="player-photo__proportion clip-hexagon">
+
+                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
+                                <img src="http://userphoto.localhost/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
+
                             </div>
+
                         </figure>
 
                         <header>
 
                             <dt class="player__id__name">Cody Morton</dt>
-                            <dd class="player__id__stats"><?php /* <span class="player__id__level">Ninja</span> */ ?>4 wins 0 losses</dd>
+                            <dd class="player__id__stats">4 wins 0 losses</dd>
 
                         </header>
 
@@ -288,21 +292,25 @@
 
                 </li>
 
-                <li class="player block__slab is--level50">
+                <li class="player block__slab">
 
                     <dl class="player__id">
 
                         <figure class="player__player-photo player-photo">
-                            <div class="player-photo__proportion">
-                                <svg class="player-photo__level__svg"><use class="player-photo__level__use" xlink:href="#player-level" /></svg>
-                                <img src="http://userphoto.localhost/get.php?id=19" alt="Photo 1" class="player-photo__image clip-hexagon" />
+
+                            <div class="player-photo__proportion clip-hexagon">
+
+                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
+                                <img src="http://userphoto.localhost/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
+
                             </div>
+
                         </figure>
 
                         <header>
 
                             <dt class="player__id__name">Cody Morton</dt>
-                            <dd class="player__id__stats"><?php /* <span class="player__id__level">Ninja</span> */ ?>0 wins 1 losses</dd>
+                            <dd class="player__id__stats">0 wins 1 losses</dd>
 
                         </header>
 
@@ -312,51 +320,55 @@
 
                 </li>
 
-                <li class="player block__slab is--level50">
+                <li class="player block__slab">
 
                     <dl class="player__id">
 
                         <figure class="player__player-photo player-photo">
-                            <div class="player-photo__proportion">
-                                <svg class="player-photo__level__svg"><use class="player-photo__level__use" xlink:href="#player-level" /></svg>
-                                <img src="http://userphoto.localhost/get.php?id=18" alt="Photo 1" class="player-photo__image clip-hexagon" />
+
+                            <div class="player-photo__proportion clip-hexagon">
+
+                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
+                                <img src="http://userphoto.localhost/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
+
                             </div>
+
                         </figure>
 
                         <header>
 
                             <dt class="player__id__name">Cody Morton</dt>
-                            <dd class="player__id__stats"><?php /* <span class="player__id__level">Ninja</span> */ ?>Waiting for matches</dd>
+                            <dd class="player__id__stats">Waiting for matches&hellip;</dd>
 
                         </header>
 
                     </dl>
-
-                    <?php /* <aside class="player__number h3">22<small class="h3__small">pts</small></aside> */ ?>
 
                 </li>
 
-                <li class="player block__slab is--level50">
+                <li class="player block__slab">
 
                     <dl class="player__id">
 
                         <figure class="player__player-photo player-photo">
-                            <div class="player-photo__proportion">
-                                <svg class="player-photo__level__svg"><use class="player-photo__level__use" xlink:href="#player-level" /></svg>
-                                <img src="http://userphoto.localhost/get.php" alt="Photo 1" class="player-photo__image clip-hexagon" />
+
+                            <div class="player-photo__proportion clip-hexagon">
+
+                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
+                                <img src="http://userphoto.localhost/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
+
                             </div>
+
                         </figure>
 
                         <header>
 
                             <dt class="player__id__name">Cody Morton</dt>
-                            <dd class="player__id__stats"><?php /* <span class="player__id__level">Ninja</span> */ ?>Waiting for matches</dd>
+                            <dd class="player__id__stats">Waiting for matches&hellip;</dd>
 
                         </header>
 
                     </dl>
-
-                    <?php /* <aside class="player__number h3">22<small class="h3__small">pts</small></aside> */ ?>
 
                 </li>
 

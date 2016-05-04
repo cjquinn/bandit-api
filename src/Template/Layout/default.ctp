@@ -31,33 +31,35 @@
                 <svg class="menu__logo__svg"><use class="menu__logo__use" xlink:href="#brand-logo" /></svg>
             </a>
 
-    		<ol class="menu__list">
+            <div class="menu__whole">
 
-    			<li class="menu__list__item is--active">
-    				<a href="/templates/dashboard" class="menu__list__link <?php /* is--active */ ?>">Dashboard</a>
-    			</li>
+        		<ol class="menu__list">
 
-    			<li class="menu__list__item">
-    				<a href="/templates/leaderboards" class="menu__list__link">Leaderboards</a>
-    			</li>
+        			<li class="menu__list__item is--active">
+        				<a href="/templates/dashboard" class="menu__list__link <?php /* is--active */ ?>">Dashboard</a>
+        			</li>
 
-    			<li class="menu__list__item">
-    				<a href="/templates/boxleague" class="menu__list__link">Box League</a>
-    			</li>
+        			<li class="menu__list__item">
+        				<a href="/templates/leaderboards" class="menu__list__link">Leaderboards</a>
+        			</li>
 
-    			<li class="menu__list__item">
-    				<a href="/" class="menu__list__link">Players</a>
-    			</li>
+        			<li class="menu__list__item">
+        				<a href="/templates/boxleague" class="menu__list__link">Box League</a>
+        			</li>
 
-    			<li class="menu__list__item">
-    				<a href="/" class="menu__list__link">My Profile</a>
-    			</li>
+        			<li class="menu__list__item">
+        				<a href="/" class="menu__list__link">Players</a>
+        			</li>
 
-    		</ol>
+        			<li class="menu__list__item">
+        				<a href="/" class="menu__list__link">My Profile</a>
+        			</li>
 
-            <a class="button menu__button" href="/">
-                Add Wins
-            </a>
+        		</ol>
+
+                <a class="button menu__button" href="/">Add Wins</a>
+
+            </div>
 
     	</nav>
 

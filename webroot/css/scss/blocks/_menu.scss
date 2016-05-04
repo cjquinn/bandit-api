@@ -15,6 +15,14 @@
 
 	}
 
+	&__whole {
+		display: none;
+
+		@media (min-width: 900px) {
+			display: block;
+		}
+	}
+
 	&__list {
 
 		&__item {

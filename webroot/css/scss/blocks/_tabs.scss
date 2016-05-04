@@ -13,7 +13,16 @@
 			@include unit(line-height, 4); text-transform: uppercase; letter-spacing: .5px;
 		}
 
-		&:not(.is--active) {
+		&__rarr,
+		&__larr {
+			width: 8px; height: 13px;
+
+			&__use {
+				fill: $tabs__text;
+			}
+		}
+
+		&:not(.is--active):not(.is--disabled) {
 			height: 47px /* magicnumber */;
 
 			&:hover, &:focus {
@@ -25,6 +34,13 @@
 					background: rgba($app__base, .5);
 					transition: all .1s ease;
 				}
+
+				#{$block}__rarr,
+				#{$block}__larr {
+					&__use {
+						fill: $light;
+					}
+				}
 			}
 		}
 
@@ -34,8 +50,20 @@
 			box-shadow: inset 0 1px 0 $fiord;
 		}
 
-		
+		&.is--disabled {
+			color: $tabs__text--disabled;
+			background: none;
+
+			#{$block}__rarr,
+			#{$block}__larr {
+				&__use {
+					fill: $tabs__text--disabled;
+				}
+			}
+		}
 
 	}
+
+
 
 }

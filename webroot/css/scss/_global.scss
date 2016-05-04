@@ -1,3 +1,11 @@
 .clip-hexagon {
 	@include clip-hexagon;
 }
+
+.icon-inline {
+	@include inline-middle;
+}
+
+.is--flippedX {
+	transform: scaleX(-1);
+}

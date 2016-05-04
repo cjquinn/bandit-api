@@ -5,9 +5,9 @@
         <h1 class="header__title h1">Matches</h1>
 
         <ol class="tabs">
-        	<li class="tabs__tab is--disabled"><button class="tabs__tab__button">&laquo;</li>
+        	<li class="tabs__tab is--disabled" title="Previous Day"><button class="tabs__tab__button"><svg class="icon-inline rarr__svg tabs__tab__larr is--flippedX"><use class="larr__use tabs__tab__larr__use" xlink:href="#rarr" /></svg></li>
             <li class="tabs__tab is--active"><button class="tabs__tab__button">Monday</li>
-            <li class="tabs__tab"><button class="tabs__tab__button">&raquo;</li>
+            <li class="tabs__tab" title="Next Day"><button class="tabs__tab__button"><svg class="icon-inline rarr__svg tabs__tab__rarr"><use class="rarr__use tabs__tab__rarr__use" xlink:href="#rarr" /></svg></li>
         </ol>
 
     </div>

@@ -53,7 +53,7 @@
                         <figure class="match__player__player-photo">
                             <div class="player-photo__proportion clip-hexagon">
 
-                                <div class="player-photo__level is--level50"></div>
+                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
                                 <img src="http://userphoto.localhost/get.php?id=1" alt="Photo 1" class="player-photo__image" />
 
                             </div>
@@ -71,7 +71,7 @@
 
                             <div class="player-photo__proportion clip-hexagon">
 
-                                <div class="player-photo__level is--level49"></div>
+                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
                                 <img src="http://userphoto.localhost/get.php?id=2" alt="Photo 1" class="player-photo__image" />
 
                             </div>

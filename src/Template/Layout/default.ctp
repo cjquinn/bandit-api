@@ -18,6 +18,7 @@
     <?= $this->Svg->display('brand/logo') ?>
     <?= $this->Svg->display('brand/knot') ?>
     <?= $this->Svg->display('player/level') ?>
+    <?= $this->Svg->display('rarr') ?>
 </figure>
 
 <div class="app">

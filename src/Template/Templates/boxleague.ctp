@@ -1,4 +1,4 @@
-<div class="header g2">
+<header class="header g2">
 
     <div class="col">
 
@@ -15,7 +15,7 @@
 
     </div>
 
-</div>
+</header>
 
 <article class="display g2">
 

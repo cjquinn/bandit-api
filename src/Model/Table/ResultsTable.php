@@ -182,22 +182,24 @@ class ResultsTable extends Table
 
         // Update ratings to daily rating of result
         $players = [];
-        $results = $results->map(function ($r) use ($clubId, $date, &$players, $result) {
-            // Update losing player if not already done
-            if (!isset($players[$r->losing_player_id])) {
-                $r->losing_players_history->player->club->set($this->Players->dailySnapshot($r->losing_players_history->player, $clubId, $date), ['guard' => false]);
-                $this->Players->Club->save($r->losing_players_history->player->club);
 
-                $players[$r->losing_player_id] = true;
+        $revertPlayer = function ($player) use ($clubId, $date, &$players) {
+            if (!isset($players[$player->id])) {
+                $player->club->set($this->Players->dailySnapshot($player, $clubId, $date), [
+                    'guard' => false
+                ]);
+                $this->Players->Club->save($player->club);
+
+                $players[$player->id] = true;
             }
+        };
+
+        $results = $results->map(function ($r) use ($result, $revertPlayer) {
+            // Update losing player if not already done
+            $revertPlayer($r->losing_players_history->player);
 
             // Update winning player if not already done
-            if (!isset($players[$r->winning_player_id])) {
-                $r->winning_players_history->player->club->set($this->Players->dailySnapshot($r->winning_players_history->player, $clubId, $date), ['guard' => false]);
-                $this->Players->Club->save($r->winning_players_history->player->club);
-
-                $players[$r->winning_player_id] = true;
-            }
+            $revertPlayer($r->winning_players_history->player);
 
             if ($r->id === $result->id) {
                 // Remove history

@@ -111,7 +111,7 @@ class PlayersTable extends Table
     /**
      * @return int
      */
-    public function dailyRating(Player $player, $clubId, DateTime $date)
+    public function dailySnapshot(Player $player, $clubId, DateTime $date)
     {
         $result = $this->Results
             ->findByClubId($clubId)
@@ -137,7 +137,7 @@ class PlayersTable extends Table
             ])
             ->first();
 
-        return $result ? $result->history->rating : Configure::read('Bandit.initialRating');
+        return $result ? $result->history->snapshot : ['losses' => 0, 'rating' => Configure::read('Bandit.initialRating'), 'wins' => 0];
     }
 
     /**
@@ -247,13 +247,16 @@ class PlayersTable extends Table
         ]);
 
         $losingPlayersExpectedScore = $this->expectedScore(
-            $this->dailyRating($losingPlayer, $clubId, $date),
-            $this->dailyRating($winningPlayer, $clubId, $date)
+            $this->dailySnapshot($losingPlayer, $clubId, $date)['rating'],
+            $this->dailySnapshot($winningPlayer, $clubId, $date)['rating']
         );
         $winningPlayersExpectedScore = 1 - $losingPlayersExpectedScore;
 
         $losingPlayer->club->set('rating', $this->updatedRating($losingPlayer->club->rating, $losingPlayersExpectedScore, 0));
         $winningPlayer->club->set('rating', $this->updatedRating($winningPlayer->club->rating, $winningPlayersExpectedScore, 1));
+
+        $losingPlayer->club->set('losses', $losingPlayer->club->losses + 1);
+        $winningPlayer->club->set('wins', $winningPlayer->club->wins + 1);
 
         $losingPlayer->dirty('club', true);
         $winningPlayer->dirty('club', true);

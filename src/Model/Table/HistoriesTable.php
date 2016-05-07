@@ -6,6 +6,7 @@ use App\Model\Entity\Result;
 
 use ArrayObject;
 
+use Cake\Database\Schema\Table as Schema;
 use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -47,7 +48,17 @@ class HistoriesTable extends Table
      */
     public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
     {
-        $data['difference'] = $data['player']->club->rating - $data['player']->club->getOriginal('rating');
-        $data['rating'] = $data['player']->club->rating;
+        $data['snapshot'] = $data['player']->club->snapshot;
+        $data['is_winner'] = $data['player']->club->rating > $data['player']->club->getOriginal('rating');
+    }
+
+    /**
+     * @return \Cake\Database\Schema\Table
+     */
+    protected function _initializeSchema(Schema $schema)
+    {
+        $schema->columnType('snapshot', 'json');
+        
+        return $schema;
     }
 }

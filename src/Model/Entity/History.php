@@ -7,8 +7,7 @@ use Cake\ORM\Entity;
 /**
  * @property int $player_id
  * @property int $result_id
- * @property int $difference
- * @property int $rating
+ * @property text $snapshot
  */
 class History extends Entity
 {

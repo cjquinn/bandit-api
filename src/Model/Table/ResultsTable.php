@@ -41,13 +41,13 @@ class ResultsTable extends Table
                 'LosingPlayersHistories' => [
                     'className' => 'Histories',
                     'conditions' => [
-                        'LosingPlayersHistories.difference <' => 0
+                        'LosingPlayersHistories.is_winner' => false
                     ]
                 ],
                 'WinningPlayersHistories' => [
                     'className' => 'Histories',
                     'conditions' => [
-                        'WinningPlayersHistories.difference >' => 0
+                        'WinningPlayersHistories.is_winner' => true
                     ]
                 ]
             ]
@@ -185,10 +185,7 @@ class ResultsTable extends Table
         $results = $results->map(function ($r) use ($clubId, $date, &$players, $result) {
             // Update losing player if not already done
             if (!isset($players[$r->losing_player_id])) {
-                $r->losing_players_history->player->club->set(
-                    'rating',
-                    $this->Players->dailyRating($r->losing_players_history->player, $clubId, $date)
-                );
+                $r->losing_players_history->player->club->set($this->Players->dailySnapshot($r->losing_players_history->player, $clubId, $date), ['guard' => false]);
                 $this->Players->Club->save($r->losing_players_history->player->club);
 
                 $players[$r->losing_player_id] = true;
@@ -196,10 +193,7 @@ class ResultsTable extends Table
 
             // Update winning player if not already done
             if (!isset($players[$r->winning_player_id])) {
-                $r->winning_players_history->player->club->set(
-                    'rating',
-                    $this->Players->dailyRating($r->winning_players_history->player, $clubId, $date)
-                );
+                $r->winning_players_history->player->club->set($this->Players->dailySnapshot($r->winning_players_history->player, $clubId, $date), ['guard' => false]);
                 $this->Players->Club->save($r->winning_players_history->player->club);
 
                 $players[$r->winning_player_id] = true;

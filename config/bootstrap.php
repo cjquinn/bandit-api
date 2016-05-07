@@ -196,6 +196,8 @@ DispatcherFactory::add('ControllerFactory');
 Type::build('date')->useLocaleParser();
 Type::build('datetime')->useLocaleParser();
 
+Type::map('json', 'App\Database\Type\JsonType');
+
 /**
  * Environment
  */

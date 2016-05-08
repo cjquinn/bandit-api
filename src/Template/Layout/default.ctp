@@ -12,14 +12,35 @@
     <?= $this->fetch('script') ?>
 </head>
 <body>
+
 <?= $this->Flash->render() ?>
 
-<figure class="svg-library" style="display:none;">
-    <?= $this->Svg->display('brand/logo') ?>
-    <?= $this->Svg->display('brand/knot') ?>
-    <?= $this->Svg->display('player/level') ?>
-    <?= $this->Svg->display('rarr') ?>
-</figure>
+<svg class="svg-library" style="display: none;">
+
+    <defs>
+
+        <?php /*
+
+            $viewBox = array(
+
+            'icon-players' -> '0 0 148 180';
+
+            );
+
+            */
+
+        ?>
+
+        <?= $this->Svg->display('brand/logo') ?>
+        <?= $this->Svg->display('brand/knot') ?>
+        <?= $this->Svg->display('rarr') ?>
+        <?= $this->Svg->display('icons/matches') ?>
+        <?= $this->Svg->display('icons/players') ?>
+
+    </defs>
+
+</svg>
+
 
 <div class="app">
 
@@ -28,7 +49,7 @@
     	<nav class="menu col">
 
             <a href="/" class="menu__logo">
-                <svg class="menu__logo__svg"><use class="menu__logo__use" xlink:href="#brand-logo" /></svg>
+                <svg class="menu__logo__svg" viewBox="0 0 129 95"><use xlink:href="#brand-logo" /></svg>
             </a>
 
             <div class="menu__whole">

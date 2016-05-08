@@ -1,10 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="129px" height="95px" viewBox="0 0 129 95" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 3.6.1 (26313) - http://www.bohemiancoding.com/sketch -->
-    <title>logo</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-
     <symbol id="brand-logo" viewBox="0 0 129 95">
         <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <g id="logo" fill="#FF7048">
@@ -13,4 +6,3 @@
             </g>
         </g>
     </symbol>
-</svg>

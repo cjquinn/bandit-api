@@ -52,4 +52,12 @@ class AppController extends Controller
     {
         return true;
     }
+    
+    /**
+     * @return void
+     */
+    public function beforeRender(Event $event)
+    {
+        $this->set('russellsViewVar', 'Some variable');
+    }
 }

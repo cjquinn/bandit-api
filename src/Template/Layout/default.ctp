@@ -14,6 +14,8 @@
 <body>
 <?= $this->Flash->render() ?>
 
+<?= $russellsViewVar ?>
+
 <figure class="svg-library" style="display:none;">
     <?= $this->Svg->display('brand/logo') ?>
     <?= $this->Svg->display('brand/knot') ?>

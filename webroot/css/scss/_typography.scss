@@ -54,10 +54,18 @@ h4, .h4 {
 	}
 }
 
+h5, .h5 {
+	font-size: 14px; font-weight: bold;
+}
+
 li {
 	list-style: none;
 }
 
-.content {
-	
+.points-won {
+	color: $win;
+}
+
+.points-loss {
+	color: $loss;
 }

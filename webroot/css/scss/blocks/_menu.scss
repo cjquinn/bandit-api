@@ -6,7 +6,7 @@
 		display: block; @include unit(margin-left, 3);
 
 		&__svg {
-			width: 66px; height: auto; /* is this right? */
+			width: 66px; height: auto;
 		}
 
 		&__use {

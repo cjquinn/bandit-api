@@ -3,7 +3,7 @@
 
 	&__backgrounds {
 		@include absolute-fill; opacity: .07;
-		transition: all .1s ease-in background;
+		transition: background-image .2s ease-in;
 	}
 
 	&.is--winner-first {
@@ -43,26 +43,18 @@
 							rgba($draw, 0) 84px
 							);
 		}
-		
-	}
-
-	&:hover {
-
-		#{$block}__backgrounds {
-			opacity: .14;
-		}
-
-		&.is--draw {
-			#{$block}__backgrounds {
-				opacity: .24;
-			}
-		}
 
 		#{$block}__player {
-			&:first-child {
-				// padding-right: 35px;
+			
+			&.is--first {
+				border-left: 2px solid $draw;
+			}
+
+			&.is--second {
+				border-right: 2px solid $draw;
 			}
 		}
+		
 	}
 
 	$score--width: 80px;
@@ -71,7 +63,6 @@
 		$block: #{&};
 		@include unit(height, 7); display: flex; align-items: center;
 		font-size: 14px;
-		transition: all .5s ease-in;
 
 		&__id {
 			flex: 1;
@@ -79,14 +70,17 @@
 		}
 
 		&__name {
-			font-weight: bold;
+			font-weight: bold; text-transform: uppercase;
 		}
 
 		&__rating {
+			overflow: hidden; opacity: 0;
+			max-height: 0;
 			color: $gray-chateau;
+			transition: all .2s ease;
 		}
 
-		&:first-child {
+		&.is--first {
 			padding: 0 #{$score--width/2} 0 22px;
 
 			&.is--winner {
@@ -97,16 +91,9 @@
 				border-left: 2px solid $loss;
 			}
 
-			&.is--draw {
-				border-left: 2px solid $draw;
-			}
-
-			#{$block}__player-photo {
-				//transform: translateX(-10px);
-			}
 		}
 
-		&:last-child {
+		&.is--second {
 			padding: 0 22px 0 #{$score--width/2};
 
 			&.is--winner {
@@ -117,35 +104,16 @@
 				border-right: 2px solid $loss;
 			}
 
-			&.is--draw {
-				border-right: 2px solid $draw;
-			}
-
 			#{$block}__id {
 				text-align: right;
-			}
-
-			#{$block}__player-photo {
-				//transform: translateX(10px);
 			}
 
 		}
 
 		&__player-photo {
 			width: 48px;
-
-			&__image {
-			}
-
 		}
 
-		&.is--animating {
-
-			#{$block}__player-photo {
-				animation: translateToRight .8s ease-out forwards;
-			}
-
-		}
 	}
 
 
@@ -158,4 +126,27 @@
 			font-weight: normal;
 		}
 	}
+
+
+	$block: #{&};
+
+	&:hover,
+	&:focus {
+
+		#{$block}__backgrounds {
+			opacity: .2;
+		}
+
+		&.is--draw {
+			#{$block}__backgrounds {
+				opacity: .24;
+			}
+		}
+
+		#{$block}__player__rating {
+			opacity: 1;
+			max-height: 20px;
+		}
+	}
+
 }

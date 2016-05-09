@@ -1,17 +1,33 @@
 .block {
+	$block: #{&};
 	background: $block__base;
-	box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.50), inset 0px 1px 0px 0px rgba(220,228,247,0.08), inset 0px 12px 18px 0px #313B5C;
-	border-radius: 4px 4px 0px 0px;
-	animation: translateUpFadeIn .8s ease-out forwards;
+	box-shadow: 0px 2px 2px 0px rgba(0,0,0, .25), inset 0px 1px 0px 0px rgba(220,228,247,0.08), inset 0px 12px 18px 0px #313B5C;
+	border-radius: 4px;
+	animation: translateUpFadeIn .5s ease-out forwards;
+
+	+ #{$block} {
+		@include unit(margin-top, 2);
+	}
 	
 	&__header {
 		position: relative; z-index: 1;
-		@include unit(height, 6); padding: 0 20px 0;
-		@include unit(line-height, 6); text-shadow: 0 -1px 0 rgba($shadow, .1);
+		@include gutter(padding-left, 2); @include gutter(padding-right, 2);
+		text-shadow: 0 -1px 0 rgba($shadow, .1);
 		box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.50);
+
+		&__title {
+			@include unit(height, 6); 
+			@include unit(line-height, 6); 
+		}
 
 		> * {
 			vertical-align: baseline;
+		}
+	}
+
+	&.has--contents {
+		#{$block}__header {
+			box-shadow: none;
 		}
 	}
 
@@ -38,12 +54,38 @@
 		}
 
 		&:hover {
-			background: $mirage;
+			background: adjust_hue(lighten(saturate($mirage, 17), 3), 14);
 			transition: background .1s ease;
 		}
 	}
 
+	&__contents {
+		padding: 0 $unit/2 $unit/2;
+
+		> .col:nth-child(2) {
+			margin-left: $unit/2;
+		}
+	}
+
 	&__footer {
+		background: $block__footer;
+		box-shadow: inset 0px 1px 0px 0px rgba($light, .08), inset 0px -1px 0px 0px rgba($shadow, .42); border-radius: 0 0 4px 4px;
+
+		&__meta {
+			 @include gutter(padding-left, 2); @include gutter(padding-right, 2);
+			@include unit(line-height, 4); font-size: 14px; color: $ghost; font-weight: 300; text-shadow: 0 -1px 0 rgba($shadow, .42);
+
+			@include inline-children($up:true);
+
+			&__item {
+				 @include gutter(margin-right, 2);
+			}
+
+			&__icon {
+				@include inline-middle($up:true); height: 17px; margin-right: 2px;
+				fill: $ghost;
+			}
+		}
 
 	}
 

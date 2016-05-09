@@ -28,73 +28,57 @@
 		}
 
 		&:before {
-			left: 0;
+			left: 0; z-index: 2;
 			display: none;
 			transform: translate(-50%, 50%) skew(60deg);
 		}
 
-		&.is--level47  {
-			&:after { background: $level47; }
+		&.is--level {
+			&47 {
+				&:after { background: $level47; }
+			}
+
+			&48 {
+				&:after { background: $level48; }
+			}
+
+			&49 {
+				&:after { background: $level49; }
+			}
+
+			&50 {
+				&:after { background: $level50; }
+			}
+
+			&51 {
+				&:after { background: $level51; }
+			}
+
+			&52 {
+				&:after { background: $level52; }
+			}
+
+			&53 {
+				&:after { background: $level53; }
+			}
+
+			&54 {
+				&:after { background: $level54; }
+			}
+
+			&55 {
+				&:after { background: $level55; }
+			}
+
+			&100 {
+				&:before { display: block; background: $level100; }
+			}
 		}
-
-		&.is--level48 {
-			&:after { background: $level48; }
-		}
-
-		&.is--level49 {
-			&:after { background: $level49; }
-		}
-
-		&.is--level50 {
-			&:after { background: $level50; }
-		}
-
-		&.is--level51 {
-			&:after { background: $level51; }
-		}
-
-		&.is--level52 {
-			&:after { background: $level52; }
-		}
-
-		&.is--level53 {
-			&:after { background: $level53; }
-		}
-
-		&.is--level54 {
-			&:after { background: $level54; }
-		}
-
-		&.is--level55 {
-			&:after { background: $level55; }
-		}
-
-		&.is--level100 {
-			&:before { display: block; background: $level100; }
-		}
-	}
-
-	&__level__svg {
-		@include absolute-fill; z-index: 1;
-
-		&.is--level100 {
-			transform: scaleX(-1);
-		}
-	}
-
-	&__level__use {
-
-		
-
 	}
 
 	&__knot__svg {
-		position: absolute; right: 100%; top: 5px;
-		width: 18px; height: 17px;
-	}
-
-	&__knot__use {
-		@include absolute-fill;
+		position: absolute; right: 100%; top: 6px;
+		width: 14px;
 	}
 	
 }

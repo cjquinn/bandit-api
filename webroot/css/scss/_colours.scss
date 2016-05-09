@@ -3,6 +3,7 @@ $vulcan: #0F1221;
 $mirage: #1D2438;
 $mirage2: #171C2D;
 $mirage3: #131627;
+$mirage4: #181E31;
 $pickled-bluewood: #27304A;
 $fiord: #3C4563;
 
@@ -10,6 +11,7 @@ $link-water: #DCE4F7;
 $cornflower: #91AEE6;
 $sail: #ADC8FA;
 $gray-chateau: #A3A9B5;
+$ghost: #C1C5CD;
 $abbey: #555659;
 
 $win: #9CEB6E;
@@ -65,6 +67,7 @@ $app__base: $mirage;
 $app__inset: $vulcan; // behind navigation + view tabs
 
 $block__base: $pickled-bluewood;
+$block__footer: $mirage4;
 
 $text: $link-water;
 $text--link: $cornflower;

@@ -1,25 +1,41 @@
 .menu {
-	background: $app__inset;
-	border-radius: 4px 0 0 4px; box-shadow: inset -1px 0px 2px $shadow, inset -3px 0px 19px rgba($shadow, 0.10);
 
-	&__logo {
-		display: block; @include unit(margin-left, 3);
+	@media (max-width: 599px) {
+		position: absolute; top: 0; left: 0;
+		width: 100%; @include unit(padding, 1);
 
-		&__svg {
-			width: 66px; height: auto;
+		&__whole {
+			display: none;
 		}
 
-		&__use {
-			
+		&__logo {
+			float: left;
+
+			&__svg {
+				@include unit(height, 5);
+			}
 		}
 
+		&__current {
+			float: left;
+		}
+
+		&__toggle {
+			float: right;
+		}
 	}
 
-	&__whole {
-		display: none;
+	@media (min-width: 600px) {
+		background: $app__inset;
+		border-radius: 4px 0 0 4px; box-shadow: inset -1px 0px 2px $shadow, inset -3px 0px 19px rgba($shadow, 0.10);
 
-		@media (min-width: 900px) {
-			display: block;
+		&__logo {
+			display: block; @include unit(margin-left, 3);
+
+			&__svg {
+				width: 66px; height: auto;
+			}
+
 		}
 	}
 

@@ -60,6 +60,10 @@ $unit: 12px;
 
 	#{$property}: #{($multiplier * $unit)};
 
+	@media (max-width: 600px) {
+		#{$property}: #{($multiplier * 10px)};
+	}
+
 }
 
 $gutter: 10px;

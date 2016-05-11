@@ -43,160 +43,26 @@
 
                     for ($k = 0; $k < $stream; $k++) {
 
+                        echo $this->element('matchBandit');
+
+                    }
+
+                    $stream = 3;
+
+                    for ($k = 0; $k < $stream; $k++) {
+
+                        echo $this->element('match');
+
+                    }
+
+                    $stream = 1;
+
+                    for ($k = 0; $k < $stream; $k++) {
+
+                        echo $this->element('matchLoss');
+
+                    }
                 ?>
-
-                <li class="match block__slab is--winner-first gflex">
-
-                    <div class="match__player is--winner col">
-
-                        <dl class="match__player__id">
-
-                            <dt class="match__player__name">RB</dt>
-                            <dd class="match__player__rating">6085</dd>
-
-                        </dl>
-
-                        <figure class="match__player__player-photo">
-                            <div class="player-photo__proportion clip-hexagon">
-
-                                <div class="player-photo__level is--level50"></div>
-                                <img src="http://userphoto.localhost/get.php?id=1" alt="Photo 1" class="player-photo__image" />
-
-                            </div>
-                        </figure>
-
-                    </div>
-
-                    <aside class="match__score h3">3<span class="match__score__hyphen">-</span>0</aside>
-
-                    <div class="match__backgrounds"></div>
-
-                    <div class="match__player is--loser col">
-
-                        <figure class="match__player__player-photo player-photo">
-
-                            <div class="player-photo__proportion clip-hexagon">
-
-                                <div class="player-photo__level is--level49"></div>
-                                <img src="http://userphoto.localhost/get.php?id=2" alt="Photo 1" class="player-photo__image" />
-
-                            </div>
-
-                        </figure>
-
-                        <dl class="match__player__id">
-
-                            <dt class="match__player__name">JM</dt>
-                            <dd class="match__player__rating">5675</dd>
-
-                        </dl>                                    
-
-                    </div>
-
-                </li> 
-
-                <?php } ?>
-
-                <li class="match block__slab is--loser-first gflex">
-
-                    <div class="match__player is--loser col">
-
-                        <dl class="match__player__id">
-
-                            <dt class="match__player__name">AJ</dt>
-                            <dd class="match__player__rating">7015</dd>
-
-                        </dl>
-
-                        <figure class="match__player__player-photo">
-                            <div class="player-photo__proportion clip-hexagon">
-
-                                <div class="player-photo__level is--level52"></div>
-                                <img src="http://userphoto.localhost/get.php?id=3" alt="Photo 1" class="player-photo__image" />
-
-                            </div>
-                        </figure>
-
-                    </div>
-
-                    <aside class="match__score h3">1<span class="match__score__hyphen">-</span>4</aside>
-
-                    <div class="match__backgrounds"></div>
-
-                    <div class="match__player is--winner col">
-
-                        <figure class="match__player__player-photo player-photo">
-
-                        	<svg class="player-photo__knot__svg"><use class="player-photo__knot__use" xlink:href="#brand-knot" /></svg>
-
-                            <div class="player-photo__proportion clip-hexagon">
-
-                                <div class="player-photo__level is--level55 is--level100"></div>
-                                <img src="http://userphoto.localhost/get.php?id=4" alt="Photo 1" class="player-photo__image" />
-                            </div>
-
-                        </figure>
-
-                        <dl class="match__player__id">
-
-                            <dt class="match__player__name">TS</dt>
-                            <dd class="match__player__rating">6635</dd>
-
-                        </dl>                                    
-
-                    </div>
-
-                </li>
-
-                <li class="match block__slab is--draw gflex">
-
-                    <div class="match__player is--draw col">
-
-                        <dl class="match__player__id">
-
-                            <dt class="match__player__name">MH</dt>
-                            <dd class="match__player__rating">4820</dd>
-
-                        </dl>
-
-                        <figure class="match__player__player-photo">
-                            <div class="player-photo__proportion clip-hexagon">
-
-                                <div class="player-photo__level is--level54"></div>
-                                <img src="http://userphoto.localhost/get.php?id=7" alt="Photo 1" class="player-photo__image" />
-
-                            </div>
-                        </figure>
-
-                    </div>
-
-                    <aside class="match__score h3">2<span class="match__score__hyphen">-</span>2</aside>
-
-                    <div class="match__backgrounds"></div>
-
-                    <div class="match__player is--draw col">
-
-                        <figure class="match__player__player-photo player-photo">
-
-                            <div class="player-photo__proportion clip-hexagon">
-
-                            	<div class="player-photo__level is--level54"></div>
-                                <img src="http://userphoto.localhost/get.php?id=6" alt="Photo 1" class="player-photo__image" />
-
-                            </div>
-
-                        </figure>
-
-                        <dl class="match__player__id">
-
-                            <dt class="match__player__name">KL</dt>
-                            <dd class="match__player__rating">4910</dd>
-
-                        </dl>                                    
-
-                    </div>
-
-                </li>
 
             </ol>
 
@@ -225,7 +91,7 @@
                             <div class="player-photo__proportion clip-hexagon">
 
                             	<div class="player-photo__level is--level55 is--level100"></div>
-                                <img src="http://userphoto.localhost/get.php?id=31" alt="Photo 1" class="player-photo__image" />
+                                <img src="http://userphoto.russellbishop.co.uk/get.php?id=31" alt="Photo 1" class="player-photo__image" />
 
                             </div>
 
@@ -253,7 +119,7 @@
                             <div class="player-photo__proportion clip-hexagon">
 
                                 <div class="player-photo__level is--level54"></div>
-                                <img src="http://userphoto.localhost/get.php?id=60" alt="Photo 1" class="player-photo__image" />
+                                <img src="http://userphoto.russellbishop.co.uk/get.php?id=60" alt="Photo 1" class="player-photo__image" />
 
                             </div>
 

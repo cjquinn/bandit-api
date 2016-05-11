@@ -15,7 +15,7 @@
             <div class="player-photo__proportion clip-hexagon">
 
                 <div class="player-photo__level is--level<?=rand(47, 55)?> is--level100"></div>
-                <img src="http://userphoto.localhost/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
+                <img src="http://userphoto.russellbishop.co.uk/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
 
             </div>
 
@@ -28,7 +28,7 @@
             <div class="player-photo__proportion clip-hexagon">
 
                 <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
-                <img src="http://userphoto.localhost/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
+                <img src="http://userphoto.russellbishop.co.uk/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
 
             </div>
 

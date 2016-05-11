@@ -1,6 +1,6 @@
 .button {
-	display: block;
+	display: block; @include gutter(padding-left, 1); @include gutter(padding-right, 1);
 	background: $button__base; border: 2px solid $level100;
-	color: $white;
+	color: $white; @include unit(line-height, 4);
 	border-radius: 4px;
 }

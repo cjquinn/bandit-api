@@ -13,4 +13,9 @@ class SvgHelper extends Helper
         $svg = new File(WWW_ROOT . 'img' . DS . $file . '.svg');
         return preg_replace('/<title>.*<\/title>/', '', $svg->read());
     }
+
+    public function useit($id, $class, $viewBox)
+    {
+        return '<svg viewBox="'.$viewBox.'" class="'.$class.'"><use xlink:href="#'.$id.'"></use></svg>';
+    }
 }

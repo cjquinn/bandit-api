@@ -173,6 +173,7 @@
 
                         <div class="finder__display__input" contentEditable="true" data-placeholder="Search Players&hellip;"></div>
 
+                        <?= $this->Svg->useit('rarr', 'finder__display__rarr', '0 0 8 13') ?>
                     </div>
 
                     <ul class="finder__results">

@@ -152,11 +152,8 @@ class ResultsTable extends Table
     public function nullify(Result $result)
     {
         $clubId = $result->club_id;
-
-        // Date of result
         $date = new DateTime($result->created->i18nFormat('Y-M-d'));
-
-        // Get effected results
+        $players = [];
         $results = $this
             ->find()
             ->contain([
@@ -180,9 +177,7 @@ class ResultsTable extends Table
                 'created >=' => $date
             ]);
 
-        // Update ratings to daily rating of result
-        $players = [];
-
+        
         $revertPlayer = function ($player) use ($clubId, $date, &$players) {
             if (!isset($players[$player->id])) {
                 $player->club->set($this->Players->dailySnapshot($player, $clubId, $date), [
@@ -195,14 +190,10 @@ class ResultsTable extends Table
         };
 
         $results = $results->map(function ($r) use ($result, $revertPlayer) {
-            // Update losing player if not already done
             $revertPlayer($r->losing_players_history->player);
-
-            // Update winning player if not already done
             $revertPlayer($r->winning_players_history->player);
 
             if ($r->id === $result->id) {
-                // Remove history
                 $this->Histories->delete($r->losing_players_history);
                 $this->Histories->delete($r->winning_players_history);
 
@@ -212,7 +203,6 @@ class ResultsTable extends Table
             return $r;
         });
 
-        // Re-save results
         $results->each(function ($result) {
             if ($result) {
                 $result->dirty('*', true);

@@ -30,7 +30,7 @@
 
         <?= $this->Svg->display('brand/logo') ?>
         <?= $this->Svg->display('brand/knot') ?>
-        
+
         <?= $this->Svg->display('rarr') ?>
         <?= $this->Svg->display('player') ?>
 
@@ -100,6 +100,22 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <script>
+
+$(function() {
+
+    $('.block.is--animating').each(function() {
+
+        $(this).on("transitionend MSTransitionEnd webkitTransitionEnd oTransitionEnd",
+
+            function() {
+                console.log('ended');
+                $(this).removeClass('is--animating');
+            }
+        );
+    });
+
+});
+
 </script>
 
 </body>

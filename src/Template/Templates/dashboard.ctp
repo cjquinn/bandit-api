@@ -27,7 +27,7 @@
 
     <div class="col">
 
-        <section class="block">
+        <section class="block is--animating">
 
             <header class="block__header">
                 <h1 class="h4">Matches</h1>
@@ -83,7 +83,7 @@
         </section>
 
 
-        <section class="block">
+        <section class="block is--animating">
 
             <header class="block__header">
                 <h1 class="h4">Box 1 <small class="h4__small">3 weeks left</small></h1>
@@ -134,7 +134,21 @@
 
     <div class="col">
 
-        <section class="block">
+        <section class="block is--animating">
+
+            <header class="block__header">
+                <h1 class="h4">Disputes</h1>
+            </header>
+
+            <ol class="stream is--disputes">
+
+                <?= $this->element('finder'); ?>
+
+            </ol>
+
+        </section>
+
+        <section class="block is--animating">
 
             <header class="block__header">
                 <h1 class="h4">Notifications</h1>
@@ -144,99 +158,6 @@
             </ol>
 
         </section>
-
-
-
-        <section class="block">
-
-            <header class="block__header">
-                <h1 class="h4">Disputes</h1>
-            </header>
-
-            <ol class="stream is--disputes">
-
-                <div class="finder">
-                    <div class="finder__display">
-
-                        <figure class="finder__player-photo">
-
-                            <?= $this->Svg->useit('player', 'finder__player-photo__icon') ?>
-
-                            <div class="player-photo__proportion clip-hexagon">
-
-
-                            </div>
-
-                        </figure>
-
-                        <input class="finder__display__input" type="text" required placeholder="Search Players&hellip;"/>
-
-                        <?= $this->Svg->useit('rarr', 'finder__display__rarr') ?>
-                    </div>
-
-                    <li class="finder__display finder__results__result is--selected">
-                        <figure class="finder__player-photo finder__results__player-photo">
-
-                            <div class="player-photo__proportion clip-hexagon">
-
-                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
-                                <img src="http://userphoto.russellbishop.co.uk/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
-
-                            </div>
-
-                        </figure>
-
-                        <header>
-
-                            <dt class="player__id__name">Cody Morton</dt>
-
-                        </header>
-
-                        <?= $this->Svg->useit('rarr', 'finder__display__rarr') ?>
-                    </li>
-
-                    <ul class="finder__results">
-
-                        <?php
-
-                        for ($k = 0; $k < 10; $k++) :
-
-                        ?>
-
-                        <li class="finder__results__result">
-                            <figure class="finder__player-photo finder__results__player-photo">
-
-                                <div class="player-photo__proportion clip-hexagon">
-
-                                    <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
-                                    <img src="http://userphoto.russellbishop.co.uk/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
-
-                                </div>
-
-                            </figure>
-
-                            <header>
-
-                                <dt class="player__id__name">Cody Morton</dt>
-
-                            </header>
-                        </li>
-
-                        <?php
-
-                        endfor;
-
-                        ?>
-
-                        
-
-                    </ul>
-                </div>
-
-            </ol>
-
-        </section>
-
 
     </div>
 
@@ -252,7 +173,7 @@
                 <h1 class="h4__small">Leaderboards</h1>
             </header>
 
-            <div class="block__contents gflex">
+            <div class="block__contents gflex from--desktop">
 
                 <div class="col">
 

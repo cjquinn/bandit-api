@@ -1,4 +1,6 @@
 .finder {
+	$block: #{&};
+	position: relative; z-index: 30;
 
 	&__display {
 		position: relative;
@@ -46,7 +48,7 @@
 	}
 
 	&__results {
-		position: absolute; top: 100%; z-index: 30;
+		position: absolute; top: 100%; z-index: 1000; -webkit-transform: translate3d(0,0,0);
 		display: none; width: 100%; max-height: 40vh; overflow-x: hidden; overflow-y: auto;
 
 		&__result {
@@ -66,11 +68,11 @@
 
 	}
 
-	&:hover,
-	&:focus {
+	&:hover {
 
-		.finder__results {
+		#{$block}__results {
 			display: block;
+			animation: translateDownFadeIn .2s ease-out forwards;
 		}
 	}
 

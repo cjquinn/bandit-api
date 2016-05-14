@@ -66,11 +66,11 @@ class ResultsTableTest extends TestCase
             ])
             ->firstOrFail();
 
-        $this->assertEquals(1170, $christy->club->rating);
+        $this->assertEquals(1169, $christy->club->rating);
         $this->assertEquals(2, $christy->club->losses);
         $this->assertEquals(0, $christy->club->wins);
 
-        $this->assertEquals(1230, $russell->club->rating);
+        $this->assertEquals(1231, $russell->club->rating);
         $this->assertEquals(0, $russell->club->losses);
         $this->assertEquals(2, $russell->club->wins);
 

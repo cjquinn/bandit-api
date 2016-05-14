@@ -189,7 +189,7 @@ class ResultsTable extends Table
             }
         };
 
-        $results = $results->map(function ($r) use ($result, $revertPlayer) {
+        $results = $results->filter(function ($r) use ($result, $revertPlayer) {
             $revertPlayer($r->losing_players_history->player);
             $revertPlayer($r->winning_players_history->player);
 
@@ -197,10 +197,10 @@ class ResultsTable extends Table
                 $this->Histories->delete($r->losing_players_history);
                 $this->Histories->delete($r->winning_players_history);
 
-                return;
+                return false;
             }
             
-            return $r;
+            return true;
         });
 
         $results->each(function ($result) {

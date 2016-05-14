@@ -1,7 +1,73 @@
 .login {
 
-    @include container; max-width: 510px; padding: $unit/2;
+    @include container; max-width: 510px; max-width: 440px; padding: $unit*2;
     background-color: $app__base;
     border-radius: 6px;
+
+    &__brand {
+        text-align: center; line-height: 1.4;
+
+        a {
+            color: $level100;
+        }
+
+        h1 {
+            font-weight: 300;
+        }
+
+        h2 {
+            font-size: 1em;
+        }
+    }
+
+    &__logo {
+        display: block; width: 120px; margin: 0 auto;
+        transform: translateX(-12%);
+    }
+
+    fieldset {
+        position: relative;
+        display: block; margin: 40px 0;
+
+        label, input {
+            display: block; width: 100%;
+            transition: all .2s ease-in;            
+        }
+
+        input {
+            position: relative; z-index: 1;
+            padding: 20px 0;
+            background: none; border: none; border-bottom: 2px solid rgba($light, .2);
+
+            &:focus {
+                ~ label {
+                    transform: translateY(-10px);
+                }
+            }
+
+            &:valid {
+
+                border-bottom: 2px solid $light;
+
+                ~ label {
+                    opacity: 0;
+                }
+            }
+        }
+
+        label {
+            position: absolute; top: 0; z-index: 0;
+            
+        }
+    }
+
+    .button {
+        display: block; width: 100%;
+    }
+
+    &__links {
+        font-size: .8em;
+    }
     
+
 }

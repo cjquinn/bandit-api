@@ -1,0 +1,7 @@
+.login {
+
+    @include container; max-width: 510px; padding: $unit/2;
+    background-color: $app__base;
+    border-radius: 6px;
+    
+}

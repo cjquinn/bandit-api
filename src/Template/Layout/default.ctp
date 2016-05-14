@@ -49,7 +49,9 @@
     	<nav class="menu col">
 
             <a href="/" class="menu__logo">
-                <svg class="menu__logo__svg" viewBox="0 0 129 95"><use xlink:href="#brand-logo" /></svg>
+
+                <?= $this->Svg->useit('brand-logo', 'menu__logo__svg'); ?>
+                
             </a>
 
             <h6 class="menu__current">Dashboard</h6>

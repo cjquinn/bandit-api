@@ -6,6 +6,7 @@ class SvgHelper extends Helper
 {
     private $_viewBoxes = [
         
+        'brand-logo' => '0 0 129 95',
         'brand-knot' => '0 0 37 32',
 
         'icon-matches' => '0 0 21 18',

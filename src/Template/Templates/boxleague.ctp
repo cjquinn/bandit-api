@@ -78,7 +78,7 @@
 
                         <figure class="player__player-photo player-photo">
 
-                            <svg class="player-photo__knot__svg"><use class="player-photo__knot__use" xlink:href="#brand-knot" /></svg>
+                            <?= $this->Svg->useit('brand-knot', 'player-photo__knot__svg') ?>
 
                             <div class="player-photo__proportion clip-hexagon">
 

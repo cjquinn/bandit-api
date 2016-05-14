@@ -7,14 +7,14 @@
 
         <dl class="match__player__id">
 
-            <dt class="match__player__name"><?= $this->Initial->display() ?></dt>
-            <dd class="match__player__rating"><?= $this->Rating->display('high') ?></dd>
+            <dt class="match__player__name" data-initials="<?= $this->Initial->display() ?>"><span class="match__player__name__full">Marley Jenkins</span></dt>
+            <dd class="match__player__rating"><?= $this->Svg->useit('icon-rating', 'match__player__rating__icon')?><?= $this->Rating->display('high') ?></dd>
 
         </dl>
 
         <figure class="match__player__player-photo player-photo">
 
-            <svg class="player-photo__knot__svg" viewBox="0 0 37 32"><use xlink:href="#brand-knot" /></svg>
+            <?= $this->Svg->useit('brand-knot', 'player-photo__knot__svg') ?>
 
             <div class="player-photo__proportion clip-hexagon">
 
@@ -44,8 +44,8 @@
 
         <dl class="match__player__id">
 
-            <dt class="match__player__name"><?= $this->Initial->display() ?></dt>
-            <dd class="match__player__rating"><?= $this->Rating->display('low') ?></dd>
+            <dt class="match__player__name" data-initials="<?= $this->Initial->display() ?>"><span class="match__player__name__full">Marley Jenkins</span></dt>
+            <dd class="match__player__rating"><?= $this->Svg->useit('icon-rating', 'match__player__rating__icon')?><?= $this->Rating->display('low') ?></dd>
 
         </dl>                                    
 

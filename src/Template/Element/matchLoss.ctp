@@ -7,8 +7,8 @@
 
         <dl class="match__player__id">
 
-            <dt class="match__player__name"><?= $this->Initial->display() ?></dt>
-            <dd class="match__player__rating"><?= $this->Rating->display('high') ?></dd>
+            <dt class="match__player__name" data-initials="<?= $this->Initial->display() ?>"><span class="match__player__name__full">Marley Jenkins</span></dt>
+            <dd class="match__player__rating"><?= $this->Svg->useit('icon-rating', 'match__player__rating__icon')?><?= $this->Rating->display('high') ?></dd>
 
         </dl>
 
@@ -41,8 +41,8 @@
 
         <dl class="match__player__id">
 
-            <dt class="match__player__name"><?= $this->Initial->display() ?></dt>
-            <dd class="match__player__rating"><?= $this->Rating->display('low') ?></dd>
+            <dt class="match__player__name" data-initials="<?= $this->Initial->display() ?>"><span class="match__player__name__full">Marley Jenkins</span></dt>
+            <dd class="match__player__rating"><?= $this->Svg->useit('icon-rating', 'match__player__rating__icon')?><?= $this->Rating->display('low') ?></dd>
 
         </dl>                                    
 

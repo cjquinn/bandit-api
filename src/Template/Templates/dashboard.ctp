@@ -69,18 +69,13 @@
                 <ul class="block__footer__meta">
 
                     <li class="block__footer__meta__item">
-                        <svg viewBox="0 0 21 18" class="icon-inline block__footer__meta__icon">
-                            <use xlink:href="#icon-matches"></use>
-                        </svg>
+                        <?= $this->Svg->useit('icon-matches', 'icon-inline block__footer__meta__icon') ?>
                         10 matches
                     </li>
 
                     <li class="block__footer__meta__item">
-                        <svg viewBox="0 0 148 180" class="icon-inline block__footer__meta__icon">
-                            <use xlink:href="#icon-players"></use>
-                        </svg>
+                        <?= $this->Svg->useit('icon-players', 'icon-inline block__footer__meta__icon') ?>
                         5 opponents</li>
-
                 </ul>
 
             </footer>
@@ -165,16 +160,40 @@
 
                         <figure class="finder__player-photo">
 
+                            <?= $this->Svg->useit('player', 'finder__player-photo__icon') ?>
+
                             <div class="player-photo__proportion clip-hexagon">
+
 
                             </div>
 
                         </figure>
 
-                        <div class="finder__display__input" contentEditable="true" data-placeholder="Search Players&hellip;"></div>
+                        <input class="finder__display__input" type="text" required placeholder="Search Players&hellip;"/>
 
-                        <?= $this->Svg->useit('rarr', 'finder__display__rarr', '0 0 8 13') ?>
+                        <?= $this->Svg->useit('rarr', 'finder__display__rarr') ?>
                     </div>
+
+                    <li class="finder__display finder__results__result is--selected">
+                        <figure class="finder__player-photo finder__results__player-photo">
+
+                            <div class="player-photo__proportion clip-hexagon">
+
+                                <div class="player-photo__level is--level<?=rand(47, 55)?>"></div>
+                                <img src="http://userphoto.russellbishop.co.uk/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
+
+                            </div>
+
+                        </figure>
+
+                        <header>
+
+                            <dt class="player__id__name">Cody Morton</dt>
+
+                        </header>
+
+                        <?= $this->Svg->useit('rarr', 'finder__display__rarr') ?>
+                    </li>
 
                     <ul class="finder__results">
 

@@ -28,34 +28,19 @@
 
     <defs>
 
-        <?php /*
-
-            $viewBox = array(
-
-            'icon-players' -> '0 0 148 180';
-
-            );
-
-            */
-
-        ?>
-
         <?= $this->Svg->display('brand/logo') ?>
         <?= $this->Svg->display('brand/knot') ?>
+        
         <?= $this->Svg->display('rarr') ?>
+        <?= $this->Svg->display('player') ?>
+
         <?= $this->Svg->display('icons/matches') ?>
         <?= $this->Svg->display('icons/players') ?>
+        <?= $this->Svg->display('icons/rating') ?>
 
     </defs>
 
 </svg>
-
-<figure class="svg-library" style="display:none;">
-    <?= $this->Svg->display('brand/logo') ?>
-    <?= $this->Svg->display('brand/knot') ?>
-    <?= $this->Svg->display('player/level') ?>
-    <?= $this->Svg->display('rarr') ?>
-</figure>
 
 <div class="app">
 

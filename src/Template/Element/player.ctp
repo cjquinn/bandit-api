@@ -10,7 +10,7 @@
 
             ?>
 
-            <svg class="player-photo__knot__svg" viewBox="0 0 37 32">><use class="player-photo__knot__use" xlink:href="#brand-knot" /></svg>
+            <?= $this->Svg->useit('brand-knot', 'player-photo__knot__svg') ?>
 
             <div class="player-photo__proportion clip-hexagon">
 
@@ -45,7 +45,12 @@
         <header>
 
             <dt class="player__id__name">Cody Morton</dt>
-            <dd class="player__id__stats"><?php if ($bandit == 'yes') { echo '<span class="player__id__level is--level100">Bandit</span> '; } ?><span class="player__id__level is--level55">Ninja</span> <span class="player__id__rating"><?= $this->Rating->display($rating) ?></dd>
+
+            <dd class="player__id__stats">
+                <?php if ($bandit == 'yes') { echo '<span class="player__id__level is--level100">Bandit</span> '; } ?>
+                <span class="player__id__level is--level55">Ninja</span>
+                <span class="player__id__rating"><?= $this->Svg->useit('icon-rating', 'match__player__rating__icon')?><?= $this->Rating->display($rating) ?>
+            </dd>
 
         </header>
 

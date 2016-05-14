@@ -1,14 +1,14 @@
 <li class="match block__slab is--winner-first gflex">
 
-    <? /*
+    <?php /*
         first player
     */ ?>
     <div class="match__player is--first is--winner col">
 
         <dl class="match__player__id">
 
-            <dt class="match__player__name"><?= $this->Initial->display() ?></dt>
-            <dd class="match__player__rating"><?= $this->Rating->display('high') ?></dd>
+            <dt class="match__player__name" data-initials="<?= $this->Initial->display() ?>"><span class="match__player__name__full">Marley Jenkins</span></dt>
+            <dd class="match__player__rating"><?= $this->Svg->useit('icon-rating', 'match__player__rating__icon')?><?= $this->Rating->display('high') ?></dd>
 
         </dl>
 
@@ -23,7 +23,7 @@
 
     </div>
 
-    <? /*
+    <?php /*
         second player
     */ ?>
     <div class="match__player is--second is--loser col">
@@ -41,20 +41,20 @@
 
         <dl class="match__player__id">
 
-            <dt class="match__player__name"><?= $this->Initial->display() ?></dt>
-            <dd class="match__player__rating"><?= $this->Rating->display('low') ?></dd>
+            <dt class="match__player__name" data-initials="<?= $this->Initial->display() ?>"><span class="match__player__name__full">Elliott Therton</span></dt>
+            <dd class="match__player__rating"><?= $this->Svg->useit('icon-rating', 'match__player__rating__icon')?><?= $this->Rating->display('low') ?></dd>
 
         </dl>                                    
 
     </div>
 
-    <? /*
+    <?php /*
         match score
     */ ?>
     <aside class="match__score h3"><?=rand(2, 5)?><span class="match__score__hyphen">-</span><?=rand(0, 1)?></aside>
 
 
-    <? /*
+    <?php /*
         win/loss glow backgrounds
     */ ?>
     <div class="match__backgrounds"></div>

@@ -10,7 +10,7 @@
 
             ?>
 
-            <svg class="player-photo__knot__svg" viewBox="0 0 37 32">><use class="player-photo__knot__use" xlink:href="#brand-knot" /></svg>
+            <?= $this->Svg->useit('brand-knot', 'player-photo__knot__svg') ?>
 
             <div class="player-photo__proportion clip-hexagon">
 

@@ -3,7 +3,10 @@
 
 	&__backgrounds {
 		@include absolute-fill; opacity: .07;
-		// transition: background-image .2s ease-in;
+
+		@media (min-width: 700px) {
+			transition: background-image .2s ease-in;
+		}
 	}
 
 	&.is--winner-first {
@@ -70,14 +73,29 @@
 		}
 
 		&__name {
-			font-weight: bold; text-transform: uppercase;
+
+			&__full {
+				display: none;
+			}
+
+			&:before {
+				font-weight: bold; text-transform: uppercase;
+				content: attr(data-initials);
+			}
 		}
 
 		&__rating {
 			overflow: hidden; opacity: 0;
 			max-height: 0;
 			color: $gray-chateau;
-			//transition: all .2s ease;
+
+			@media (min-width: 700px) {
+				transition: all .2s ease;
+			}
+
+			&__icon {
+				@include inline-middle($up: true); width: 11px; margin-right: 4px;
+			}
 		}
 
 		&.is--first {
@@ -151,6 +169,14 @@
 			opacity: 1;
 			max-height: 20px;
 		}
-	}
 
+		#{$block}__player__name {
+			&:before {
+				display: none;
+			}
+			&__full {
+				display: block;
+			}
+		}
+	}
 }

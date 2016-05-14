@@ -67,6 +67,6 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
         $this->_setAuthSession(1);
         $this->post('/api/clubs/1/box-league-cycles.json', []);
 
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(200);
     }
 }

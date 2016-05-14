@@ -23,6 +23,14 @@ Router::scope('/api', function ($routes) {
         ]
     ], function ($routes) {
         /**
+         * BoxLeagueCycles
+         */
+        $routes->resources('BoxLeagueCycles', [
+            'inflect' => 'dasherize',
+            'only' => 'create'
+        ]);
+
+        /**
          * ClubsPlayers
          */
         $routes->connect('/players/:player_id', [

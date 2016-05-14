@@ -10,6 +10,8 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+use DateTime;
+
 class ClubsTable extends Table
 {
 
@@ -29,6 +31,7 @@ class ClubsTable extends Table
                 'Players'
             ],
             'hasMany' => [
+                'BoxLeagueCycles',
                 'Results'
             ]
         ]);
@@ -83,5 +86,24 @@ class ClubsTable extends Table
 
             $this->save($club);
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function hasUnfinishedBoxLeagueCycle($id)
+    {
+        $box = $this->BoxLeagueCycles
+            ->find()
+            ->where([
+                'club_id' => $id,
+                'end >' => new DateTime()
+            ])
+            ->toArray();
+
+        return $this->BoxLeagueCycles->exists([
+            'club_id' => $id,
+            'end >' => new DateTime()
+        ]);
     }
 }

@@ -10,7 +10,7 @@ use Cake\ORM\Entity;
  * @property \Cake\I18n\Time $start
  * @property \Cake\I18n\Time $end
  */
-class BoxLeague extends Entity
+class BoxLeagueCycle extends Entity
 {
 
     protected $_accessible = [

@@ -13,12 +13,12 @@ class CreateBoxes extends AbstractMigration
     public function change()
     {
         $table = $this->table('boxes');
-        $table->addColumn('box_league_id', 'integer', [
+        $table->addColumn('box_league_cycle_id', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false,
         ]);
-        $table->addForeignKey('box_league_id', 'box_leagues', 'id', [
+        $table->addForeignKey('box_league_cycle_id', 'box_league_cycles', 'id', [
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);

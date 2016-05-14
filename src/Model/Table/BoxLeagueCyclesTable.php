@@ -5,7 +5,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class BoxLeaguesTable extends Table
+class BoxLeagueCyclesTable extends Table
 {
 
     /**
@@ -26,15 +26,17 @@ class BoxLeaguesTable extends Table
     /**
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
+    public function validationStartCycle(Validator $validator)
     {
         $validator
-            ->add('start', 'valid', ['rule' => 'datetime'])
-            ->allowEmpty('start');
+            ->requirePresence('start')
+            ->notEmpty('start')
+            ->add('start', 'valid', ['rule' => 'datetime']);
 
         $validator
-            ->add('end', 'valid', ['rule' => 'datetime'])
-            ->allowEmpty('end');
+            ->requirePresence('end')
+            ->notEmpty('end')
+            ->add('end', 'valid', ['rule' => 'datetime']);
 
         return $validator;
     }

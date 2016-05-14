@@ -6,6 +6,10 @@ trait ControllerTestTrait
 {
 
     public $fixtures = [
+        'app.box_league_cycles',
+        'app.boxes',
+        'app.boxes_players',
+        'app.boxes_players_results',
         'app.clubs',
         'app.clubs_players',
         'app.disputes',

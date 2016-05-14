@@ -8,7 +8,7 @@ class BoxesPlayersResultsFixture extends TestFixture
 {
 
     public $import = [
-        'table' => 'boxes_player_results'
+        'table' => 'boxes_players_results'
     ];
 
     public function init()

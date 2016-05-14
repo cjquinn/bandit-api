@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class CreateBoxLeagues extends AbstractMigration
+class CreateBoxLeagueCycles extends AbstractMigration
 {
     /**
      * Change Method.
@@ -12,7 +12,7 @@ class CreateBoxLeagues extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('box_leagues');
+        $table = $this->table('box_league_cycles');
         $table->addColumn('club_id', 'integer', [
             'default' => null,
             'limit' => 11,

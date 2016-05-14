@@ -4,13 +4,9 @@ use Migrations\AbstractMigration;
 class CreateBoxesPlayers extends AbstractMigration
 {
     /**
-     * Change Method.
-     *
-     * More information on this method is available here:
-     * http://docs.phinx.org/en/latest/migrations.html#the-change-method
      * @return void
      */
-    public function change()
+    public function up()
     {
         $table = $this->table('boxes_players', [
             'id' => false,
@@ -44,5 +40,13 @@ class CreateBoxesPlayers extends AbstractMigration
         ]);
         $table->create();
         $this->query('CREATE INDEX box_id ON boxes_players (box_id)');
+    }
+
+    /**
+     * @return void
+     */
+    public function down()
+    {
+        $this->dropTable('boxes_players');
     }
 }

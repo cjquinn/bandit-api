@@ -1,73 +1,88 @@
 .login {
-
-    @include container; max-width: 510px; max-width: 440px; padding: $unit*2;
+    @include container; max-width: 510px; max-width: 440px; margin-bottom: $unit*3; padding: $unit*2;
     background-color: $app__base;
     border-radius: 6px;
 
+    > * + * {
+        @include unit(margin-top, 3); 
+    }
+
     &__brand {
-        text-align: center; line-height: 1.4;
+        text-align: center; line-height: 1.2;
 
-        a {
-            color: $level100;
+        &__logo {
+            display: inline-block; margin-bottom: 6px;
+            transform: translateX(-12%);
+
+            &__svg {
+                display: block; width: 108px; height: auto;
+            }
         }
 
-        h1 {
-            font-weight: 300;
+        &__name {
+            font-weight: bold; font-size: 21px; text-transform: uppercase;
+
+            a {
+                color: $level100;
+            }
         }
 
-        h2 {
+        &__descriptor {
+            position: relative;
             font-size: 1em;
+
+            &:after {
+                top: 100%; @include absolute-centre-x;
+                width: 30px; height: 7px; background: rgba($shadow, .25);
+                border-radius: 100%; transform: translate(-50%, 18px);
+                @include no-content;
+            }
         }
     }
 
-    &__logo {
-        display: block; width: 120px; margin: 0 auto;
-        transform: translateX(-12%);
-    }
+    
 
-    fieldset {
+    &__fieldset {
         position: relative;
-        display: block; margin: 40px 0;
+        display: block;
+    }
 
-        label, input {
-            display: block; width: 100%;
-            transition: all .2s ease-in;            
-        }
+    &__label,
+    &__input {
+        display: block; width: 100%;
+        transition: all .2s ease-in;
+    }
 
-        input {
-            position: relative; z-index: 1;
-            padding: 20px 0;
-            background: none; border: none; border-bottom: 2px solid rgba($light, .2);
+    &__input {
+        position: relative; z-index: 1;
+        padding-top: $unit*1.5; padding-bottom: $unit*1.5;
+        background: none; border: none; border-bottom: 2px solid rgba($light, .2);
+        color: inherit; line-height: 1;
 
-            &:focus {
-                ~ label {
-                    transform: translateY(-10px);
-                }
-            }
+        &:focus {
+            border-bottom: 2px solid rgba($light, .5);
 
-            &:valid {
-
-                border-bottom: 2px solid $light;
-
-                ~ label {
-                    opacity: 0;
-                }
+            ~ label {
+                color: $white;
+                transform: translateY(-14px);
             }
         }
 
-        label {
-            position: absolute; top: 0; z-index: 0;
-            
+        &:not(:placeholder-shown) {
+            border-bottom-color: $light;
+
+            ~ label {
+                opacity: 0;
+            }
         }
     }
 
-    .button {
-        display: block; width: 100%;
+    &__label {
+        position: absolute; top: 0; z-index: 0;
     }
 
     &__links {
         font-size: .8em;
-    }
-    
+    }    
 
 }

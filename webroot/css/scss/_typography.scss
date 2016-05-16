@@ -62,6 +62,16 @@ li {
 	list-style: none;
 }
 
+.paragraph-spacing {
+	> * + * {
+		margin-top: .5em;
+	}
+}
+
+.content {
+	line-height: 1.35; font-weight: 300;
+}
+
 .points-won {
 	color: $win;
 }

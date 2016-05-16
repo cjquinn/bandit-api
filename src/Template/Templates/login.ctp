@@ -16,45 +16,56 @@
 
     <header class="login__brand">
 
-        <a href="http://banditplay.com">
-            <?= $this->Svg->useit('brand-logo', 'login__logo'); ?>
+        <a href="http://banditplay.com" class="login__brand__logo">
+            <?= $this->Svg->useit('brand-logo', 'login__brand__logo__svg'); ?>
         </a>
 
-        <h1><a href="http://banditplay.com">Bandit</a></h1>
-        <h2>Play, win, bandit.</h2>
-
+        <h1 class="login__brand__name"><a href="http://banditplay.com">Bandit</a></h1>
+        <h2 class="login__brand__descriptor">Play, win, bandit.</h2>
 
     </header>
 
-    <fieldset>
+    <fieldset class="login__fieldset">
         
-        <input type="text" name="email" required />
-        <label>Email:</label>
+        <input class="login__input" type="email" name="email" placeholder="&nbsp;" required />
+        <label class="login__label" for="email">Email:</label>
 
     </fieldset>
 
-    <fieldset>
+    <fieldset class="login__fieldset">
         
-        <input type="password" name="password" required />
-        <label>Password:</label>
+        <input class="login__input" type="password" name="password" placeholder="&nbsp;" required />
+        <label class="login__label" for="password">Password:</label>
 
     </fieldset>
 
-    <fieldset>
+    <fieldset class="login__fieldset">
 
-        <button class="button">Let's do this!</button>
+        <button class="button is--full is--l">Let's do this!</button>
 
     </fieldset>
 
     <footer class="login__links gleftright">
 
-        <a href="">Sign yourself up</a>
+        <a href="#">New players</a>
 
-        <a href="">I think I forgot my password</a>
+        <a href="#">Forgot my password</a>
 
     </footer>
 
 </article>
+
+<?php /* 
+<article class="explain content paragraph-spacing">
+
+    <h3 class="h4">We're putting an end to boring games leaderboards.</h3>
+
+    <p>We won't speak for you, but the Bandit team are bored out of our minds by leagues and tournaments looking like newspaper crosswords.</p>
+
+    <p>That's why we built a club system as exciting as the sports you play.</p>
+
+</article>*/ ?>
+
 
 <style>
 .app { display: none; }

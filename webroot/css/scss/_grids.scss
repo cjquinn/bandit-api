@@ -134,19 +134,16 @@
 .gleftright {
 	@include clearfix;
 
-	@media (min-width: 900px) {
-
-		> * {
-			&:first-child {
-				float: left;
-			}
-
-			&:last-child {
-				float: right;
-			}
+	> * {
+		&:first-child {
+			float: left;
 		}
 
+		&:last-child {
+			float: right;
+		}
 	}
+
 }
 
 

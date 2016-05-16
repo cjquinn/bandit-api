@@ -1,6 +1,6 @@
 .tabs {
 	@include clearfix;
-	overflow-x: scroll;
+	overflow-x: auto;
 	white-space: nowrap;
 
 	&__tab {

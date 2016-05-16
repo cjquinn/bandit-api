@@ -224,7 +224,7 @@ class PlayersTable extends Table
      */
     public function updatedRating($rating, $expectedScore, $score)
     {
-        return round($rating + 32 * ($score - $expectedScore));
+        return $rating + round(32 * ($score - $expectedScore));
     }
 
     /**

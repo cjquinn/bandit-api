@@ -203,12 +203,10 @@ class ResultsTable extends Table
             return true;
         });
 
-        $results->each(function ($result) {
-            if ($result) {
-                $result->dirty('*', true);
-                $this->save($result);
-            }
-        });
+        foreach ($results->toArray() as $result) {
+            $result->dirty('*', true);
+            $this->save($result);
+        }
     }
 
     /**

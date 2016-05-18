@@ -87,7 +87,7 @@
 		&__rating {
 			overflow: hidden; opacity: 0;
 			max-height: 0;
-			color: $gray-chateau;
+			color: $gray-chateau; font-weight: 100;
 
 			@media (min-width: 700px) {
 				transition: all .2s ease;

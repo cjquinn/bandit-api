@@ -17,6 +17,7 @@
         <?= $this->Svg->useit('rarr', 'finder__display__rarr') ?>
     </div>
 
+    <?php /*
     <li class="finder__display finder__results__result is--selected">
         <figure class="finder__player-photo finder__results__player-photo">
 
@@ -37,6 +38,7 @@
 
         <?= $this->Svg->useit('rarr', 'finder__display__rarr') ?>
     </li>
+    */ ?>
 
     <ul class="finder__results">
 

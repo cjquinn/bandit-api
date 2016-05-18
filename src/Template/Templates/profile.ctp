@@ -40,55 +40,30 @@
 
         <section class="block has--contents">
 
-            <div class="block__contents">
+            <header class="block__header">
 
-                <ol class="tabs">
-                    <li class="tabs__tab is--active"><button class="tabs__tab__button">Rating</button></li>
+                <ol class="tabs block__tabs">
+                    <li class="tabs__tab is--active"><button class="tabs__tab__button">Rating<span class="tabs__tab__sub">9870</span></button></li>
                     <li class="tabs__tab"><button class="tabs__tab__button">Win Ratio</button></li>
                 </ol>
 
-                <aside class="key">
+                <dl class="key">
 
-                    <dl class="block__footer__meta">
+                    <li class="key__stat">
+                        <dt><?= $this->Svg->useit('icon-rating', 'match__player__rating__icon icon-inline')?>Highest:</dt> <dd>10240</dd>
+                    </li>
 
-                        <li class="block__footer__meta__item">
-                            <dt>Highest:</dt> <?= $this->Svg->useit('icon-rating', 'match__player__rating__icon')?><dd>10240</dd>
-                        </li>
+                    <li class="key__stat">
+                        <dt><?= $this->Svg->useit('icon-rating', 'match__player__rating__icon icon-inline')?>Lowest:</dt> <dd>6240</dd>
+                    </li>
 
-                        <li class="block__footer__meta__item">
-                            <dt>Lowest:</dt> <?= $this->Svg->useit('icon-rating', 'match__player__rating__icon')?><dd>6240</dd>
-                        </li>
-                    </dl>
+                </dl>
 
-                </aside>
+                <div class="block__contents">
 
-                <ol class="stream is--players">
+                </div>
 
-                    <?=$this->element('playerWeek', [
-                            'number' => 1,
-                            'rating' => 'high',
-                            'bandit' => 'no',
-                            'sibling' => 1
-                        ])?>
-
-                    <?=$this->element('playerWeek', [
-                            'number' => 2,
-                            'rating' => 'medium',
-                            'bandit' => 'no',
-                            'sibling' => 0
-                        ])?>
-
-                    <?=$this->element('playerWeek', [
-                            'number' => 3,
-                            'rating' => 'low',
-                            'bandit' => 'no',
-                            'sibling' => 1
-                        ])?>
-
-
-                </ol>
-
-            </div>
+            </header>
 
         </section>
 
@@ -96,30 +71,7 @@
 
     <div class="col">
 
-        <section class="block is--animating">
 
-            <header class="block__header">
-                <h1 class="h4">Disputes</h1>
-            </header>
-
-            <ol class="stream is--disputes">
-
-                <?= $this->element('finder'); ?>
-
-            </ol>
-
-        </section>
-
-        <section class="block is--animating">
-
-            <header class="block__header">
-                <h1 class="h4">Notifications</h1>
-            </header>
-
-            <ol class="stream is--notifications">
-            </ol>
-
-        </section>
 
     </div>
 
@@ -132,7 +84,7 @@
         <section class="block has--contents">
 
             <header class="block__header">
-                <h1 class="h4__small">Leaderboards</h1>
+                <h1 class="h4__small"><a href="/templates/leaderboards/">Leaderboards</a></h1>
             </header>
 
             <div class="block__contents gflex from--desktop">
@@ -141,27 +93,41 @@
 
                     <h2 class="h4 stream__title"><a href="#">This Week</a></h2>
 
-                    <ol class="stream is--players">
+                    <ol class="stream is--players is--snapshot">
 
                         <?=$this->element('playerWeek', [
                                 'number' => 1,
+                                'rating' => 'high',
+                                'bandit' => 'yes',
+                                'sibling' => 2
+                            ])?>
+
+                        <?=$this->element('playerWeek', [
+                                'number' => 2,
                                 'rating' => 'high',
                                 'bandit' => 'no',
                                 'sibling' => 1
                             ])?>
 
                         <?=$this->element('playerWeek', [
-                                'number' => 2,
+                                'number' => 3,
                                 'rating' => 'medium',
                                 'bandit' => 'no',
                                 'sibling' => 0
                             ])?>
 
                         <?=$this->element('playerWeek', [
-                                'number' => 3,
+                                'number' => 4,
                                 'rating' => 'low',
                                 'bandit' => 'no',
                                 'sibling' => 1
+                            ])?>
+
+                        <?=$this->element('playerWeek', [
+                                'number' => 5,
+                                'rating' => 'low',
+                                'bandit' => 'no',
+                                'sibling' => 2
                             ])?>
 
 

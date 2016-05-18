@@ -7,7 +7,7 @@
 		line-height: 20px;
 
 		&__stats {
-			@include font-size($size:small); color: $gray-chateau;
+			@include font-size($size:small); color: $gray-chateau; font-weight: 100;
 		}
 
 		&__level {
@@ -44,12 +44,15 @@
 	}
 
 	&.is--sibling {
+		&0 {
+		}
+
 		&1 {
-			opacity: .75;
+			opacity: .5;
 		}
 
 		&2 {
-			opacity: .5;
+			opacity: .3;
 		}
 	}
 

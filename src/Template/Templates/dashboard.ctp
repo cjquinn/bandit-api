@@ -1,5 +1,3 @@
-<?php /*
-
 <header class="header g2">
 
     <div class="col">
@@ -7,21 +5,15 @@
         <h1 class="header__title h1">Dashboard</h1>
 
         <ol class="tabs">
-            <li class="tabs__tab is--active"><button class="tabs__tab__button">This Week</li>
-            <li class="tabs__tab"><button class="tabs__tab__button">All Time</li>
+            <li class="tabs__tab is--active"><button class="tabs__tab__button">Activity</li>
+            <li class="tabs__tab"><button class="tabs__tab__button"><span class="tabs__tab__button__count">5</span> Notifications</li>
+            <li class="tabs__tab"><button class="tabs__tab__button">My Account</li>
+            <li class="tabs__tab" style="float:right;"><button class="tabs__tab__button">Disputes</li>
         </ol>
 
     </div>
 
-    <div class="col">
-
-        <h1 class="header__title h1">Notifications</h1>
-
-    </div>
-
 </header>
-
-*/ ?>
 
 <article class="display g2">
 
@@ -68,14 +60,7 @@
 
                 <ul class="block__footer__meta">
 
-                    <li class="block__footer__meta__item">
-                        <?= $this->Svg->useit('icon-matches', 'icon-inline block__footer__meta__icon') ?>
-                        10 matches
-                    </li>
 
-                    <li class="block__footer__meta__item">
-                        <?= $this->Svg->useit('icon-players', 'icon-inline block__footer__meta__icon') ?>
-                        5 opponents</li>
                 </ul>
 
             </footer>
@@ -83,7 +68,13 @@
         </section>
 
 
-        <section class="block is--animating">
+        
+
+    </div>
+
+    <div class="col">
+
+       <section class="block is--animating">
 
             <header class="block__header">
                 <h1 class="h4">Box 1 <small class="h4__small">3 weeks left</small></h1>
@@ -101,7 +92,7 @@
 
                     }
 
-                    $stream = 3;
+                    $stream = 2;
 
                     for ($k = 0; $k < $stream; $k++) {
 
@@ -126,35 +117,6 @@
                     }
                 ?>
 
-            </ol>
-
-        </section>
-
-    </div>
-
-    <div class="col">
-
-        <section class="block is--animating">
-
-            <header class="block__header">
-                <h1 class="h4">Disputes</h1>
-            </header>
-
-            <ol class="stream is--disputes">
-
-                <?= $this->element('finder'); ?>
-
-            </ol>
-
-        </section>
-
-        <section class="block is--animating">
-
-            <header class="block__header">
-                <h1 class="h4">Notifications</h1>
-            </header>
-
-            <ol class="stream is--notifications">
             </ol>
 
         </section>

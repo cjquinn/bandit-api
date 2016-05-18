@@ -79,7 +79,7 @@
         			</li>
 
         			<li class="menu__list__item">
-        				<a href="/" class="menu__list__link">My Profile</a>
+        				<a href="/templates/profile" class="menu__list__link">My Profile</a>
         			</li>
 
         		</ol>

@@ -1,17 +1,3 @@
-<?php
-    $this->viewBuilder()->layout('respondent');
-?>
-
-</article>
-</div>
-</div>
-
-<?php
-
-    /* lol, end previous template markup. I'm terrible. */
-
-?>
-
 <article class="login">
 
     <header class="login__brand">
@@ -65,8 +51,3 @@
     <p>That's why we built a club system as exciting as the sports you play.</p>
 
 </article>*/ ?>
-
-
-<style>
-.app { display: none; }
-</style>

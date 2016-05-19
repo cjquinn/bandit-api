@@ -16,6 +16,11 @@ Router::scope('/', function ($routes) {
         'pass' => ['template']
     ]);
 
+    $routes->connect('/templates/login', [
+        'controller' => 'Templates',
+        'action' => 'login'
+    ]);
+
     /**
      * Logins
      */

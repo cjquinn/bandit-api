@@ -50,4 +50,10 @@ class BoxLeagueCyclesTable extends Table
         
         return $rules;
     }
+
+    /**
+     * Application rules
+     *
+     * A box must have at least 2 boxes to run
+     */
 }

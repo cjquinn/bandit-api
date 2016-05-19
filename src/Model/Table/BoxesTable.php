@@ -32,4 +32,11 @@ class BoxesTable extends Table
 
         return $rules;
     }
+
+    /**
+     * Application rules
+     *
+     * A player cannot be in more than one box
+     * There must be at least 4 players in each box
+     */
 }

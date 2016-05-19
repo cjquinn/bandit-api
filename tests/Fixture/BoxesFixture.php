@@ -13,7 +13,13 @@ class BoxesFixture extends TestFixture
 
     public function init()
     {
-        $this->records = [];
+        $this->records = [
+            [
+                'id' => 1,
+                'box_league_cycle_id' => 1,
+                'division' => 1
+            ]
+        ];
 
         parent::init();
     }

@@ -16,6 +16,8 @@ class SvgHelper extends Helper
         'rarr' => '0 0 8 13',
         'player' => '0 0 91 107',
 
+        'menu' => '0 0 18 18',
+
     ];
 
     /**

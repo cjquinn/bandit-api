@@ -38,6 +38,8 @@
         <?= $this->Svg->display('icons/players') ?>
         <?= $this->Svg->display('icons/rating') ?>
 
+        <?= $this->Svg->display('menu') ?>
+
     </defs>
 
 </svg>
@@ -54,16 +56,16 @@
                 
             </a>
 
-            <h6 class="menu__current">Dashboard</h6>
-
-            <button class="menu__toggle">Menu</button>
+            <button class="menu__toggle"><?= $this->Svg->useit('menu', 'menu__toggle__svg'); ?></button>
 
             <div class="menu__whole">
+
+                <button class="menu__toggle"><?= $this->Svg->useit('menu', 'menu__toggle__svg'); ?></button>
 
         		<ol class="menu__list">
 
         			<li class="menu__list__item is--active">
-        				<a href="/templates/dashboard" class="menu__list__link <?php /* is--active */ ?>">Dashboard</a>
+        				<a href="/templates/dashboard" class="menu__list__link is--active">Dashboard</a>
         			</li>
 
         			<li class="menu__list__item">
@@ -105,15 +107,21 @@
 
 $(function() {
 
-    $('.block.is--animating').each(function() {
+    /*
+        fade in blocks
+    */
+    $('.block').addClass('is--animating');
 
-        $(this).on("transitionend MSTransitionEnd webkitTransitionEnd oTransitionEnd",
+    setTimeout(function () { 
+        $('.block').removeClass('is--animating');
+    }, 500);
 
-            function() {
-                console.log('ended');
-                $(this).removeClass('is--animating');
-            }
-        );
+
+    /*
+        show/hide mobile menu
+    */
+    $('.menu__toggle').click(function() {
+        $('.menu__whole').toggleClass('is--open');
     });
 
 });

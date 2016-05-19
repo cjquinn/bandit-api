@@ -5,7 +5,18 @@
 		width: 100%; @include unit(padding, 1);
 
 		&__whole {
-			display: none;
+			@include fixed-fill; z-index: 1000;
+			display: none; padding: 10px;
+
+			&.is--open {
+				display: block;
+				animation: menuRollOut .4s ease-in-out; animation-fill-mode: forwards;
+				background: $body__background;
+			}
+
+			.menu__toggle {
+				margin-bottom: 10px;
+			}
 		}
 
 		&__logo {
@@ -21,7 +32,18 @@
 		}
 
 		&__toggle {
-			float: right;
+			position: relative;
+			float: right; width: 43px; height: 35px;
+			background: $app__base;
+			box-shadow: inset 0 1px 0 $fiord; border-radius: 9px;
+
+			&__svg {
+				width: 18px;
+			}
+		}
+
+		&__list {
+			clear: both;
 		}
 	}
 

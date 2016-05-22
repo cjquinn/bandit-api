@@ -10,7 +10,6 @@ a {
 	&:hover, &:focus {
 
 	}
-	
 }
 
 h1, .h1,
@@ -23,39 +22,75 @@ h6, .h6 {
 }
 
 h1, .h1 {
-	font-size: 31px; font-weight: 300;
-
-	&__small {
-		font-size: 21px;
-	}
-}
-
-h2, .h2 {
-	font-size: 28px; font-weight: 300;
+	font-size: 22px; font-weight: 300;
 
 	&__small {
 		font-size: 20px;
 	}
 }
 
-h3, .h3 {
-	font-size: 24px; font-weight: bold;
+h2, .h2 {
+	font-size: 21px; font-weight: 300;
 
 	&__small {
-		font-size: 17px;
+		font-size: 18px;
+	}
+}
+
+h3, .h3 {
+	font-size: 19px; font-weight: bold;
+
+	&__small {
+		font-size: 16px;
 	}
 }
 
 h4, .h4 {
-	font-size: 24px; font-weight: 300;
+	font-size: 18px; font-weight: 300;
 
 	&__small {
-		font-size: 17px;
+		font-size: 14px;
 	}
 }
 
 h5, .h5 {
 	font-size: 14px; font-weight: bold;
+}
+
+@media (min-width: 800px) {
+
+	h1, .h1 {
+		font-size: 31px; font-weight: 300;
+
+		&__small {
+			font-size: 21px;
+		}
+	}
+
+	h2, .h2 {
+		font-size: 28px; font-weight: 300;
+
+		&__small {
+			font-size: 20px;
+		}
+	}
+
+	h3, .h3 {
+		font-size: 24px; font-weight: bold;
+
+		&__small {
+			font-size: 17px;
+		}
+	}
+
+	h4, .h4 {
+		font-size: 24px; font-weight: 300;
+
+		&__small {
+			font-size: 17px;
+		}
+	}
+
 }
 
 li {
@@ -78,4 +113,13 @@ li {
 
 .points-loss {
 	color: $loss;
+}
+
+.score {
+	@include font-size($size:xxlarge); text-align: center; white-space: nowrap;
+
+	&__hyphen {
+		margin: 0 4px 0; display: inline-block;
+		font-weight: normal;
+	}
 }

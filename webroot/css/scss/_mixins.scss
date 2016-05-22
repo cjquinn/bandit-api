@@ -59,6 +59,18 @@
 
 }
 
+@mixin align-items-centre {
+	display: flex; align-items: center;
+}
+
+@mixin justify-space-between {
+	display: flex; justify-content: space-between; align-items: center;
+}
+
+@mixin size($size) {
+	width: $size; height: $size;
+}
+
 $unit: 12px;
 
 @mixin unit($property, $multiplier) {

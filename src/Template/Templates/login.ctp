@@ -27,13 +27,13 @@
 
     <fieldset class="login__fieldset">
 
-        <button class="button is--full is--l">Let's do this!</button>
+        <button class="button is--full is--l">Let's play!</button>
 
     </fieldset>
 
     <footer class="login__links gleftright">
 
-        <a href="#">New players</a>
+        <a href="#">New player?</a>
 
         <a href="#">Forgot my password</a>
 

@@ -5,6 +5,7 @@
         <h1 class="header__title h1">Season <small class="h1__small">Ends June 16th</small></h1>
 
         <ol class="tabs">
+            <li class="tabs__tab"><button class="tabs__tab__button">Build</li>
             <li class="tabs__tab"><button class="tabs__tab__button">My Matches</li>
             <li class="tabs__tab is--active"><button class="tabs__tab__button">Box 1</li>
             <li class="tabs__tab"><button class="tabs__tab__button">Box 2</li>
@@ -31,29 +32,13 @@
 
                 <?php
 
-                    $stream = 1;
-
-                    for ($k = 0; $k < $stream; $k++) {
-
-                        echo $this->element('matchBandit');
-
-                    }
-
-                    $stream = 3;
-
-                    for ($k = 0; $k < $stream; $k++) {
+                    for ($k = 0; $k < 3; $k++) {
 
                         echo $this->element('match');
-
-                    }
-
-                    $stream = 1;
-
-                    for ($k = 0; $k < $stream; $k++) {
-
                         echo $this->element('matchLoss');
 
                     }
+
                 ?>
 
             </ol>

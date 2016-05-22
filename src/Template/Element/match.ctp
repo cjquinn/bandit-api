@@ -51,7 +51,7 @@
     <?php /*
         match score
     */ ?>
-    <aside class="match__score h3"><?=rand(2, 5)?><span class="match__score__hyphen">-</span><?=rand(0, 1)?></aside>
+    <aside class="score match__score h3"><?=rand(2, 5)?><span class="score__hyphen match__score__hyphen">-</span><?=rand(0, 1)?></aside>
 
 
     <?php /*

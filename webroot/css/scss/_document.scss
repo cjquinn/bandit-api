@@ -17,7 +17,7 @@ body {
 	background-color: $app__base;
 	border-radius: 6px;
 
-	@media (max-width: 599px) {
+	@media (max-width: 799px) {
 		@include unit(margin-top, 7);
 	}
 }

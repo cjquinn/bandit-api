@@ -8,7 +8,7 @@
             <li class="tabs__tab is--active"><button class="tabs__tab__button">Activity</li>
             <li class="tabs__tab"><button class="tabs__tab__button"><span class="tabs__tab__button__count">5</span> Notifications</li>
             <li class="tabs__tab"><button class="tabs__tab__button">My Account</li>
-            <li class="tabs__tab" style="float:right;"><button class="tabs__tab__button">Disputes</li>
+            <li class="tabs__tab"><button class="tabs__tab__button">Disputes</li>
         </ol>
 
     </div>
@@ -19,7 +19,7 @@
 
     <div class="col">
 
-        <section class="block is--animating">
+        <section class="block">
 
             <header class="block__header">
                 <h1 class="h4">Matches</h1>
@@ -74,7 +74,7 @@
 
     <div class="col">
 
-       <section class="block is--animating">
+       <section class="block">
 
             <header class="block__header">
                 <h1 class="h4">Box 1 <small class="h4__small">3 weeks left</small></h1>

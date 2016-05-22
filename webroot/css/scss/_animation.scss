@@ -42,3 +42,17 @@
 		clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
 	}
 }
+
+@keyframes pendingGlow {
+	0% {
+		opacity: .8;
+	}
+
+	50% {
+		opacity: .2;
+	}
+
+	100% {
+		opacity: .8;
+	}
+}

@@ -39,6 +39,9 @@
         <?= $this->Svg->display('icons/rating') ?>
 
         <?= $this->Svg->display('menu') ?>
+        <?= $this->Svg->display('plus') ?>
+        <?= $this->Svg->display('tick') ?>
+        <?= $this->Svg->display('cross') ?>
 
     </defs>
 

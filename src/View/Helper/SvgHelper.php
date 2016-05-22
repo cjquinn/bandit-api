@@ -18,6 +18,10 @@ class SvgHelper extends Helper
 
         'menu' => '0 0 18 18',
 
+        'plus' => '0 0 12 12',
+        'tick' => '0 0 11 8',
+        'cross' => '0 0 8 8',
+
     ];
 
     /**

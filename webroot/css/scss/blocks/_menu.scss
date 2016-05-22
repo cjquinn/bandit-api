@@ -1,6 +1,6 @@
 .menu {
 
-	@media (max-width: 599px) {
+	@media (max-width: 799px) {
 		position: absolute; top: 0; left: 0;
 		width: 100%; @include unit(padding, 1);
 
@@ -47,15 +47,16 @@
 		}
 	}
 
-	@media (min-width: 600px) {
+	@media (min-width: 800px) {
 		background: $app__inset;
 		border-radius: 4px 0 0 4px; box-shadow: inset -1px 0px 2px $shadow, inset -3px 0px 19px rgba($shadow, 0.10);
 
 		&__logo {
-			display: block; @include unit(margin-left, 3);
+			display: block; @include unit(margin-left, 3); @include unit(padding-top, 2);
 
 			&__svg {
 				width: 66px; height: auto;
+				transform: translateX(-25%);
 			}
 
 		}

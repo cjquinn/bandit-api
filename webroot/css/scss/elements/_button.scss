@@ -1,23 +1,44 @@
 .button {
-	display: block; @include gutter(padding-left, 1); @include gutter(padding-right, 1);
+	@include align-items-centre; @include gutter(padding-left, 1); @include gutter(padding-right, 1);
 	background: $button__base; border: 2px solid $level100;
 	color: $white; @include unit(line-height, 4);
-	border-radius: 4px; box-shadow: inset 0 -2px 0 $slogging, 0 2px 0 $shadow;
-	transition: all .2s ease-in;
+	border-radius: 4px; box-shadow: inset 0 -2px 0 rgba($slogging, .6), 0 2px 0 $shadow;
+	transition: all .1s ease-in;
 
 	&.is--full {
 		display: block; width: 100%;
 	}
 
-	&.is--l {		
-		border-width: 3px;
+	&.is--l {
 		@include unit(line-height, 5); font-size: 1.1em;
-		box-shadow: inset 0 -3px 0 $slogging, 0 2px 0 $shadow; border-radius: 8px;
+	}
+
+	&.is--xl {
+		@include unit(height, 6); font-size: 1.2em;
 	}
 
 	&:hover, &:focus {
-		background: $bandit;
-		color: $shadow;
-		box-shadow: 0 2px 4px $shadow;
+		//background: $bandit;
+		//color: $shadow;
+		//box-shadow: 0 2px 4px $shadow;
+		background: $block__base;
+		box-shadow: inset 0 2px 0 rgba($slogging, .6), 0 2px 0 $shadow;
 	}
+
+	&__icon {
+		@include inline-middle($up:true); width: 25px; margin-right: 6px;
+
+		&__clip {
+			position: relative; overflow: hidden;
+			width: 100%; height: 0; padding-bottom: percentage(55.43/48);
+			background: $bandit;
+		}
+
+		&__svg {
+			@include absolute-centre;
+			width: 12px;
+			fill: $mirage3;
+		}
+	}
+
 }

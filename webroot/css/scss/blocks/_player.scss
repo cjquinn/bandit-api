@@ -22,7 +22,7 @@
 				&53 { color: $level53; }
 				&54 { color: $level54; }
 				&55 { color: $level55; }
-				&100 {color: $level100; }
+				&100 { color: $level100; }
 			}
 
 		}
@@ -30,10 +30,14 @@
 		&__rating {
 
 		}
+
+		&__result {
+			margin-left: 10px;
+		}
 	}
 
 	&__player-photo {
-		width: 48px; margin-right: 10px;
+		margin-right: 10px;
 
 		&__image {
 		}
@@ -48,16 +52,39 @@
 		}
 
 		&1 {
-			opacity: .5;
+			opacity: .55;
 		}
 
 		&2 {
-			opacity: .3;
+			opacity: .25;
+		}
+	}
+
+	&.is--opponent {
+		@include justify-space-between;
+
+		&:hover, &:focus {
+			cursor: default;
+			background: $mirage3;
 		}
 	}
 
 	&:hover, &:focus {
 		opacity: 1;
 	}
+}
 
+
+.box-result {
+	width: 170px /* magic number, won't work for smallscreens */;
+
+	&__score {
+		&__hyphen {
+		}
+	}
+
+	&__respond {
+		text-align: center;
+		@include inline-children;
+	}
 }

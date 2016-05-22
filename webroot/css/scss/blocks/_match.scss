@@ -1,5 +1,6 @@
 .match {
 	$block: #{&};
+	padding-left: 0; padding-right: 0;
 
 	&__backgrounds {
 		@include absolute-fill; opacity: .07;
@@ -64,8 +65,12 @@
 
 	&__player {
 		$block: #{&};
-		@include unit(height, 7); display: flex; align-items: center;
+		@include unit(height, 6.5); display: flex; align-items: center;
 		font-size: 14px;
+
+		@media (min-width: 800px) {
+			@include unit(height, 7);
+		}
 
 		&__id {
 			flex: 1;
@@ -129,11 +134,13 @@
 		}
 
 		&__player-photo {
-			width: 42px;
+			/* width: 36px;
 
 			@media (min-width: 600px) {
 				width: 48px;
 			}
+			
+			*/
 		}
 
 	}
@@ -141,11 +148,9 @@
 
 	&__score {
 		@include absolute-centre;
-		@include font-size($size:xxlarge); text-align: center; white-space: nowrap;
 
 		&__hyphen {
-			margin: 0 4px 0; display: inline-block;
-			font-weight: normal;
+			
 		}
 	}
 

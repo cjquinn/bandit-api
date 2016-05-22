@@ -52,7 +52,7 @@
         match score
     */
     $score = rand(0, 4); ?>
-    <aside class="match__score h3"><?=$score?><span class="match__score__hyphen">-</span><?=$score?></aside>
+    <aside class="score match__score h3"><?=$score?><span class="score__hyphen match__score__hyphen">-</span><?=$score?></aside>
 
 
     <? /*

@@ -12,7 +12,7 @@
 .g1 {
 	@include clearfix;
 
-	@media (min-width: 900px) {
+	@media (min-width: 800px) {
 
 		display: flex;
 
@@ -190,7 +190,7 @@
 */
 
 .galignitemscenter {
-	display: flex; align-items: center;
+	@include align-items-centre;
 }
 
 
@@ -203,6 +203,6 @@
 
 */
 
-.gjustifycontentspacebetween {
+.gjustifyspacebetween {
 	display: flex; justify-content: space-between;
 }

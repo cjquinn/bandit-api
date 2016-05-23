@@ -25,7 +25,7 @@
     <aside class="box-result">
         <button class="button is--full">
             <div class="button__icon">
-                <figure class="button__icon__clip clip-hexagon"><?= $this->Svg->useit('plus', 'icon-plus button__icon__svg') ?></figure>
+                <figure class="button__icon__clip"><?= $this->Svg->useit('plus', 'icon-plus button__icon__svg') ?></figure>
             </div>Add Result
         </button>
     </aside>

@@ -1,0 +1,27 @@
+.prompt {
+	@include absolute-fill; z-index: 1000;
+	background: rgba($body__background, .85);
+
+	&__close {
+		$block: #{&};
+		position: absolute; top: 0; right: 0;
+		padding: 30px;
+
+		&__svg {
+			width: 15px;
+			fill: $loss;
+		}
+
+		&:hover {
+			#{$block}__svg {
+				fill: $loss--glow;
+			}
+		}
+	}
+
+	&__message {
+		position: absolute; @include unit(top, 6); left: 50%;
+		max-width: 526px; min-width: 400px;
+		transform: translateX(-50%);
+	}
+}

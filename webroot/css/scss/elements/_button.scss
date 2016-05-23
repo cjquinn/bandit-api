@@ -31,7 +31,7 @@
 		&__clip {
 			position: relative; overflow: hidden;
 			width: 100%; height: 0; padding-bottom: percentage(55.43/48);
-			background: $bandit;
+			background: url('../img/icons/hexagon-base.svg') no-repeat; background-size: cover;
 		}
 
 		&__svg {

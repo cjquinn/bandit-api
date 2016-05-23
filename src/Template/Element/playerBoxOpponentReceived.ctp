@@ -30,11 +30,11 @@
 
         <div class="box-result__respond">
             <button class="pick">
-                <?= $this->Svg->useit('tick', '') ?>
+                <?= $this->Svg->useit('tick', 'pick__icon') ?>
             </button>
 
             <button class="pick">
-                <?= $this->Svg->useit('cross', '') ?>
+                <?= $this->Svg->useit('cross', 'pick__icon') ?>
             </button>
         </div>
             

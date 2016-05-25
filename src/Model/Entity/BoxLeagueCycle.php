@@ -14,8 +14,6 @@ class BoxLeagueCycle extends Entity
 {
 
     protected $_accessible = [
-        'start' => true,
-        'end' => true,
         '*' => false
     ];
 }

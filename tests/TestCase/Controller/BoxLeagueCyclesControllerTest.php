@@ -77,9 +77,9 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/api/clubs/1/box-league-cycles/1.json', [
-            'start' => new DateTime('today'),
-            'end' => new DateTime('next week')
+        $this->put('/api/clubs/1/box-league-cycles/1.json', [
+            'start' => (new DateTime('today'))->format('Y-m-d'),
+            'end' => (new DateTime('next week'))->format('Y-m-d')
         ]);
 
         $this->assertResponseCode(403);
@@ -94,8 +94,8 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
 
         $this->_setAuthSession(1);
         $this->put('/api/clubs/2/box-league-cycles/1.json', [
-            'start' => new DateTime('today'),
-            'end' => new DateTime('+2 weeks')
+            'start' => (new DateTime('today'))->format('Y-m-d'),
+            'end' => (new DateTime('+2 weeks'))->format('Y-m-d')
         ]);
 
         $this->assertResponseCode(403);
@@ -110,8 +110,8 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
 
         $this->_setAuthSession(2);
         $this->put('/api/clubs/1/box-league-cycles/1.json', [
-            'start' => new DateTime('today'),
-            'end' => new DateTime('+2 weeks')
+            'start' => (new DateTime('today'))->format('Y-m-d'),
+            'end' => (new DateTime('+2 weeks'))->format('Y-m-d')
         ]);
 
         $this->assertResponseCode(403);
@@ -126,11 +126,33 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
 
         $this->_setAuthSession(1);
         $this->put('/api/clubs/1/box-league-cycles/1.json', [
-            'start' => new DateTime('today'),
-            'end' => new DateTime('+2 weeks')
+            'start' => (new DateTime('today'))->format('Y-m-d'),
+            'end' => (new DateTime('+2 weeks'))->format('Y-m-d')
         ]);
 
         $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditBadData()
+    {
+        $boxLeagueCycles = TableRegistry::get('BoxLeagueCycles');
+
+        $boxLeagueCycle = $boxLeagueCycles->get(1);
+
+        $boxLeagueCycle->set('start', null);
+        $boxLeagueCycle->set('end', null);
+
+        $boxLeagueCycles->save($boxLeagueCycle);
+
+        $this->_setAjaxRequest();
+
+        $this->_setAuthSession(1);
+        $this->put('/api/clubs/1/box-league-cycles/1.json', []);
+
+        $this->assertResponseCode(400);
     }
 
     /**
@@ -151,8 +173,8 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
 
         $this->_setAuthSession(1);
         $this->put('/api/clubs/1/box-league-cycles/1.json', [
-            'start' => new DateTime('today'),
-            'end' => new DateTime('+2 weeks')
+            'start' => (new DateTime('today'))->format('Y-m-d'),
+            'end' => (new DateTime('+2 weeks'))->format('Y-m-d')
         ]);
 
         $this->assertResponseCode(200);

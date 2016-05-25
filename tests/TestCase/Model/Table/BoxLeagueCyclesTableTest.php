@@ -5,6 +5,8 @@ namespace App\Test\TestCase\Model\Table;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
+use DateTime;
+
 class BoxLeagueCyclesTableTest extends TestCase
 {
 
@@ -54,8 +56,8 @@ class BoxLeagueCyclesTableTest extends TestCase
     public function testValidationStartCycle()
     {
         $errors = $this->BoxLeagueCycles->validator('startCycle')->errors([
-            'start' => '2016-09-09',
-            'end' => '2016-08-08'
+            'start' => (new DateTime('-1 week'))->format('Y-m-d'),
+            'end' => (new DateTime('-3 weeks'))->format('Y-m-d')
         ]);
 
         $expected = [

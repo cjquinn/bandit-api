@@ -64,7 +64,7 @@ class BoxLeagueCyclesTable extends Table
                     $start = new Date($context['data']['start']);
                     $end = new Date($context['data']['end']);
 
-                    return $end->gt($end);
+                    return $end->gt($start);
                 }
             ]);
 
@@ -105,6 +105,17 @@ class BoxLeagueCyclesTable extends Table
                 ]
             ]);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOwnedBy($id, $clubId)
+    {
+        return $this->exists([
+            'id' => $id,
+            'club_id' => $clubId
+        ]);
     }
 
     /**

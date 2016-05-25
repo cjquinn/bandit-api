@@ -27,7 +27,10 @@ Router::scope('/api', function ($routes) {
          */
         $routes->resources('BoxLeagueCycles', [
             'inflect' => 'dasherize',
-            'only' => 'create'
+            'only' => [
+                'create',
+                'update'
+            ]
         ]);
 
         /**

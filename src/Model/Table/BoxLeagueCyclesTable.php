@@ -1,6 +1,12 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\Entity\BoxLeagueCycle;
+
+use ArrayObject;
+
+use Cake\Event\Event;
+
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -49,6 +55,32 @@ class BoxLeagueCyclesTable extends Table
         $rules->add($rules->existsIn(['club_id'], 'Clubs'));
         
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function beforeSave(Event $event, BoxLeagueCycle $boxLeagueCycle, ArrayObject $options)
+    {
+        if ($boxLeagueCycle->isNew()) {
+            $this->patchEntity($boxLeagueCycle, [
+                'boxes' => [
+                    [
+                        'division' => 1
+                    ],
+                    [
+                        'division' => 2
+                    ]
+                ]
+            ], [
+                'fieldList' => ['boxes'],
+                'associated' => [
+                    'Boxes' => [
+                        'fieldList' => 'division'
+                    ]
+                ]
+            ]);
+        }
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Controller;
 
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
 class BoxesControllerTest extends IntegrationTestCase

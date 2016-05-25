@@ -77,7 +77,10 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/api/clubs/1/box-league-cycles/1.json', []);
+        $this->post('/api/clubs/1/box-league-cycles/1.json', [
+            'start' => new DateTime('today'),
+            'end' => new DateTime('next week')
+        ]);
 
         $this->assertResponseCode(403);
     }
@@ -90,7 +93,10 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
 
         $this->_setAuthSession(1);
-        $this->put('/api/clubs/2/box-league-cycles/1.json', []);
+        $this->put('/api/clubs/2/box-league-cycles/1.json', [
+            'start' => new DateTime('today'),
+            'end' => new DateTime('+2 weeks')
+        ]);
 
         $this->assertResponseCode(403);
     }
@@ -103,7 +109,10 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
 
         $this->_setAuthSession(2);
-        $this->put('/api/clubs/1/box-league-cycles/1.json', []);
+        $this->put('/api/clubs/1/box-league-cycles/1.json', [
+            'start' => new DateTime('today'),
+            'end' => new DateTime('+2 weeks')
+        ]);
 
         $this->assertResponseCode(403);
     }
@@ -116,7 +125,10 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
 
         $this->_setAuthSession(1);
-        $this->put('/api/clubs/1/box-league-cycles/1.json', []);
+        $this->put('/api/clubs/1/box-league-cycles/1.json', [
+            'start' => new DateTime('today'),
+            'end' => new DateTime('+2 weeks')
+        ]);
 
         $this->assertResponseCode(403);
     }
@@ -139,16 +151,8 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
 
         $this->_setAuthSession(1);
         $this->put('/api/clubs/1/box-league-cycles/1.json', [
-            'boxes' => [
-                [
-                    'id' => 1,
-                    'players' => [
-                        '_ids' => [
-                            1
-                        ]
-                    ]
-                ]
-            ]
+            'start' => new DateTime('today'),
+            'end' => new DateTime('+2 weeks')
         ]);
 
         $this->assertResponseCode(200);

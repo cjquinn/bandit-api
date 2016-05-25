@@ -47,4 +47,26 @@ class BoxLeagueCyclesTableTest extends TestCase
 
         $this->assertEquals(2, count($boxLeagueCycle->boxes));
     }
+
+    /**
+     * @return void
+     */
+    public function testValidationStartCycle()
+    {
+        $errors = $this->BoxLeagueCycles->validator('startCycle')->errors([
+            'start' => '2016-09-09',
+            'end' => '2016-08-08'
+        ]);
+
+        $expected = [
+            'start' => [
+                'valid' => 'Start date cannot be in the past or after the end date.'
+            ],
+            'end' => [
+                'valid' => 'The end date must be after the start date.'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+    }
 }

@@ -36,6 +36,11 @@ $(function() {
             }
         });
 
+    $('.prompt__close')
+        .click(function() {
+            $(this).closest('.prompt').removeClass('is--open');
+        });
+
     /*
     $('.finder__display__input')
 	    .on('focus', function(){

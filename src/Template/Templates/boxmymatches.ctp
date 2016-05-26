@@ -1,4 +1,4 @@
-<aside class="prompt">
+<aside class="prompt is--open" data-prompt-id="add-wins">
 
     <button class="prompt__close">
         <?= $this->Svg->useit('cross', 'prompt__close__svg'); ?>
@@ -97,6 +97,8 @@
                     }
 
                     echo $this->element('playerBoxOpponentReceived');
+
+                    echo $this->element('playerBoxOpponentAccepted');
 
                 ?>
 

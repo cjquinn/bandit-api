@@ -32,14 +32,8 @@
             </aside>
         </div>
 
-        <div class="box-result__respond">
-            <button class="pick">
-                <?= $this->Svg->useit('tick', 'pick__icon') ?>
-            </button>
-
-            <button class="pick">
-                <?= $this->Svg->useit('cross', 'pick__icon') ?>
-            </button>
+        <div class="box-result__response">
+             <?= $this->Svg->useit('tick', 'pick__icon') ?>
         </div>
             
     </aside>

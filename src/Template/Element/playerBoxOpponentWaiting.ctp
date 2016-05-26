@@ -25,7 +25,11 @@
     <aside class="box-result">
 
         <div>
-            <aside class="score box-result__score h3"><?=rand(2, 3)?><span class="score__hyphen box-result__score__hyphen">-</span><?=rand(0, 2)?></aside>
+            <aside class="score box-result__score h3">
+                <span><?=rand(2, 3)?></span>
+                <span class="score__hyphen box-result__score__hyphen">-</span>
+                <span><?=rand(0, 2)?></span>
+            </aside>
         </div>
 
         <div>

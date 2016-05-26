@@ -89,7 +89,11 @@
 
         		</ol>
 
-                <a class="button menu__button" href="/">Add Wins</a>
+                <button class="button menu__button is--full">
+                    <div class="button__icon">
+                        <figure class="button__icon__clip"><?= $this->Svg->useit('plus', 'icon-plus button__icon__svg') ?></figure>
+                    </div>Add Wins
+                </button>
 
             </div>
 

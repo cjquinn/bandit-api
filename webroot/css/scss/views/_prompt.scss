@@ -1,5 +1,6 @@
 .prompt {
 	@include absolute-fill; z-index: 500;
+	display: none;
 	background: rgba($body__background, .85);
 
 	&__close {
@@ -23,6 +24,11 @@
 		position: absolute; 
 		width: 100%; max-width: 526px; margin-top: 0;
 		box-shadow:  $block--shadow, 0 2px 9px 10px $shadow;
+	}
+
+	&.is--open {
+		display: block;
+		animation: fadeIn .5s ease-out forwards; 
 	}
 
 	@media (min-width: 480px) {

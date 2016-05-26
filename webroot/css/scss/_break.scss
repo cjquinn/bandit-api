@@ -1,0 +1,38 @@
+/**
+* Break
+*/
+@function break($compare, $size)
+{
+
+    @if $size ==            'xxsmall'           {   $size: 490;     }
+    @else if $size ==       'xsmall'            {   $size: 545;     }
+    @else if $size ==       'small'             {   $size: 600;     }
+
+
+    @else if $size ==       'xxmedium'          {   $size: 700;     }
+    @else if $size ==       'xmedium'           {   $size: 820;     }
+    @else if $size ==       'medium'            {   $size: 940;     }
+
+    @else if $size ==       'xxlarge'           {   $size: 1100;    }
+    @else if $size ==       'xlarge'            {   $size: 1160;    }
+    @else if $size ==       'large'             {   $size: 1270;    }
+
+    @else                                       {   $size: 1020;    }
+
+    $return: '';
+
+
+
+    // < <= >= >
+    @if $compare == '<' {
+        $return: 'max-width:' + ($size - 1px);
+    } @else if $compare == '<=' {
+        $return: 'max-width:' + ($size) + 'px';
+    } @else if $compare == '>=' {
+        $return: 'min-width:' + ($size) + 'px';
+    } @else {
+        $return: 'min-width:' + ($size + 1px);
+    }
+
+    @return $return;
+}

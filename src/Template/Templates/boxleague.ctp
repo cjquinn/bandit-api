@@ -28,7 +28,7 @@
                 <h1 class="h4">Matches</h1>
             </header>
 
-            <ol class="stream is--matches">
+            <ol class="stream matches">
 
                 <?php
 

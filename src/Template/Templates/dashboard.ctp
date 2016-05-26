@@ -25,7 +25,7 @@
                 <h1 class="h4">Matches</h1>
             </header>
 
-            <ol class="stream is--matches">
+            <ol class="stream matches">
 
                 <?php
 
@@ -80,7 +80,7 @@
                 <h1 class="h4">Box 1 <small class="h4__small">3 weeks left</small></h1>
             </header>
 
-            <ol class="stream is--matches">
+            <ol class="stream matches">
 
                 <?php
 

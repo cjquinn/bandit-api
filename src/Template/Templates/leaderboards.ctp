@@ -35,7 +35,7 @@
                 <h1 class="h4">Monday <small class="h3__small">25th April</small></h1>
             </header>
 
-            <ol class="stream is--matches">
+            <ol class="stream matches">
 
                 <?php
 

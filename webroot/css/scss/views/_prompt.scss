@@ -1,15 +1,15 @@
 .prompt {
-	@include absolute-fill; z-index: 1000;
+	@include absolute-fill; z-index: 500;
 	background: rgba($body__background, .85);
 
 	&__close {
-		$block: #{&};
+		$block: #{&}; z-index: 1;
 		position: absolute; top: 0; right: 0;
-		padding: 30px;
+		padding: 10px;
 
 		&__svg {
-			width: 15px;
-			fill: $loss;
+			width: 12px;
+			fill: $loss;		
 		}
 
 		&:hover {
@@ -20,8 +20,27 @@
 	}
 
 	&__message {
-		position: absolute; @include unit(top, 6); left: 50%;
-		max-width: 526px; min-width: 400px;
-		transform: translateX(-50%);
+		position: absolute; 
+		width: 100%; max-width: 526px; margin-top: 0;
+		box-shadow:  $block--shadow, 0 2px 9px 10px $shadow;
+	}
+
+	@media (min-width: 480px) {
+
+		&__close {
+			padding: 30px;
+
+			&__svg {
+				width: 15px;
+				filter: drop-shadow(0 1px 1px rgba($shadow, .4));
+			}
+		}
+
+		&__message {
+			@include unit(top, 6); left: 50%;
+			min-width: 400px;
+			transform: translateX(-50%);
+		}
+
 	}
 }

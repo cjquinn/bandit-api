@@ -106,30 +106,7 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
-<script>
-
-$(function() {
-
-    /*
-        fade in blocks
-    */
-    $('.block').addClass('is--animating');
-
-    setTimeout(function () { 
-        $('.block').removeClass('is--animating');
-    }, 500);
-
-
-    /*
-        show/hide mobile menu
-    */
-    $('.menu__toggle').click(function() {
-        $('.menu__whole').toggleClass('is--open');
-    });
-
-});
-
-</script>
+<script src="/js/scripts.js"></script>
 
 </body>
 </html>

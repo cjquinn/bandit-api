@@ -4,50 +4,48 @@
         <?= $this->Svg->useit('cross', 'prompt__close__svg'); ?>
     </button>
 
-    <section class="prompt__message">
 
-        <section class="block has--contents">
+    <section class="prompt__message block has--contents">
 
-            <header class="block__header">
-                <h1 class="h4">Add Wins <span class="h4__small">Saturday 8th June</span></h1>                
-            </header>
+        <header class="block__header">
+            <h1 class="h4">Add Wins <span class="h4__small">Saturday 8th June</span></h1>                
+        </header>
 
-            <div class="block__contents form">
+        <div class="block__contents form">
 
-                <fieldset>
-                    <label class="form__label">Choose your opponent:</label>
-                    <?=$this->element('finder')?>
-                </fieldset>
+            <fieldset>
+                <label class="form__label">Choose your opponent:</label>
+                <?=$this->element('finder')?>
+            </fieldset>
 
-                <fieldset class="form__stepper">
-                    <label class="form__label">How many wins?:</label>
+            <fieldset class="form__stepper">
+                <label class="form__label">How many wins?:</label>
 
-                    <div class="relative">
-                        <button class="pick is--up">
-                            <?= $this->Svg->useit('rarr', 'pick__icon is--up') ?>
-                        </button>
+                <div class="relative">
+                    <button class="pick is--up">
+                        <?= $this->Svg->useit('rarr', 'pick__icon is--up') ?>
+                    </button>
 
-                        <button class="pick is--down">
-                            <?= $this->Svg->useit('rarr', 'pick__icon is--down') ?>
-                        </button>
+                    <button class="pick is--down">
+                        <?= $this->Svg->useit('rarr', 'pick__icon is--down') ?>
+                    </button>
 
-                        <input type="number" value="1" class="form__input" />
-                    </div>
-                </fieldset>
+                    <input type="number" value="1" min="1" max="10" class="form__input" />
+                </div>
+            </fieldset>
 
-                <p><button>+ More Opponents</button></p>
+            <p><button>+ More Opponents</button></p>
 
-                <button class="button is--full is--l">
-                    <div class="button__icon">
-                        <figure class="button__icon__clip"><?= $this->Svg->useit('tick', 'icon-tick button__icon__svg') ?></figure>
-                    </div>Submit Wins
-                </button>
+            <button class="button is--full is--l">
+                <div class="button__icon">
+                    <figure class="button__icon__clip"><?= $this->Svg->useit('tick', 'icon-tick button__icon__svg') ?></figure>
+                </div>Submit Wins
+            </button>
 
-            </div>
-
-        </section>
+        </div>
 
     </section>
+
 
 </aside>
 
@@ -81,7 +79,7 @@
                 <h1 class="h4">Your Opponents</h1>
             </header>
 
-            <ol class="stream is--matches">
+            <ol class="stream matches">
 
                 <?php
 

@@ -72,13 +72,14 @@
 }
 
 $unit: 12px;
+$unit--small: 10px;
 
 @mixin unit($property, $multiplier) {
 
 	#{$property}: #{($multiplier * $unit)};
 
 	@media (max-width: 600px) {
-		#{$property}: #{($multiplier * 10px)};
+		#{$property}: #{($multiplier * $unit--small)};
 	}
 
 }
@@ -131,6 +132,12 @@ $gutter: 10px;
 @mixin background-cover {
 	background-repeat: no-repeat; background-size: cover; background-position: center center;
 }
+
+/*
+	box shadows
+*/
+
+$block--shadow: 0px 2px 2px 0px rgba($black, .25), inset 0px 1px 0px 0px rgba($link-water,0.08), inset 0px 12px 18px 0px #313B5C;
 
 
 /*

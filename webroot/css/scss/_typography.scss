@@ -116,10 +116,13 @@ li {
 }
 
 .score {
-	@include font-size($size:xxlarge); text-align: center; white-space: nowrap;
+	text-align: center; font-size: 0; white-space: nowrap;
+
+	> * {
+		@include font-size($size: xxlarge);
+	}
 
 	&__hyphen {
-		margin: 0 4px 0; display: inline-block;
-		font-weight: normal;
+		margin: 0 3px 0;
 	}
 }

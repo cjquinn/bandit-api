@@ -54,7 +54,11 @@
     <? /*
         match score
     */ ?>
-    <aside class="score match__score h3"><?=rand(0, 1)?><span class="score__hyphen match__score__hyphen">-</span><?=rand(2, 5)?></aside>
+    <aside class="score match__score h3">
+        <span class="match__score__losing"><?=rand(0, 1)?></span>
+        <span class="score__hyphen match__score__hyphen">-</span>
+        <span class="match__score__winning"><?=rand(2, 5)?></span>
+    </aside>
 
 
     <? /*

@@ -49,10 +49,16 @@
     </div>
 
     <?php /*
-        match score
+        match score       
     */
-    $score = rand(0, 4); ?>
-    <aside class="score match__score h3"><?=$score?><span class="score__hyphen match__score__hyphen">-</span><?=$score?></aside>
+    $score = rand(1, 5); ?>
+
+    <aside class="score match__score h3">
+
+        <span class="match__score__winning"><?=$score?></span>
+        <span class="score__hyphen match__score__hyphen">-</span>
+        <span class="match__score__winning"><?=$score?></span>
+    </aside>
 
 
     <? /*

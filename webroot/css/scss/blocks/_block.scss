@@ -2,7 +2,7 @@
 	$block: #{&};
 	position: relative;
 	background: $block__base;
-	box-shadow: 0px 2px 2px 0px rgba($black, .25), inset 0px 1px 0px 0px rgba($link-water,0.08), inset 0px 12px 18px 0px #313B5C; border-radius: 4px;
+	box-shadow: $block--shadow; border-radius: 4px;
 
 	@media (max-width: 700px) {
 		@include unit(margin-top, 2);
@@ -65,6 +65,7 @@
 
 		&:hover {
 			background: adjust_hue(lighten(saturate($mirage, 17), 3), 14);
+			background-color: rgba($mirage, .25);
 		}
 
 		&.is--empty {

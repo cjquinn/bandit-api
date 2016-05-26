@@ -4,10 +4,6 @@
 
 	&__backgrounds {
 		@include absolute-fill; opacity: .07;
-
-		@media (min-width: 700px) {
-			transition: background-image .2s ease-in;
-		}
 	}
 
 	&.is--winner-first {
@@ -94,10 +90,6 @@
 			max-height: 0;
 			color: $gray-chateau; font-weight: 100;
 
-			@media (min-width: 700px) {
-				transition: all .2s ease;
-			}
-
 			&__icon {
 				@include inline-middle($up: true); width: 11px; margin-right: 4px;
 			}
@@ -130,27 +122,27 @@
 			#{$block}__id {
 				text-align: right;
 			}
-
 		}
-
-		&__player-photo {
-			/* width: 36px;
-
-			@media (min-width: 600px) {
-				width: 48px;
-			}
-			
-			*/
-		}
-
 	}
 
 
 	&__score {
 		@include absolute-centre;
 
+		> * {
+			@include inline-middle;
+		}
+
 		&__hyphen {
-			
+			opacity: .5;
+		}
+
+		&__winning {
+
+		}
+
+		&__losing {
+			// opacity: .75;
 		}
 	}
 
@@ -162,6 +154,10 @@
 
 		#{$block}__backgrounds {
 			opacity: .2;
+
+			@media (min-width: 700px) {
+				transition: all .2s ease;
+			}
 		}
 
 		&.is--draw {
@@ -173,6 +169,10 @@
 		#{$block}__player__rating {
 			opacity: 1;
 			max-height: 20px;
+
+			@media (min-width: 700px) {
+				transition: all .2s ease;
+			}
 		}
 
 		#{$block}__player__name {

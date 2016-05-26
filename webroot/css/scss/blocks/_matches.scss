@@ -1,0 +1,16 @@
+.matches {
+
+	&:hover,
+	&:focus {
+		> .block__slab:not(:hover) {
+
+			.match__player {
+				border-color: transparent;
+			}
+		}
+	}
+}
+
+.match__player {
+	transition: border .1s ease;
+}

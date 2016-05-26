@@ -17,8 +17,9 @@ input, select {
     }
 
 	&__input {
-		display: block; width: 100%; @include unit(height, 5); padding: 0 $unit*2;
-		@include unit(line-height, 5);
+		$unitSize: 6;
+		display: block; width: 100%; @include unit(height, $unitSize); padding: 0 $unit*2;
+		@include unit(line-height, $unitSize);
 		background: $mirage3; border: none;
 		box-shadow: inset 0px -1px 0px 0px rgba($shadow, .5);
 		border-radius: 4px;
@@ -34,14 +35,14 @@ input, select {
 		position: relative;
 
 		.pick {
-			position: absolute; right: 13px;
+			position: absolute; right: 6px;
 
 			&.is--up {
-				top: 8px;
+				top: 4px;
 			}
 
 			&.is--down {
-				bottom: 8px;
+				bottom: 4px;
 			}
 
 			&__icon {
@@ -53,6 +54,18 @@ input, select {
 
 				&.is--down {
 					transform: rotate(90deg);
+				}
+			}
+
+			@media (min-width: 600px) {
+				right: 13px;
+
+				&.is--up {
+					top: 8px;
+				}
+
+				&.is--down {
+					bottom: 8px;
 				}
 			}
 		}

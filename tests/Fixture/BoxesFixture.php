@@ -18,6 +18,11 @@ class BoxesFixture extends TestFixture
                 'id' => 1,
                 'box_league_cycle_id' => 1,
                 'division' => 1
+            ],
+            [
+                'id' => 2,
+                'box_league_cycle_id' => 1,
+                'division' => 2
             ]
         ];
 

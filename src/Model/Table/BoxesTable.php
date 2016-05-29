@@ -2,6 +2,11 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Box;
+
+use ArrayObject;
+
+use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 
@@ -31,6 +36,16 @@ class BoxesTable extends Table
         $rules->add($rules->existsIn(['box_league_cycle_id'], 'BoxLeagueCycles'));
 
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function beforeSave(Event $event, Box $box, ArrayObject $options)
+    {
+        if ($box->isNew()) {
+            $box->set('division', $this->findByBoxLeagueCycleId($box->box_league_cycle_id)->count() + 1);
+        }
     }
 
     /**

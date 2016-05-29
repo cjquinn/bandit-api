@@ -31,7 +31,13 @@ Router::scope('/api', function ($routes) {
                 'create',
                 'update'
             ]
-        ]);
+        ], function ($routes) {
+            $routes->resources('Boxes', [
+                'only' => [
+                    'create'
+                ]
+            ]);
+        });
 
         /**
          * ClubsPlayers

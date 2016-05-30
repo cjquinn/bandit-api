@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
-class ClubsPlayersController extends ApiController
+class ClubsPlayersController extends AppController
 {
 
     /**

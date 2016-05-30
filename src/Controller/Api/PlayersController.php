@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use Cake\Utility\Hash;
 
-class PlayersController extends ApiController
+class PlayersController extends AppController
 {
 
     /**

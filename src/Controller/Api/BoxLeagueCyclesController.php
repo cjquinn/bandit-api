@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
-class BoxLeagueCyclesController extends ApiController
+class BoxLeagueCyclesController extends AppController
 {
 
     /**

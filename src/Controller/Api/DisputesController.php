@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
-class DisputesController extends ApiController
+class DisputesController extends AppController
 {
 
     /**

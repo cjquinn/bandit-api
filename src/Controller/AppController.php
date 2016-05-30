@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Cake\Controller\Controller;
-use Cake\Event\Event;
 
 class AppController extends Controller
 {
@@ -34,16 +33,6 @@ class AppController extends Controller
                 '_method' => 'POST'
             ]
         ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function beforeFilter(Event $event)
-    {
-        if ($this->request->is('ajax')) {
-            $this->Auth->config('unauthorizedRedirect', false);
-        }
     }
 
     /**

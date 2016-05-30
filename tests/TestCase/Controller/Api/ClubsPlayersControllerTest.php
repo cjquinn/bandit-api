@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Test\TestCase\Controller;
+namespace App\Test\TestCase\Controller\Api;
+
+use App\Test\TestCase\Controller\ControllerTestTrait;
 
 use Cake\TestSuite\IntegrationTestCase;
 

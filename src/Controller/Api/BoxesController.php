@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
-class BoxesController extends ApiController
+class BoxesController extends AppController
 {
 
     /**

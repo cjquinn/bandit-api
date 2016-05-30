@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use Cake\Event\Event;
 
-class ClubsController extends ApiController
+class ClubsController extends AppController
 {
 
     /**

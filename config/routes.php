@@ -8,7 +8,7 @@ Router::defaultRouteClass('DashedRoute');
 /**
  * RESTful API
  */
-Router::scope('/api', function ($routes) {
+Router::prefix('api', function ($routes) {
     $routes->extensions(['json']);
     
     /**

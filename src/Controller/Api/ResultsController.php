@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use Cake\Utility\Hash;
 
-class ResultsController extends ApiController
+class ResultsController extends AppController
 {
 
     /**

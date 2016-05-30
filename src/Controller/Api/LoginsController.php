@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Api;
 
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -9,7 +9,7 @@ use Cake\Network\Exception\ForbiddenException;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 
-class LoginsController extends ApiController
+class LoginsController extends AppController
 {
 
     use MailerAwareTrait;

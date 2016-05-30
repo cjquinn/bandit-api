@@ -60,6 +60,17 @@ class BoxesTable extends Table
     }
 
     /**
+     * @return bool
+     */
+    public function isOwnedBy($id, $boxLeagueCycleId)
+    {
+        return $this->exists([
+            'id' => $id,
+            'box_league_cycle_id' => $boxLeagueCycleId
+        ]);
+    }
+
+    /**
      * Application rules
      *
      * A player cannot be in more than one box

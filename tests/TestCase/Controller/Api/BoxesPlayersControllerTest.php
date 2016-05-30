@@ -27,34 +27,6 @@ class BoxesPlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testInvalidClubId()
-    {
-        $this->_resetRunningCycle();
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
-
-        $this->post('/api/clubs/1/box-league-cycles/2/boxes/1/players/1.json', []);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testInvalidBoxId()
-    {
-        $this->_resetRunningCycle();
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
-
-        $this->post('/api/clubs/1/box-league-cycles/1/boxes/3/players/1.json', []);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
     public function testNonFounder()
     {
         $this->_resetRunningCycle();
@@ -75,6 +47,48 @@ class BoxesPlayersControllerTest extends IntegrationTestCase
         $this->_setAuthSession(1);
 
         $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/players/1.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testInvalidPlayerId()
+    {
+        $this->_resetRunningCycle();
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/players/9.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddInvalidClubId()
+    {
+        $this->_resetRunningCycle();
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->post('/api/clubs/1/box-league-cycles/2/boxes/1/players/1.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddInvalidBoxId()
+    {
+        $this->_resetRunningCycle();
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->post('/api/clubs/1/box-league-cycles/1/boxes/3/players/1.json', []);
 
         $this->assertResponseCode(403);
     }

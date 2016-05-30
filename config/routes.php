@@ -46,7 +46,7 @@ Router::prefix('api', function ($routes) {
                  */
                 $connectRoute = function ($action, $method) use ($routes) {
                     $routes->connect('/players/:player_id', [
-                        'controller' => 'BoxesPayers',
+                        'controller' => 'BoxesPlayers',
                         'action' => $action,
                         '_method' => $method
                     ], [

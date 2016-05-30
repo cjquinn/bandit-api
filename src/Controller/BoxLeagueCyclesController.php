@@ -10,21 +10,28 @@ class BoxLeagueCyclesController extends ApiController
      */
     public function isAuthorized($user)
     {
+        if (!parent::isAuthorized($user)) {
+            return false;
+        }
+
+        // Non founder
         if (!$this->BoxLeagueCycles->Clubs->Players->isFounder($this->Auth->user('player.id'), $this->request->params['club_id'])) {
             return false;
         }
 
+        // Running cycle
         if ($this->BoxLeagueCycles->Clubs->hasUnfinishedBoxLeagueCycle($this->request->params['club_id'])) {
             return false;
         }
 
+        // Invalid club id
         if ($this->request->action === 'edit' &&
             !$this->BoxLeagueCycles->isOwnedBy($this->request->params['id'], $this->request->params['club_id'])
         ) {
             return false;
         }
 
-        return parent::isAuthorized($user);
+        return true;
     }
 
     /**

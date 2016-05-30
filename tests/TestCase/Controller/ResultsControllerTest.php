@@ -14,7 +14,7 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddUnauthorised()
+    public function testUnauthorised()
     {
         $this->_setAjaxRequest();
 
@@ -26,7 +26,20 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddInvalidLoserId()
+    public function testUnassigned()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(9);
+
+        $this->get('/api/clubs/1/results.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddInvalidLosingPlayer()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
@@ -41,7 +54,7 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddUnassignedLoserId()
+    public function testAddUnassignedLosingPlayer()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
@@ -92,19 +105,7 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteUnauthorised()
-    {
-        $this->_setAjaxRequest();
-
-        $this->delete('/api/clubs/1/results/3.json');
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testDeleteInvalidPlayerId()
+    public function testDeleteInvalidPlayer()
     {
         $this->_setAuthSession(1);
         $this->_setAjaxRequest();
@@ -163,18 +164,6 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testIndexUnauthorised()
-    {
-        $this->_setAjaxRequest();
-
-        $this->get('/api/clubs/1/results.json');
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
     public function testIndexGet()
     {
         $this->_setAjaxRequest();
@@ -188,18 +177,6 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testViewUnauthorised()
-    {
-        $this->_setAjaxRequest();
-
-        $this->get('/api/clubs/1/results/1.json');
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
     public function testViewGet()
     {
         $this->_setAjaxRequest();
@@ -208,18 +185,5 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->get('/api/clubs/1/results/1.json');
 
         $this->assertResponseCode(200);
-    }
-
-    /**
-     * @return void
-     */
-    public function testUnassigned()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(9);
-
-        $this->get('/api/clubs/1/results/1.json');
-
-        $this->assertResponseCode(403);
     }
 }

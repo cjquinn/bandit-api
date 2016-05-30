@@ -15,7 +15,7 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddUnauthorised()
+    public function testUnauthorised()
     {
         $this->_setAjaxRequest();
 
@@ -27,7 +27,7 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddNonFounder()
+    public function testNonFounder()
     {
         $this->_setAjaxRequest();
 
@@ -40,7 +40,7 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddExistingCycle()
+    public function testRunningCycle()
     {
         $this->_setAjaxRequest();
 
@@ -73,59 +73,12 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditUnauthorised()
-    {
-        $this->_setAjaxRequest();
-
-        $this->put('/api/clubs/1/box-league-cycles/1.json', [
-            'start' => (new DateTime('today'))->format('Y-m-d'),
-            'end' => (new DateTime('next week'))->format('Y-m-d')
-        ]);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
     public function testEditInvalidClubId()
     {
         $this->_setAjaxRequest();
 
         $this->_setAuthSession(1);
         $this->put('/api/clubs/2/box-league-cycles/1.json', [
-            'start' => (new DateTime('today'))->format('Y-m-d'),
-            'end' => (new DateTime('+2 weeks'))->format('Y-m-d')
-        ]);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditNonFounder()
-    {
-        $this->_setAjaxRequest();
-
-        $this->_setAuthSession(2);
-        $this->put('/api/clubs/1/box-league-cycles/1.json', [
-            'start' => (new DateTime('today'))->format('Y-m-d'),
-            'end' => (new DateTime('+2 weeks'))->format('Y-m-d')
-        ]);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditRunningCycle()
-    {
-        $this->_setAjaxRequest();
-
-        $this->_setAuthSession(1);
-        $this->put('/api/clubs/1/box-league-cycles/1.json', [
             'start' => (new DateTime('today'))->format('Y-m-d'),
             'end' => (new DateTime('+2 weeks'))->format('Y-m-d')
         ]);

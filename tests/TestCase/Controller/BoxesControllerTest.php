@@ -13,7 +13,7 @@ class BoxesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddUnauthorised()
+    public function testUnauthorised()
     {
         $this->_setAjaxRequest();
 
@@ -25,7 +25,7 @@ class BoxesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddInvalidClubId()
+    public function testInvalidClubId()
     {
         $this->_setAjaxRequest();
 
@@ -38,7 +38,7 @@ class BoxesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddNonFounder()
+    public function testNonFounder()
     {
         $this->_setAjaxRequest();
 
@@ -51,7 +51,7 @@ class BoxesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddRunningCycle()
+    public function testRunningCycle()
     {
         $this->_setAjaxRequest();
 
@@ -86,14 +86,7 @@ class BoxesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteUnauthorised()
-    {
-    }
-
-    /**
-     * @return void
-     */
-    public function testDeleteNonFounder()
+    public function testDeleteInvalidBoxLeagueCycleId()
     {
     }
 
@@ -107,28 +100,7 @@ class BoxesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteRunningCycle()
-    {
-    }
-
-    /**
-     * @return void
-     */
     public function testDeleteOnlyTwoBoxes()
-    {
-    }
-
-    /**
-     * @return void
-     */
-    public function testDeleteInvalidClubId()
-    {
-    }
-
-    /**
-     * @return void
-     */
-    public function testDeleteInvalidBoxLeagueCycleId()
     {
     }
 

@@ -14,9 +14,24 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddUnauthorised()
+    public function testUnauthorised()
     {
         $this->_setAjaxRequest();
+
+        $this->post('/api/clubs/1/results/3/disputes.json', [
+            'message' => ''
+        ]);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testUnassigned()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(9);
 
         $this->post('/api/clubs/1/results/3/disputes.json', [
             'message' => ''
@@ -43,7 +58,7 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddInvalidPlayerId()
+    public function testAddInvalidLosingPlayer()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
@@ -95,18 +110,6 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteUnauthorised()
-    {
-        $this->_setAjaxRequest();
-
-        $this->delete('/api/clubs/1/results/2/disputes.json');
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
     public function testDeleteResolvedDispute()
     {
         $disputes = TableRegistry::get('Disputes');
@@ -125,7 +128,7 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteInvalidPlayerId()
+    public function testDeleteInvalidLosingPlayer()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(3);
@@ -151,20 +154,6 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditUnauthorised()
-    {
-        $this->_setAjaxRequest();
-
-        $this->put('/api/clubs/1/results/2/disputes.json', [
-            'is_resolved' => 1
-        ]);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
     public function testEditTimeExpired()
     {
         $results = TableRegistry::get('Results');
@@ -185,7 +174,7 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditInvalidPlayerId()
+    public function testEditInvalidWinningPlayer()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
@@ -231,20 +220,5 @@ class DisputesControllerTest extends IntegrationTestCase
 
         $this->assertEquals(-8, $christy->reputation);
         $this->assertEquals(-10, $tom->reputation);
-    }
-
-    /**
-     * @return void
-     */
-    public function testUnassigned()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(4);
-
-        $this->post('/api/clubs/1/results/3/disputes.json', [
-            'message' => ''
-        ]);
-
-        $this->assertResponseCode(403);
     }
 }

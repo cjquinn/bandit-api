@@ -30,37 +30,43 @@ class DisputesController extends ApiController
         }
 
         if ($this->request->action === 'add') {
+            // Time expired
             if (!$this->_result->created->wasWithinLast('24 hours')) {
                 return false;
             }
 
-            if ($this->_result->losing_player_id !== $this->Auth->user('player.id')) {
-                return false;
-            }
-
+            // Existing dispute
             if ($this->_result->dispute) {
                 return false;
             }
         }
 
-        if ($this->request->action === 'delete') {
-            if ($this->_result->dispute->is_resolved) {
-                return false;
-            }
-
-            if ($this->_result->losing_player_id !== $this->Auth->user('player.id')) {
-                return false;
-            }
+        // Resolved dispute
+        if ($this->request->action === 'delete' &&
+            $this->_result->dispute->is_resolved
+        ) {
+            return false;
         }
 
-        if ($this->request->action === 'edit') {
-            if (!$this->_result->created->wasWithinLast('48 hours')) {
-                return false;
-            }
+        // Invalid winning player
+        if ($this->request->action === 'edit' &&
+            $this->_result->winning_player_id !== $this->Auth->user('player.id')
+        ) {
+            return false;
+        }
 
-            if ($this->_result->winning_player_id !== $this->Auth->user('player.id')) {
-                return false;
-            }
+        // Invalid losing player
+        if (($this->request->action === 'add' || $this->request->action === 'delete') &&
+            $this->_result->losing_player_id !== $this->Auth->user('player.id')
+        ) {
+            return false;
+        }
+
+        // Time expired
+        if (($this->request->action === 'delete' || $this->request->action === 'edit') &&
+            !$this->_result->created->wasWithinLast('48 hours')
+        ) {
+            return false;
         }
 
         return true;

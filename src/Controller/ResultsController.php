@@ -12,37 +12,47 @@ class ResultsController extends ApiController
      */
     public function isAuthorized($user)
     {
+        if (!parent::isAuthorized($user)) {
+            return false;
+        }
+
         if ($this->request->action === 'add') {
             $losingPlayerId = Hash::get($this->request->data, 'losing_player_id');
 
+            // Invalid losing player
             if ($losingPlayerId === $this->Auth->user('player.id')) {
                 return false;
             }
 
+            // Unassigned losing player
             if (!$this->Results->Players->isAssignedTo($losingPlayerId, $this->request->params['club_id'])) {
                 return false;
             }
 
+            // Existing disputes
             if ($this->Results->Players->hasDisputes($this->Auth->user('player.id'), $this->request->params['club_id'])) {
                 return false;
             }
         }
 
         if ($this->request->action === 'delete') {
+            // Invalid player
             if (!$this->Results->isOwnedBy($this->request->params['id'], $this->Auth->user('player.id'))) {
                 return false;
             }
 
+            // Existing dispute
             if ($this->Results->isDisputed($this->request->params['id'])) {
                 return false;
             }
 
+            // Time expired
             if (!$this->Results->wasWithinLast($this->request->params['id'], '24 hours')) {
                 return false;
             }
         }
 
-        return parent::isAuthorized($user);
+        return true;
     }
 
     /**

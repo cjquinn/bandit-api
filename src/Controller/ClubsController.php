@@ -22,12 +22,14 @@ class ClubsController extends ApiController
      */
     public function isAuthorized($user)
     {
+        // Non founder
         if ($this->request->action === 'edit' &&
             !$this->Clubs->Players->isFounder($this->Auth->user('player.id'), $this->request->params['id'])
         ) {
             return false;
         }
 
+        // Unassigned
         if ($this->request->action === 'view' &&
             !$this->Clubs->Players->isAssignedTo($this->Auth->user('player.id'), $this->request->params['id'])
         ) {

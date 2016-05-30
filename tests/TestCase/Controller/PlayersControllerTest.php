@@ -13,9 +13,22 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddUnauthorised()
+    public function testUnauthorised()
     {
         $this->_setAjaxRequest();
+
+        $this->post('/api/clubs/1/players.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddUnassigned()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(9);
 
         $this->post('/api/clubs/1/players.json', []);
 
@@ -66,18 +79,6 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditUnauthorised()
-    {
-        $this->_setAjaxRequest();
-
-        $this->put('/api/players/1.json');
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
     public function testEditInvalidPlayerId()
     {
         $this->_setAjaxRequest();
@@ -103,18 +104,5 @@ class PlayersControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(200);
-    }
-
-    /**
-     * @return void
-     */
-    public function testUnassigned()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(9);
-
-        $this->post('/api/clubs/1/players.json', []);
-
-        $this->assertResponseCode(403);
     }
 }

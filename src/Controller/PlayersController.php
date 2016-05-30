@@ -12,13 +12,18 @@ class PlayersController extends ApiController
      */
     public function isAuthorized($user)
     {
+        if (!parent::isAuthorized($user)) {
+            return false;
+        }
+
+        // Invalid player id
         if ($this->request->action === 'edit' &&
             $this->Auth->user('player.id') !== (int)$this->request->params['id']
         ) {
             return false;
         }
 
-        return parent::isAuthorized($user);
+        return true;
     }
 
     /**

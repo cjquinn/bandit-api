@@ -94,7 +94,7 @@ class ClubsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditInvalidFoundingPlayerId()
+    public function testEditNonFounder()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);

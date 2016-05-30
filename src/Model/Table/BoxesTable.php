@@ -24,6 +24,9 @@ class BoxesTable extends Table
             ],
             'belongsToMany' => [
                 'Players'
+            ],
+            'hasMany' => [
+                'BoxesPlayers'
             ]
         ]);
     }
@@ -46,6 +49,14 @@ class BoxesTable extends Table
         if ($box->isNew()) {
             $box->set('division', $this->findByBoxLeagueCycleId($box->box_league_cycle_id)->count() + 1);
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasAssignedPlayers($id)
+    {
+        return !$this->BoxesPlayers->findByBoxId($id)->isEmpty();
     }
 
     /**

@@ -29,6 +29,18 @@ class BoxesController extends ApiController
             return false;
         }
 
+        if ($this->request->action === 'delete') {
+            // Existing players
+            if ($this->Boxes->hasAssignedPlayers($this->request->params['id'])) {
+                return false;
+            }
+
+            // Only two boxes
+            if ($this->Boxes->BoxLeagueCycles->hasMinimumBoxes($this->request->params['box_league_cycle_id'])) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -53,5 +65,22 @@ class BoxesController extends ApiController
 
             $this->response->statusCode(400);
         }
+    }
+
+    /**
+     * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     */
+    public function delete($id)
+    {
+        $box = $this->Boxes->get($id, [
+            'conditions' => [
+                'box_league_cycle_id' => $this->request->params['box_league_cycle_id']
+            ]
+        ]);
+
+        $this->Boxes->delete($box);
+
+        $this->set('_serialize', true);
     }
 }

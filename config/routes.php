@@ -34,7 +34,8 @@ Router::scope('/api', function ($routes) {
         ], function ($routes) {
             $routes->resources('Boxes', [
                 'only' => [
-                    'create'
+                    'create',
+                    'delete'
                 ]
             ]);
         });

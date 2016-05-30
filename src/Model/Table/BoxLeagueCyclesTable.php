@@ -106,6 +106,14 @@ class BoxLeagueCyclesTable extends Table
     /**
      * @return bool
      */
+    public function hasMinimumBoxes($id)
+    {
+        return $this->Boxes->findByBoxLeagueCycleId($id)->count() === 2;
+    }
+
+    /**
+     * @return bool
+     */
     public function isOwnedBy($id, $clubId)
     {
         return $this->exists([

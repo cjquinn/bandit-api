@@ -4,7 +4,7 @@ namespace App\Controller\Api;
 
 use Cake\Event\Event;
 
-class ClubsController extends AppController
+class ClubsController extends ApiController
 {
 
     /**

@@ -4,7 +4,7 @@ namespace App\Controller\Api;
 
 use Cake\Utility\Hash;
 
-class ResultsController extends AppController
+class ResultsController extends ApiController
 {
 
     /**

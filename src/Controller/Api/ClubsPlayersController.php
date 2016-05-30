@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api;
 
-class ClubsPlayersController extends AppController
+class ClubsPlayersController extends ApiController
 {
 
     /**

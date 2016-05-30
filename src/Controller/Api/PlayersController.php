@@ -4,7 +4,7 @@ namespace App\Controller\Api;
 
 use Cake\Utility\Hash;
 
-class PlayersController extends AppController
+class PlayersController extends ApiController
 {
 
     /**

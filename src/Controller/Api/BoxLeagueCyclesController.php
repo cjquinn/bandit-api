@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api;
 
-class BoxLeagueCyclesController extends AppController
+class BoxLeagueCyclesController extends ApiController
 {
 
     /**

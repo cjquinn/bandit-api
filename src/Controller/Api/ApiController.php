@@ -2,12 +2,12 @@
 
 namespace App\Controller\Api;
 
-use App\Controller\AppController as BaseAppController;
+use App\Controller\AppController;
 
 use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
-class AppController extends BaseAppController
+class ApiController extends AppController
 {
 
     /**

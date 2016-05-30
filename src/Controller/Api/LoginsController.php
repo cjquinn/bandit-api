@@ -9,7 +9,7 @@ use Cake\Network\Exception\ForbiddenException;
 use Cake\Routing\Router;
 use Cake\Utility\Hash;
 
-class LoginsController extends AppController
+class LoginsController extends ApiController
 {
 
     use MailerAwareTrait;

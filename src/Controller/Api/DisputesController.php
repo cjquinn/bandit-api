@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api;
 
-class DisputesController extends AppController
+class DisputesController extends ApiController
 {
 
     /**

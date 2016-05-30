@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api;
 
-class BoxesController extends AppController
+class BoxesController extends ApiController
 {
 
     /**

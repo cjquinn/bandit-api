@@ -13,7 +13,7 @@ class BoxesPlayersTable extends Table
      */
     public function initialize(array $config)
     {
-        $this->primaryKey(['box_id', 'player_id']);
+        $this->primaryKey(['box_league_cycle_id', 'player_id']);
 
         $this->addAssociations([
             'belongsTo' => [

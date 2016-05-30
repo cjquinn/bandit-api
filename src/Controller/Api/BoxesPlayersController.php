@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api;
 
+use Cake\Event\Event;
+
 class BoxesPlayersController extends ApiController
 {
 
@@ -47,8 +49,25 @@ class BoxesPlayersController extends ApiController
     /**
      * @return void
      */
+    public function beforeRender(Event $event)
+    {
+        $this->set('_serialize', true);
+    }
+
+    /**
+     * @return void
+     */
     public function add($boxId, $boxLeagueCycleId, $playerId)
     {
+        $boxesPlayer = $this->BoxesPlayers->newEntity();
+
+        $boxesPlayer->set([
+            'box_id' => $boxId,
+            'box_league_cycle_id' => $boxLeagueCycleId,
+            'player_id' => $playerId
+        ], ['guard' => false]);
+
+        $this->BoxesPlayers->save($boxesPlayer);
     }
 
     /**
@@ -57,6 +76,12 @@ class BoxesPlayersController extends ApiController
      */
     public function delete($boxId, $boxLeagueCycleId, $playerId)
     {
+        $boxesPlayer = $this->BoxesPlayers->get([
+            'box_league_cycle_id' => $boxLeagueCycleId,
+            'player_id' => $playerId
+        ]);
+
+        $this->BoxesPlayers->delete($boxesPlayer);
     }
 
     /**
@@ -65,5 +90,13 @@ class BoxesPlayersController extends ApiController
      */
     public function edit($boxId, $boxLeagueCycleId, $playerId)
     {
+        $boxesPlayer = $this->BoxesPlayers->get([
+            'box_league_cycle_id' => $boxLeagueCycleId,
+            'player_id' => $playerId
+        ]);
+
+        $boxesPlayer->set('box_id', $boxId);
+
+        $this->BoxesPlayers->save($boxesPlayer);
     }
 }

@@ -30,8 +30,17 @@ class DisputesControllerTest extends IntegrationTestCase
      */
     public function testUnassigned()
     {
+        $clubsPlayers = TableRegistry::get('ClubsPlayers');
+
+        $clubsPlayer = $clubsPlayers->get([
+            'club_id' => 1,
+            'player_id' => 1
+        ]);
+
+        $clubsPlayers->delete($clubsPlayer);
+
         $this->_setAjaxRequest();
-        $this->_setAuthSession(9);
+        $this->_setAuthSession(1);
 
         $this->post('/api/clubs/1/results/3/disputes.json', [
             'message' => ''

@@ -17,6 +17,11 @@ class BoxesPlayersControllerTest extends IntegrationTestCase
      */
     public function testUnauthorised()
     {
+        $this->_setAjaxRequest();
+
+        $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/players/1.json', []);
+
+        $this->assertResponseCode(403);
     }
 
     /**
@@ -24,6 +29,27 @@ class BoxesPlayersControllerTest extends IntegrationTestCase
      */
     public function testInvalidClubId()
     {
+        $this->_resetRunningCycle();
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->post('/api/clubs/1/box-league-cycles/2/boxes/1/players/1.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testInvalidBoxId()
+    {
+        $this->_resetRunningCycle();
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->post('/api/clubs/1/box-league-cycles/1/boxes/3/players/1.json', []);
+
+        $this->assertResponseCode(403);
     }
 
     /**
@@ -31,6 +57,13 @@ class BoxesPlayersControllerTest extends IntegrationTestCase
      */
     public function testNonFounder()
     {
+        $this->_resetRunningCycle();
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(2);
+
+        $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/players/1.json', []);
+
+        $this->assertResponseCode(403);
     }
 
     /**
@@ -38,6 +71,12 @@ class BoxesPlayersControllerTest extends IntegrationTestCase
      */
     public function testRunningCycle()
     {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/players/1.json', []);
+
+        $this->assertResponseCode(403);
     }
 
     /**
@@ -45,13 +84,13 @@ class BoxesPlayersControllerTest extends IntegrationTestCase
      */
     public function testAddPost()
     {
-    }
+        $this->_resetRunningCycle();
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
 
-    /**
-     * @return void
-     */
-    public function testDeleteInvalidBoxId()
-    {
+        $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/players/1.json', []);
+
+        $this->assertResponseCode(200);
     }
 
     /**
@@ -59,13 +98,13 @@ class BoxesPlayersControllerTest extends IntegrationTestCase
      */
     public function testDeleteDelete()
     {
-    }
+        $this->_resetRunningCycle();
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
 
-    /**
-     * @return void
-     */
-    public function testEditInvalidBoxId()
-    {
+        $this->delete('/api/clubs/1/box-league-cycles/1/boxes/1/players/1.json');
+
+        $this->assertResponseCode(200);
     }
 
     /**
@@ -73,5 +112,27 @@ class BoxesPlayersControllerTest extends IntegrationTestCase
      */
     public function testEditPut()
     {
+        $this->_resetRunningCycle();
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->put('/api/clubs/1/box-league-cycles/1/boxes/1/players/1.json', []);
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    private function _resetRunningCycle()
+    {
+        $boxLeagueCycles = TableRegistry::get('BoxLeagueCycles');
+
+        $boxLeagueCycle = $boxLeagueCycles->get(1);
+
+        $boxLeagueCycle->set('start', null);
+        $boxLeagueCycle->set('end', null);
+
+        $boxLeagueCycles->save($boxLeagueCycle);
     }
 }

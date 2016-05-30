@@ -32,12 +32,36 @@ Router::prefix('api', function ($routes) {
                 'update'
             ]
         ], function ($routes) {
+            /**
+             * Boxes
+             */
             $routes->resources('Boxes', [
                 'only' => [
                     'create',
                     'delete'
                 ]
-            ]);
+            ], function ($routes) {
+                /**
+                 * BoxesPayers
+                 */
+                $connectRoute = function ($action, $method) use ($routes) {
+                    $routes->connect('/players/:player_id', [
+                        'controller' => 'BoxesPayers',
+                        'action' => $action,
+                        '_method' => $method
+                    ], [
+                        'pass' => [
+                            'box_id',
+                            'box_league_cycle_id',
+                            'player_id'
+                        ]
+                    ]);
+                };
+
+                $connectRoute('add', 'POST');
+                $connectRoute('delete', 'DELETE');
+                $connectRoute('edit', ['PATCH', 'PUT']);
+            });
         });
 
         /**
@@ -48,8 +72,6 @@ Router::prefix('api', function ($routes) {
             'action' => 'add',
             '_method' => 'POST'
         ], [
-            'club_id' => '[0-9]+',
-            'player_id' => '[0-9]+',
             'pass' => [
                 'club_id',
                 'player_id'

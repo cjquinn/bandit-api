@@ -11,7 +11,7 @@ class CreateBoxesPlayers extends AbstractMigration
         $table = $this->table('boxes_players', [
             'id' => false,
             'primary_key' => [
-                'box_id',
+                'box_league_cycle_id',
                 'player_id'
             ]
         ]);
@@ -21,6 +21,15 @@ class CreateBoxesPlayers extends AbstractMigration
             'null' => false,
         ]);
         $table->addForeignKey('box_id', 'boxes', 'id', [
+            'update' => 'RESTRICT',
+            'delete' => 'RESTRICT'
+        ]);
+        $table->addColumn('box_league_cycle_id', 'integer', [
+            'default' => null,
+            'limit' => 11,
+            'null' => false,
+        ]);
+        $table->addForeignKey('box_league_cycle_id', 'box_league_cycles', 'id', [
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
@@ -39,7 +48,7 @@ class CreateBoxesPlayers extends AbstractMigration
             'null' => false,
         ]);
         $table->create();
-        $this->query('CREATE INDEX box_id ON boxes_players (box_id)');
+        $this->query('CREATE INDEX box_league_cycle_id ON boxes_players (box_league_cycle_id)');
     }
 
     /**

@@ -18,6 +18,7 @@ class BoxesPlayersTable extends Table
         $this->addAssociations([
             'belongsTo' => [
                 'Boxes',
+                'BoxLeagueCycles',
                 'Players'
             ],
             'belongsToMany' => [
@@ -37,6 +38,7 @@ class BoxesPlayersTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['box_id'], 'Boxes'));
+        $rules->add($rules->existsIn(['box_league_cycle_id'], 'BoxLeagueCycles'));
         $rules->add($rules->existsIn(['player_id'], 'Players'));
 
         return $rules;

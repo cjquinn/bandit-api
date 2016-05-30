@@ -6,6 +6,7 @@ use Cake\ORM\Entity;
 
 /**
  * @property int $box_id
+ * @property int $box_league_cycle_id
  * @property int $player_id
  * @property int $points
  */

@@ -111,7 +111,7 @@ class PlayersControllerTest extends IntegrationTestCase
     public function testUnassigned()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(4);
+        $this->_setAuthSession(9);
 
         $this->post('/api/clubs/1/players.json', []);
 

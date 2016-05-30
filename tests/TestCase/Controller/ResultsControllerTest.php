@@ -47,7 +47,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAuthSession(1);
 
         $this->post('/api/clubs/1/results.json', [
-            'losing_player_id' => 4
+            'losing_player_id' => 9
         ]);
 
         $this->assertResponseCode(403);
@@ -216,7 +216,7 @@ class ResultsControllerTest extends IntegrationTestCase
     public function testUnassigned()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(4);
+        $this->_setAuthSession(9);
 
         $this->get('/api/clubs/1/results/1.json');
 

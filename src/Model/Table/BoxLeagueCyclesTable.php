@@ -89,12 +89,8 @@ class BoxLeagueCyclesTable extends Table
         if ($boxLeagueCycle->isNew()) {
             $this->patchEntity($boxLeagueCycle, [
                 'boxes' => [
-                    [
-                        'division' => 1
-                    ],
-                    [
-                        'division' => 2
-                    ]
+                    ['division' => 1],
+                    ['division' => 2]
                 ]
             ], [
                 'fieldList' => ['boxes'],
@@ -121,6 +117,7 @@ class BoxLeagueCyclesTable extends Table
     /**
      * Application rules
      *
-     * A box must have at least 2 boxes to run
+     * A box league cycle must have at least 2 boxes to run
+     * Each box must have at least 4 players
      */
 }

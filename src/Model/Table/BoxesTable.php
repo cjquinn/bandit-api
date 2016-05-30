@@ -52,6 +52,5 @@ class BoxesTable extends Table
      * Application rules
      *
      * A player cannot be in more than one box
-     * There must be at least 4 players in each box
      */
 }

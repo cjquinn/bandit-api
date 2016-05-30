@@ -22,7 +22,7 @@ class BoxesTableTest extends TestCase
 
         $this->Boxes = TableRegistry::get('Boxes');
     }
-
+    
     /**
      * @return void
      */

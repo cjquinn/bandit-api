@@ -48,6 +48,41 @@ class ClubsPlayersFixture extends TestFixture
                 'losses' => 0,
                 'rating' => 1200,
                 'wins' => 0,
+            ],
+            [
+                'club_id' => 1,
+                'player_id' => 4,
+                'losses' => 0,
+                'rating' => 1200,
+                'wins' => 0
+            ],
+            [
+                'club_id' => 1,
+                'player_id' => 5,
+                'losses' => 0,
+                'rating' => 1200,
+                'wins' => 0
+            ],
+            [
+                'club_id' => 1,
+                'player_id' => 6,
+                'losses' => 0,
+                'rating' => 1200,
+                'wins' => 0
+            ],
+            [
+                'club_id' => 1,
+                'player_id' => 7,
+                'losses' => 0,
+                'rating' => 1200,
+                'wins' => 0
+            ],
+            [
+                'club_id' => 1,
+                'player_id' => 8,
+                'losses' => 0,
+                'rating' => 1200,
+                'wins' => 0
             ]
         ];
 

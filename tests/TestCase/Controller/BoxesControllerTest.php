@@ -82,4 +82,60 @@ class BoxesControllerTest extends IntegrationTestCase
 
         $this->assertResponseCode(200);
     }
+
+    /**
+     * @return void
+     */
+    public function testDeleteUnauthorised()
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteNonFounder()
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteExistingPlayers()
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteRunningCycle()
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteOnlyTwoBoxes()
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteInvalidClubId()
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteInvalidBoxLeagueCycleId()
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteDelete()
+    {
+    }
 }

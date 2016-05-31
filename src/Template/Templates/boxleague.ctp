@@ -39,6 +39,13 @@
 
                     }
 
+                    for ($k = 0; $k < 15; $k++) {
+
+                        echo $this->element('match');
+                        echo $this->element('matchLoss');
+
+                    }
+
                 ?>
 
             </ol>

@@ -24,8 +24,8 @@
 
         <section class="block">
 
-            <header class="block__header">
-                <h1 class="h4">Players <small class="h4__small">26 players available</small></h1>
+            <header class="block__header justify-space-between-baseline">
+                <h1 class="h4">Players</h1> <small class="h4__small">26 players available</small>
             </header>
 
             <ol class="stream is--players">
@@ -92,8 +92,8 @@
 
         <section class="block">
 
-            <header class="block__header">
-                <h1 class="h4">Box 1 <span class="h4__small">3 spaces left</span></h1>
+            <header class="block__header justify-space-between-baseline">
+                <h1 class="h4">Box 1</h1> <span class="h4__small">3 spaces left</span>
             </header>
 
             <ol class="stream is--players">
@@ -134,8 +134,8 @@
 
         <section class="block">
 
-            <header class="block__header">
-                <h1 class="h4">Box 2 <small class="h4__small">5 spaces left</small></h1>
+            <header class="block__header justify-space-between-baseline">
+                <h1 class="h4">Box 2</h1> <small class="h4__small">5 spaces left</small>
             </header>
 
             <ol class="stream is--players">

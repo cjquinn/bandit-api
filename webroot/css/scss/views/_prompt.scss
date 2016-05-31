@@ -10,12 +10,10 @@
 
 		&__svg {
 			width: 12px;
-			fill: $loss;		
 		}
 
 		&:hover {
 			#{$block}__svg {
-				fill: $loss--glow;
 			}
 		}
 	}

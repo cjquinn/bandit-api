@@ -1,14 +1,14 @@
 <aside class="prompt is--open" data-prompt-id="add-wins">
 
     <button class="prompt__close">
-        <?= $this->Svg->useit('cross', 'prompt__close__svg'); ?>
+        <?= $this->Svg->useit('cross', 'prompt__close__svg close'); ?>
     </button>
 
 
     <section class="prompt__message block has--contents">
 
-        <header class="block__header">
-            <h1 class="h4">Add Wins <span class="h4__small">Saturday 8th June</span></h1>                
+        <header class="block__header justify-space-between-baseline">
+            <h1 class="h4">Add Wins</h1> <span class="h4__small">Saturday 8th June</span>
         </header>
 
         <div class="block__contents form">
@@ -57,8 +57,8 @@
 
         <ol class="tabs">
             <li class="tabs__tab"><button class="tabs__tab__button">Build</li>
-            <li class="tabs__tab"><button class="tabs__tab__button">My Matches</li>
-            <li class="tabs__tab is--active"><button class="tabs__tab__button">Box 1</li>
+            <li class="tabs__tab is--active"><button class="tabs__tab__button">My Matches</li>
+            <li class="tabs__tab"><button class="tabs__tab__button">Box 1</li>
             <li class="tabs__tab"><button class="tabs__tab__button">Box 2</li>
             <li class="tabs__tab"><button class="tabs__tab__button">Box 3</li>
             <li class="tabs__tab"><button class="tabs__tab__button">Box 4</li>

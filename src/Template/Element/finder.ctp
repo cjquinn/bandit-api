@@ -15,6 +15,9 @@
         <input class="finder__display__input" type="text" required placeholder="Search Players&hellip;"/>
 
         <?= $this->Svg->useit('rarr', 'finder__display__rarr') ?>
+
+        <?= $this->Svg->useit('cross', 'finder__display__close close'); ?>
+        
     </div>
 
     <?php /*

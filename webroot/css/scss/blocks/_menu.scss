@@ -93,8 +93,8 @@
 
 	}
 
-	&__button {
-		@include unit(margin-left, 3); @include unit(margin-right, 3);
-	}
+	// &__button {
+	// 	@include unit(margin-left, 3); @include unit(margin-right, 3);
+	// }
 
 }

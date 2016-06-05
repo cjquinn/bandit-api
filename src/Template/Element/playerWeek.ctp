@@ -1,4 +1,4 @@
-<li class="player is--sibling<?=$sibling?> block__slab">
+<li class="player <?php if ($sibling != '0') { echo 'is--sibling is--sibling' . $sibling; } ?> block__slab">
 
     <dl class="player__id">
 

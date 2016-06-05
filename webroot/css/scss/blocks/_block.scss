@@ -100,17 +100,13 @@
 			@include inline-children($up:true);
 
 			&__item {
-				 @include gutter(margin-right, 2);
-			}
-
-			&__icon {
-				@include inline-middle($up:true); height: 17px; margin-right: 2px;
-				fill: $ghost;
+				@include gutter(margin-right, 2);
 			}
 		}
 
+		&__icon {
+			@include inline-middle($up:true); height: 17px; margin-right: 2px;
+			fill: $ghost;
+		}
 	}
-
-	
-
 }

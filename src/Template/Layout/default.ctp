@@ -53,7 +53,7 @@
 
     	<nav class="menu col">
 
-            <a href="/" class="menu__logo">
+            <a href="/templates/dashboard" class="menu__logo">
 
                 <?= $this->Svg->useit('brand-logo', 'menu__logo__svg'); ?>
                 
@@ -71,6 +71,10 @@
         				<a href="/templates/dashboard" class="menu__list__link is--active">Dashboard</a>
         			</li>
 
+                    <li class="menu__list__item">
+                        <a href="/templates/thisweek" class="menu__list__link">This Week</a>
+                    </li>
+
         			<li class="menu__list__item">
         				<a href="/templates/leaderboards" class="menu__list__link">Leaderboards</a>
         			</li>
@@ -80,20 +84,24 @@
         			</li>
 
         			<li class="menu__list__item">
-        				<a href="/" class="menu__list__link">Players</a>
+        				<a href="/templates/players" class="menu__list__link">Players</a>
         			</li>
 
         			<li class="menu__list__item">
         				<a href="/templates/profile" class="menu__list__link">My Profile</a>
         			</li>
 
+                    <li class="menu__list__item">
+                        <button class="button menu__button is--full">
+                            <div class="button__icon">
+                                <figure class="button__icon__clip"><?= $this->Svg->useit('plus', 'icon-plus button__icon__svg') ?></figure>
+                            </div>Add Wins
+                        </button>
+                    </li>
+
         		</ol>
 
-                <button class="button menu__button is--full">
-                    <div class="button__icon">
-                        <figure class="button__icon__clip"><?= $this->Svg->useit('plus', 'icon-plus button__icon__svg') ?></figure>
-                    </div>Add Wins
-                </button>
+                
 
             </div>
 
@@ -108,6 +116,8 @@
     </div><?/* .g1 */?>
 
 </div>
+
+<?= $this->element('addWins') ?>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
 <script src="/js/scripts.js"></script>

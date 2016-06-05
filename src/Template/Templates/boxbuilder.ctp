@@ -30,21 +30,7 @@
 
             <ol class="stream is--players">
 
-                <li class="finder__display">
-
-                    <figure class="finder__player-photo">
-
-                        <?= $this->Svg->useit('player', 'finder__player-photo__icon') ?>
-
-                        <div class="player-photo__proportion clip-hexagon">
-
-
-                        </div>
-
-                    </figure>
-
-                    <input class="finder__display__input" type="text" required placeholder="Search Players&hellip;"/>
-                </li>
+                <?=$this->element('finder')?>
 
                 <?php
 

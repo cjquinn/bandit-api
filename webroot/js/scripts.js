@@ -39,7 +39,7 @@ $(function() {
     $('.finder__display__close')
         .click(function() {
             $(this).closest('.finder').removeClass('is--focused');
-            $(this).closest('.finder__display__input').val('');
+            $(this).prev('.finder__display__input').val('');
         });
 
     $('.prompt__close')

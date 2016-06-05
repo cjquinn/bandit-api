@@ -48,8 +48,8 @@
 	}
 
 	&.is--sibling {
-		&0 {
-		}
+
+		@include unit(height, 5);
 
 		&1 {
 			opacity: .55;

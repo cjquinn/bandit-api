@@ -25,10 +25,18 @@
         <section class="block">
 
             <header class="block__header justify-space-between-baseline">
-                <h1 class="h4">All Players</h1><select><option>A-Z</option><option>Recently Joined</option></select>
+                <h1 class="h4">All Players</h1>
+                <select>
+                    <option>A-Z First Name</option>
+                    <option>Most Games</option>
+                    <option>Least Games</option>
+                    <option>Recently Joined</option>
+                </select>
             </header>
 
             <ol class="stream matches">
+
+                    <?=$this->element('finder')?>
 
                 <?php
 

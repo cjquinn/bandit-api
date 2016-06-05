@@ -60,6 +60,12 @@
 
                 <ul class="block__footer__meta">
 
+                    <li class="block__footer__meta__item">
+
+                        <?= $this->Svg->useit('icon-matches', 'block__footer__icon'); ?>
+
+                    </li>
+
 
                 </ul>
 

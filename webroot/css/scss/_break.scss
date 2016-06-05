@@ -6,16 +6,11 @@
 
     @if $size ==            'xxsmall'           {   $size: 490;     }
     @else if $size ==       'xsmall'            {   $size: 545;     }
-    @else if $size ==       'small'             {   $size: 600;     }
 
 
     @else if $size ==       'xxmedium'          {   $size: 700;     }
-    @else if $size ==       'xmedium'           {   $size: 820;     }
-    @else if $size ==       'medium'            {   $size: 940;     }
 
     @else if $size ==       'xxlarge'           {   $size: 1100;    }
-    @else if $size ==       'xlarge'            {   $size: 1160;    }
-    @else if $size ==       'large'             {   $size: 1270;    }
 
     @else                                       {   $size: 1020;    }
 

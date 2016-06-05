@@ -7,9 +7,7 @@ input, select {
 	background: $mirage4;
 
 	.prompt__message & {
-
 		padding-left: $unit; padding-right: $unit; padding-bottom: $unit;
-
 	}
 
 	> * + * {

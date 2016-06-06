@@ -9,6 +9,7 @@
 
 
     @else if $size ==       'xxmedium'          {   $size: 700;     }
+    @else if $size ==       'medium'            {   $size: 900;     }
 
     @else if $size ==       'xxlarge'           {   $size: 1100;    }
 

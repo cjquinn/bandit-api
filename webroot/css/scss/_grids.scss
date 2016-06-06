@@ -65,32 +65,30 @@
 
 	Grid 3
 	
-	[  ?  ] 80px [  ?  ]
+	1 [ 8 ] 1 [ 8 ] 1 
 
 	Used for:
-	header, data
+	header
 
 */
 
 .g3 {
 	@include clearfix;
 
-	@media (min-width: 900px) {
+	$padding: percentage(1/19);
 
-		display: flex; align-items: center;
+	@media (break('<', 'medium')) {
+
+		padding-left: $padding;	padding-right: $padding;
+
+	}
+
+	@media (break('>=', 'medium')) {
+
+		display: flex; padding-left: $padding;
 
 		> .col {
-
-			flex: 1;
-
-			&:nth-child(odd) {
-				
-			}
-			
-
-			&:nth-child(even) {
-				flex: 0 0 80px; /* about the width of XY - YZ */
-			}
+			flex: 1; margin-right: $padding;
 		}
 
 	}

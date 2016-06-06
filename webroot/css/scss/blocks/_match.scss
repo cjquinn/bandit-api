@@ -61,12 +61,14 @@
 
 	&__player {
 		$block: #{&};
-		@include unit(height, 6.5); display: flex; align-items: center;
+		/* @include unit(height, 6.5); */ display: flex; height: 100%; align-items: center;
 		font-size: 14px;
 
+		/*
 		@media (min-width: 800px) {
 			@include unit(height, 7);
 		}
+		*/
 
 		&__id {
 			flex: 1;

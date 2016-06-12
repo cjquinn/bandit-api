@@ -1,6 +1,10 @@
 .menu {
 
-	@media (max-width: 799px) {
+	@media (break('<', 'xxxlarge')) {
+
+		/*
+			Mobile Menu Styles
+		*/
 		position: absolute; top: 0; left: 0;
 		width: 100%; @include unit(padding, 1);
 
@@ -33,9 +37,7 @@
 
 		&__toggle {
 			position: relative;
-			float: right; width: 43px; height: 35px;
-			background: $app__base;
-			box-shadow: inset 0 1px 0 $fiord; border-radius: 9px;
+			float: right; @include size(43px);
 
 			&__svg {
 				width: 18px;
@@ -45,14 +47,18 @@
 		&__list {
 			clear: both;
 		}
+
+		/*
+			Mobile Menu Styles
+		*/
 	}
 
-	@media (min-width: 800px) {
+	@media (break('>=', 'xxxlarge')) {
 		background: $app__inset;
 		border-radius: 4px 0 0 4px; box-shadow: inset -1px 0px 2px $shadow, inset -3px 0px 19px rgba($shadow, 0.10);
 
 		&__logo {
-			display: block; @include unit(margin-left, 3); @include unit(padding-top, 2);
+			display: block; @include unit(padding-top, 2); @include unit(padding-bottom, 2);
 
 			&__svg {
 				width: 66px; height: auto;
@@ -60,41 +66,49 @@
 			}
 
 		}
+
+		&__toggle {
+			display: none;
+		}
+	}
+
+	&__padding {
+		@include unit(padding-left, 2); @include unit(padding-right, 2);
 	}
 
 	&__list {
 
 		&__item {
 			@include unit(margin-bottom, 1);
+			text-transform: uppercase; letter-spacing: .03em; font-weight: bold; font-size: 14px;
+
 
 			&.is--active {
 				
 			}
 
 		}
+	}
 
-		&__link {
-			position: relative;
-			display: block; @include unit(padding-left, 3); @include unit(padding-right, 3);
-			@include unit(line-height, 5); white-space: nowrap;
-			transition: all .2s ease;
+	&__link {
+		position: relative;
+		display: block;
+		@include unit(line-height, 5); white-space: nowrap;
+		transition: all .2s ease;
 
-			&:hover,
-			&:focus {
-				background-color: rgba($mirage, .25);
-			}
+		&:hover,
+		&:focus {
+			background-color: rgba($mirage, .25);
+		}
 
-			&.is--active {
-				background-color: rgba($mirage, .37);
-				color: $link-water;
-			}
-
+		&.is--active {
+			background-color: rgba($mirage, .37);
+			color: $link-water;
 		}
 
 	}
 
-	// &__button {
-	// 	@include unit(margin-left, 3); @include unit(margin-right, 3);
-	// }
+	&__button {
+	}
 
 }

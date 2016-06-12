@@ -1,4 +1,4 @@
-<li class="player is--sibling<?=$sibling?> block__slab">
+<li class="player <?php if ($sibling != '0') { echo 'is--sibling is--sibling' . $sibling; } ?> block__slab">
 
     <dl class="player__id">
 
@@ -44,7 +44,7 @@
 
         <header>
 
-            <dt class="player__id__name">Cody Morton</dt>
+            <dt class="player__id__name"><?php if (isset($name)) { echo $name; } else { echo 'Jeremy Knowles'; } ?></dt>
 
             <dd class="player__id__stats">
                 <?php if ($bandit == 'yes') { echo '<span class="player__id__level is--level100">Bandit</span> '; } ?>

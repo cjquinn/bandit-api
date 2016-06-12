@@ -44,7 +44,7 @@
 
         <header>
 
-            <dt class="player__id__name">Cody Morton</dt>
+            <dt class="player__id__name"><?php if (isset($name)) { echo $name; } else { echo 'Cody Morton'; } ?></dt>
             <dd class="player__id__stats"><?=rand(6, 12)?> wins <?=rand(0, 6)?> loses <span class="points-won">+<?=rand(50, 100)*5?></span></dd>
 
         </header>

@@ -61,7 +61,7 @@
 
     	<nav class="menu col">
 
-            <a href="/templates/dashboard" class="menu__logo">
+            <a href="/templates/dashboard" class="menu__logo menu__padding">
 
                 <?= $this->Svg->useit('brand-logo', 'menu__logo__svg'); ?>
                 
@@ -76,30 +76,30 @@
         		<ol class="menu__list">
 
         			<li class="menu__list__item is--active">
-        				<a href="/templates/dashboard" class="menu__list__link is--active">Dashboard</a>
+        				<a href="/templates/dashboard" class="menu__link menu__padding is--active">Dashboard</a>
         			</li>
 
                     <li class="menu__list__item">
-                        <a href="/templates/thisweek" class="menu__list__link">This Week</a>
+                        <a href="/templates/thisweek" class="menu__link menu__padding">This Week</a>
                     </li>
 
         			<li class="menu__list__item">
-        				<a href="/templates/leaderboards" class="menu__list__link">Leaderboards</a>
+        				<a href="/templates/leaderboards" class="menu__link menu__padding">Leaderboards</a>
         			</li>
 
         			<li class="menu__list__item">
-        				<a href="/templates/boxleague" class="menu__list__link">Box League</a>
+        				<a href="/templates/boxleague" class="menu__link menu__padding">Box League</a>
         			</li>
 
         			<li class="menu__list__item">
-        				<a href="/templates/players" class="menu__list__link">Players</a>
+        				<a href="/templates/players" class="menu__link menu__padding">Players</a>
         			</li>
 
         			<li class="menu__list__item">
-        				<a href="/templates/profile" class="menu__list__link">My Profile</a>
+        				<a href="/templates/profile" class="menu__link menu__padding">My Profile</a>
         			</li>
 
-                    <li class="menu__list__item">
+                    <li class="menu__padding">
                         <button class="button menu__button is--full">
                             <div class="button__icon">
                                 <figure class="button__icon__clip"><?= $this->Svg->useit('plus', 'icon-plus button__icon__svg') ?></figure>

@@ -15,6 +15,18 @@
 			@include unit(line-height, 4);
 		}
 
+		&__count {
+			$size: 1.4em;
+			@include inline-middle($up:true); @include size($size);
+			font-size: 12px; font-weight: normal; line-height: $size; text-align: center; color: rgba($text, .8);
+			background: rgba($body__background, .7);
+			border-radius: 3px;
+
+			&.is--alert {
+				color: $bandit;
+			}
+		}
+
 		&__rarr,
 		&__larr {
 			width: 8px; height: 13px;

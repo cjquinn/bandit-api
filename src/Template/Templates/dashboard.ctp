@@ -1,17 +1,30 @@
-<header class="header g2">
+<header class="header g3">
 
     <div class="col">
 
         <h1 class="header__title h1">Dashboard</h1>
 
-        <ol class="tabs">
+        <ol class="tabs header__tabs">
             <li class="tabs__tab is--active"><button class="tabs__tab__button">Activity</li>
-            <li class="tabs__tab"><button class="tabs__tab__button"><span class="tabs__tab__button__count">5</span> Notifications</li>
-            <li class="tabs__tab"><button class="tabs__tab__button">My Account</li>
-            <li class="tabs__tab"><button class="tabs__tab__button">Disputes</li>
+            <li class="tabs__tab"><button class="tabs__tab__button">Notifications <span class="tabs__tab__count is--alert">5</span></li>
+            <li class="tabs__tab"><button class="tabs__tab__button">Disputes <span class="tabs__tab__count">0</span></li>
         </ol>
 
     </div>
+
+    <nav class="form__select header__select">
+        <h1 class="h2">Dashboard</h1>
+        
+        <label>
+            <select>
+                <option disabled>Dashboard:</option>
+                <option selected>Activity</option>
+                <option>Notifications (5)</option>
+                <option>Disputes (0)</option>
+            </select>
+            <?= $this->Svg->useit('rarr', 'rarr header__select__rarr') ?>
+        </label>
+    </nav>
 
 </header>
 
@@ -21,8 +34,9 @@
 
         <section class="block">
 
-            <header class="block__header">
-                <h1 class="h4">Matches</h1>
+            <header class="block__header justify-space-between-baseline">
+                <h1 class="h4"><a href="/templates/thisweek">Matches</a></h1>
+                <small class="h4__small">Monday 9th</small>
             </header>
 
             <ol class="stream matches">
@@ -56,20 +70,26 @@
 
             </ol>
 
-            <footer class="block__footer">
+            <ul class="block__footer__meta">
 
-                <ul class="block__footer__meta">
+                <li class="block__footer__meta__item">
 
-                    <li class="block__footer__meta__item">
+                    <?= $this->Svg->useit('icon-matches', 'block__footer__icon'); ?>
 
-                        <?= $this->Svg->useit('icon-matches', 'block__footer__icon'); ?>
+                    5 Matches
 
-                    </li>
+                </li>
+
+                <li class="block__footer__meta__item">
+
+                    <?= $this->Svg->useit('icon-players', 'block__footer__icon'); ?>
+
+                    10 Players
+
+                </li>
 
 
-                </ul>
-
-            </footer>
+            </ul>
 
         </section>
 
@@ -82,8 +102,9 @@
 
        <section class="block">
 
-            <header class="block__header">
-                <h1 class="h4">Box 1 <small class="h4__small">3 weeks left</small></h1>
+            <header class="block__header justify-space-between-baseline">
+                <h1 class="h4"><a href="/templates/boxmymatches">Box 1</a></h1>
+                <small class="h4__small">3 weeks left</small>
             </header>
 
             <ol class="stream matches">
@@ -125,6 +146,27 @@
 
             </ol>
 
+            <ul class="block__footer__meta">
+
+                <li class="block__footer__meta__item">
+
+                    <?= $this->Svg->useit('icon-matches', 'block__footer__icon'); ?>
+
+                    5 Matches
+
+                </li>
+
+                <li class="block__footer__meta__item">
+
+                    <?= $this->Svg->useit('icon-players', 'block__footer__icon'); ?>
+
+                    8 Players
+
+                </li>
+
+
+            </ul>
+
         </section>
 
     </div>
@@ -135,7 +177,7 @@
 
     <div class="col">
 
-        <section class="block has--contents">
+        <section class="block has--contents has--multiple">
 
             <header class="block__header">
                 <h1 class="h4__small">Leaderboards</h1>
@@ -160,7 +202,8 @@
                                 'number' => 2,
                                 'rating' => 'medium',
                                 'bandit' => 'no',
-                                'sibling' => 0
+                                'sibling' => 0,
+                                'name' => 'You',
                             ])?>
 
                         <?=$this->element('playerWeek', [
@@ -199,7 +242,8 @@
                                 'number' => 3,
                                 'rating' => 'low',
                                 'bandit' => 'no',
-                                'sibling' => 0
+                                'name' => 'You',
+                                'sibling' => 0,
                             ])?>
 
                     </ol>

@@ -12,7 +12,7 @@
 
     </div>
 
-    <nav class="header__select">
+    <nav class="form__select header__select">
         <h1 class="h2">This Week</h1>
         
         <label>
@@ -21,7 +21,7 @@
                 <option selected>Matches</option>
                 <option>Leaderboard</option>
             </select>
-            <?= $this->Svg->useit('rarr', 'header__select__rarr') ?>
+            <?= $this->Svg->useit('rarr', 'rarr header__select__rarr') ?>
         </label>
     </nav>
 
@@ -51,7 +51,7 @@
 
                 <?php
 
-                for ($k = 1; $k < 16; $k++) {
+                for ($k = 1; $k < 7; $k++) {
 
                         echo $this->element('playerWeek', [
                                 'number' => $k,

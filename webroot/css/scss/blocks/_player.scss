@@ -4,7 +4,11 @@
 
 	&__id {
 		display: flex; align-items: center;
-		line-height: 20px;
+		line-height: 18px;
+
+		@media (min-width: 700px) {
+			line-height: 20px;
+		}
 
 		&__stats {
 			@include font-size($size:small); color: $gray-chateau; font-weight: 100;
@@ -48,15 +52,24 @@
 	}
 
 	&.is--sibling {
-
-		@include unit(height, 5);
+		@include unit(height, 6);
 
 		&1 {
-			opacity: .55;
+			opacity: .75;
 		}
 
 		&2 {
-			opacity: .25;
+			opacity: .55;
+		}
+
+		.player-photo {
+
+			width: 26px; margin-left: 5px; margin-right: 15px;
+
+			@media (min-width: 600px) {
+				width: 38px;
+			}
+
 		}
 	}
 

@@ -38,6 +38,12 @@
 		}
 	}
 
+	&.has--multiple {
+		#{$block}__header {
+			padding-bottom: 0;
+		}
+	}
+
 	&__slab {
 		position: relative; cursor: pointer;
 		background: $mirage3;
@@ -45,6 +51,7 @@
 		/* can I set this for everything?? */
 		display: flex; justify-content: space-between; align-items: center; @include unit(height, 7); padding: 0 22px;
 
+		/* doesn't actually look good?
 		&:not(:first-child) {
 
 			&:before {
@@ -62,10 +69,11 @@
 				@include no-content;
 			}
 		}
+		*/
 
 		&:hover {
-			background: adjust_hue(lighten(saturate($mirage, 17), 3), 14);
-			background-color: rgba($mirage, .25);
+			// background: adjust_hue(lighten(saturate($mirage, 17), 3), 14);
+			// background-color: rgba($mirage, .25);
 		}
 
 		&.is--empty {

@@ -26,17 +26,24 @@
 
             <header class="block__header justify-space-between-baseline">
                 <h1 class="h4">All Players</h1>
-                <select>
-                    <option>A-Z First Name</option>
-                    <option>Most Games</option>
-                    <option>Least Games</option>
-                    <option>Recently Joined</option>
-                </select>
+
+                <nav class="form__select">
+                    <label>
+                        <select>
+                            <option disabled>Dashboard:</option>
+                            <option selected>A-Z First Name</option>
+                            <option>Most Games</option>
+                            <option>Least Games</option>
+                            <option>Recently Joined</option>
+                        </select>
+                        <?= $this->Svg->useit('rarr', 'rarr') ?>
+                    </label>
+                </nav>
             </header>
 
             <ol class="stream matches">
 
-                    <?=$this->element('finder')?>
+                <?=$this->element('finder')?>
 
                 <?php
 

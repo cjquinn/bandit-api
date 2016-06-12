@@ -68,4 +68,20 @@ input, select {
 			}
 		}
 	}
+
+	&__select {
+		
+		select {
+			display: block; width: 100%; padding: 16px 0;
+			color: $text--link; font-weight: 300;
+			background: none; border: none; appearance: none;
+		}
+
+		.rarr {
+			position: absolute; top: 50%; right: 0;
+			width: 8px;
+			fill: $text--link;
+			transform: translateY(-50%) rotate(90deg);
+		}
+	}
 }

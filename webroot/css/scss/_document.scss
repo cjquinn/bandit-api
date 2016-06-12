@@ -22,16 +22,13 @@ body {
 	background-color: $app__base;
 	border-radius: 6px;
 
-	@media (max-width: 799px) {
+	@media (break('<', 'xxxlarge')) {
 		@include unit(margin-top, 7);
 	}
 }
 
 	.view {
 		position: relative; /* for .prompt's */
-
-		@media (max-width: 599px) {
-		}
 	}
 
 		.display {

@@ -12,7 +12,7 @@
 .g1 {
 	@include clearfix;
 
-	@media (min-width: 800px) {
+	@media (break('>=', 'xmedium')) {
 
 		display: flex;
 
@@ -163,6 +163,14 @@
 
 	&.from--desktop {
 		display: block;
+
+		@media (max-width: 699px) {
+
+			> .col + .col {
+				@include unit(margin-top, 2);
+			}
+
+		}
 
 		@media (min-width: 700px) {
 

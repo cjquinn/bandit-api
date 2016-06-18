@@ -79,7 +79,11 @@ class BoxLeagueCyclesTable extends Table
         $validator
             ->requirePresence('boxes')
             ->hasAtLeast('boxes', 2);
-        //     ->notEmpty('boxes');
+
+        $boxValidator = new Validator();
+        $boxValidator->hasAtLeast('players', 4);
+        
+        $validator->addNestedMany('boxes', $boxValidator);
 
         return $validator;
     }

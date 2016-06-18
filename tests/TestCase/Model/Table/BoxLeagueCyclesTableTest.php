@@ -109,5 +109,30 @@ class BoxLeagueCyclesTableTest extends TestCase
         ];
 
         $this->assertEquals($expected, $errors);
+
+        $errors = $this->BoxLeagueCycles->validator('startCycle')->errors([
+            'start' => (new DateTime())->format('Y-m-d'),
+            'end' => (new DateTime('+2 weeks'))->format('Y-m-d'),
+            'boxes' => [
+                [
+                    'players' => [1, 2, 3, 4]
+                ],
+                [
+                    'players' => [1, 2, 3]
+                ]
+            ]
+        ]);
+
+        $expected = [
+            'boxes' => [
+                '1' => [
+                    'players' => [
+                        'hasAtLeast' => 'The provided value is invalid'
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
     }
 }

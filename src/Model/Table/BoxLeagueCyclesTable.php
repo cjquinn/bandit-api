@@ -36,37 +36,50 @@ class BoxLeagueCyclesTable extends Table
     {
         $validator
             ->requirePresence('start')
-            ->notEmpty('start')
-            ->date('start')
-            ->add('start', 'custom', [
-                'on' => function ($context) {
-                    return isset($context['data']['start']) && isset($context['data']['end']);
-                },
-                'message' => 'Start date cannot be in the past or after the end date.',
-                'rule' => function ($value, $context) {
-                    $start = new Date($context['data']['start']);
-                    $end = new Date($context['data']['end']);
+            ->add('start', [
+                'date' => [
+                    'rule' => ['date'],
+                    'last' => true
+                ],
+                'custom' => [
+                    'on' => function ($context) {
+                        return isset($context['data']['start']) && isset($context['data']['end']);
+                    },
+                    'message' => 'Start date cannot be in the past or after the end date.',
+                    'rule' => function ($value, $context) {
+                        $start = new Date($context['data']['start']);
+                        $end = new Date($context['data']['end']);
 
-                    return $start->gte(Date::now()) && $start->lt($end);
-                }
+                        return $start->gte(Date::now()) && $start->lt($end);
+                    }
+                ]
             ]);
 
         $validator
             ->requirePresence('end')
-            ->notEmpty('end')
-            ->date('end')
-            ->add('end', 'custom', [
-                'on' => function ($context) {
-                    return isset($context['data']['start']) && isset($context['data']['end']);
-                },
-                'message' => 'The end date must be after the start date.',
-                'rule' => function ($value, $context) {
-                    $start = new Date($context['data']['start']);
-                    $end = new Date($context['data']['end']);
+            ->add('end', [
+                'date' => [
+                    'rule' => ['date'],
+                    'last' => true
+                ],
+                'custom' => [
+                    'on' => function ($context) {
+                        return isset($context['data']['start']) && isset($context['data']['end']);
+                    },
+                    'message' => 'The end date must be after the start date.',
+                    'rule' => function ($value, $context) {
+                        $start = new Date($context['data']['start']);
+                        $end = new Date($context['data']['end']);
 
-                    return $end->gt($start);
-                }
+                        return $end->gt($start);
+                    }
+                ]
             ]);
+
+        $validator
+            ->requirePresence('boxes')
+            ->hasAtLeast('boxes', 2);
+        //     ->notEmpty('boxes');
 
         return $validator;
     }

@@ -56,8 +56,28 @@ class BoxLeagueCyclesTableTest extends TestCase
     public function testValidationStartCycle()
     {
         $errors = $this->BoxLeagueCycles->validator('startCycle')->errors([
+            'start' => 'Not a date',
+            'end' => ''
+        ]);
+
+        $expected = [
+            'start' => [
+                'date' => 'The provided value is invalid'
+            ],
+            'end' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'boxes' => [
+                '_required' => 'This field is required'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        $errors = $this->BoxLeagueCycles->validator('startCycle')->errors([
             'start' => (new DateTime('-1 week'))->format('Y-m-d'),
-            'end' => (new DateTime('-3 weeks'))->format('Y-m-d')
+            'end' => (new DateTime('-3 weeks'))->format('Y-m-d'),
+            'boxes' => []
         ]);
 
         $expected = [
@@ -68,7 +88,23 @@ class BoxLeagueCyclesTableTest extends TestCase
                 'custom' => 'The end date must be after the start date.'
             ],
             'boxes' => [
-                'custom' => 'There must be at least two boxes to start a cycle.'
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        $errors = $this->BoxLeagueCycles->validator('startCycle')->errors([
+            'start' => (new DateTime())->format('Y-m-d'),
+            'end' => (new DateTime('+2 weeks'))->format('Y-m-d'),
+            'boxes' => [
+                []
+            ]
+        ]);
+
+        $expected = [
+            'boxes' => [
+                'hasAtLeast' => 'The provided value is invalid'
             ]
         ];
 

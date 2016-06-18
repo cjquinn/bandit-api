@@ -26,7 +26,8 @@ class BoxesTable extends Table
                 'Players'
             ],
             'hasMany' => [
-                'BoxesPlayers'
+                'BoxesPlayers',
+                'Results'
             ]
         ]);
     }

@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class AddLossesWinsToClubsPlayers extends AbstractMigration
+class AddBoxIdToResults extends AbstractMigration
 {
     /**
      * Change Method.
@@ -12,17 +12,16 @@ class AddLossesWinsToClubsPlayers extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('clubs_players');
-        $table->addColumn('losses', 'integer', [
-            'after' => 'player_id',
+        $table = $this->table('results');
+        $table->addColumn('box_id', 'integer', [
+            'after' => 'id',
             'default' => null,
             'limit' => 11,
-            'null' => false,
+            'null' => true
         ]);
-        $table->addColumn('wins', 'integer', [
-            'default' => 0,
-            'limit' => 11,
-            'null' => false,
+        $table->addForeignKey('box_id', 'boxes', 'id', [
+            'update' => 'RESTRICT',
+            'delete' => 'RESTRICT'
         ]);
         $table->update();
     }

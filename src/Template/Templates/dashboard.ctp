@@ -103,7 +103,7 @@
        <section class="block">
 
             <header class="block__header justify-space-between-baseline">
-                <h1 class="h4"><a href="/templates/boxmymatches">Box 1</a></h1>
+                <h1 class="h4"><a href="/templates/boxleague">Box 1</a></h1>
                 <small class="h4__small">3 weeks left</small>
             </header>
 

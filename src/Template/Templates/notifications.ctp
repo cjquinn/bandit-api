@@ -75,7 +75,9 @@
 
                             <div class="player-photo__proportion clip-hexagon">
 
-                                <span style="position: absolute;"><?= $this->Svg->useit('rarr', 'finder__display__rarr') ?>2</span>
+                                <div class="clip-hexagon__contents">
+                                    <span style="position: absolute;"><?= $this->Svg->useit('rarr', 'finder__display__rarr') ?>2</span>
+                                </div>
 
                             </div>            
 

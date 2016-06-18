@@ -8,6 +8,7 @@ class SvgHelper extends Helper
         
         'brand-logo' => '0 0 129 95',
         'brand-knot' => '0 0 37 32',
+        'brand-mask' => '0 0 134 42',
 
         'icon-matches' => '0 0 21 18',
         'icon-players' => '0 0 148 180',

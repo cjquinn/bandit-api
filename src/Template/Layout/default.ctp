@@ -38,6 +38,7 @@
 
         <?= $this->Svg->display('brand/logo') ?>
         <?= $this->Svg->display('brand/knot') ?>
+        <?= $this->Svg->display('brand/mask') ?>
 
         <?= $this->Svg->display('rarr') ?>
         <?= $this->Svg->display('player') ?>

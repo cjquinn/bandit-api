@@ -44,6 +44,10 @@
 		}
 	}
 
+	&__base {
+		background: $mirage3;
+	}
+
 	&__slab {
 		position: relative; cursor: pointer;
 		background: $mirage3;

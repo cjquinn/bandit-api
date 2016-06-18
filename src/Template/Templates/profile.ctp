@@ -77,6 +77,55 @@
 
 </article>
 
+
+<article class="display g2">
+
+    <div class="col">
+
+        <section class="block has--contents">
+
+            <header class="block__header">
+                <h1 class="h4__small">Level</h1>
+                <h2 class="h4">Ninja</h2>
+            </header>
+
+            <div class="block__contents">
+
+                <div class="block__base level g5">
+
+                    <div class="level__info is--49 col--1">
+                        <?= $this->Svg->useit('brand-mask', 'mask is--level49 level__mask-icon'); ?>
+                        <h3 class="h5 level__name">Ninja</h3>
+                        <p class="level__minimum">9000+</p>
+                    </div>
+
+                    <div class="col--2">
+
+                        <figure class="level__progress">
+                            <div class="level__progress-complete" style="width: 67%;">
+                            </div>
+                        </figure>
+                        
+                    </div>
+
+                    <div class="level__info is--50 col--3">
+                        <?= $this->Svg->useit('brand-mask', 'mask is--level50 level__mask-icon'); ?>
+                        <h3 class="h5 level__name">Warrior</h3>
+                        <p class="level__minimum">10000+</p>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</article>
+
+
+
+
 <article class="display g2">
 
     <div class="col">

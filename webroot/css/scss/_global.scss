@@ -1,5 +1,9 @@
 .clip-hexagon {
 	@include clip-hexagon;
+
+	&__contents {
+		@include absolute-fill; overflow: hidden;
+	}
 }
 
 .icon-inline {

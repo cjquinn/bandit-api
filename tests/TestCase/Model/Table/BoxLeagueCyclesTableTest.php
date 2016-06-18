@@ -62,10 +62,13 @@ class BoxLeagueCyclesTableTest extends TestCase
 
         $expected = [
             'start' => [
-                'valid' => 'Start date cannot be in the past or after the end date.'
+                'custom' => 'Start date cannot be in the past or after the end date.'
             ],
             'end' => [
-                'valid' => 'The end date must be after the start date.'
+                'custom' => 'The end date must be after the start date.'
+            ],
+            'boxes' => [
+                'custom' => 'There must be at least two boxes to start a cycle.'
             ]
         ];
 

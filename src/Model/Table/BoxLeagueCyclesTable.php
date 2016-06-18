@@ -37,8 +37,8 @@ class BoxLeagueCyclesTable extends Table
         $validator
             ->requirePresence('start')
             ->notEmpty('start')
-            ->add('start', 'valid', ['rule' => 'date'])
-            ->add('start', 'valid', [
+            ->date('start')
+            ->add('start', 'custom', [
                 'on' => function ($context) {
                     return isset($context['data']['start']) && isset($context['data']['end']);
                 },
@@ -54,8 +54,8 @@ class BoxLeagueCyclesTable extends Table
         $validator
             ->requirePresence('end')
             ->notEmpty('end')
-            ->add('end', 'valid', ['rule' => 'date'])
-            ->add('end', 'valid', [
+            ->date('end')
+            ->add('end', 'custom', [
                 'on' => function ($context) {
                     return isset($context['data']['start']) && isset($context['data']['end']);
                 },

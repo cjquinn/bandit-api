@@ -50,7 +50,7 @@ class CloseDisputesShellTest extends TestCase
         $results = TableRegistry::get('results');
 
         $result = $results->get(2);
-        $result->set('created', new Time('49 hours ago'));
+        $result->set('submitted', new Time('49 hours ago'));
 
         $results->save($result);
 

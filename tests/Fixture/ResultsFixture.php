@@ -21,24 +21,21 @@ class ResultsFixture extends TestFixture
                 'club_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 2,
-                'created' => new DateTime('yesterday'),
-                'modified' => new DateTime('yesterday')
+                'submitted' => new DateTime('yesterday')
             ],
             [
                 'id' => 2,
                 'club_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 3,
-                'created' => new DateTime('25 hours ago'),
-                'modified' => new DateTime('25 hours ago')
+                'submitted' => new DateTime('25 hours ago')
             ],
             [
                 'id' => 3,
                 'club_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 2,
-                'created' => new DateTime('today'),
-                'modified' => new DateTime('today')
+                'submitted' => new DateTime('today')
             ]
         ];
 

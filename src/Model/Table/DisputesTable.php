@@ -73,7 +73,7 @@ class DisputesTable extends Table
                 ]);
             }
 
-            if ($dispute->result->created->wasWithinLast('48 hours')) {
+            if ($dispute->result->submitted->wasWithinLast('48 hours')) {
                 $reputationDifference = $dispute->is_resolved ? -1 : -11;
 
                 $this->Results->Players->updateReputation($dispute->result->losing_player, $reputationDifference);

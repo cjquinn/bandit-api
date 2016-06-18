@@ -126,14 +126,14 @@ class PlayersTable extends Table
             ])
             ->innerJoinWith('Histories')
             ->order([
-                'created' => 'DESC'
+                'submitted' => 'DESC'
             ])
             ->where([
                 'OR' => [
                     ['losing_player_id' => $player->id],
                     ['winning_player_id' => $player->id]
                 ],
-                'created <' => $date
+                'submitted <' => $date
             ])
             ->first();
 

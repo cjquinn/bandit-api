@@ -20,7 +20,7 @@ class CloseDisputesShell extends Shell
             ->find()
             ->innerJoinWith('Results', function ($q) {
                 $q->where([
-                    'created <' => new DateTime('48 hours ago')
+                    'submitted <' => new DateTime('48 hours ago')
                 ]);
 
                 return $q;

@@ -125,7 +125,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $results = TableRegistry::get('Results');
         
         $result = $results->get(2);
-        $result->set('created', new Time('today'));
+        $result->set('submitted', new Time('today'));
 
         $results->save($result);
 

@@ -31,7 +31,7 @@ class DisputesController extends ApiController
 
         if ($this->request->action === 'add') {
             // Time expired
-            if (!$this->_result->created->wasWithinLast('24 hours')) {
+            if (!$this->_result->submitted->wasWithinLast('24 hours')) {
                 return false;
             }
 
@@ -64,7 +64,7 @@ class DisputesController extends ApiController
 
         // Time expired
         if (($this->request->action === 'delete' || $this->request->action === 'edit') &&
-            !$this->_result->created->wasWithinLast('48 hours')
+            !$this->_result->submitted->wasWithinLast('48 hours')
         ) {
             return false;
         }

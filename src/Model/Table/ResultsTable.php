@@ -53,7 +53,13 @@ class ResultsTable extends Table
             ]
         ]);
 
-        $this->addBehavior('Timestamp');
+        $this->addBehavior('Timestamp', [
+            'events' => [
+                'Model.beforeSave' => [
+                    'submitted' => 'new'
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -105,7 +111,7 @@ class ResultsTable extends Table
             ]);
         }
 
-        $date = $result->isNew() ? new DateTime('today') : new DateTime($result->created->i18nFormat('Y-M-d'));
+        $date = $result->isNew() ? new DateTime('today') : new DateTime($result->submitted->i18nFormat('Y-M-d'));
         $this->Players->updateRatings($losingPlayer, $winningPlayer, $result->club_id, $date);
 
         $this->patchEntity($result, [
@@ -152,7 +158,7 @@ class ResultsTable extends Table
     public function nullify(Result $result)
     {
         $clubId = $result->club_id;
-        $date = new DateTime($result->created->i18nFormat('Y-M-d'));
+        $date = new DateTime($result->submitted->i18nFormat('Y-M-d'));
         $players = [];
         $results = $this
             ->find()
@@ -174,7 +180,7 @@ class ResultsTable extends Table
             ])
             ->innerJoinWith('LosingPlayersHistories')
             ->where([
-                'created >=' => $date
+                'submitted >=' => $date
             ]);
 
         
@@ -216,7 +222,7 @@ class ResultsTable extends Table
     {
         return $this->exists([
             'id' => $id,
-            'created >=' => new DateTime('-' . $period)
+            'submitted >=' => new DateTime('-' . $period)
         ]);
     }
 }

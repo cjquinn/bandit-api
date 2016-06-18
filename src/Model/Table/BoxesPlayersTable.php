@@ -20,14 +20,6 @@ class BoxesPlayersTable extends Table
                 'Boxes',
                 'BoxLeagueCycles',
                 'Players'
-            ],
-            'belongsToMany' => [
-                'Results' => [
-                    'foreignKey' => [
-                        'boxes_player_box_id',
-                        'boxes_player_player_id'
-                    ]
-                ]
             ]
         ]);
     }

@@ -69,10 +69,4 @@ class BoxesTable extends Table
             'box_league_cycle_id' => $boxLeagueCycleId
         ]);
     }
-
-    /**
-     * Application rules
-     *
-     * A player cannot be in more than one box
-     */
 }

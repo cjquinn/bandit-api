@@ -121,11 +121,4 @@ class BoxLeagueCyclesTable extends Table
             'club_id' => $clubId
         ]);
     }
-
-    /**
-     * Application rules
-     *
-     * A box league cycle must have at least 2 boxes to run
-     * Each box must have at least 4 players
-     */
 }

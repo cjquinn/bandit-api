@@ -58,6 +58,9 @@ class BoxLeagueCyclesController extends ApiController
     {
         $boxLeagueCycle = $this->BoxLeagueCycles->get($id);
 
+        // Triggers loading of boxes in beforeMarshal
+        $this->request->data['id'] = $id;
+
         $this->BoxLeagueCycles->patchEntity($boxLeagueCycle, $this->request->data, [
             'fieldList' => [
                 'start',

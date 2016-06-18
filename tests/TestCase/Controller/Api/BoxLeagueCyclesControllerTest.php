@@ -111,6 +111,7 @@ class BoxLeagueCyclesControllerTest extends IntegrationTestCase
     }
 
     /**
+     * @group testing
      * @return void
      */
     public function testEditPut()

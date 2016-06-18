@@ -30,6 +30,22 @@ class BoxLeagueCyclesTable extends Table
     }
 
     /**
+     * @return void
+     */
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    {
+        if (isset($data['id'])) {
+            $data['boxes'] = $this->Boxes
+                ->findByBoxLeagueCycleId($data['id'])
+                ->contain('Players')
+                ->hydrate(false)
+                ->toArray();
+
+            unset($data['id']);
+        }
+    }
+
+    /**
      * @return \Cake\Validation\Validator
      */
     public function validationStartCycle(Validator $validator)

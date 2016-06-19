@@ -18,6 +18,7 @@ class ResultsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
+                'box_id' => 1,
                 'club_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 2,
@@ -25,6 +26,7 @@ class ResultsFixture extends TestFixture
             ],
             [
                 'id' => 2,
+                'box_id' => 1,
                 'club_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 3,
@@ -32,6 +34,7 @@ class ResultsFixture extends TestFixture
             ],
             [
                 'id' => 3,
+                'box_id' => 1,
                 'club_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 2,

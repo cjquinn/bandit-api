@@ -42,6 +42,14 @@ Router::prefix('api', function ($routes) {
                 ]
             ], function ($routes) {
                 /**
+                 * BoxMatches
+                 */
+                $routes->resources('BoxMatches', [
+                    'only' => ['create'],
+                    'inflect' => 'dasherize'
+                ]);
+
+                /**
                  * BoxesPayers
                  */
                 $connectRoute = function ($action, $method) use ($routes) {

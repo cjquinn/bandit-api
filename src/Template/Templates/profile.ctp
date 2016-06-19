@@ -82,7 +82,7 @@
 
     <div class="col">
 
-        <section class="block has--contents">
+        <section class="level block has--contents">
 
             <header class="block__header">
                 <h1 class="h4__small">Level</h1>
@@ -91,7 +91,7 @@
 
             <div class="block__contents">
 
-                <div class="block__base level g5">
+                <div class="block__base level__base g5">
 
                     <div class="level__info is--49 col--1">
                         <?= $this->Svg->useit('brand-mask', 'mask is--level49 level__mask-icon'); ?>
@@ -102,7 +102,7 @@
                     <div class="col--2">
 
                         <figure class="level__progress">
-                            <div class="level__progress-complete" style="width: 67%;">
+                            <div class="level__progress-complete is--level49" style="width: 67%;">
                             </div>
                         </figure>
                         

@@ -39,40 +39,15 @@
 		}
 
 		&.is--level {
-			&47 {
-				&:after { background: $level47; }
-			}
 
-			&48 {
-				&:after { background: $level48; }
-			}
+			@each $colour in $level-colours {
 
-			&49 {
-				&:after { background: $level49; }
-			}
+				&#{nth($colour, 1)} {
+					&:after {
+						background: nth($colour, 2);
+					}
+				}
 
-			&50 {
-				&:after { background: $level50; }
-			}
-
-			&51 {
-				&:after { background: $level51; }
-			}
-
-			&52 {
-				&:after { background: $level52; }
-			}
-
-			&53 {
-				&:after { background: $level53; }
-			}
-
-			&54 {
-				&:after { background: $level54; }
-			}
-
-			&55 {
-				&:after { background: $level55; }
 			}
 
 			&100 {

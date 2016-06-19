@@ -79,7 +79,7 @@
 	&__list {
 
 		&__item {
-			@include unit(margin-bottom, 1);
+			// @include unit(margin-bottom, 1);
 			text-transform: uppercase; letter-spacing: .03em; font-weight: bold; font-size: 14px;
 
 

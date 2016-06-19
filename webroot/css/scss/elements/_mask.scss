@@ -1,39 +1,10 @@
 .mask {
 	&.is--level {
-		&47 {
-			fill: $level47;
-		}
+		@each $colour in $level-colours {
 
-		&48 {
-			fill: $level48;
-		}
-
-		&49 {
-			fill: $level49;
-		}
-
-		&50 {
-			fill: $level50;
-		}
-
-		&51 {
-			fill: $level51;
-		}
-
-		&52 {
-			fill: $level52;
-		}
-
-		&53 {
-			fill: $level53;
-		}
-
-		&54 {
-			fill: $level54;
-		}
-
-		&55 {
-			fill: $level55;
+			&#{nth($colour, 1)} {
+				fill: nth($colour, 2);
+			}
 		}
 	}
 }

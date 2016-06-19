@@ -70,7 +70,7 @@ class ResultsTable extends Table
     {
         $validator
             ->requirePresence('losing_player_id', 'create')
-            ->notEmpty('losing_player_id');
+            ->nonNegativeInteger('losing_player_id');
 
         return $validator;
     }

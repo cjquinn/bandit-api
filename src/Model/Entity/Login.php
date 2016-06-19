@@ -10,9 +10,9 @@ use Cake\ORM\Entity;
  * @property string $email
  * @property string $password
  * @property string $token
- * @property \Cake\I18n\Time $token_sent
- * @property \Cake\I18n\Time $created
- * @property \Cake\I18n\Time $modified
+ * @property datetime $token_sent
+ * @property datetime $created
+ * @property datetime $modified
  */
 class Login extends Entity
 {

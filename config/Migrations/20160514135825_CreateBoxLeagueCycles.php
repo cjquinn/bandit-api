@@ -1,4 +1,5 @@
 <?php
+
 use Migrations\AbstractMigration;
 
 class CreateBoxLeagueCycles extends AbstractMigration
@@ -22,11 +23,11 @@ class CreateBoxLeagueCycles extends AbstractMigration
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
-        $table->addColumn('start', 'datetime', [
+        $table->addColumn('start', 'date', [
             'default' => null,
             'null' => true,
         ]);
-        $table->addColumn('end', 'datetime', [
+        $table->addColumn('end', 'date', [
             'default' => null,
             'null' => true,
         ]);

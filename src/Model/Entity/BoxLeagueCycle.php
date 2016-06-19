@@ -7,8 +7,8 @@ use Cake\ORM\Entity;
 /**
  * @property int $id
  * @property int $club_id
- * @property \Cake\I18n\Time $start
- * @property \Cake\I18n\Time $end
+ * @property date $start
+ * @property date $end
  */
 class BoxLeagueCycle extends Entity
 {

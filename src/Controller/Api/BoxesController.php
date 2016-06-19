@@ -14,7 +14,7 @@ class BoxesController extends ApiController
             return false;
         }
 
-        // Invalid club id
+        // Invalid club_id
         if (!$this->Boxes->BoxLeagueCycles->isOwnedBy($this->request->params['box_league_cycle_id'], $this->request->params['club_id'])) {
             return false;
         }

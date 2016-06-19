@@ -19,19 +19,9 @@ class BoxMatchesFixture extends TestFixture
                 'losing_player_id' => 1,
                 'winning_player_id' => 2,
                 'disputed' => null
-            ],
-            [
-                'box_id' => 1,
-                'losing_player_id' => 1,
-                'winning_player_id' => 3,
-                'disputed' => null
-            ],
-            [
-                'box_id' => 1,
-                'losing_player_id' => 1,
-                'winning_player_id' => 2,
-                'disputed' => null
             ]
-        ]
+        ];
+
+        parent::init();
     }
 }

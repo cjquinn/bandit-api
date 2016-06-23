@@ -2,6 +2,8 @@
 
 namespace App\Controller\Api;
 
+use Cake\Utility\Hash;
+
 class BoxMatchesController extends ApiController
 {
 
@@ -22,6 +24,45 @@ class BoxMatchesController extends ApiController
         // Invalid box_id
         if (!$this->BoxMatches->Boxes->isOwnedBy($this->request->params['box_id'], $this->request->params['box_league_cycle_id'])) {
             return false;
+        }
+
+        if ($this->request->action === 'add') {
+            $losingPlayerId = Hash::get($this->request->data, 'losing_player_id');
+
+            // Invalid losing player
+            if ($this->Auth->user('player.id') === $losingPlayerId) {
+                return false;
+            }
+
+            // Non club losing player
+            if (!$this->BoxMatches->LosingPlayers->isAssignedToClub($losingPlayerId, $this->request->params['club_id'])) {
+                return false;
+            }
+
+            // Non box losing player
+            if (!$this->BoxMatches->LosingPlayers->isAssignedToBox($losingPlayerId, $this->request->params['box_id'])) {
+                return false;
+            }
+
+            // Non box winning player
+            if (!$this->BoxMatches->WinningPlayers->isAssignedToBox($this->Auth->user('player.id'), $this->request->params['box_id'])) {
+                return false;
+            }
+
+            // Duplicate
+            if ($this->BoxMatches->exists([
+                    'box_id' => $this->request->params['box_id'],
+                    'losing_player_id' => $losingPlayerId,
+                    'winning_player_id' => $this->Auth->user('player.id')
+                ])
+            ) {
+                return false;
+            }
+
+            // Existing disputes
+            if ($this->BoxMatches->WinningPlayers->hasDisputes($this->Auth->user('player.id'), $this->request->params['club_id'])) {
+                return false;
+            }
         }
 
         return true;

@@ -25,7 +25,7 @@ class ResultsController extends ApiController
             }
 
             // Unassigned losing player
-            if (!$this->Results->Players->isAssignedTo($losingPlayerId, $this->request->params['club_id'])) {
+            if (!$this->Results->Players->isAssignedToClub($losingPlayerId, $this->request->params['club_id'])) {
                 return false;
             }
 

@@ -38,6 +38,7 @@ class PlayersTable extends Table
                 'Clubs'
             ],
             'hasMany' => [
+                'BoxesPlayers',
                 'Histories',
                 'Results'
             ],
@@ -188,7 +189,18 @@ class PlayersTable extends Table
     /**
      * @return bool
      */
-    public function isAssignedTo($id, $clubId)
+    public function isAssignedToBox($id, $boxId)
+    {
+        return $this->BoxesPlayers->exists([
+            'box_id' => $boxId,
+            'player_id' => $id
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAssignedToClub($id, $clubId)
     {
         return $this->Club->exists([
             'club_id' => $clubId,

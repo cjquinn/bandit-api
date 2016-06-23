@@ -27,7 +27,7 @@ class BoxesPlayersController extends ApiController
         }
 
         // Invalid player id
-        if (!$this->BoxesPlayers->Players->isAssignedTo($this->request->params['player_id'], $this->request->params['club_id'])) {
+        if (!$this->BoxesPlayers->Players->isAssignedToClub($this->request->params['player_id'], $this->request->params['club_id'])) {
             return false;
         }
 

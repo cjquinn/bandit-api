@@ -31,7 +31,7 @@ class ClubsController extends ApiController
 
         // Unassigned
         if ($this->request->action === 'view' &&
-            !$this->Clubs->Players->isAssignedTo($this->Auth->user('player.id'), $this->request->params['id'])
+            !$this->Clubs->Players->isAssignedToClub($this->Auth->user('player.id'), $this->request->params['id'])
         ) {
             return false;
         }

@@ -72,8 +72,8 @@ class BoxMatchesControllerTest extends IntegrationTestCase
 
         $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches.json', [
             'losing_player_id' => 1,
-            'wins' => 3,
-            'losses' => 0
+            'losses' => 0,
+            'wins' => 3
         ]);
 
         $this->assertResponseCode(403);
@@ -89,8 +89,8 @@ class BoxMatchesControllerTest extends IntegrationTestCase
 
         $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches.json', [
             'losing_player_id' => 9,
-            'wins' => 3,
-            'losses' => 0
+            'losses' => 0,
+            'wins' => 3
         ]);
 
         $this->assertResponseCode(403);
@@ -106,8 +106,8 @@ class BoxMatchesControllerTest extends IntegrationTestCase
 
         $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches.json', [
             'losing_player_id' => 1,
-            'wins' => 3,
-            'losses' => 0
+            'losses' => 0,
+            'wins' => 3
         ]);
 
         $this->assertResponseCode(403);
@@ -123,8 +123,8 @@ class BoxMatchesControllerTest extends IntegrationTestCase
 
         $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches.json', [
             'losing_player_id' => 5,
-            'wins' => 3,
-            'losses' => 0
+            'losses' => 0,
+            'wins' => 3
         ]);
 
         $this->assertResponseCode(403);
@@ -140,8 +140,8 @@ class BoxMatchesControllerTest extends IntegrationTestCase
 
         $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches.json', [
             'losing_player_id' => 1,
-            'wins' => 3,
-            'losses' => 0
+            'losses' => 0,
+            'wins' => 3
         ]);
 
         $this->assertResponseCode(403);
@@ -157,8 +157,8 @@ class BoxMatchesControllerTest extends IntegrationTestCase
 
         $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches.json', [
             'losing_player_id' => 1,
-            'wins' => 3,
-            'losses' => 0
+            'losses' => 0,
+            'wins' => 3
         ]);
 
         $this->assertResponseCode(403);

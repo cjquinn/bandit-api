@@ -22,8 +22,6 @@ class BoxMatchesTableTest extends TestCase
     }
 
     /**
-     * tearDown method
-     *
      * @return void
      */
     public function tearDown()
@@ -31,5 +29,62 @@ class BoxMatchesTableTest extends TestCase
         unset($this->BoxMatches);
 
         parent::tearDown();
+    }
+
+    /**
+     * @return void
+     */
+    public function testValidationDefault()
+    {
+        $errors = $this->BoxMatches->validator()->errors([
+            'losing_player_id' => 1,
+            'losses' => -1,
+            'wins' => 0
+        ]);
+
+        $expected = [
+            'losses' => [
+                'nonNegativeInteger' => 'The provided value is invalid'
+            ],
+            'wins' => [
+                'greaterThanOrEqual' => 'The provided value is invalid'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        $errors = $this->BoxMatches->validator()->errors([
+            'losing_player_id' => 1,
+            'losses' => 3,
+            'wins' => 5
+        ]);
+
+        $expected = [
+            'losses' => [
+                'lessThanOrEqual' => 'The provided value is invalid'
+            ],
+            'wins' => [
+                'lessThanOrEqual' => 'The provided value is invalid'
+            ],
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        $errors = $this->BoxMatches->validator()->errors([
+            'losing_player_id' => 1,
+            'losses' => 2,
+            'wins' => 1
+        ]);
+
+        $expected = [
+            'losses' => [
+                'valid' => 'You must enter more wins then losses'
+            ],
+            'wins' => [
+                'valid' => 'You must enter more wins then losses'
+            ],
+        ];
+
+        $this->assertEquals($expected, $errors);
     }
 }

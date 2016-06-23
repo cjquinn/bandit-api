@@ -57,7 +57,7 @@ class BoxLeagueCyclesTable extends Table
                     'rule' => ['date'],
                     'last' => true
                 ],
-                'custom' => [
+                'valid' => [
                     'on' => function ($context) {
                         return isset($context['data']['start']) && isset($context['data']['end']);
                     },
@@ -78,7 +78,7 @@ class BoxLeagueCyclesTable extends Table
                     'rule' => ['date'],
                     'last' => true
                 ],
-                'custom' => [
+                'valid' => [
                     'on' => function ($context) {
                         return isset($context['data']['start']) && isset($context['data']['end']);
                     },

@@ -2,8 +2,13 @@
 
 namespace App\Model\Table;
 
+use ArrayObject;
+
+use Cake\Datasource\EntityInterface;
+use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Utility\Hash;
 use Cake\Validation\Validator;
 
 class BoxMatchesTable extends Table
@@ -27,6 +32,11 @@ class BoxMatchesTable extends Table
                 'WinningPlayers' => [
                     'className' => 'Players',
                     'foreignKey' => 'winning_player_id'
+                ]
+            ],
+            'hasMany' => [
+                'Results' => [
+                    'foreignKey' => $this->primaryKey()
                 ]
             ]
         ]);
@@ -101,5 +111,56 @@ class BoxMatchesTable extends Table
         $rules->add($rules->existsIn(['winning_player_id'], 'Players'));
 
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function beforeSave(Event $event, EntityInterface $boxMatch, ArrayObject $options)
+    {
+        if ($boxMatch->isNew()) {
+            $clubId = Hash::get($this->Boxes->BoxLeagueCycles
+                ->find()
+                ->select(['club_id'])
+                ->innerJoinWith('Boxes', function ($q) use ($boxMatch) {
+                    $q->where([
+                        'Boxes.id' => $boxMatch->box_id
+                    ]);
+
+                    return $q;
+                })
+                ->hydrate(false)
+                ->first(), 'club_id');
+
+            $results = [];
+
+            for ($i = 0; $i < $boxMatch->losses; $i++) {
+                $result = $this->Results->newEntity();
+                $result->set([
+                    'box_id' => $boxMatch->box_id,
+                    'club_id' => $clubId,
+                    'losing_player_id' => $boxMatch->winning_player_id,
+                    'winning_player_id' => $boxMatch->losing_player_id
+                ], ['guard' => false]);
+
+                array_push($results, $result);
+            }
+
+            for ($i = 0; $i < $boxMatch->wins; $i++) {
+                $result = $this->Results->newEntity();
+                $result->set([
+                    'box_id' => $boxMatch->box_id,
+                    'club_id' => $clubId,
+                    'losing_player_id' => $boxMatch->losing_player_id,
+                    'winning_player_id' => $boxMatch->winning_player_id
+                ], ['guard' => false]);
+
+                array_push($results, $result);
+            }
+
+            $boxMatch->set('results', $results);
+
+            pr($boxMatch);
+        }
     }
 }

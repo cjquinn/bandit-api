@@ -15,6 +15,8 @@ class BoxMatch extends Entity
 
     protected $_accessible = [
         'losing_player_id' => true,
+        'losses' => true,
+        'wins' => true,
         '*' => false
     ];
 }

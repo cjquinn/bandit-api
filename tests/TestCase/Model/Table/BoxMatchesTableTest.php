@@ -112,28 +112,38 @@ class BoxMatchesTableTest extends TestCase
 
         $this->BoxMatches->save($boxMatch);
 
-        $this->assertNotNull($boxMatch->results);
-        $this->assertEquals(count($boxMatch->results), 5);
+        $this->assertNotNull($boxMatch->losing_player_results);
+        $this->assertNotNull($boxMatch->winning_player_results);
 
-        $losersResults = $this->BoxMatches->Results
-            ->find()
-            ->where([
-                'box_id' => 1,
-                'losing_player_id' => 4,
-                'winning_player_id' => 1
+        $this->assertEquals(count($boxMatch->losing_player_results), 2);
+        $this->assertEquals(count($boxMatch->winning_player_results), 3);
+
+        $boxMatch = $this->BoxMatches->find()
+            ->contain([
+                'LosingPlayerResults',
+                'WinningPlayerResults'
             ])
-            ->count();
-
-        $this->assertEquals($losersResults, 2);
-
-        $winnersResults = $this->BoxMatches->Results
-            ->find()
             ->where([
-                'box_id' => 1,
-                'losing_player_id' => 1,
-                'winning_player_id' => 4
+                'BoxMatches.box_id' => 1,
+                'BoxMatches.losing_player_id' => 1,
+                'BoxMatches.winning_player_id' => 4
             ]);
 
-        $this->assertEquals($winnersResults, 3);
+        $boxMatch = $this->BoxMatches->get([
+            'box_id' => 1,
+            'losing_player_id' => 1,
+            'winning_player_id' => 4
+        ], [
+            'contain' => [
+                'LosingPlayerResults',
+                'WinningPlayerResults'
+            ]
+        ]);
+
+        $this->assertNotNull($boxMatch->losing_player_results);
+        $this->assertNotNull($boxMatch->winning_player_results);
+
+        $this->assertEquals(count($boxMatch->losing_player_results), 2);
+        $this->assertEquals(count($boxMatch->winning_player_results), 3);
     }
 }

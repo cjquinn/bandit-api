@@ -6,6 +6,7 @@ use ArrayObject;
 
 use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
@@ -35,7 +36,21 @@ class BoxMatchesTable extends Table
                 ]
             ],
             'hasMany' => [
-                'Results' => [
+                'LosingPlayerResults' => [
+                    'className' => 'Results',
+                    'bindingKey' => [
+                        'box_id',
+                        'winning_player_id',
+                        'losing_player_id'
+                    ],
+                    'foreignKey' => [
+                        'box_id',
+                        'losing_player_id',
+                        'winning_player_id'
+                    ]
+                ],
+                'WinningPlayerResults' => [
+                    'className' => 'Results',
                     'foreignKey' => $this->primaryKey()
                 ]
             ]
@@ -132,35 +147,33 @@ class BoxMatchesTable extends Table
                 ->hydrate(false)
                 ->first(), 'club_id');
 
-            $results = [];
-
+            $losingPlayerResults = [];
             for ($i = 0; $i < $boxMatch->losses; $i++) {
-                $result = $this->Results->newEntity();
-                $result->set([
+                $losingPlayerResult = $this->LosingPlayerResults->newEntity();
+                $losingPlayerResult->set([
                     'box_id' => $boxMatch->box_id,
                     'club_id' => $clubId,
                     'losing_player_id' => $boxMatch->winning_player_id,
                     'winning_player_id' => $boxMatch->losing_player_id
                 ], ['guard' => false]);
 
-                array_push($results, $result);
+                array_push($losingPlayerResults, $losingPlayerResult);
             }
+            $boxMatch->set('losing_player_results', $losingPlayerResults);
 
+            $winningPlayerResults = [];
             for ($i = 0; $i < $boxMatch->wins; $i++) {
-                $result = $this->Results->newEntity();
-                $result->set([
+                $winningPlayerResult = $this->WinningPlayerResults->newEntity();
+                $winningPlayerResult->set([
                     'box_id' => $boxMatch->box_id,
                     'club_id' => $clubId,
                     'losing_player_id' => $boxMatch->losing_player_id,
                     'winning_player_id' => $boxMatch->winning_player_id
                 ], ['guard' => false]);
 
-                array_push($results, $result);
+                array_push($winningPlayerResults, $winningPlayerResult);
             }
-
-            $boxMatch->set('results', $results);
-
-            pr($boxMatch);
+            $boxMatch->set('winning_player_results', $winningPlayerResults);
         }
     }
 }

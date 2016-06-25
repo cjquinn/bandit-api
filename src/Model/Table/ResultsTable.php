@@ -39,16 +39,18 @@ class ResultsTable extends Table
             'hasOne' => [
                 'Disputes',
                 'Histories',
-                'LosingPlayersHistories' => [
+                'LosingPlayerHistories' => [
                     'className' => 'Histories',
+                    'foreignKey' => 'result_id',
                     'conditions' => [
-                        'LosingPlayersHistories.is_winner' => false
+                        'LosingPlayerHistories.is_winner' => false
                     ]
                 ],
-                'WinningPlayersHistories' => [
+                'WinningPlayerHistories' => [
                     'className' => 'Histories',
+                    'foreignKey' => 'result_id',
                     'conditions' => [
-                        'WinningPlayersHistories.is_winner' => true
+                        'WinningPlayerHistories.is_winner' => true
                     ]
                 ]
             ]
@@ -107,10 +109,10 @@ class ResultsTable extends Table
         if ($result->isNew()) {
             $this->Players->updateReputation($losingPlayer, 1);
             $this->Players->updateReputation($winningPlayer, 1);
-        } elseif (!$result->losing_players_history || !$result->winning_players_history) {
+        } elseif (!$result->losing_player_history || !$result->winning_player_history) {
             $this->loadInto($result, [
-                'LosingPlayersHistories',
-                'WinningPlayersHistories'
+                'LosingPlayerHistories',
+                'WinningPlayerHistories'
             ]);
         }
 
@@ -118,16 +120,16 @@ class ResultsTable extends Table
         $this->Players->updateRatings($losingPlayer, $winningPlayer, $result->club_id, $date);
 
         $this->patchEntity($result, [
-            'losing_players_history' => [
+            'losing_player_history' => [
                 'player' => $losingPlayer,
             ],
-            'winning_players_history' => [
+            'winning_player_history' => [
                 'player' => $winningPlayer
             ]
         ], [
             'fieldList' => [
-                'losing_players_history',
-                'winning_players_history'
+                'losing_player_history',
+                'winning_player_history'
             ],
             'validate' => false
         ]);
@@ -166,14 +168,14 @@ class ResultsTable extends Table
         $results = $this
             ->find()
             ->contain([
-                'LosingPlayersHistories.Players.Club' => function ($q) use ($clubId) {
+                'LosingPlayerHistories.Players.Club' => function ($q) use ($clubId) {
                     $q->where([
                         'Club.club_id' => $clubId
                     ]);
 
                     return $q;
                 },
-                'WinningPlayersHistories.Players.Club' => function ($q) use ($clubId) {
+                'WinningPlayerHistories.Players.Club' => function ($q) use ($clubId) {
                     $q->where([
                         'Club.club_id' => $clubId
                     ]);
@@ -181,7 +183,7 @@ class ResultsTable extends Table
                     return $q;
                 }
             ])
-            ->innerJoinWith('LosingPlayersHistories')
+            ->innerJoinWith('LosingPlayerHistories')
             ->where([
                 'submitted >=' => $date
             ]);
@@ -199,12 +201,12 @@ class ResultsTable extends Table
         };
 
         $results = $results->filter(function ($r) use ($result, $revertPlayer) {
-            $revertPlayer($r->losing_players_history->player);
-            $revertPlayer($r->winning_players_history->player);
+            $revertPlayer($r->losing_player_history->player);
+            $revertPlayer($r->winning_player_history->player);
 
             if ($r->id === $result->id) {
-                $this->Histories->delete($r->losing_players_history);
-                $this->Histories->delete($r->winning_players_history);
+                $this->Histories->delete($r->losing_player_history);
+                $this->Histories->delete($r->winning_player_history);
 
                 return false;
             }

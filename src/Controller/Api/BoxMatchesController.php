@@ -73,6 +73,22 @@ class BoxMatchesController extends ApiController
      */
     public function add()
     {
-        $this->set('_serialize', true);
+        $boxMatch = $this->BoxMatches->newEntity($this->request->data);
+
+        $boxMatch->set('box_id', $this->request->params['box_id']);
+        $boxMatch->set('winning_player_id', $this->Auth->user('player.id'));
+
+        $this->set('boxMatch', $boxMatch);
+
+        if ($this->BoxMatches->save($boxMatch)) {
+            $this->set('_serialize', 'boxMatch');
+        } else {
+            $this->set([
+                'errors' => $result->errors(),
+                '_serialize' => true
+            ]);
+
+            $this->response->statusCode(400);
+        }
     }
 }

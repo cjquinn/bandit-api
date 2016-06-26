@@ -134,25 +134,23 @@ class BoxMatchesTable extends Table
     public function beforeSave(Event $event, EntityInterface $boxMatch, ArrayObject $options)
     {
         if ($boxMatch->isNew()) {
-            $clubId = Hash::get($this->Boxes->BoxLeagueCycles
+            $club = $this->Players->Clubs
                 ->find()
-                ->select(['club_id'])
-                ->innerJoinWith('Boxes', function ($q) use ($boxMatch) {
+                ->innerJoinWith('BoxLeagueCycles.Boxes', function ($q) use ($boxMatch) {
                     $q->where([
                         'Boxes.id' => $boxMatch->box_id
                     ]);
 
                     return $q;
                 })
-                ->hydrate(false)
-                ->first(), 'club_id');
+                ->firstOrFail();
 
             $losingPlayerResults = [];
             for ($i = 0; $i < $boxMatch->losses; $i++) {
                 $losingPlayerResult = $this->LosingPlayerResults->newEntity();
                 $losingPlayerResult->set([
                     'box_id' => $boxMatch->box_id,
-                    'club_id' => $clubId,
+                    'club_id' => $club->id,
                     'losing_player_id' => $boxMatch->winning_player_id,
                     'winning_player_id' => $boxMatch->losing_player_id
                 ], ['guard' => false]);
@@ -166,7 +164,7 @@ class BoxMatchesTable extends Table
                 $winningPlayerResult = $this->WinningPlayerResults->newEntity();
                 $winningPlayerResult->set([
                     'box_id' => $boxMatch->box_id,
-                    'club_id' => $clubId,
+                    'club_id' => $club->id,
                     'losing_player_id' => $boxMatch->losing_player_id,
                     'winning_player_id' => $boxMatch->winning_player_id
                 ], ['guard' => false]);
@@ -175,5 +173,25 @@ class BoxMatchesTable extends Table
             }
             $boxMatch->set('winning_player_results', $winningPlayerResults);
         }
+    }
+
+    /**
+     * @return int
+     */
+    public function losingPlayerScore(array $score)
+    {
+        return $score['losses'] + 1;
+    }
+
+    /**
+     * @return int
+     */
+    public function winningPlayerScore(array $score)
+    {
+        if ($score['wins'] < 3) {
+            return $score['wins'] + 1;
+        }
+
+        return 6 - $score['losses'];
     }
 }

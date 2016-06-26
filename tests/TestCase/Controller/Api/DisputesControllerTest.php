@@ -106,6 +106,14 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testAddBoxMatchResult()
+    {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+    }
+
+    /**
+     * @return void
+     */
     public function testAddPost()
     {
         $this->_setAjaxRequest();

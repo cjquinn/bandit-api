@@ -14,6 +14,7 @@ class PlayersTableTest extends TestCase
         'app.clubs',
         'app.clubs_players',
         'app.histories',
+        'app.logins',
         'app.players',
         'app.results'
     ];

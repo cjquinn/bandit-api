@@ -38,7 +38,9 @@ class ResultsTable extends Table
             ],
             'hasOne' => [
                 'Disputes',
-                'Histories',
+                'Histories' => [
+                    'foreignKey' => 'result_id',
+                ],
                 'LosingPlayerHistories' => [
                     'className' => 'Histories',
                     'foreignKey' => 'result_id',
@@ -200,21 +202,23 @@ class ResultsTable extends Table
             }
         };
 
-        $results = $results->filter(function ($r) use ($result, $revertPlayer) {
-            $revertPlayer($r->losing_player_history->player);
-            $revertPlayer($r->winning_player_history->player);
+        $results = $results
+            ->filter(function ($r) use ($result, $revertPlayer) {
+                $revertPlayer($r->losing_player_history->player);
+                $revertPlayer($r->winning_player_history->player);
 
-            if ($r->id === $result->id) {
-                $this->Histories->delete($r->losing_player_history);
-                $this->Histories->delete($r->winning_player_history);
+                if ($r->id === $result->id) {
+                    $this->Histories->delete($r->losing_player_history);
+                    $this->Histories->delete($r->winning_player_history);
 
-                return false;
-            }
-            
-            return true;
-        });
+                    return false;
+                }
+                
+                return true;
+            })
+            ->toArray();
 
-        foreach ($results->toArray() as $result) {
+        foreach ($results as $result) {
             $result->dirty('*', true);
             $this->save($result);
         }

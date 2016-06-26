@@ -144,9 +144,9 @@ class PlayersTable extends Table
     /**
      * @return float
      */
-    public function expectedScore($losingPlayersRating, $winningPlayersRating)
+    public function expectedScore($losingPlayerRating, $winningPlayerRating)
     {
-        return 1 / (1 + pow(10, ($winningPlayersRating - $losingPlayersRating) / 400));
+        return 1 / (1 + pow(10, ($winningPlayerRating - $losingPlayerRating) / 400));
     }
 
     /**
@@ -258,14 +258,14 @@ class PlayersTable extends Table
             }
         ]);
 
-        $losingPlayersExpectedScore = $this->expectedScore(
+        $losingPlayerExpectedScore = $this->expectedScore(
             $this->dailySnapshot($losingPlayer, $clubId, $date)['rating'],
             $this->dailySnapshot($winningPlayer, $clubId, $date)['rating']
         );
-        $winningPlayersExpectedScore = 1 - $losingPlayersExpectedScore;
+        $winningPlayerExpectedScore = 1 - $losingPlayerExpectedScore;
 
-        $losingPlayer->club->set('rating', $this->updatedRating($losingPlayer->club->rating, $losingPlayersExpectedScore, 0));
-        $winningPlayer->club->set('rating', $this->updatedRating($winningPlayer->club->rating, $winningPlayersExpectedScore, 1));
+        $losingPlayer->club->set('rating', $this->updatedRating($losingPlayer->club->rating, $losingPlayerExpectedScore, 0));
+        $winningPlayer->club->set('rating', $this->updatedRating($winningPlayer->club->rating, $winningPlayerExpectedScore, 1));
 
         $losingPlayer->club->set('losses', $losingPlayer->club->losses + 1);
         $winningPlayer->club->set('wins', $winningPlayer->club->wins + 1);

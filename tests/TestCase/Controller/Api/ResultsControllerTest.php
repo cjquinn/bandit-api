@@ -153,6 +153,14 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testDeleteBoxMatchResult()
+    {
+        $this->markTestIncomplete('This test has not been implemented yet.');
+    }
+
+    /**
+     * @return void
+     */
     public function testDeleteDelete()
     {
         $this->_setAuthSession(2);

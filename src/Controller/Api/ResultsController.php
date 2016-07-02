@@ -36,6 +36,11 @@ class ResultsController extends ApiController
         }
 
         if ($this->request->action === 'delete') {
+            // Box result
+            if ($this->Results->isBoxGame($this->request->params['id'])) {
+                return false;
+            }
+
             // Invalid player
             if (!$this->Results->isOwnedBy($this->request->params['id'], $this->Auth->user('player.id'))) {
                 return false;

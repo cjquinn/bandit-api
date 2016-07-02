@@ -140,6 +140,17 @@ class ResultsTable extends Table
     /**
      * @return bool
      */
+    public function isBoxGame($id)
+    {
+        return $this->exists([
+            'id' => $id,
+            'box_id IS NOT' => null
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
     public function isDisputed($id)
     {
         return $this->Disputes->exists([

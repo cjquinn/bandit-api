@@ -25,18 +25,32 @@ class BoxMatchesTable extends Table
         $this->addAssociations([
             'belongsTo' => [
                 'Boxes',
-                'LosingPlayers' => [
-                    'className' => 'Players',
-                    'foreignKey' => 'losing_player_id'
+                'LosingBoxesPlayers' => [
+                    'bindingKey' => [
+                        'box_id',
+                        'player_id'
+                    ],
+                    'className' => 'BoxesPlayers',
+                    'foreignKey' => [
+                        'box_id',
+                        'losing_player_id'
+                    ]
                 ],
                 'Players',
-                'WinningPlayers' => [
-                    'className' => 'Players',
-                    'foreignKey' => 'winning_player_id'
+                'WinningBoxesPlayers' => [
+                    'bindingKey' => [
+                        'box_id',
+                        'player_id'
+                    ],
+                    'className' => 'BoxesPlayers',
+                    'foreignKey' => [
+                        'box_id',
+                        'winning_player_id'
+                    ]
                 ]
             ],
             'hasMany' => [
-                'LosingPlayerResults' => [
+                'LosingBoxesPlayerResults' => [
                     'className' => 'Results',
                     'bindingKey' => [
                         'box_id',
@@ -49,7 +63,7 @@ class BoxMatchesTable extends Table
                         'winning_player_id'
                     ]
                 ],
-                'WinningPlayerResults' => [
+                'WinningBoxesPlayerResults' => [
                     'className' => 'Results',
                     'foreignKey' => $this->primaryKey()
                 ]
@@ -134,6 +148,29 @@ class BoxMatchesTable extends Table
     public function beforeSave(Event $event, EntityInterface $boxMatch, ArrayObject $options)
     {
         if ($boxMatch->isNew()) {
+            // Update losing players score
+            $losingBoxesPlayer = $this->LosingBoxesPlayers
+                ->find()
+                ->where([
+                    'box_id' => $boxMatch->box_id,
+                    'player_id' => $boxMatch->losing_player_id
+                ])
+                ->firstOrFail();
+
+            $losingBoxesPlayer->set('points', $this->losingPlayerPoints($boxMatch->score));
+            $boxMatch->set('losing_boxes_player', $losingBoxesPlayer);
+
+            // Update winning players score
+            $winningPlayer = $this->WinningBoxesPlayers
+                ->find()
+                ->where([
+                    'box_id' => $boxMatch->box_id,
+                    'player_id' => $boxMatch->winning_player_id
+                ])
+                ->firstOrFail();
+            $winningPlayer->set('points', $this->winningPlayerPoints($boxMatch->score));
+            $boxMatch->set('winning_boxes_player', $winningPlayer);
+
             $club = $this->Players->Clubs
                 ->find()
                 ->innerJoinWith('BoxLeagueCycles.Boxes', function ($q) use ($boxMatch) {
@@ -145,40 +182,42 @@ class BoxMatchesTable extends Table
                 })
                 ->firstOrFail();
 
-            $losingPlayerResults = [];
+            // Create losing player results
+            $losingBoxesPlayerResults = [];
             for ($i = 0; $i < $boxMatch->losses; $i++) {
-                $losingPlayerResult = $this->LosingPlayerResults->newEntity();
-                $losingPlayerResult->set([
+                $losingBoxesPlayerResult = $this->LosingBoxesPlayerResults->newEntity();
+                $losingBoxesPlayerResult->set([
                     'box_id' => $boxMatch->box_id,
                     'club_id' => $club->id,
                     'losing_player_id' => $boxMatch->winning_player_id,
                     'winning_player_id' => $boxMatch->losing_player_id
                 ], ['guard' => false]);
 
-                array_push($losingPlayerResults, $losingPlayerResult);
+                array_push($losingBoxesPlayerResults, $losingBoxesPlayerResult);
             }
-            $boxMatch->set('losing_player_results', $losingPlayerResults);
+            $boxMatch->set('losing_boxes_player_results', $losingBoxesPlayerResults);
 
-            $winningPlayerResults = [];
+            // Create winning player results
+            $winningBoxesPlayerResults = [];
             for ($i = 0; $i < $boxMatch->wins; $i++) {
-                $winningPlayerResult = $this->WinningPlayerResults->newEntity();
-                $winningPlayerResult->set([
+                $winningBoxesPlayerResult = $this->WinningBoxesPlayerResults->newEntity();
+                $winningBoxesPlayerResult->set([
                     'box_id' => $boxMatch->box_id,
                     'club_id' => $club->id,
                     'losing_player_id' => $boxMatch->losing_player_id,
                     'winning_player_id' => $boxMatch->winning_player_id
                 ], ['guard' => false]);
 
-                array_push($winningPlayerResults, $winningPlayerResult);
+                array_push($winningBoxesPlayerResults, $winningBoxesPlayerResult);
             }
-            $boxMatch->set('winning_player_results', $winningPlayerResults);
+            $boxMatch->set('winning_boxes_player_results', $winningBoxesPlayerResults);
         }
     }
 
     /**
      * @return int
      */
-    public function losingPlayerScore(array $score)
+    public function losingPlayerPoints(array $score)
     {
         return $score['losses'] + 1;
     }
@@ -186,7 +225,7 @@ class BoxMatchesTable extends Table
     /**
      * @return int
      */
-    public function winningPlayerScore(array $score)
+    public function winningPlayerPoints(array $score)
     {
         if ($score['wins'] < 3) {
             return $score['wins'] + 1;

@@ -35,17 +35,17 @@ class BoxMatchesController extends ApiController
             }
 
             // Non club losing player
-            if (!$this->BoxMatches->LosingPlayers->isAssignedToClub($losingPlayerId, $this->request->params['club_id'])) {
+            if (!$this->BoxMatches->Players->isAssignedToClub($losingPlayerId, $this->request->params['club_id'])) {
                 return false;
             }
 
             // Non box losing player
-            if (!$this->BoxMatches->LosingPlayers->isAssignedToBox($losingPlayerId, $this->request->params['box_id'])) {
+            if (!$this->BoxMatches->Players->isAssignedToBox($losingPlayerId, $this->request->params['box_id'])) {
                 return false;
             }
 
             // Non box winning player
-            if (!$this->BoxMatches->WinningPlayers->isAssignedToBox($this->Auth->user('player.id'), $this->request->params['box_id'])) {
+            if (!$this->BoxMatches->Players->isAssignedToBox($this->Auth->user('player.id'), $this->request->params['box_id'])) {
                 return false;
             }
 
@@ -60,7 +60,7 @@ class BoxMatchesController extends ApiController
             }
 
             // Existing disputes
-            if ($this->BoxMatches->WinningPlayers->hasDisputes($this->Auth->user('player.id'), $this->request->params['club_id'])) {
+            if ($this->BoxMatches->Players->hasDisputes($this->Auth->user('player.id'), $this->request->params['club_id'])) {
                 return false;
             }
         }

@@ -19,4 +19,15 @@ class BoxMatch extends Entity
         'wins' => true,
         '*' => false
     ];
+
+    /**
+     * @return array
+     */
+    protected function _getScore()
+    {
+        return [
+            'losses' => $this->losses ? $this->losses : 0,
+            'wins' => $this->wins ? $this->wins : 0
+        ];
+    }
 }

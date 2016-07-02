@@ -16,4 +16,12 @@ class BoxesPlayer extends Entity
     protected $_accessible = [
         '*' => false
     ];
+
+    /**
+     * @return int
+     */
+    protected function _setPoints($points)
+    {
+        return $this->points + $points;
+    }
 }

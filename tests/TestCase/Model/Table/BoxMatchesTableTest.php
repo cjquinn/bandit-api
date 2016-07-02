@@ -12,6 +12,7 @@ class BoxMatchesTableTest extends TestCase
         'app.box_league_cycles',
         'app.box_matches',
         'app.boxes',
+        'app.boxes_players',
         'app.clubs',
         'app.clubs_players',
         'app.histories',
@@ -112,22 +113,11 @@ class BoxMatchesTableTest extends TestCase
 
         $this->BoxMatches->save($boxMatch);
 
-        $this->assertNotNull($boxMatch->losing_player_results);
-        $this->assertNotNull($boxMatch->winning_player_results);
+        $this->assertNotNull($boxMatch->losing_boxes_player_results);
+        $this->assertNotNull($boxMatch->winning_boxes_player_results);
 
-        $this->assertEquals(count($boxMatch->losing_player_results), 2);
-        $this->assertEquals(count($boxMatch->winning_player_results), 3);
-
-        $boxMatch = $this->BoxMatches->find()
-            ->contain([
-                'LosingPlayerResults',
-                'WinningPlayerResults'
-            ])
-            ->where([
-                'BoxMatches.box_id' => 1,
-                'BoxMatches.losing_player_id' => 1,
-                'BoxMatches.winning_player_id' => 4
-            ]);
+        $this->assertEquals(count($boxMatch->losing_boxes_player_results), 2);
+        $this->assertEquals(count($boxMatch->winning_boxes_player_results), 3);
 
         $boxMatch = $this->BoxMatches->get([
             'box_id' => 1,
@@ -135,153 +125,158 @@ class BoxMatchesTableTest extends TestCase
             'winning_player_id' => 4
         ], [
             'contain' => [
-                'LosingPlayerResults',
-                'WinningPlayerResults'
+                'LosingBoxesPlayerResults',
+                'LosingBoxesPlayers',
+                'WinningBoxesPlayerResults',
+                'WinningBoxesPlayers'
             ]
         ]);
 
-        $this->assertNotNull($boxMatch->losing_player_results);
-        $this->assertNotNull($boxMatch->winning_player_results);
+        $this->assertEquals($boxMatch->losing_boxes_player->points, 4);
+        $this->assertEquals($boxMatch->winning_boxes_player->points, 4);
 
-        $this->assertEquals(count($boxMatch->losing_player_results), 2);
-        $this->assertEquals(count($boxMatch->winning_player_results), 3);
+        $this->assertNotNull($boxMatch->losing_boxes_player_results);
+        $this->assertNotNull($boxMatch->winning_boxes_player_results);
+
+        $this->assertEquals(count($boxMatch->losing_boxes_player_results), 2);
+        $this->assertEquals(count($boxMatch->winning_boxes_player_results), 3);
     }
 
     /**
      * @return void
      */
-    public function testLosingPlayerScore()
+    public function testLosingPlayerPoints()
     {
-        $losingPlayerScore = $this->BoxMatches->losingPlayerScore([
+        $losingPlayerPoints = $this->BoxMatches->losingPlayerPoints([
             'wins' => 3,
             'losses' => 0
         ]);
 
-        $this->assertEquals($losingPlayerScore, 1);
+        $this->assertEquals($losingPlayerPoints, 1);
 
-        $losingPlayerScore = $this->BoxMatches->losingPlayerScore([
+        $losingPlayerPoints = $this->BoxMatches->losingPlayerPoints([
             'wins' => 3,
             'losses' => 1
         ]);
 
-        $this->assertEquals($losingPlayerScore, 2);
+        $this->assertEquals($losingPlayerPoints, 2);
 
-        $losingPlayerScore = $this->BoxMatches->losingPlayerScore([
+        $losingPlayerPoints = $this->BoxMatches->losingPlayerPoints([
             'wins' => 3,
             'losses' => 2
         ]);
 
-        $this->assertEquals($losingPlayerScore, 3);
+        $this->assertEquals($losingPlayerPoints, 3);
 
-        $losingPlayerScore = $this->BoxMatches->losingPlayerScore([
+        $losingPlayerPoints = $this->BoxMatches->losingPlayerPoints([
             'wins' => 2,
             'losses' => 0
         ]);
 
-        $this->assertEquals($losingPlayerScore, 1);
+        $this->assertEquals($losingPlayerPoints, 1);
 
-        $losingPlayerScore = $this->BoxMatches->losingPlayerScore([
+        $losingPlayerPoints = $this->BoxMatches->losingPlayerPoints([
             'wins' => 2,
             'losses' => 1
         ]);
 
-        $this->assertEquals($losingPlayerScore, 2);
+        $this->assertEquals($losingPlayerPoints, 2);
 
-        $losingPlayerScore = $this->BoxMatches->losingPlayerScore([
+        $losingPlayerPoints = $this->BoxMatches->losingPlayerPoints([
             'wins' => 2,
             'losses' => 2
         ]);
 
-        $this->assertEquals($losingPlayerScore, 3);
+        $this->assertEquals($losingPlayerPoints, 3);
 
-        $losingPlayerScore = $this->BoxMatches->losingPlayerScore([
+        $losingPlayerPoints = $this->BoxMatches->losingPlayerPoints([
             'wins' => 1,
             'losses' => 0
         ]);
 
-        $this->assertEquals($losingPlayerScore, 1);
+        $this->assertEquals($losingPlayerPoints, 1);
 
-        $losingPlayerScore = $this->BoxMatches->losingPlayerScore([
+        $losingPlayerPoints = $this->BoxMatches->losingPlayerPoints([
             'wins' => 1,
             'losses' => 1
         ]);
 
-        $this->assertEquals($losingPlayerScore, 2);
+        $this->assertEquals($losingPlayerPoints, 2);
 
-        $losingPlayerScore = $this->BoxMatches->losingPlayerScore([
+        $losingPlayerPoints = $this->BoxMatches->losingPlayerPoints([
             'wins' => 0,
             'losses' => 0
         ]);
 
-        $this->assertEquals($losingPlayerScore, 1);
+        $this->assertEquals($losingPlayerPoints, 1);
     }
 
     /**
      * @return void
      */
-    public function testWinningPlayerScore()
+    public function testWinningPlayerPoints()
     {
-        $winningPlayerScore = $this->BoxMatches->winningPlayerScore([
+        $winningPlayerPoints = $this->BoxMatches->winningPlayerPoints([
             'wins' => 3,
             'losses' => 0
         ]);
 
-        $this->assertEquals($winningPlayerScore, 6);
+        $this->assertEquals($winningPlayerPoints, 6);
 
-        $winningPlayerScore = $this->BoxMatches->winningPlayerScore([
+        $winningPlayerPoints = $this->BoxMatches->winningPlayerPoints([
             'wins' => 3,
             'losses' => 1
         ]);
 
-        $this->assertEquals($winningPlayerScore, 5);
+        $this->assertEquals($winningPlayerPoints, 5);
 
-        $winningPlayerScore = $this->BoxMatches->winningPlayerScore([
+        $winningPlayerPoints = $this->BoxMatches->winningPlayerPoints([
             'wins' => 3,
             'losses' => 2
         ]);
 
-        $this->assertEquals($winningPlayerScore, 4);
+        $this->assertEquals($winningPlayerPoints, 4);
 
-        $winningPlayerScore = $this->BoxMatches->winningPlayerScore([
+        $winningPlayerPoints = $this->BoxMatches->winningPlayerPoints([
             'wins' => 2,
             'losses' => 0
         ]);
 
-        $this->assertEquals($winningPlayerScore, 3);
+        $this->assertEquals($winningPlayerPoints, 3);
 
-        $winningPlayerScore = $this->BoxMatches->winningPlayerScore([
+        $winningPlayerPoints = $this->BoxMatches->winningPlayerPoints([
             'wins' => 2,
             'losses' => 1
         ]);
 
-        $this->assertEquals($winningPlayerScore, 3);
+        $this->assertEquals($winningPlayerPoints, 3);
 
-        $winningPlayerScore = $this->BoxMatches->winningPlayerScore([
+        $winningPlayerPoints = $this->BoxMatches->winningPlayerPoints([
             'wins' => 2,
             'losses' => 2
         ]);
 
-        $this->assertEquals($winningPlayerScore, 3);
+        $this->assertEquals($winningPlayerPoints, 3);
 
-        $winningPlayerScore = $this->BoxMatches->winningPlayerScore([
+        $winningPlayerPoints = $this->BoxMatches->winningPlayerPoints([
             'wins' => 1,
             'losses' => 0
         ]);
 
-        $this->assertEquals($winningPlayerScore, 2);
+        $this->assertEquals($winningPlayerPoints, 2);
 
-        $winningPlayerScore = $this->BoxMatches->winningPlayerScore([
+        $winningPlayerPoints = $this->BoxMatches->winningPlayerPoints([
             'wins' => 1,
             'losses' => 1
         ]);
 
-        $this->assertEquals($winningPlayerScore, 2);
+        $this->assertEquals($winningPlayerPoints, 2);
 
-        $winningPlayerScore = $this->BoxMatches->winningPlayerScore([
+        $winningPlayerPoints = $this->BoxMatches->winningPlayerPoints([
             'wins' => 0,
             'losses' => 0
         ]);
 
-        $this->assertEquals($winningPlayerScore, 1);
+        $this->assertEquals($winningPlayerPoints, 1);
     }
 }

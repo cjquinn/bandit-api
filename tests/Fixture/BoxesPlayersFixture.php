@@ -18,13 +18,13 @@ class BoxesPlayersFixture extends TestFixture
                 'box_id' => 1,
                 'box_league_cycle_id' => 1,
                 'player_id' => 1,
-                'points' => 0
+                'points' => 1
             ],
             [
                 'box_id' => 1,
                 'box_league_cycle_id' => 1,
                 'player_id' => 2,
-                'points' => 0
+                'points' => 2
             ],
             [
                 'box_id' => 1,

@@ -108,7 +108,21 @@ class DisputesControllerTest extends IntegrationTestCase
      */
     public function testAddBoxMatchResult()
     {
-        $this->markTestIncomplete('This test has not been implemented yet.');
+        $results = TableRegistry::get('Results');
+
+        $result = $results->get(3);
+        $result->set('box_id', 1);
+
+        $results->save($result);
+
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->post('/api/clubs/1/results/3/disputes.json', [
+            'message' => ''
+        ]);
+
+        $this->assertResponseCode(403);
     }
 
     /**

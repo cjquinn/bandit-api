@@ -30,6 +30,11 @@ class DisputesController extends ApiController
         }
 
         if ($this->request->action === 'add') {
+            // Box match result
+            if ($this->_result->box_id) {
+                return false;
+            }
+
             // Time expired
             if (!$this->_result->submitted->wasWithinLast('24 hours')) {
                 return false;

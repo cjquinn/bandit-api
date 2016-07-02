@@ -4,6 +4,8 @@ namespace App\Test\Fixture;
 
 use Cake\TestSuite\Fixture\TestFixture;
 
+use DateTime;
+
 class BoxMatchesFixture extends TestFixture
 {
 
@@ -18,7 +20,8 @@ class BoxMatchesFixture extends TestFixture
                 'box_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 2,
-                'disputed' => null
+                'disputed' => null,
+                'submitted' => new DateTime('yesterday')
             ]
         ];
 

@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Controller\Api;
 
 use App\Test\TestCase\Controller\ControllerTestTrait;
 
+use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
 class BoxMatchesControllerTest extends IntegrationTestCase
@@ -162,5 +163,91 @@ class BoxMatchesControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDisputeTimeExpired()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->put('/api/clubs/box-league-cycles/1/boxes/1/players/2/dispute.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDisputeInvalidLosingPlayer()
+    {
+        $boxMatches = TableRegistry::get('BoxMatches');
+
+        $boxMatch = $boxMatches->get([
+            'box_id' => 1,
+            'losing_player_id' => 1,
+            'winning_player_id' => 2
+        ]);
+        $boxMatch->set('submitted', new DateTime());
+
+        $boxMatches->save($boxMatch);
+
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(2);
+
+        $this->put('/api/clubs/box-league-cycles/1/boxes/1/players/2/dispute.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDisputeExistingDispute()
+    {
+        $boxMatches = TableRegistry::get('BoxMatches');
+
+        $boxMatch = $boxMatches->get([
+            'box_id' => 1,
+            'losing_player_id' => 1,
+            'winning_player_id' => 2
+        ]);
+        $boxMatch->set('submitted', new DateTime());
+        $boxMatch->set('disputed', new DateTime());
+
+        $boxMatches->save($boxMatch);
+
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->put('/api/clubs/box-league-cycles/1/boxes/1/players/2/dispute.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDisputeExistingPut()
+    {
+        $boxMatches = TableRegistry::get('BoxMatches');
+
+        $boxMatch = $boxMatches->get([
+            'box_id' => 1,
+            'losing_player_id' => 1,
+            'winning_player_id' => 2
+        ]);
+        $boxMatch->set('submitted', new DateTime());
+
+        $boxMatches->save($boxMatch);
+
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->put('/api/clubs/box-league-cycles/1/boxes/1/players/2/dispute.json', []);
+
+        $this->assertResponseCode(200);
     }
 }

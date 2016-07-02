@@ -47,6 +47,10 @@ class CreateBoxMatches extends AbstractMigration
             'default' => null,
             'null' => true,
         ]);
+        $table->addColumn('submitted', 'datetime', [
+            'default' => null,
+            'null' => true,
+        ]);
         $table->create();
 
         $this->query('CREATE INDEX box_id ON box_matches (box_id)');

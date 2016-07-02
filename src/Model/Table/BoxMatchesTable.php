@@ -74,6 +74,9 @@ class BoxMatchesTable extends Table
             'events' => [
                 'BoxMatch.disputed' => [
                     'disputed' => 'always'
+                ],
+                'Model.beforeSave' => [
+                    'submitted' => 'new'
                 ]
             ]
         ]);

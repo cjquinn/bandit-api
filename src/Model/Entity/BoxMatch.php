@@ -9,6 +9,7 @@ use Cake\ORM\Entity;
  * @property int $losing_player_id
  * @property int $winning_player_id
  * @property datetime $disputed
+ * @property datetime $submitted
  */
 class BoxMatch extends Entity
 {

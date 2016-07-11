@@ -2,6 +2,8 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\BoxMatch;
+
 use ArrayObject;
 
 use Cake\Datasource\EntityInterface;
@@ -11,6 +13,8 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
 use Cake\Validation\Validator;
+
+use DateTime;
 
 class BoxMatchesTable extends Table
 {
@@ -54,7 +58,7 @@ class BoxMatchesTable extends Table
 
         $this->addBehavior('Timestamp', [
             'events' => [
-                'BoxMatch.disputed' => [
+                'Model.BoxMatch.disputed' => [
                     'disputed' => 'always'
                 ],
                 'Model.beforeSave' => [
@@ -201,11 +205,56 @@ class BoxMatchesTable extends Table
     }
 
     /**
+     * @return void
+     */
+    public function dispute(BoxMatch $boxMatch)
+    {
+        $this->dispatchEvent('Model.BoxMatch.disputed', [
+            'boxMatch' => $boxMatch
+        ]);
+
+        $this->save($boxMatch);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDisputed($id)
+    {
+        return $this->exists([
+            'id' => $id,
+            'disputed IS NOT' => null
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLosingPlayer($id, $losingPlayerId)
+    {
+        return $this->exists([
+            'id' => $id,
+            'losing_player_id' => $losingPlayerId
+        ]);
+    }
+
+    /**
      * @return int
      */
     public function losingPlayerPoints(array $score)
     {
         return $score['losses'] + 1;
+    }
+
+    /**
+     * @return void
+     */
+    public function wasWithinLast($id, $period)
+    {
+        return $this->exists([
+            'id' => $id,
+            'submitted >=' => new DateTime('-' . $period)
+        ]);
     }
 
     /**

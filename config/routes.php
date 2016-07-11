@@ -53,7 +53,8 @@ Router::prefix('api', function ($routes) {
                     'map' => [
                         'dispute' => [
                             'action' => 'dispute',
-                            'method' => ['PATCH', 'PUT']
+                            'method' => ['PATCH', 'PUT'],
+                            'path' => '/:id/dispute'
                         ]
                     ]
                 ]);

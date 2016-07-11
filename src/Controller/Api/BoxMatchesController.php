@@ -65,6 +65,23 @@ class BoxMatchesController extends ApiController
             }
         }
 
+        if ($this->request->action === 'dispute') {
+            // Time expired
+            if (!$this->BoxMatches->wasWithinLast($this->request->params['id'], '24 hours')) {
+                return false;
+            }
+
+            // Invalid losing player id
+            if (!$this->BoxMatches->isLosingPlayer($this->request->params['id'], $this->Auth->user('player.id'))) {
+                return false;
+            }
+
+            // Existing dispute
+            if ($this->BoxMatches->isDisputed($this->request->params['id'])) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -90,5 +107,21 @@ class BoxMatchesController extends ApiController
 
             $this->response->statusCode(400);
         }
+    }
+
+    /**
+     * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     */
+    public function dispute($id)
+    {
+        $boxMatch = $this->BoxMatches->get($id);
+
+        $this->BoxMatches->dispute($boxMatch);
+
+        $this->set([
+            'boxMatch' => $boxMatch,
+            '_serialize' => 'boxMatch'
+        ]);
     }
 }

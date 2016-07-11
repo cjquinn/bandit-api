@@ -110,7 +110,7 @@ class PlayersTable extends Table
     }
 
     /**
-     * @return int
+     * @return array
      */
     public function dailySnapshot(Player $player, $clubId, DateTime $date)
     {

@@ -192,7 +192,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/api/clubs/box-league-cycles/1/boxes/1/box-matches/2.json', []);
+        $this->put('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches/1/dispute.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -212,7 +212,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->put('/api/clubs/box-league-cycles/1/boxes/1/box-matches/1.json', []);
+        $this->put('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches/1/dispute.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -233,7 +233,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/api/clubs/box-league-cycles/1/boxes/1/box-matches/1.json', []);
+        $this->put('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches/1/dispute.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -241,7 +241,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDisputeExistingPut()
+    public function testDisputePut()
     {
         $boxMatches = TableRegistry::get('BoxMatches');
 
@@ -253,7 +253,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/api/clubs/box-league-cycles/1/boxes/1/box-matches/1.json', []);
+        $this->put('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches/1/dispute.json', []);
 
         $this->assertResponseCode(200);
     }

@@ -7,6 +7,8 @@ use App\Test\TestCase\Controller\ControllerTestTrait;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
+use DateTime;
+
 class BoxMatchesControllerTest extends IntegrationTestCase
 {
 
@@ -168,12 +170,29 @@ class BoxMatchesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testAddPost()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->post('/api/clubs/1/box-league-cycles/1/boxes/1/box-matches.json', [
+            'losing_player_id' => 3,
+            'losses' => 0,
+            'wins' => 3
+        ]);
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
     public function testDisputeTimeExpired()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/api/clubs/box-league-cycles/1/boxes/1/players/2/dispute.json', []);
+        $this->put('/api/clubs/box-league-cycles/1/boxes/1/box-matches/2.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -185,11 +204,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
     {
         $boxMatches = TableRegistry::get('BoxMatches');
 
-        $boxMatch = $boxMatches->get([
-            'box_id' => 1,
-            'losing_player_id' => 1,
-            'winning_player_id' => 2
-        ]);
+        $boxMatch = $boxMatches->get(1);
         $boxMatch->set('submitted', new DateTime());
 
         $boxMatches->save($boxMatch);
@@ -197,7 +212,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->put('/api/clubs/box-league-cycles/1/boxes/1/players/2/dispute.json', []);
+        $this->put('/api/clubs/box-league-cycles/1/boxes/1/box-matches/1.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -209,11 +224,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
     {
         $boxMatches = TableRegistry::get('BoxMatches');
 
-        $boxMatch = $boxMatches->get([
-            'box_id' => 1,
-            'losing_player_id' => 1,
-            'winning_player_id' => 2
-        ]);
+        $boxMatch = $boxMatches->get(1);
         $boxMatch->set('submitted', new DateTime());
         $boxMatch->set('disputed', new DateTime());
 
@@ -222,7 +233,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/api/clubs/box-league-cycles/1/boxes/1/players/2/dispute.json', []);
+        $this->put('/api/clubs/box-league-cycles/1/boxes/1/box-matches/1.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -234,11 +245,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
     {
         $boxMatches = TableRegistry::get('BoxMatches');
 
-        $boxMatch = $boxMatches->get([
-            'box_id' => 1,
-            'losing_player_id' => 1,
-            'winning_player_id' => 2
-        ]);
+        $boxMatch = $boxMatches->get(1);
         $boxMatch->set('submitted', new DateTime());
 
         $boxMatches->save($boxMatch);
@@ -246,7 +253,7 @@ class BoxMatchesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/api/clubs/box-league-cycles/1/boxes/1/players/2/dispute.json', []);
+        $this->put('/api/clubs/box-league-cycles/1/boxes/1/box-matches/1.json', []);
 
         $this->assertResponseCode(200);
     }

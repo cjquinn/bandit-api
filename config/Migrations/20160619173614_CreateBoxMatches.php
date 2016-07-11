@@ -6,16 +6,9 @@ class CreateBoxMatches extends AbstractMigration
     /**
      * @return void
      */
-    public function up()
+    public function change()
     {
-        $table = $this->table('box_matches', [
-            'id' => false,
-            'primary_key' => [
-                'box_id',
-                'losing_player_id',
-                'winning_player_id'
-            ]
-        ]);
+        $table = $this->table('box_matches');
         $table->addColumn('box_id', 'integer', [
             'default' => null,
             'limit' => 11,
@@ -52,15 +45,5 @@ class CreateBoxMatches extends AbstractMigration
             'null' => true,
         ]);
         $table->create();
-
-        $this->query('CREATE INDEX box_id ON box_matches (box_id)');
-    }
-
-    /**
-     * @return void
-     */
-    public function down()
-    {
-        $this->dropTable('box_matches');
     }
 }

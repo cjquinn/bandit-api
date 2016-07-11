@@ -20,8 +20,6 @@ class BoxMatchesTable extends Table
      */
     public function initialize(array $config)
     {
-        $this->primaryKey(['box_id', 'losing_player_id', 'winning_player_id']);
-
         $this->addAssociations([
             'belongsTo' => [
                 'Boxes',
@@ -50,23 +48,7 @@ class BoxMatchesTable extends Table
                 ]
             ],
             'hasMany' => [
-                'LosingBoxesPlayerResults' => [
-                    'className' => 'Results',
-                    'bindingKey' => [
-                        'box_id',
-                        'winning_player_id',
-                        'losing_player_id'
-                    ],
-                    'foreignKey' => [
-                        'box_id',
-                        'losing_player_id',
-                        'winning_player_id'
-                    ]
-                ],
-                'WinningBoxesPlayerResults' => [
-                    'className' => 'Results',
-                    'foreignKey' => $this->primaryKey()
-                ]
+                'Results'
             ]
         ]);
 
@@ -171,6 +153,7 @@ class BoxMatchesTable extends Table
                     'player_id' => $boxMatch->winning_player_id
                 ])
                 ->firstOrFail();
+
             $winningPlayer->set('points', $this->winningPlayerPoints($boxMatch->score));
             $boxMatch->set('winning_boxes_player', $winningPlayer);
 
@@ -185,35 +168,35 @@ class BoxMatchesTable extends Table
                 })
                 ->firstOrFail();
 
-            // Create losing player results
-            $losingBoxesPlayerResults = [];
-            for ($i = 0; $i < $boxMatch->losses; $i++) {
-                $losingBoxesPlayerResult = $this->LosingBoxesPlayerResults->newEntity();
-                $losingBoxesPlayerResult->set([
-                    'box_id' => $boxMatch->box_id,
-                    'club_id' => $club->id,
-                    'losing_player_id' => $boxMatch->winning_player_id,
-                    'winning_player_id' => $boxMatch->losing_player_id
-                ], ['guard' => false]);
+            $results = [];
 
-                array_push($losingBoxesPlayerResults, $losingBoxesPlayerResult);
-            }
-            $boxMatch->set('losing_boxes_player_results', $losingBoxesPlayerResults);
+            $createResults = function ($isWinner) use ($boxMatch, $club, &$results) {
+                if ($isWinner) {
+                    $count = $boxMatch->wins;
+                    $losingPlayerId = $boxMatch->losing_player_id;
+                    $winningPlayerId = $boxMatch->winning_player_id;
+                } else {
+                    $count = $boxMatch->losses;
+                    $losingPlayerId = $boxMatch->winning_player_id;
+                    $winningPlayerId = $boxMatch->losing_player_id;
+                }
 
-            // Create winning player results
-            $winningBoxesPlayerResults = [];
-            for ($i = 0; $i < $boxMatch->wins; $i++) {
-                $winningBoxesPlayerResult = $this->WinningBoxesPlayerResults->newEntity();
-                $winningBoxesPlayerResult->set([
-                    'box_id' => $boxMatch->box_id,
-                    'club_id' => $club->id,
-                    'losing_player_id' => $boxMatch->losing_player_id,
-                    'winning_player_id' => $boxMatch->winning_player_id
-                ], ['guard' => false]);
+                for ($i = 0; $i < $count; $i++) {
+                    $result = $this->Results->newEntity();
+                    $result->set([
+                        'box_id' => $boxMatch->box_id,
+                        'club_id' => $club->id,
+                        'losing_player_id' => $losingPlayerId,
+                        'winning_player_id' => $winningPlayerId
+                    ], ['guard' => false]);
+                    array_push($results, $result);
+                }
+            };
 
-                array_push($winningBoxesPlayerResults, $winningBoxesPlayerResult);
-            }
-            $boxMatch->set('winning_boxes_player_results', $winningBoxesPlayerResults);
+            $createResults(true);
+            $createResults(false);
+
+            $boxMatch->set('results', $results);
         }
     }
 

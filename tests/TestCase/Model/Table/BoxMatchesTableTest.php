@@ -113,21 +113,12 @@ class BoxMatchesTableTest extends TestCase
 
         $this->BoxMatches->save($boxMatch);
 
-        $this->assertNotNull($boxMatch->losing_boxes_player_results);
-        $this->assertNotNull($boxMatch->winning_boxes_player_results);
+        $this->assertNotNull($boxMatch->results);
+        $this->assertEquals(count($boxMatch->results), 5);
 
-        $this->assertEquals(count($boxMatch->losing_boxes_player_results), 2);
-        $this->assertEquals(count($boxMatch->winning_boxes_player_results), 3);
-
-        $boxMatch = $this->BoxMatches->get([
-            'box_id' => 1,
-            'losing_player_id' => 1,
-            'winning_player_id' => 4
-        ], [
+        $boxMatch = $this->BoxMatches->get($boxMatch->id, [
             'contain' => [
-                'LosingBoxesPlayerResults',
                 'LosingBoxesPlayers',
-                'WinningBoxesPlayerResults',
                 'WinningBoxesPlayers'
             ]
         ]);
@@ -135,11 +126,23 @@ class BoxMatchesTableTest extends TestCase
         $this->assertEquals($boxMatch->losing_boxes_player->points, 4);
         $this->assertEquals($boxMatch->winning_boxes_player->points, 4);
 
-        $this->assertNotNull($boxMatch->losing_boxes_player_results);
-        $this->assertNotNull($boxMatch->winning_boxes_player_results);
+        $totalLosingPlayerResults = $this->BoxMatches->Results
+            ->findByBoxMatchId($boxMatch->id)
+            ->where([
+                'winning_player_id' => 1
+            ])
+            ->count();
 
-        $this->assertEquals(count($boxMatch->losing_boxes_player_results), 2);
-        $this->assertEquals(count($boxMatch->winning_boxes_player_results), 3);
+        $this->assertEquals(2, $totalLosingPlayerResults);
+
+        $totalWinningPlayerResults = $this->BoxMatches->Results
+            ->findByBoxMatchId($boxMatch->id)
+            ->where([
+                'winning_player_id' => 4
+            ])
+            ->count();
+
+        $this->assertEquals(3, $totalWinningPlayerResults);
     }
 
     /**

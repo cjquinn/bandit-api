@@ -17,6 +17,7 @@ class BoxMatchesFixture extends TestFixture
     {
         $this->records = [
             [
+                'id' => 1,
                 'box_id' => 1,
                 'losing_player_id' => 1,
                 'winning_player_id' => 2,

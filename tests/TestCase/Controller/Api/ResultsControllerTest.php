@@ -112,7 +112,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $results = TableRegistry::get('Results');
 
         $result = $results->get(3);
-        $result->set('box_id', 1);
+        $result->set('box_match_id', 1);
 
         $results->save($result);
 

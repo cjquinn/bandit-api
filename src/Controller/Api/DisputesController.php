@@ -31,7 +31,7 @@ class DisputesController extends ApiController
 
         if ($this->request->action === 'add') {
             // Box match result
-            if ($this->_result->box_id) {
+            if ($this->_result->box_match_id) {
                 return false;
             }
 

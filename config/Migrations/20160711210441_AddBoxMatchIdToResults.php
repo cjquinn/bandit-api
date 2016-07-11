@@ -1,7 +1,7 @@
 <?php
 use Migrations\AbstractMigration;
 
-class AddBoxIdToResults extends AbstractMigration
+class AddBoxMatchIdToResults extends AbstractMigration
 {
     /**
      * Change Method.
@@ -13,13 +13,13 @@ class AddBoxIdToResults extends AbstractMigration
     public function change()
     {
         $table = $this->table('results');
-        $table->addColumn('box_id', 'integer', [
+        $table->addColumn('box_match_id', 'integer', [
             'after' => 'id',
             'default' => null,
             'limit' => 11,
-            'null' => true
+            'null' => true,
         ]);
-        $table->addForeignKey('box_id', 'boxes', 'id', [
+        $table->addForeignKey('box_match_id', 'box_matches', 'id', [
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);

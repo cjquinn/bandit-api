@@ -45,8 +45,17 @@ Router::prefix('api', function ($routes) {
                  * BoxMatches
                  */
                 $routes->resources('BoxMatches', [
-                    'only' => ['create'],
-                    'inflect' => 'dasherize'
+                    'inflect' => 'dasherize',
+                    'only' => [
+                        'create',
+                        'dispute'
+                    ],
+                    'map' => [
+                        'dispute' => [
+                            'action' => 'dispute',
+                            'method' => ['PATCH', 'PUT']
+                        ]
+                    ]
                 ]);
 
                 /**

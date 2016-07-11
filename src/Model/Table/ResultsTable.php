@@ -24,7 +24,7 @@ class ResultsTable extends Table
     {
         $this->addAssociations([
             'belongsTo' => [
-                'Boxes',
+                'BoxMatches',
                 'Clubs',
                 'LosingPlayers' => [
                     'className' => 'Players',
@@ -84,7 +84,7 @@ class ResultsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['box_id'], 'Boxes'));
+        $rules->add($rules->existsIn(['box_match_id'], 'BoxMatches'));
         $rules->add($rules->existsIn(['club_id'], 'Clubs'));
         $rules->add($rules->existsIn(['losing_player_id'], 'Players'));
         $rules->add($rules->existsIn(['winning_player_id'], 'Players'));
@@ -144,7 +144,7 @@ class ResultsTable extends Table
     {
         return $this->exists([
             'id' => $id,
-            'box_id IS NOT' => null
+            'box_match_id IS NOT' => null
         ]);
     }
 

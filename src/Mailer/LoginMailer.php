@@ -22,7 +22,6 @@ class LoginMailer extends Mailer
             ->subject('Activate account')
             ->from(Configure::read('EmailAddresses.welcome'))
             ->set(['login' => $login])
-            ->template('activateAccount')
             ->emailFormat('both');
     }
 
@@ -37,7 +36,6 @@ class LoginMailer extends Mailer
             ->subject('Reset password')
             ->from(Configure::read('EmailAddresses.support'))
             ->set(['login' => $login])
-            ->template('resetPassword')
             ->emailFormat('both');
     }
 
@@ -46,13 +44,13 @@ class LoginMailer extends Mailer
      */
     public function implementedEvents()
     {
-        return defined('TESTING') ? [] : ['Model.afterSave' => 'afterRegister'];
+        return defined('TESTING') ? [] : ['Model.afterSave' => 'onRegistration'];
     }
 
     /**
      * @return void
      */
-    public function afterRegister(Event $event, Login $login)
+    public function onRegistration(Event $event, Login $login)
     {
         if ($login->isNew()) {
             $this->send('activateAccount', [$login]);

@@ -9,6 +9,7 @@ class ResultsTableTest extends TestCase
 {
 
     public $fixtures = [
+        'app.box_matches',
         'app.clubs',
         'app.clubs_players',
         'app.disputes',
@@ -41,11 +42,15 @@ class ResultsTableTest extends TestCase
     /**
      * @return void
      */
-    public function testNullify()
+    public function testDelete()
     {
         $result = $this->Results->get(2);
 
-        $this->Results->nullify($result);
+        $this->Results->delete($result);
+
+        $this->assertFalse($this->Results->exists([
+            'id' => 2
+        ]));
 
         $christy = $this->Results->Players
             ->findById(1)

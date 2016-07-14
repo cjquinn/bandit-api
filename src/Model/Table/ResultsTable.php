@@ -97,6 +97,12 @@ class ResultsTable extends Table
      */
     public function beforeDelete(Event $event, Result $result, ArrayObject $options)
     {
+        $this->loadInto($result, [
+            'Disputes'
+        ]);
+
+        $this->Disputes->delete($result->dispute);
+
         $this->nullify($result);
     }
 
@@ -175,48 +181,102 @@ class ResultsTable extends Table
      */
     public function nullify(Result $result)
     {
-        $clubId = $result->club_id;
-        $date = new DateTime($result->submitted->i18nFormat('Y-M-d'));
-        $players = [];
+        $resultIds = function ($result) use (&$resultIds) {
+            if (!$result) {
+                return [];
+            }
+
+            $playerIds = [
+                $result['losing_player_id'],
+                $result['winning_player_id']
+            ];
+            $select = [
+                'id',
+                'losing_player_id',
+                'winning_player_id',
+                'submitted'
+            ];
+
+            $left = $this
+                ->find()
+                ->select($select)
+                ->where([
+                    'id !=' => $result['id'],
+                    'losing_player_id IN' => $playerIds,
+                    'submitted >=' => $result['submitted']
+                ])
+                ->hydrate(false)
+                ->first();
+
+            $right = $this
+                ->find()
+                ->select($select)
+                ->where([
+                    'id !=' => $result['id'],
+                    'winning_player_id IN' => $playerIds,
+                    'submitted >=' => $result['submitted']
+                ])
+                ->hydrate(false)
+                ->first();
+
+            return [$result['id'] => $result['id']] + $resultIds($left) + $resultIds($right);
+        };
+
         $results = $this
             ->find()
+            ->where([
+                'Results.id IN' => $resultIds($result)
+            ])
             ->contain([
-                'LosingPlayerHistories.Players.Club' => function ($q) use ($clubId) {
+                'LosingPlayerHistories.Players.Club' => function ($q) use ($result) {
                     $q->where([
-                        'Club.club_id' => $clubId
+                        'Club.club_id' => $result->club_id
                     ]);
 
                     return $q;
                 },
-                'WinningPlayerHistories.Players.Club' => function ($q) use ($clubId) {
+                'WinningPlayerHistories.Players.Club' => function ($q) use ($result) {
                     $q->where([
-                        'Club.club_id' => $clubId
+                        'Club.club_id' => $result->club_id
                     ]);
 
                     return $q;
                 }
             ])
-            ->innerJoinWith('LosingPlayerHistories')
-            ->where([
-                'submitted >=' => $date
+            ->order([
+                'submitted' => 'ASC'
             ]);
 
-        
-        $revertPlayer = function ($player) use ($clubId, $date, &$players) {
-            if (!isset($players[$player->id])) {
-                $player->club->set($this->Players->dailySnapshot($player, $clubId, $date), [
+        $revertedPlayers = [];
+
+        $revertPlayer = function ($history) use (&$revertedPlayers) {
+            if (!isset($revertedPlayers[$history->player->id])) {
+                $snapshot = [
+                    'rating' => $history['snapshot']['rating'] - $history['snapshot']['difference']
+                ];
+
+                if ($history->is_winner) {
+                    $snapshot['losses'] = $history['snapshot']['losses'];
+                    $snapshot['wins'] = $history['snapshot']['wins'] - 1;
+                } else {
+                    $snapshot['losses'] = $history['snapshot']['losses'] - 1;
+                    $snapshot['wins'] = $history['snapshot']['wins'];
+                }
+
+                $history->player->club->set($snapshot, [
                     'guard' => false
                 ]);
-                $this->Players->Club->save($player->club);
 
-                $players[$player->id] = true;
+                $this->Players->Club->save($history->player->club);
+
+                $revertedPlayers[$history->player->id] = true;
             }
         };
 
         $results = $results
             ->filter(function ($r) use ($result, $revertPlayer) {
-                $revertPlayer($r->losing_player_history->player);
-                $revertPlayer($r->winning_player_history->player);
+                $revertPlayer($r->losing_player_history);
+                $revertPlayer($r->winning_player_history);
 
                 if ($r->id === $result->id) {
                     $this->Histories->delete($r->losing_player_history);
@@ -231,6 +291,7 @@ class ResultsTable extends Table
 
         foreach ($results as $result) {
             $result->dirty('*', true);
+
             $this->save($result);
         }
     }

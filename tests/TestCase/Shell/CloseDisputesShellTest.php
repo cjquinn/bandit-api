@@ -52,21 +52,17 @@ class CloseDisputesShellTest extends TestCase
         $result = $results->get(2);
         $result->set('submitted', new Time('49 hours ago'));
 
-        $results->save($result);
+        $results->save($result, [
+            'ignoreEvents' => true
+        ]);
 
         $this->CloseDisputes->main();
 
-        $dipute = TableRegistry::get('Disputes')->get(2, [
-            'contain' => [
-                'Results' => [
-                    'LosingPlayers',
-                    'WinningPlayers'
-                ]
-            ]
-        ]);
-
-        $this->assertTrue(!is_null($dipute->is_resolved) && !$dipute->is_resolved);
-        $this->assertEquals(3, $dipute->result->losing_player->reputation);
-        $this->assertEquals(-10, $dipute->result->winning_player->reputation);
+        $this->assertFalse($results->exists([
+            'id' => 2
+        ]));
+        $this->assertFalse($results->Disputes->exists([
+            'result_id' => 2
+        ]));
     }
 }

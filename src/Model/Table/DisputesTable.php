@@ -63,28 +63,30 @@ class DisputesTable extends Table
      */
     public function afterSave(Event $event, Dispute $dispute, ArrayObject $options)
     {
-        if (!$dispute->isNew()) {
-            if (!$dispute->result) {
-                $this->loadInto($dispute, [
-                    'Results' => [
-                        'LosingPlayers',
-                        'WinningPlayers'
-                    ]
-                ]);
+        if (!isset($options['ignoreEvents'])) {
+            if (!$dispute->isNew()) {
+                if (!$dispute->result) {
+                    $this->loadInto($dispute, [
+                        'Results' => [
+                            'LosingPlayers',
+                            'WinningPlayers'
+                        ]
+                    ]);
+                }
+
+                if (!$dispute->result->submitted->wasWithinLast('48 hours')) {
+                    $this->Results->Players->updateReputation($dispute->result->winning_player, -10);
+                } elseif (!$dispute->is_resolved) {
+                    $this->Results->Players->updateReputation($dispute->result->losing_player, -10);
+                    $this->Results->Players->updateReputation($dispute->result->winning_player, -10);
+
+                    $this->Results->Players->save($dispute->result->losing_player);
+                }
+
+                $this->Results->Players->save($dispute->result->winning_player);
+
+                $this->Results->delete($dispute->result);
             }
-
-            if (!$dispute->result->submitted->wasWithinLast('48 hours')) {
-                $this->Results->Players->updateReputation($dispute->result->winning_player, -10);
-            } elseif (!$dispute->is_resolved) {
-                $this->Results->Players->updateReputation($dispute->result->losing_player, -10);
-                $this->Results->Players->updateReputation($dispute->result->winning_player, -10);
-
-                $this->Results->Players->save($dispute->result->losing_player);
-            }
-
-            $this->Results->Players->save($dispute->result->winning_player);
-
-            $this->Results->delete($dispute->result);
         }
     }
 }

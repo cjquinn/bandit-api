@@ -148,7 +148,9 @@ class DisputesControllerTest extends IntegrationTestCase
         $disputes = TableRegistry::get('Disputes');
         $dispute = $disputes->get(2);
         $dispute->set('is_resolved', true);
-        $disputes->save($dispute);
+        $disputes->save($dispute, [
+            'ignoreEvents' => true
+        ]);
 
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);

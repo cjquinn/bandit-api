@@ -271,6 +271,38 @@ class ResultsTable extends Table
     }
 
     /**
+     * @return array
+     */
+    public function idTree($result)
+    {
+        if (!$result) {
+            return [];
+        }
+
+        $playerIds = [
+            $result->losing_player_id,
+            $result->winning_player_id
+        ];
+        $where = [
+            'id !=' => $result->id,
+            'club_id' => $result->club_id,
+            'submitted >' => $result->submitted
+        ];
+
+        $left = $this
+            ->find()
+            ->where($where + ['losing_player_id IN' => $playerIds])
+            ->first();
+
+        $right = $this
+            ->find()
+            ->where($where + ['winning_player_id IN' => $playerIds])
+            ->first();
+
+        return [$result->id => $result->id] + $this->idTree($left) + $this->idTree($right);
+    }
+
+    /**
      * @return bool
      */
     public function isBoxGame($id)

@@ -106,12 +106,14 @@ class ResultsTableTest extends TestCase
     {
         // Create some results
         $dates = [
-            '2 days ago' => [
+            '49 hours ago' => [
                 [
                     // 4
                     'losing_player_id' => 1,
                     'winning_player_id' => 2
-                ],
+                ]
+            ],
+            '48 hours ago' => [
                 [
                     // 5
                     'losing_player_id' => 2,
@@ -149,13 +151,13 @@ class ResultsTableTest extends TestCase
         foreach ($dates as $date => $results) {
             $date = new DateTime($date);
 
-            foreach ($results as $result) {
+            foreach ($results as $data) {
                 $result = $this->Results->newEntity();
 
                 $result->set([
                     'club_id' => 2,
-                    'losing_player_id' => $result['losing_player_id'],
-                    'winning_player_id' => $result['winning_player_id'],
+                    'losing_player_id' => $data['losing_player_id'],
+                    'winning_player_id' => $data['winning_player_id'],
                     'submitted' => $date
                 ], ['guard' => false]);
 
@@ -171,7 +173,12 @@ class ResultsTableTest extends TestCase
 
         $resultTree = $this->Results->idTree($firstResult);
 
-        $expected = [4, 5, 7, 9];
+        $expected = [
+            4 => 4,
+            5 => 5,
+            9 => 9,
+            7 => 7
+        ];
         $this->assertEquals($expected, $resultTree);
     }
 }

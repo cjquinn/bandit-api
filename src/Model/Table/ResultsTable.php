@@ -138,47 +138,10 @@ class ResultsTable extends Table
      */
     public function beforeDelete(Event $event, Result $result, ArrayObject $options)
     {
-        $resultIds = function ($result) use (&$resultIds) {
-            if (!$result) {
-                return [];
-            }
-
-            $playerIds = [
-                $result['losing_player_id'],
-                $result['winning_player_id']
-            ];
-            $select = [
-                'id',
-                'losing_player_id',
-                'winning_player_id',
-                'submitted'
-            ];
-            $where = [
-                'id !=' => $result['id'],
-                'submitted >=' => $result['submitted']
-            ];
-
-            $left = $this
-                ->find()
-                ->select($select)
-                ->where($where + ['losing_player_id IN' => $playerIds])
-                ->hydrate(false)
-                ->first();
-
-            $right = $this
-                ->find()
-                ->select($select)
-                ->where($where + ['winning_player_id IN' => $playerIds])
-                ->hydrate(false)
-                ->first();
-
-            return [$result['id'] => $result['id']] + $resultIds($left) + $resultIds($right);
-        };
-
         $results = $this
             ->find()
             ->where([
-                'Results.id IN' => $resultIds($result)
+                'Results.id IN' => $this->idTree($result)
             ])
             ->contain([
                 'LosingPlayerHistories.Players.Club' => function ($q) use ($result) {

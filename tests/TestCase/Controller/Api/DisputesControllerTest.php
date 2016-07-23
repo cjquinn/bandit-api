@@ -247,11 +247,5 @@ class DisputesControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(200);
-
-        $christy = TableRegistry::get('Players')->get(1);
-        $tom = TableRegistry::get('Players')->get(3);
-
-        $this->assertEquals(-8, $christy->reputation);
-        $this->assertEquals(-10, $tom->reputation);
     }
 }

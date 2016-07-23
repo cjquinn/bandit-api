@@ -37,7 +37,9 @@ class ResultsTable extends Table
                 ]
             ],
             'hasOne' => [
-                'Disputes',
+                'Disputes' => [
+                    'dependent' => true
+                ],
                 'Histories' => [
                     'foreignKey' => 'result_id',
                 ],
@@ -95,91 +97,46 @@ class ResultsTable extends Table
     /**
      * @return void
      */
-    public function beforeDelete(Event $event, Result $result, ArrayObject $options)
-    {
-        $this->loadInto($result, [
-            'Disputes'
-        ]);
-
-        $this->Disputes->delete($result->dispute);
-
-        $this->nullify($result);
-    }
-
-    /**
-     * @return void
-     */
     public function beforeSave(Event $event, Result $result, ArrayObject $options)
     {
-        $losingPlayer = $this->Players->get($result->losing_player_id);
-        $winningPlayer = $this->Players->get($result->winning_player_id);
+        if (!isset($options['ignoreEvents'])) {
+            $losingPlayer = $this->Players->get($result->losing_player_id);
+            $winningPlayer = $this->Players->get($result->winning_player_id);
 
-        if ($result->isNew()) {
-            $this->Players->updateReputation($losingPlayer, 1);
-            $this->Players->updateReputation($winningPlayer, 1);
-        } elseif (!$result->losing_player_history || !$result->winning_player_history) {
-            $this->loadInto($result, [
-                'LosingPlayerHistories',
-                'WinningPlayerHistories'
+            if ($result->isNew()) {
+                $this->Players->updateReputation($losingPlayer, 1);
+                $this->Players->updateReputation($winningPlayer, 1);
+            } elseif (!$result->losing_player_history || !$result->winning_player_history) {
+                $this->loadInto($result, [
+                    'LosingPlayerHistories',
+                    'WinningPlayerHistories'
+                ]);
+            }
+
+            $date = $result->isNew() ? new DateTime('today') : new DateTime($result->submitted->i18nFormat('Y-M-d'));
+            $this->Players->updateRatings($losingPlayer, $winningPlayer, $result->club_id, $date);
+
+            $this->patchEntity($result, [
+                'losing_player_history' => [
+                    'player' => $losingPlayer,
+                ],
+                'winning_player_history' => [
+                    'player' => $winningPlayer
+                ]
+            ], [
+                'fieldList' => [
+                    'losing_player_history',
+                    'winning_player_history'
+                ],
+                'validate' => false
             ]);
         }
-
-        $date = $result->isNew() ? new DateTime('today') : new DateTime($result->submitted->i18nFormat('Y-M-d'));
-        $this->Players->updateRatings($losingPlayer, $winningPlayer, $result->club_id, $date);
-
-        $this->patchEntity($result, [
-            'losing_player_history' => [
-                'player' => $losingPlayer,
-            ],
-            'winning_player_history' => [
-                'player' => $winningPlayer
-            ]
-        ], [
-            'fieldList' => [
-                'losing_player_history',
-                'winning_player_history'
-            ],
-            'validate' => false
-        ]);
     }
 
     /**
-     * @return bool
-     */
-    public function isBoxGame($id)
-    {
-        return $this->exists([
-            'id' => $id,
-            'box_match_id IS NOT' => null
-        ]);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDisputed($id)
-    {
-        return $this->Disputes->exists([
-            'result_id' => $id
-        ]);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isOwnedBy($id, $winningPlayerId)
-    {
-        return $this->exists([
-            'id' => $id,
-            'winning_player_id' => $winningPlayerId
-        ]);
-    }
-
-    /**
-     * @param \App\Model\Entity\Result $result The result
      * @return void
      */
-    public function nullify(Result $result)
+    public function beforeDelete(Event $event, Result $result, ArrayObject $options)
     {
         $resultIds = function ($result) use (&$resultIds) {
             if (!$result) {
@@ -294,6 +251,59 @@ class ResultsTable extends Table
 
             $this->save($result);
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function afterDelete(Event $event, Result $result, ArrayObject $options)
+    {
+        $players = $this->Players
+            ->find()
+            ->where([
+                'id IN' => [
+                    $result->losing_player_id,
+                    $result->winning_player_id
+                ]
+            ]);
+
+        foreach ($players as $player) {
+            $this->Players->updateReputation($player, -1);
+
+            $this->Players->save($player);
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isBoxGame($id)
+    {
+        return $this->exists([
+            'id' => $id,
+            'box_match_id IS NOT' => null
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDisputed($id)
+    {
+        return $this->Disputes->exists([
+            'result_id' => $id
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOwnedBy($id, $winningPlayerId)
+    {
+        return $this->exists([
+            'id' => $id,
+            'winning_player_id' => $winningPlayerId
+        ]);
     }
 
     /**

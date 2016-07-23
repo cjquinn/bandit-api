@@ -25,6 +25,7 @@ class FounderMailer extends Mailer
 
         $this
             ->to($boxMatch->box->box_league_cycle->club->founding_player->login->email)
+            ->cc($boxMatch->winning_player->login->email)
             ->subject('Box Match Dispute')
             ->from($boxMatch->losing_player->login->email)
             ->set(['boxMatch' => $boxMatch])

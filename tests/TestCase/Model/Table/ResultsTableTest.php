@@ -42,15 +42,11 @@ class ResultsTableTest extends TestCase
     /**
      * @return void
      */
-    public function testDelete()
+    public function testBeforeDelete()
     {
         $result = $this->Results->get(2);
 
         $this->Results->delete($result);
-
-        $this->assertFalse($this->Results->exists([
-            'id' => 2
-        ]));
 
         $christy = $this->Results->Players
             ->findById(1)
@@ -82,5 +78,21 @@ class ResultsTableTest extends TestCase
         $this->assertEquals(1200, $tom->club->rating);
         $this->assertEquals(0, $tom->club->losses);
         $this->assertEquals(0, $tom->club->wins);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterDelete()
+    {
+        $result = $this->Results->get(2);
+
+        $this->Results->delete($result);
+
+        $losingPlayer = $this->Results->Players->get($result->losing_player_id);
+        $winningPlayer = $this->Results->Players->get($result->winning_player_id);
+
+        $this->assertEquals(2, $losingPlayer->reputation);
+        $this->assertEquals(0, $winningPlayer->reputation);
     }
 }

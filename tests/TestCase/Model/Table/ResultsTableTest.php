@@ -180,4 +180,52 @@ class ResultsTableTest extends TestCase
         ];
         $this->assertEquals($expected, $resultTree);
     }
+
+    /**
+     * @return void
+     * @group testing
+     */
+    public function testInsert()
+    {
+        $result = $this->Results->newEntity();
+
+        $result->set([
+            'club_id' => 1,
+            'losing_player_id' => 2,
+            'winning_player_id' => 1,
+            'submitted' => new DateTime('49 hours ago')
+        ], ['guard' => false]);
+
+        $this->Results->insert($result);
+
+        // 1216 loses to 1184
+        // 1199 --------- 1201
+        // 1216 loses to 1200
+        // 1182 --------- 1217
+        // 1182 loses to 1201
+        // 1167 --------- 1216
+
+        $christy = $this->Results->Players
+            ->findById(1)
+            ->find('club', [
+                'clubId' => 1
+            ])
+            ->firstOrFail();
+        $russell = $this->Results->Players
+            ->findById(2)
+            ->find('club', [
+                'clubId' => 1
+            ])
+            ->firstOrFail();
+        $tom = $this->Results->Players
+            ->findById(3)
+            ->find('club', [
+                'clubId' => 1
+            ])
+            ->firstOrFail();
+
+        $this->assertEquals(1167, $christy->club->rating);
+        $this->assertEquals(1216, $russell->club->rating);
+        $this->assertEquals(1217, $tom->club->rating);
+    }
 }

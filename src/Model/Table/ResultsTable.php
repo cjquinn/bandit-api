@@ -234,6 +234,7 @@ class ResultsTable extends Table
     }
 
     /**
+     * @param $result null|\App\Model\Entity\Result
      * @return array
      */
     public function idTree($result)
@@ -263,6 +264,14 @@ class ResultsTable extends Table
             ->first();
 
         return [$result->id => $result->id] + $this->idTree($left) + $this->idTree($right);
+    }
+
+    /**
+     * @return void
+     */
+    public function insert(Result $result)
+    {
+
     }
 
     /**

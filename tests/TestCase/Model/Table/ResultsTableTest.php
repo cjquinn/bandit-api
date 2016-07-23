@@ -5,6 +5,8 @@ namespace App\Test\TestCase\Model\Table;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
+use DateTime;
+
 class ResultsTableTest extends TestCase
 {
 
@@ -94,5 +96,82 @@ class ResultsTableTest extends TestCase
 
         $this->assertEquals(2, $losingPlayer->reputation);
         $this->assertEquals(0, $winningPlayer->reputation);
+    }
+
+    /**
+     * @return void
+     * @group testing
+     */
+    public function testIdTree()
+    {
+        // Create some results
+        $dates = [
+            '2 days ago' => [
+                [
+                    // 4
+                    'losing_player_id' => 1,
+                    'winning_player_id' => 2
+                ],
+                [
+                    // 5
+                    'losing_player_id' => 2,
+                    'winning_player_id' => 3
+                ],
+                [
+                    // 6
+                    'losing_player_id' => 4,
+                    'winning_player_id' => 5
+                ]
+            ],
+            '1 day ago' => [
+                [
+                    // 7
+                    'losing_player_id' => 5,
+                    'winning_player_id' => 1
+                ],
+                [
+                    // 8
+                    'losing_player_id' => 6,
+                    'winning_player_id' => 7
+                ]
+            ],
+            'today' => [
+                [
+                    //9
+                    'losing_player_id' => 4,
+                    'winning_player_id' => 2
+                ]
+            ]
+        ];
+
+        $firstResult = null;
+
+        foreach ($dates as $date => $results) {
+            $date = new DateTime($date);
+
+            foreach ($results as $result) {
+                $result = $this->Results->newEntity();
+
+                $result->set([
+                    'club_id' => 2,
+                    'losing_player_id' => $result['losing_player_id'],
+                    'winning_player_id' => $result['winning_player_id'],
+                    'submitted' => $date
+                ], ['guard' => false]);
+
+                $this->Results->save($result, [
+                    'ignoreEvents' => true
+                ]);
+
+                if (!$firstResult) {
+                    $firstResult = $result;
+                }
+            }
+        }
+
+        $resultTree = $this->Results->idTree($firstResult);
+
+        $expected = [4, 5, 7, 9];
+        $this->assertEquals($expected, $resultTree);
     }
 }

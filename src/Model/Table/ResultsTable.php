@@ -153,26 +153,22 @@ class ResultsTable extends Table
                 'winning_player_id',
                 'submitted'
             ];
+            $where = [
+                'id !=' => $result['id'],
+                'submitted >=' => $result['submitted']
+            ];
 
             $left = $this
                 ->find()
                 ->select($select)
-                ->where([
-                    'id !=' => $result['id'],
-                    'losing_player_id IN' => $playerIds,
-                    'submitted >=' => $result['submitted']
-                ])
+                ->where($where + ['losing_player_id IN' => $playerIds])
                 ->hydrate(false)
                 ->first();
 
             $right = $this
                 ->find()
                 ->select($select)
-                ->where([
-                    'id !=' => $result['id'],
-                    'winning_player_id IN' => $playerIds,
-                    'submitted >=' => $result['submitted']
-                ])
+                ->where($where + ['winning_player_id IN' => $playerIds])
                 ->hydrate(false)
                 ->first();
 

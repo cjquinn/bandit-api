@@ -2,6 +2,7 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\ClubsPlayer;
 use App\Model\Entity\History;
 use App\Model\Entity\Player;
 
@@ -267,11 +268,13 @@ class PlayersTable extends Table
     }
 
     /**
-     * @return float
+     * @return void
      */
-    public function updatedRating($rating, $expectedScore, $score)
+    public function updateRating(ClubsPlayer $club, $expectedScore, $score)
     {
-        return $rating + round(32 * ($score - $expectedScore));
+        $kFactor = $club->losses + $club->wins > 30 ? 24 : 32;
+
+        $club->set('rating', $club->rating + round($kFactor * ($score - $expectedScore)));
     }
 
     /**
@@ -299,11 +302,11 @@ class PlayersTable extends Table
         );
         $winningPlayerExpectedScore = 1 - $losingPlayerExpectedScore;
 
-        $losingPlayer->club->set('rating', $this->updatedRating($losingPlayer->club->rating, $losingPlayerExpectedScore, 0));
-        $winningPlayer->club->set('rating', $this->updatedRating($winningPlayer->club->rating, $winningPlayerExpectedScore, 1));
-
         $losingPlayer->club->set('losses', $losingPlayer->club->losses + 1);
         $winningPlayer->club->set('wins', $winningPlayer->club->wins + 1);
+
+        $this->updateRating($losingPlayer->club, $losingPlayerExpectedScore, 0);
+        $this->updateRating($winningPlayer->club, $winningPlayerExpectedScore, 1);
 
         $losingPlayer->dirty('club', true);
         $winningPlayer->dirty('club', true);

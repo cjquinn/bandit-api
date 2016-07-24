@@ -72,6 +72,30 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testUpdateRating()
+    {
+        $club = $this->Players->Club->get([
+            'player_id' => 1,
+            'club_id' => 1
+        ]);
+
+        // 1154 + round(32 * (1 - 0))
+        $this->Players->updateRating($club, 0, 1);
+
+        $this->assertEquals(1186, $club->rating);
+
+        $club->losses = 15;
+        $club->wins = 16;
+
+        // 1186 + round(24 * (1 - 0))
+        $this->Players->updateRating($club, 0, 1);
+
+        $this->assertEquals(1210, $club->rating);
+    }
+
+    /**
+     * @return void
+     */
     public function testUpdateRatings()
     {
         $date = new DateTime('today');

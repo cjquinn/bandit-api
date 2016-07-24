@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Model\Table;
 
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
@@ -141,17 +142,22 @@ class ResultsTableTest extends TestCase
             'club_id' => 1,
             'losing_player_id' => 2,
             'winning_player_id' => 1,
-            'submitted' => new DateTime('49 hours ago')
+            'submitted' => new Time('49 hours ago')
         ], ['guard' => false]);
 
         $this->Results->insert($result);
 
+        // 1200 loses to 1200
+        // 1184 -------- 1216
+        // ------------------
         // 1216 loses to 1184
-        // 1199 --------- 1201
+        // 1199 -------- 1201
         // 1216 loses to 1200
-        // 1182 --------- 1217
+        // 1182 -------- 1217
+        // ------------------
         // 1182 loses to 1201
-        // 1167 --------- 1216
+        // 1167 -------- 1216
+        // ------------------
 
         $christy = $this->Results->Players
             ->findById(1)

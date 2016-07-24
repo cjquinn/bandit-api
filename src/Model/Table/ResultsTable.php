@@ -114,7 +114,7 @@ class ResultsTable extends Table
                 ]);
             }
 
-            $date = $result->isNew() ? new DateTime('today') : new DateTime($result->submitted->i18nFormat('Y-M-d'));
+            $date = !$result->submitted ? new DateTime('today') : new DateTime($result->submitted->i18nFormat('Y-M-d'));
             $this->Players->updateRatings($losingPlayer, $winningPlayer, $result->club_id, $date);
 
             $this->patchEntity($result, [
@@ -145,45 +145,26 @@ class ResultsTable extends Table
 
         $revertedPlayers = [];
 
-        $revertPlayer = function ($history) use (&$revertedPlayers) {
-            if (!isset($revertedPlayers[$history->player->id])) {
-                $snapshot = [
-                    'rating' => $history['snapshot']['rating'] - $history['snapshot']['difference']
-                ];
-
-                if ($history->is_winner) {
-                    $snapshot['losses'] = $history['snapshot']['losses'];
-                    $snapshot['wins'] = $history['snapshot']['wins'] - 1;
-                } else {
-                    $snapshot['losses'] = $history['snapshot']['losses'] - 1;
-                    $snapshot['wins'] = $history['snapshot']['wins'];
-                }
-
-                $history->player->club->set($snapshot, [
-                    'guard' => false
-                ]);
-
-                $this->Players->Club->save($history->player->club);
-
-                $revertedPlayers[$history->player->id] = true;
+        $results = $results->filter(function ($r) use ($result, &$revertedPlayers) {
+            if (!isset($revertedPlayers[$r->losing_player_history->player_id])) {
+                $this->Players->revert($r->losing_player_history);
+                $revertedPlayers[$r->losing_player_history->player_id] = true;
             }
-        };
 
-        $results = $results
-            ->filter(function ($r) use ($result, $revertPlayer) {
-                $revertPlayer($r->losing_player_history);
-                $revertPlayer($r->winning_player_history);
+            if (!isset($revertedPlayers[$r->winning_player_history->player_id])) {
+                $this->Players->revert($r->winning_player_history);
+                $revertedPlayers[$r->winning_player_history->player_id] = true;
+            }
 
-                if ($r->id === $result->id) {
-                    $this->Histories->delete($r->losing_player_history);
-                    $this->Histories->delete($r->winning_player_history);
+            if ($r->id === $result->id) {
+                $this->Histories->delete($r->losing_player_history);
+                $this->Histories->delete($r->winning_player_history);
 
-                    return false;
-                }
-                
-                return true;
-            })
-            ->toArray();
+                return false;
+            }
+            
+            return true;
+        });
 
         foreach ($results as $result) {
             $result->dirty('*', true);
@@ -218,21 +199,13 @@ class ResultsTable extends Table
      */
     public function findTree(Query $query, array $options)
     {
-        $clubCondition = function ($q) use ($options) {
-            $q->where([
-                'Club.club_id' => $options['result']->club_id
-            ]);
-
-            return $q;
-        };
-
         $query
             ->where([
                 'Results.id IN' => $this->idTree($options['result'])
             ])
             ->contain([
-                'LosingPlayerHistories.Players.Club' => $clubCondition,
-                'WinningPlayerHistories.Players.Club' => $clubCondition
+                'LosingPlayerHistories',
+                'WinningPlayerHistories'
             ])
             ->order([
                 'submitted' => 'ASC'
@@ -256,10 +229,13 @@ class ResultsTable extends Table
             $result->winning_player_id
         ];
         $where = [
-            'id !=' => $result->id,
             'club_id' => $result->club_id,
             'submitted >' => $result->submitted
         ];
+
+        if ($result->id) {
+            $where['id !='] = $result->id;
+        }
 
         $left = $this
             ->find()
@@ -271,7 +247,11 @@ class ResultsTable extends Table
             ->where($where + ['winning_player_id IN' => $playerIds])
             ->first();
 
-        return [$result->id => $result->id] + $this->idTree($left) + $this->idTree($right);
+        if ($result->id) {
+            return [$result->id => $result->id] + $this->idTree($left) + $this->idTree($right);
+        }
+
+        return $this->idTree($left) + $this->idTree($right);
     }
 
     /**
@@ -279,7 +259,31 @@ class ResultsTable extends Table
      */
     public function insert(Result $result)
     {
+        $results = $this->find('tree', [
+            'result' => $result
+        ]);
 
+        $revertedPlayers = [];
+
+        $results->each(function ($result) use (&$revertedPlayers) {
+            if (!isset($revertedPlayers[$result->losing_player_history->player_id])) {
+                $this->Players->revert($result->losing_player_history);
+                $revertedPlayers[$result->losing_player_history->player_id] = true;
+            }
+
+            if (!isset($revertedPlayers[$result->winning_player_history->player_id])) {
+                $this->Players->revert($result->winning_player_history);
+                $revertedPlayers[$result->winning_player_history->player_id] = true;
+            }
+        });
+
+        $this->save($result);
+
+        foreach ($results as $result) {
+            $result->dirty('*', true);
+
+            $this->save($result);
+        }
     }
 
     /**

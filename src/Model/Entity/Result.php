@@ -14,6 +14,7 @@ use Cake\ORM\Entity;
  */
 class Result extends Entity
 {
+
     protected $_accessible = [
         'losing_player_id' => true,
         '*' => false

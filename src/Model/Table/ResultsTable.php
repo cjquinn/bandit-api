@@ -7,6 +7,7 @@ use App\Model\Entity\Result;
 use ArrayObject;
 
 use Cake\Event\Event;
+use Cake\I18n\Time;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -60,14 +61,6 @@ class ResultsTable extends Table
                 ]
             ]
         ]);
-
-        $this->addBehavior('Timestamp', [
-            'events' => [
-                'Model.beforeSave' => [
-                    'submitted' => 'new'
-                ]
-            ]
-        ]);
     }
 
     /**
@@ -114,7 +107,11 @@ class ResultsTable extends Table
                 ]);
             }
 
-            $date = !$result->submitted ? new DateTime('today') : new DateTime($result->submitted->i18nFormat('Y-M-d'));
+            if (!$result->submitted) {
+                $result->set('submitted', new Time());
+            }
+
+            $date = new DateTime($result->submitted->i18nFormat('Y-M-d'));
             $this->Players->updateRatings($losingPlayer, $winningPlayer, $result->club_id, $date);
 
             $this->patchEntity($result, [

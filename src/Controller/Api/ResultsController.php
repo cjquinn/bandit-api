@@ -65,8 +65,14 @@ class ResultsController extends ApiController
      */
     public function add()
     {
-        $result = $this->Results->newEntity($this->request->data);
+        $result = $this->Results->newEntity();
         
+        if ($this->Results->Players->isFounder($this->Auth->user('player.id'), $this->request->params['club_id'])) {
+            $result->accessible('submitted', true);
+        }
+
+        $this->Results->patchEntity($result, $this->request->data);
+
         $result->set('club_id', $this->request->params['club_id']);
         $result->set('winning_player_id', $this->Auth->user('player.id'));
 

@@ -2,6 +2,7 @@
 
 namespace App\Test\TestCase\Model\Table;
 
+use Cake\Event\EventList;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
@@ -28,6 +29,8 @@ class BoxMatchesTableTest extends TestCase
     {
         parent::setUp();
         $this->BoxMatches = TableRegistry::get('BoxMatches');
+
+        $this->BoxMatches->eventManager()->setEventList(new EventList());
     }
 
     /**
@@ -38,63 +41,6 @@ class BoxMatchesTableTest extends TestCase
         unset($this->BoxMatches);
 
         parent::tearDown();
-    }
-
-    /**
-     * @return void
-     */
-    public function testValidationDefault()
-    {
-        $errors = $this->BoxMatches->validator()->errors([
-            'losing_player_id' => 1,
-            'losses' => -1,
-            'wins' => 0
-        ]);
-
-        $expected = [
-            'losses' => [
-                'nonNegativeInteger' => 'The provided value is invalid'
-            ],
-            'wins' => [
-                'greaterThanOrEqual' => 'The provided value is invalid'
-            ]
-        ];
-
-        $this->assertEquals($expected, $errors);
-
-        $errors = $this->BoxMatches->validator()->errors([
-            'losing_player_id' => 1,
-            'losses' => 3,
-            'wins' => 5
-        ]);
-
-        $expected = [
-            'losses' => [
-                'lessThanOrEqual' => 'The provided value is invalid'
-            ],
-            'wins' => [
-                'lessThanOrEqual' => 'The provided value is invalid'
-            ],
-        ];
-
-        $this->assertEquals($expected, $errors);
-
-        $errors = $this->BoxMatches->validator()->errors([
-            'losing_player_id' => 1,
-            'losses' => 2,
-            'wins' => 1
-        ]);
-
-        $expected = [
-            'losses' => [
-                'valid' => 'You must enter more wins then losses'
-            ],
-            'wins' => [
-                'valid' => 'You must enter more wins then losses'
-            ],
-        ];
-
-        $this->assertEquals($expected, $errors);
     }
 
     /**
@@ -143,6 +89,19 @@ class BoxMatchesTableTest extends TestCase
             ->count();
 
         $this->assertEquals(3, $totalWinningPlayerResults);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDispute()
+    {
+        $boxMatch = $this->BoxMatches->get(1);
+
+        $this->BoxMatches->dispute($boxMatch);
+
+        $this->assertEventFired('Model.BoxMatch.disputed', $this->BoxMatches->eventManager());
+        $this->assertNotNull($boxMatch->disputed);
     }
 
     /**
@@ -212,6 +171,63 @@ class BoxMatchesTableTest extends TestCase
         ]);
 
         $this->assertEquals($losingPlayerPoints, 1);
+    }
+
+    /**
+     * @return void
+     */
+    public function testValidationDefault()
+    {
+        $errors = $this->BoxMatches->validator()->errors([
+            'losing_player_id' => 1,
+            'losses' => -1,
+            'wins' => 0
+        ]);
+
+        $expected = [
+            'losses' => [
+                'nonNegativeInteger' => 'The provided value is invalid'
+            ],
+            'wins' => [
+                'greaterThanOrEqual' => 'The provided value is invalid'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        $errors = $this->BoxMatches->validator()->errors([
+            'losing_player_id' => 1,
+            'losses' => 3,
+            'wins' => 5
+        ]);
+
+        $expected = [
+            'losses' => [
+                'lessThanOrEqual' => 'The provided value is invalid'
+            ],
+            'wins' => [
+                'lessThanOrEqual' => 'The provided value is invalid'
+            ],
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        $errors = $this->BoxMatches->validator()->errors([
+            'losing_player_id' => 1,
+            'losses' => 2,
+            'wins' => 1
+        ]);
+
+        $expected = [
+            'losses' => [
+                'valid' => 'You must enter more wins then losses'
+            ],
+            'wins' => [
+                'valid' => 'You must enter more wins then losses'
+            ],
+        ];
+
+        $this->assertEquals($expected, $errors);
     }
 
     /**

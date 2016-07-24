@@ -42,6 +42,36 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testRevert()
+    {
+        $history = $this->Players->Histories->get([
+            'player_id' => 1,
+            'result_id' => 1
+        ]);
+
+        $this->Players->revert($history);
+
+        $club = $this->Players->Club
+            ->find()
+            ->where([
+                'club_id' => 1,
+                'player_id' => 1
+            ])
+            ->firstOrFail();
+
+        $expected = [
+            'club_id' => 1,
+            'player_id' => 1,
+            'losses' => 0,
+            'rating' => 1200,
+            'wins' => 0
+        ];
+        $this->assertEquals($expected, $club->toArray());
+    }
+
+    /**
+     * @return void
+     */
     public function testUpdateRatings()
     {
         $date = new DateTime('today');

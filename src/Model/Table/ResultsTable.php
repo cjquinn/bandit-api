@@ -139,30 +139,9 @@ class ResultsTable extends Table
      */
     public function beforeDelete(Event $event, Result $result, ArrayObject $options)
     {
-        $results = $this
-            ->find()
-            ->where([
-                'Results.id IN' => $this->idTree($result)
-            ])
-            ->contain([
-                'LosingPlayerHistories.Players.Club' => function ($q) use ($result) {
-                    $q->where([
-                        'Club.club_id' => $result->club_id
-                    ]);
-
-                    return $q;
-                },
-                'WinningPlayerHistories.Players.Club' => function ($q) use ($result) {
-                    $q->where([
-                        'Club.club_id' => $result->club_id
-                    ]);
-
-                    return $q;
-                }
-            ])
-            ->order([
-                'submitted' => 'ASC'
-            ]);
+        $results = $this->find('tree', [
+            'result' => $result
+        ]);
 
         $revertedPlayers = [];
 

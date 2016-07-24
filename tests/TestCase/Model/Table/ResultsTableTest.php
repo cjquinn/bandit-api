@@ -100,7 +100,6 @@ class ResultsTableTest extends TestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testFindTree()
     {

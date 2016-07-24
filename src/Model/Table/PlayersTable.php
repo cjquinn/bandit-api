@@ -2,6 +2,7 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\History;
 use App\Model\Entity\Player;
 
 use ArrayObject;
@@ -217,6 +218,40 @@ class PlayersTable extends Table
             'id' => $clubId,
             'founding_player_id' => $id
         ]);
+    }
+
+    /**
+     * @return void
+     * @throws \Cake\Network\Exception\NotFoundException
+     */
+    public function revert(History $history)
+    {
+        $result = $this->Results->get($history->result_id);
+        $club = $this->Club
+            ->find()
+            ->where([
+                'club_id' => $result->club_id,
+                'player_id' => $history->player_id
+            ])
+            ->firstOrFail();
+
+        $snapshot = [
+            'rating' => $history->snapshot['rating'] - $history->snapshot['difference']
+        ];
+
+        if ($history->is_winner) {
+            $snapshot['losses'] = $history->snapshot['losses'];
+            $snapshot['wins'] = $history->snapshot['wins'] - 1;
+        } else {
+            $snapshot['losses'] = $history->snapshot['losses'] - 1;
+            $snapshot['wins'] = $history->snapshot['wins'];
+        }
+
+        $club->set($snapshot, [
+            'guard' => false
+        ]);
+
+        $this->Club->save($club);
     }
 
     /**

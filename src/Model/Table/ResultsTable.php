@@ -7,6 +7,7 @@ use App\Model\Entity\Result;
 use ArrayObject;
 
 use Cake\Event\Event;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\ORM\TableRegistry;
@@ -231,6 +232,34 @@ class ResultsTable extends Table
 
             $this->Players->save($player);
         }
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findTree(Query $query, array $options)
+    {
+        $clubCondition = function ($q) use ($options) {
+            $q->where([
+                'Club.club_id' => $options['result']->club_id
+            ]);
+
+            return $q;
+        };
+
+        $query
+            ->where([
+                'Results.id IN' => $this->idTree($options['result'])
+            ])
+            ->contain([
+                'LosingPlayerHistories.Players.Club' => $clubCondition,
+                'WinningPlayerHistories.Players.Club' => $clubCondition
+            ])
+            ->order([
+                'submitted' => 'ASC'
+            ]);
+
+        return $query;
     }
 
     /**

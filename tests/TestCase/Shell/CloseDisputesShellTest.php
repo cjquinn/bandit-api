@@ -28,7 +28,7 @@ class CloseDisputesShellTest extends TestCase
     {
         parent::setUp();
 
-        $this->io = $this->getMock('Cake\Console\ConsoleIo');
+        $this->io = $this->createMock('Cake\Console\ConsoleIo');
         $this->CloseDisputes = new CloseDisputesShell($this->io);
     }
 

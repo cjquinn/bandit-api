@@ -40,7 +40,6 @@ class PlayersTable extends Table
                 'Clubs'
             ],
             'hasMany' => [
-                'BoxesPlayers',
                 'Histories',
                 'Results'
             ],
@@ -107,7 +106,7 @@ class PlayersTable extends Table
     {
         $rules->add($rules->existsIn(['current_club_id'], 'Clubs'));
         $rules->add($rules->existsIn(['login_id'], 'Logins'));
-        
+
         return $rules;
     }
 
@@ -186,17 +185,6 @@ class PlayersTable extends Table
                 ])
                 ->innerJoinWith('Disputes')
                 ->isEmpty();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAssignedToBox($id, $boxId)
-    {
-        return $this->BoxesPlayers->exists([
-            'box_id' => $boxId,
-            'player_id' => $id
-        ]);
     }
 
     /**
@@ -350,6 +338,7 @@ class PlayersTable extends Table
 
         ob_start();
         imagejpeg($croppedImage);
+
         return ob_get_clean();
     }
 

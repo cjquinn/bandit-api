@@ -15,7 +15,7 @@ class AddLossesWinsToClubsPlayers extends AbstractMigration
         $table = $this->table('clubs_players');
         $table->addColumn('losses', 'integer', [
             'after' => 'player_id',
-            'default' => null,
+            'default' => 0,
             'limit' => 11,
             'null' => false,
         ]);

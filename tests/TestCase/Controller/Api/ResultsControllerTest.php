@@ -107,26 +107,6 @@ class ResultsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteBoxMatchResult()
-    {
-        $results = TableRegistry::get('Results');
-
-        $result = $results->get(3);
-        $result->set('box_match_id', 1);
-
-        $results->save($result);
-
-        $this->_setAuthSession(2);
-        $this->_setAjaxRequest();
-
-        $this->delete('/api/clubs/1/results/3.json');
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
     public function testDeleteInvalidPlayer()
     {
         $this->_setAuthSession(1);

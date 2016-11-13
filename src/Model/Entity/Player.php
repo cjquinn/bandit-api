@@ -6,9 +6,6 @@ use Aws\S3\S3Client;
 
 use Cake\Core\Configure;
 use Cake\ORM\Entity;
-use Cake\ORM\TableRegistry;
-
-use DateTime;
 
 /**
  * @property int $id

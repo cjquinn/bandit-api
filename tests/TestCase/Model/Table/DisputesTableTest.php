@@ -11,7 +11,6 @@ class DisputesTableTest extends TestCase
 {
 
     public $fixtures = [
-        'app.box_matches',
         'app.clubs',
         'app.clubs_players',
         'app.disputes',
@@ -30,7 +29,7 @@ class DisputesTableTest extends TestCase
 
         $this->Disputes = TableRegistry::get('Disputes');
     }
-    
+
     /**
      * @return void
      */

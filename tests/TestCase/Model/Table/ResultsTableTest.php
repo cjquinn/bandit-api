@@ -12,7 +12,6 @@ class ResultsTableTest extends TestCase
 {
 
     public $fixtures = [
-        'app.box_matches',
         'app.clubs',
         'app.clubs_players',
         'app.disputes',
@@ -186,7 +185,7 @@ class ResultsTableTest extends TestCase
     /**
      * @return \App\Model\Entity\Result
      */
-    public function _createResultsTree()
+    private function _createResultsTree()
     {
         // Create some results
         $dates = [

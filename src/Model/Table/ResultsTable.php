@@ -26,7 +26,6 @@ class ResultsTable extends Table
     {
         $this->addAssociations([
             'belongsTo' => [
-                'BoxMatches',
                 'Clubs',
                 'LosingPlayers' => [
                     'className' => 'Players',
@@ -80,7 +79,6 @@ class ResultsTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['box_match_id'], 'BoxMatches'));
         $rules->add($rules->existsIn(['club_id'], 'Clubs'));
         $rules->add($rules->existsIn(['losing_player_id'], 'Players'));
         $rules->add($rules->existsIn(['winning_player_id'], 'Players'));
@@ -159,7 +157,7 @@ class ResultsTable extends Table
 
                 return false;
             }
-            
+
             return true;
         });
 
@@ -212,7 +210,7 @@ class ResultsTable extends Table
     }
 
     /**
-     * @param $result null|\App\Model\Entity\Result
+     * @param null|\App\Model\Entity\Result $result The result
      * @return array
      */
     public function idTree($result)
@@ -281,17 +279,6 @@ class ResultsTable extends Table
 
             $this->save($result);
         }
-    }
-
-    /**
-     * @return bool
-     */
-    public function isBoxGame($id)
-    {
-        return $this->exists([
-            'id' => $id,
-            'box_match_id IS NOT' => null
-        ]);
     }
 
     /**

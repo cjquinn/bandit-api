@@ -2,15 +2,14 @@
 
 namespace App\Model\Table;
 
+use App\Model\Entity\Club;
+
 use ArrayObject;
 
-use Cake\Datasource\EntityInterface;
 use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-
-use DateTime;
 
 class ClubsTable extends Table
 {
@@ -31,7 +30,6 @@ class ClubsTable extends Table
                 'Players'
             ],
             'hasMany' => [
-                'BoxLeagueCycles',
                 'Results'
             ]
         ]);
@@ -61,14 +59,16 @@ class ClubsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['founding_player_id'], 'Players'));
-        
+
         return $rules;
     }
 
     /**
+     * TODO: move this into beforeSave
+     *
      * @return void
      */
-    public function afterSave(Event $event, EntityInterface $club, ArrayObject $options)
+    public function afterSave(Event $event, Club $club, ArrayObject $options)
     {
         if ($club->isNew()) {
             $this->patchEntity($club, [
@@ -86,24 +86,5 @@ class ClubsTable extends Table
 
             $this->save($club);
         }
-    }
-
-    /**
-     * @return void
-     */
-    public function hasUnfinishedBoxLeagueCycle($id)
-    {
-        $box = $this->BoxLeagueCycles
-            ->find()
-            ->where([
-                'club_id' => $id,
-                'end >' => new DateTime()
-            ])
-            ->toArray();
-
-        return $this->BoxLeagueCycles->exists([
-            'club_id' => $id,
-            'end >' => new DateTime()
-        ]);
     }
 }

@@ -106,28 +106,6 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddBoxMatchResult()
-    {
-        $results = TableRegistry::get('Results');
-
-        $result = $results->get(3);
-        $result->set('box_match_id', 1);
-
-        $results->save($result);
-
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
-
-        $this->post('/api/clubs/1/results/3/disputes.json', [
-            'message' => ''
-        ]);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
     public function testAddPost()
     {
         $this->_setAjaxRequest();

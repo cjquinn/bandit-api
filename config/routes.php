@@ -10,7 +10,7 @@ Router::defaultRouteClass('DashedRoute');
  */
 Router::prefix('api', function ($routes) {
     $routes->extensions(['json']);
-    
+
     /**
      * Clubs
      */
@@ -22,66 +22,6 @@ Router::prefix('api', function ($routes) {
             'view'
         ]
     ], function ($routes) {
-        /**
-         * BoxLeagueCycles
-         */
-        $routes->resources('BoxLeagueCycles', [
-            'inflect' => 'dasherize',
-            'only' => [
-                'create',
-                'update'
-            ]
-        ], function ($routes) {
-            /**
-             * Boxes
-             */
-            $routes->resources('Boxes', [
-                'only' => [
-                    'create',
-                    'delete'
-                ]
-            ], function ($routes) {
-                /**
-                 * BoxMatches
-                 */
-                $routes->resources('BoxMatches', [
-                    'inflect' => 'dasherize',
-                    'only' => [
-                        'create',
-                        'dispute'
-                    ],
-                    'map' => [
-                        'dispute' => [
-                            'action' => 'dispute',
-                            'method' => ['PATCH', 'PUT'],
-                            'path' => '/:id/dispute'
-                        ]
-                    ]
-                ]);
-
-                /**
-                 * BoxesPayers
-                 */
-                $connectRoute = function ($action, $method) use ($routes) {
-                    $routes->connect('/players/:player_id', [
-                        'controller' => 'BoxesPlayers',
-                        'action' => $action,
-                        '_method' => $method
-                    ], [
-                        'pass' => [
-                            'box_id',
-                            'box_league_cycle_id',
-                            'player_id'
-                        ]
-                    ]);
-                };
-
-                $connectRoute('add', 'POST');
-                $connectRoute('delete', 'DELETE');
-                $connectRoute('edit', ['PATCH', 'PUT']);
-            });
-        });
-
         /**
          * ClubsPlayers
          */

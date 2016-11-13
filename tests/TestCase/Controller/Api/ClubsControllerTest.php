@@ -13,7 +13,7 @@ class ClubsControllerTest extends IntegrationTestCase
     use ControllerTestTrait;
 
     /**
-     * The creation of a club when no logged in.
+     * The creation of a club when not logged in.
      * Requires the user to signup at the same time.
      *
      * @return void

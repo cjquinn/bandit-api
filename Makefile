@@ -1,4 +1,4 @@
-.PHONY: cake composer deploy down install migrate test up echo
+.PHONY: cake composer deploy down install migrate test up
 
 MAKEPATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PWD := $(dir $(MAKEPATH))

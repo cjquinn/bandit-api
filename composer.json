@@ -14,10 +14,10 @@
         "cakephp/chronos": "@stable"
     },
     "require-dev": {
-        "cakephp/bake": "~1.1"
+        "cakephp/bake": "~1.1",
+        "phpunit/phpunit": "^5.6"
     },
     "suggest": {
-        "phpunit/phpunit": "Allows automated tests to be run without system-wide install.",
         "cakephp/cakephp-codesniffer": "Allows to check the code against the coding standards used in CakePHP."
     },
     "autoload": {

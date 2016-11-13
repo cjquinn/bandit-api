@@ -38,6 +38,8 @@ if (!extension_loaded('intl')) {
     trigger_error('You must enable the intl extension to use CakePHP.', E_USER_ERROR);
 }
 
+use Aws\Credentials\Credentials;
+
 use Cake\Cache\Cache;
 use Cake\Console\ConsoleErrorHandler;
 use Cake\Core\App;
@@ -227,6 +229,10 @@ if (!Configure::check('Aws.credentials')) {
     die('Add Amazon Web Services credentials');
 }
 
+Configure::write('Aws.credentials', new Credentials(
+    Configure::read('Aws.credentials.key'),
+    Configure::read('Aws.credentials.secret')
+));
 Configure::write('Aws.region', 'eu-west-1');
 Configure::write('Aws.S3', [
     'bucket' => 'bandit-bucket',

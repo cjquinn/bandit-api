@@ -38,6 +38,7 @@ class Login extends Entity
             return (new DefaultPasswordHasher)->hash($password);
         }
     }
+    
     /**
      * @return bool
      */

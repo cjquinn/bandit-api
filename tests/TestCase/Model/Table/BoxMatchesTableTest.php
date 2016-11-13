@@ -176,6 +176,29 @@ class BoxMatchesTableTest extends TestCase
     /**
      * @return void
      */
+    public function testResolve()
+    {
+        // $boxMatch = $this->BoxMatches->get(1);
+
+        // $this->BoxMatches->resolve($boxMatch, [
+        //     'losing_player_id' => 1,
+        //     'winning_player_id' => 2,
+        //     'wins' => 1,
+        //     'losses' => 1
+        // ]);
+
+        // Results deleted
+
+        // Scores nullified
+
+        // Results created
+
+        // Scores updated
+    }
+
+    /**
+     * @return void
+     */
     public function testValidationDefault()
     {
         $errors = $this->BoxMatches->validator()->errors([

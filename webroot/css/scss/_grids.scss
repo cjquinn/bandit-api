@@ -48,12 +48,11 @@
 
 	@media (min-width: 900px) {
 
-		display: flex; padding-left: percentage(1/19);
+		display: flex; padding-left: percentage(1/24);
 
 		> .col {
-			flex: 1; margin-right: percentage(1/19);
+			flex: 1; margin-right: percentage(1/24);
 		}
-
 	}
 }
 
@@ -89,7 +88,6 @@
 		> .col {
 			flex: 1; margin-right: $padding;
 		}
-
 	}
 }
 
@@ -113,9 +111,7 @@
 	> .col {
 
 		float: left; width: 50%;
-
 	}
-
 }
 
 
@@ -177,7 +173,6 @@
 			float: right;
 		}
 	}
-
 }
 
 
@@ -215,10 +210,8 @@
 			> .col {
 				flex: 1;
 			}
-
 		}
 	}
-
 }
 
 

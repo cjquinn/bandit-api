@@ -101,7 +101,7 @@
         			</li>
 
                     <li class="menu__padding">
-                        <button class="button menu__button is--full">
+                        <button class="menu__button is--full">
                             <div class="button__icon">
                                 <figure class="button__icon__clip"><?= $this->Svg->useit('plus', 'icon-plus button__icon__svg') ?></figure>
                             </div>Add Wins

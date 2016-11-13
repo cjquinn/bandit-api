@@ -97,6 +97,10 @@ li {
 	list-style: none;
 }
 
+.caps {
+	text-transform: uppercase;
+}
+
 .paragraph-spacing {
 	> * + * {
 		margin-top: .5em;
@@ -125,5 +129,14 @@ li {
 	&__hyphen {
 	// 	opacity: .5;
 		margin: 0 3px 0;
+	}
+}
+
+.text--level {
+	@each $colour in $level-colours {
+
+		&#{nth($colour, 1)} {
+			color: nth($colour, 2);
+		}
 	}
 }

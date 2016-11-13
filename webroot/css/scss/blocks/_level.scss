@@ -1,7 +1,7 @@
 .level {
 
 	&__base {
-		@include unit(padding, 2);
+		@include unit(padding, 1.5);
 	}
 
 	&__info {
@@ -9,15 +9,20 @@
 	}
 
 	&__mask {
-		display: block; width: 100%;
+		display: block; width: 100%; @include unit(margin-bottom, 1);
 	}	
 
 	&__name {
+		@include unit(margin-bottom, .5);
 		text-transform: uppercase;
 	}
 
-	&__minimum {
+	&__number {
+		color: rgba($text, .6); font-size: 14px;
 
+		&.is--current {
+			color: $text;
+		}
 	}
 
 	&__progress {
@@ -33,7 +38,7 @@
 				@include absolute-centre-y;
 				right: 0;
 				@include size(15px);
-				background: $shadow; border: 5px solid $white;
+				background: $shadow; border: 3px solid $white;
 				border-radius: 50%; transform: translate(50%, -50%);
 				@include no-content;
 			}

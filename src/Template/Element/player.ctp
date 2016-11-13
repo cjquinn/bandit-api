@@ -1,4 +1,4 @@
-<li class="player <?php if ($sibling != '0') { echo 'is--sibling is--sibling' . $sibling; } ?> block__slab">
+<li class="player <?php if ($sibling != '0') { echo 'is--sibling is--sibling' . $sibling; } elseif ($name == 'You') { echo 'is--you';} ?> block__slab">
 
     <dl class="player__id">
 

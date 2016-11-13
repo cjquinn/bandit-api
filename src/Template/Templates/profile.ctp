@@ -10,7 +10,7 @@
 
                 <dd class="player-photo__proportion clip-hexagon">
 
-                    <div class="player-photo__level is--level<?=rand(47, 55)?> is--level100"></div>
+                    <div class="player-photo__level is--level54 is--level100"></div>
                     <img src="http://userphoto.russellbishop.co.uk/get.php?id=<?=rand(0, 40)?>" alt="Photo 1" class="player-photo__image" />
 
                 </dd>
@@ -69,12 +69,6 @@
 
     </div>
 
-    <div class="col">
-
-
-
-    </div>
-
 </article>
 
 
@@ -82,37 +76,33 @@
 
     <div class="col">
 
-        <section class="level block has--contents">
+        <?=$this->element('levelProgress')?>
+
+    </div>
+
+    <div class="col">
+
+        <section class="stats block has--contents">
 
             <header class="block__header">
-                <h1 class="h4__small">Level</h1>
-                <h2 class="h4">Ninja</h2>
+                <h1 class="h4__small">Stats</h1>
+                <h2 class="h4">All-Time</h2>
             </header>
 
             <div class="block__contents">
 
-                <div class="block__base level__base g5">
+                <div class="block__base">
 
-                    <div class="level__info is--49 col--1">
-                        <?= $this->Svg->useit('brand-mask', 'mask is--level49 level__mask-icon'); ?>
-                        <h3 class="h5 level__name">Ninja</h3>
-                        <p class="level__minimum">9000+</p>
-                    </div>
+                    <ul>
 
-                    <div class="col--2">
+                        <li>
+                            <h4 class="h6">Games</h4>
+                            <p class="h3">502</p>
+                            <p>450w 52l</p>
+                        </li>
 
-                        <figure class="level__progress">
-                            <div class="level__progress-complete is--level49" style="width: 67%;">
-                            </div>
-                        </figure>
-                        
-                    </div>
+                    </ul>                    
 
-                    <div class="level__info is--50 col--3">
-                        <?= $this->Svg->useit('brand-mask', 'mask is--level50 level__mask-icon'); ?>
-                        <h3 class="h5 level__name">Warrior</h3>
-                        <p class="level__minimum">10000+</p>
-                    </div>
                 </div>
 
             </div>
@@ -130,94 +120,7 @@
 
     <div class="col">
 
-        <section class="block has--contents">
-
-            <header class="block__header">
-                <h1 class="h4__small"><a href="/templates/leaderboards/">Leaderboards</a></h1>
-            </header>
-
-            <div class="block__contents gflex from--desktop">
-
-                <div class="col">
-
-                    <h2 class="h4 stream__title"><a href="#">This Week</a></h2>
-
-                    <ol class="stream is--players is--snapshot">
-
-                        <?=$this->element('playerWeek', [
-                                'number' => 1,
-                                'rating' => 'high',
-                                'bandit' => 'yes',
-                                'sibling' => 2
-                            ])?>
-
-                        <?=$this->element('playerWeek', [
-                                'number' => 2,
-                                'rating' => 'high',
-                                'bandit' => 'no',
-                                'sibling' => 1
-                            ])?>
-
-                        <?=$this->element('playerWeek', [
-                                'number' => 3,
-                                'rating' => 'medium',
-                                'bandit' => 'no',
-                                'sibling' => 0
-                            ])?>
-
-                        <?=$this->element('playerWeek', [
-                                'number' => 4,
-                                'rating' => 'low',
-                                'bandit' => 'no',
-                                'sibling' => 1
-                            ])?>
-
-                        <?=$this->element('playerWeek', [
-                                'number' => 5,
-                                'rating' => 'low',
-                                'bandit' => 'no',
-                                'sibling' => 2
-                            ])?>
-
-
-                    </ol>
-
-                </div>
-
-                <div class="col">
-
-                    <h2 class="h4 stream__title"><a href="#">All Time</a></h2>
-
-                    <ol class="stream is--players">
-
-                        <?=$this->element('player', [
-                                'number' => 1,
-                                'rating' => 'high',
-                                'bandit' => 'yes',
-                                'sibling' => 2
-                            ])?>
-
-                        <?=$this->element('player', [
-                                'number' => 2,
-                                'rating' => 'medium',
-                                'bandit' => 'no',
-                                'sibling' => 1
-                            ])?>
-
-                        <?=$this->element('player', [
-                                'number' => 3,
-                                'rating' => 'low',
-                                'bandit' => 'no',
-                                'sibling' => 0
-                            ])?>
-
-                    </ol>
-
-                </div>
-
-            </div>
-
-        </section>
+        <?=$this->element('leaderboardSummary')?>
 
     </div>
 

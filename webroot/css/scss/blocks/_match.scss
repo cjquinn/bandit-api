@@ -6,14 +6,16 @@
 		@include absolute-fill; opacity: .07;
 	}
 
+	$glowDiameter: 124px;
+
 	&.is--winner-first {
 
 		#{$block}__backgrounds {
 			background-image:
-				radial-gradient( circle farthest-corner at top left, rgba($win--glow, 1) 0%, rgba($win--glow, 0) 84px),
+				radial-gradient( circle farthest-corner at top left, rgba($win--glow, 1) 0%, rgba($win--glow, 0) $glowDiameter),
 				radial-gradient( circle farthest-corner at top right,
 							rgba($loss--glow, 1) 0%,
-							rgba($loss--glow, 0) 84px
+							rgba($loss--glow, 0) $glowDiameter
 							);
 		}
 
@@ -23,10 +25,10 @@
 
 		#{$block}__backgrounds {
 			background-image:
-				radial-gradient( circle farthest-corner at top left, rgba($loss--glow, 1) 0%, rgba($loss--glow, 0) 84px),
+				radial-gradient( circle farthest-corner at top left, rgba($loss--glow, 1) 0%, rgba($loss--glow, 0) $glowDiameter),
 				radial-gradient( circle farthest-corner at top right,
 							rgba($win--glow, 1) 0%,
-							rgba($win--glow, 0) 84px
+							rgba($win--glow, 0) $glowDiameter
 							);
 		}
 
@@ -123,6 +125,12 @@
 
 			#{$block}__id {
 				text-align: right;
+			}
+		}
+
+		&.is--loser {
+			.player-photo {
+				transform: scale(.85);
 			}
 		}
 	}

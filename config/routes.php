@@ -21,6 +21,11 @@ Router::scope('/', function ($routes) {
         'action' => 'login'
     ]);
 
+    $routes->connect('/templates/onboarding', [
+        'controller' => 'Templates',
+        'action' => 'onboarding'
+    ]);
+
     /**
      * Logins
      */

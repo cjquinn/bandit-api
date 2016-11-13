@@ -30,4 +30,12 @@ class TemplatesController extends AppController
     {
         $this->viewBuilder()->layout('login');
     }
+
+    /**
+     * @return void
+     */
+    public function onboarding()
+    {
+        $this->viewBuilder()->layout('onboarding');
+    }
 }

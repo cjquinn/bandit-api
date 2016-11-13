@@ -51,15 +51,24 @@
 	&__number {
 	}
 
+	&.is--you {
+		&:before {
+			@include absolute-fill;
+			background-image: linear-gradient;
+			@include no-content;
+		}
+	}
+
 	&.is--sibling {
-		@include unit(height, 6);
+		// @include unit(height, 6);
+		// background: none;
 
 		&1 {
-			opacity: .75;
+			opacity: .55;
 		}
 
 		&2 {
-			opacity: .55;
+			opacity: .2;
 		}
 
 		.player-photo {

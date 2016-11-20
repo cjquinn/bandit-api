@@ -3,6 +3,12 @@
 /tmp/*
 /logs/*
 
-.css
-.DS_Store
+/node_modules/*
+
+/webroot/css/*
+/webroot/js/*
+/webroot/img/*
+
 .env
+
+.DS_Store

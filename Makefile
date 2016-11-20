@@ -1,4 +1,4 @@
-.PHONY: cake composer deploy down install migrate test up
+.PHONY: cake composer deploy down install migrate npm test up
 
 MAKEPATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PWD := $(dir $(MAKEPATH))
@@ -32,9 +32,18 @@ down:
 
 install:
 	make composer CMD=install
+	make npm CMD=install
 
 migrate:
 	make cake CMD="migrations migrate"
+
+npm:
+	docker run -it --rm \
+		-v $(PWD):/opt \
+		-w /opt \
+		--network=$(PROJECT)_network \
+		cjquinn/npm:latest \
+		npm $(CMD)
 
 test:
 	docker run -it --rm \

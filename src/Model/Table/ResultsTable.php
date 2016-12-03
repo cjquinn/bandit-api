@@ -250,38 +250,6 @@ class ResultsTable extends Table
     }
 
     /**
-     * @return void
-     */
-    public function insert(Result $result)
-    {
-        $results = $this->find('tree', [
-            'result' => $result
-        ]);
-
-        $revertedPlayers = [];
-
-        $results->each(function ($result) use (&$revertedPlayers) {
-            if (!isset($revertedPlayers[$result->losing_player_history->player_id])) {
-                $this->Players->revert($result->losing_player_history);
-                $revertedPlayers[$result->losing_player_history->player_id] = true;
-            }
-
-            if (!isset($revertedPlayers[$result->winning_player_history->player_id])) {
-                $this->Players->revert($result->winning_player_history);
-                $revertedPlayers[$result->winning_player_history->player_id] = true;
-            }
-        });
-
-        $this->save($result);
-
-        foreach ($results as $result) {
-            $result->dirty('*', true);
-
-            $this->save($result);
-        }
-    }
-
-    /**
      * @return bool
      */
     public function isDisputed($id)

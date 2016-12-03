@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Cake\Controller\Controller;
+use Cake\Event\Event;
 
 class AppController extends Controller
 {
@@ -36,10 +37,25 @@ class AppController extends Controller
     }
 
     /**
+     * @return void
+     */
+    public function beforeFilter(Event $event)
+    {
+        $this->Auth->allow('display');
+    }
+
+    /**
      * @return bool
      */
-    public function isAuthorized($user)
+    public function isAuthorized(array $user)
     {
         return true;
+    }
+
+    /**
+     * @return void
+     */
+    final public function display()
+    {
     }
 }

@@ -5,6 +5,13 @@ use Cake\Routing\Router;
 
 Router::defaultRouteClass('DashedRoute');
 
+Router::connect('/', [
+    'controller' => 'App',
+    'action' => 'display'
+], [
+    '_name' => 'home'
+]);
+
 /**
  * RESTful API
  */

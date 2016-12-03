@@ -10,5 +10,6 @@
 /webroot/img/*
 
 .env
+.gulprc
 
 .DS_Store

@@ -1,4 +1,4 @@
-.PHONY: cake composer deploy down install migrate seed test up
+.PHONY: cake composer down install migrate seed test up update
 
 MAKEPATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 PWD := $(dir $(MAKEPATH))
@@ -30,13 +30,6 @@ composer:
 		cjquinn/cakephp-fpm:latest \
 		composer $(CMD)
 
-deploy:
-	make install
-	make migrate
-	make cake CMD="orm_cache clear"
-	make seed
-	npm run build
-
 down:
 	docker-compose down
 
@@ -67,3 +60,12 @@ test-group:
 
 up:
 	docker-compose up -d
+	npm run watch
+
+update:
+	make install
+	make migrate
+	make cake CMD="orm_cache clear"
+	make seed
+	npm install
+	npm run build

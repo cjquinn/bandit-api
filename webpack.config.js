@@ -1,8 +1,6 @@
-const config = {
-    entry: './assets/js/main.js',
+module.exports = {
     output: {
-        filename: 'bundle.js',
-        path: './webroot/js'
+        filename: 'bundle.js'
     },
     module: {
         loaders: [
@@ -12,7 +10,6 @@ const config = {
                 loader: 'babel-loader'
             }
         ]
-    }
+    },
+    devtool: 'source-map'
 };
-
-export default config;

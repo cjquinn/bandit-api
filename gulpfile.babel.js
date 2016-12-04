@@ -20,6 +20,8 @@ elixir.config.browserSync.proxy = config.browserSync.proxy;
  * Mix!
  */
 elixir(function(mix) {
+    mix.webpack('main.js');
+
     // browserSync
     mix.browserSync();
 });

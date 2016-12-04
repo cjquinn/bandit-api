@@ -1,30 +1,6 @@
-<header class="header g3">
+<header class="header">
 
-    <div class="col">
-
-        <h1 class="header__title h1">Dashboard</h1>
-
-        <ol class="tabs header__tabs">
-            <li class="tabs__tab is--active"><button class="tabs__tab__button">Activity</li>
-            <li class="tabs__tab"><button class="tabs__tab__button">Notifications <span class="tabs__tab__count is--alert">5</span></li>
-            <li class="tabs__tab"><button class="tabs__tab__button">Disputes <span class="tabs__tab__count">0</span></li>
-        </ol>
-
-    </div>
-
-    <nav class="form__select header__select">
-        <h1 class="h2">Dashboard</h1>
-        
-        <label>
-            <select>
-                <option disabled>Dashboard:</option>
-                <option selected>Activity</option>
-                <option>Notifications (5)</option>
-                <option>Disputes (0)</option>
-            </select>
-            <?= $this->Svg->useit('rarr', 'rarr header__select__rarr') ?>
-        </label>
-    </nav>
+    <h1 class="header__title h1">Dashboard</h1>
 
 </header>
 
@@ -34,10 +10,33 @@
 
         <section class="block">
 
-            <header class="block__header justify-space-between-baseline">
-                <h1 class="h4">Matches</h1>
-                <small class="h4__small">Monday 9th</small>
+            <header class="block__header">
+                <h1 class="h4">Disputes</h1>
+                <small class="h4__small">You have 1 open dispute</small>
             </header>
+
+            <ol class="stream disputes">
+
+                <?php
+
+                    for ($k = 0; $k < 1; $k++) {
+
+                        echo $this->element('playerDisputing');
+
+                    }
+
+                ?>
+
+            </ol>
+
+        </section>
+
+        <section class="block">
+
+            <a href="/matches" class="block__header block__header--link">
+                <h1 class="h4">Matches</h1>
+                <small class="h4__small">See newest games</small>
+            </a>
 
             <ol class="stream matches">
 
@@ -70,6 +69,10 @@
 
             </ol>
 
+        </section>
+
+            <?php /*
+
             <ul class="block__footer__meta">
 
                 <li class="block__footer__meta__item">
@@ -88,13 +91,13 @@
 
                 </li>
 
-
             </ul>
 
-        </section>
+            */ ?>
 
 
-        
+
+
 
     </div>
 

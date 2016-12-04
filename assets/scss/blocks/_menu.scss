@@ -1,6 +1,6 @@
 .menu {
 
-	@media (break('<', 'xxxlarge')) {
+	@media (break('<', map-get($breakpoints, xxxlarge))) {
 
 		/*
 			Mobile Menu Styles
@@ -15,7 +15,7 @@
 			&.is--open {
 				display: block;
 				animation: menuRollOut .4s ease-in-out; animation-fill-mode: forwards;
-				background: $body__background;
+				background: rgba($body__background, .9);
 			}
 
 			.menu__toggle {
@@ -53,7 +53,7 @@
 		*/
 	}
 
-	@media (break('>=', 'xxxlarge')) {
+	@media (break('>=', map-get($breakpoints, xxxlarge))) {
 		background: $app__inset;
 		border-radius: 4px 0 0 4px; box-shadow: inset -1px 0px 2px $shadow, inset -3px 0px 19px rgba($shadow, 0.10);
 
@@ -84,7 +84,7 @@
 
 
 			&.is--active {
-				
+
 			}
 
 		}

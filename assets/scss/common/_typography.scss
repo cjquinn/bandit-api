@@ -4,7 +4,7 @@
 }
 
 body {
-	color: $text;
+	font: 16px/1 $font-stack; color: $text;
 }
 
 a {
@@ -15,43 +15,33 @@ a {
 	}
 }
 
-h1,
-.h1,
-h2,
-.h2,
-h3,
-.h3,
-h4,
-.h4,
-h5,
-.h5,
-h6,
-.h6 {
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
 	color: $link-water;
 }
 
-h1,
-.h1 {
-	@include font-scale(24, 22);
-	font-weight: 300;
+h1, .h1 {
+	@include font-scale(26, 46);
+	font-size: 22px; font-weight: 300;
 
 	&__small {
 		font-size: 20px;
 	}
 }
 
-h2,
-.h2 {
-	@include font-scale(21, 21);
-  font-weight: 300;
+h2, .h2 {
+	font-size: 21px; font-weight: 300;
 
 	&__small {
 		font-size: 18px;
 	}
 }
 
-h3,
-.h3 {
+h3, .h3 {
 	font-size: 19px; font-weight: bold;
 
 	&__small {
@@ -59,8 +49,7 @@ h3,
 	}
 }
 
-h4,
-.h4 {
+h4, .h4 {
 	font-size: 18px; font-weight: 300;
 
 	&__small {
@@ -68,15 +57,13 @@ h4,
 	}
 }
 
-h5,
-.h5 {
+h5, .h5 {
 	font-size: 14px; font-weight: bold;
 }
 
 @media (min-width: 800px) {
 
-	h1,
-  .h1 {
+	h1, .h1 {
 		font-size: 31px; font-weight: 300;
 
 		&__small {
@@ -84,8 +71,7 @@ h5,
 		}
 	}
 
-	h2,
-  .h2 {
+	h2, .h2 {
 		font-size: 28px; font-weight: 300;
 
 		&__small {
@@ -93,8 +79,7 @@ h5,
 		}
 	}
 
-	h3,
-  .h3 {
+	h3, .h3 {
 		font-size: 24px; font-weight: bold;
 
 		&__small {
@@ -102,8 +87,7 @@ h5,
 		}
 	}
 
-	h4,
-  .h4 {
+	h4, .h4 {
 		font-size: 24px; font-weight: 300;
 
 		&__small {

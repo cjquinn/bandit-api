@@ -1,31 +1,21 @@
 .header {
-	@include unit(padding-top, 2); @include unit(padding-bottom, 1);
-	background: $header__base;
-	box-shadow: inset 0 -2px 4px -2px rgba($blue-charcoal, .4), inset -1px 1px 0 rgba($shadow, .3); border-radius: 0 4px 0 0;
+  padding: 1.5rem 1rem;
+  // background: $header__base;
+  // box-shadow: inset 0 -2px 4px -2px rgba($blue-charcoal, .4), inset -1px 1px 0 rgba($shadow, .3);
+  // border-radius: 4px;
 
-	@media (break('>=', 'xxmedium')) {
-		@include unit(padding-top, 3); padding-bottom: 0;
-	}
+  &__title {
 
-	&__title {
-		@include unit(padding-bottom, 2);
-	}
+  }
 
-	&__title,
-	&__tabs {
-		@media (break('<', 'xxmedium')) {
-			display: none;
-		}
-	}
+  &__select {
+    @media (break('>=', map-get($breakpoints, xxmedium))) {
+      display: none;
+    }
 
-	&__select {
-		@media (break('>=', 'xxmedium')) {
-			display: none;
-		}
-
-		label {
-			position: relative;
-			display: block;
-		}
-	}
+    label {
+      position: relative;
+      display: block;
+    }
+  }
 }

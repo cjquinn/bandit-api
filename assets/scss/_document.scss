@@ -1,40 +1,37 @@
 html, body {
-	min-height: 100%;
+  min-height: 100%;
 
-	&.is--unscrollable {
+  &.is--unscrollable {
         overflow: hidden;
         height: 100%;
     }
 }
 
 html {
-	overflow-x: hidden; overflow-y: scroll;
-	height: 100%;
+  overflow-x: hidden; overflow-y: scroll;
+  height: 100%;
 }
 
 body {
-	height: 100%; @include unit(padding, 1); 
-	background: $body__background;
+  height: 100%;
+  background: $body__background;
 }
 
 .app {
-	@include container; padding: $unit/2;
-	background-color: $app__base;
-	border-radius: 6px;
+  @include container;
+  padding: .3rem; //tiny
+  background-color: $app__base;
+  border-radius: 6px;
 
-	@media (break('<', 'xxxlarge')) {
-		@include unit(margin-top, 7);
-	}
+  @media (break('<', map-get($breakpoints, xxxlarge))) {
+    @include unit(margin-top, 7);
+  }
 }
 
-	.view {
-		position: relative; /* for .prompt's */
-	}
+  .view {
+    position: relative; /* for .prompt's */
+  }
 
-		.display {
-
-			@media (min-width: 600px) {
-				@include unit(padding-top, 2); @include unit(padding-bottom, 2);
-			}
-			
-		}
+    .display {
+      padding-top: .3rem;
+    }

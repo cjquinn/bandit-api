@@ -2,18 +2,10 @@
 
 namespace App\Controller;
 
-use Cake\Event\Event;
+use Cake\Controller\Controller;
 
-class TemplatesController extends AppController
+class TemplatesController extends Controller
 {
-
-    /**
-     * @return void
-     */
-    public function beforeFilter(Event $event)
-    {
-        $this->Auth->allow();
-    }
 
     /**
      * @return void

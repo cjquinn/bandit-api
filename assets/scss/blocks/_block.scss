@@ -2,11 +2,9 @@
 	$block: #{&};
 	position: relative;
 	background: $block__base;
-	box-shadow: $block--shadow; border-radius: 4px;
-
-	@media (max-width: 700px) {
-		@include unit(margin-top, 2);
-	}
+	box-shadow: $block--shadow;
+	border-radius: 4px;
+  margin-bottom: .3rem;
 
 	&.is--animating {
 		animation: translateUpFadeIn .5s ease-out forwards;
@@ -15,20 +13,38 @@
 	& + & {
 		@include unit(margin-top, 2);
 	}
-	
+
 	&__header {
 		position: relative; z-index: 1;
-		@include unit(padding-top, 2); @include unit(padding-bottom, 2); @include gutter(padding-left, 2); @include gutter(padding-right, 2);
+		@include unit(padding-top, 2);
+		@include unit(padding-bottom, 2);
+		@include gutter(padding-left, 2);
+		@include gutter(padding-right, 2);
 		text-shadow: 0 -1px 0 $shadow;
 		box-shadow: 0px 2px 2px 0px rgba(0,0,0,0.50);
 
 		&__title {
-			@include unit(height, 6); 
-			@include unit(line-height, 6); 
+			@include unit(height, 6);
+			@include unit(line-height, 6);
 		}
 
 		> * {
 			vertical-align: baseline;
+		}
+
+		&--link {
+			display: block;
+			color: $bandit;
+			text-shadow: none;
+			border-top: 2px solid $bandit;
+			border-bottom: none;
+			border-radius: 4px 4px 0 0;
+
+			&:hover,
+			&:focus {
+				background-color: rgba($bandit, .2);
+				transition: background .15s ease;
+			}
 		}
 	}
 
@@ -49,36 +65,16 @@
 	}
 
 	&__slab {
-		position: relative; cursor: pointer;
+		position: relative;
+		cursor: pointer;
 		background: $mirage3;
 
 		/* can I set this for everything?? */
-		display: flex; justify-content: space-between; align-items: center; @include unit(height, 7); padding: 0 22px;
-
-		/* doesn't actually look good?
-		&:not(:first-child) {
-
-			&:before {
-				position: absolute; top: 0px; left: 0; z-index: 100;
-				width: 100%; height: 1px; background: rgba($light, .04);
-				@include no-content;
-			}
-		}
-
-		&:not(:last-child) {
-
-			&:after {
-				position: absolute; bottom: 0px; left: 0; z-index: 200;
-				width: 100%; height: 1px; background: rgba($shadow, .5);
-				@include no-content;
-			}
-		}
-		*/
-
-		&:hover {
-			// background: adjust_hue(lighten(saturate($mirage, 17), 3), 14);
-			// background-color: rgba($mirage, .25);
-		}
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		@include unit(height, 7);
+		padding: 0 22px;
 
 		&.is--empty {
 			cursor: default;
@@ -94,7 +90,9 @@
 	}
 
 	&__contents {
-		padding-left: $unit/2; padding-right: $unit/2; padding-bottom: $unit/2;
+		padding-left: $unit/2;
+		padding-right: $unit/2;
+		padding-bottom: $unit/2;
 
 		> .col:nth-child(2) {
 			margin-left: $unit/2;
@@ -103,11 +101,16 @@
 
 	&__footer {
 		background: $block__footer;
-		box-shadow: inset 0px 1px 0px 0px rgba($light, .08), inset 0px -1px 0px 0px rgba($shadow, .42); border-radius: 0 0 4px 4px;
+		box-shadow: inset 0px 1px 0px 0px rgba($light, .08), inset 0px -1px 0px 0px rgba($shadow, .42);
+		border-radius: 0 0 4px 4px;
 
 		&__meta {
-			@include gutter(padding-left, 2); @include gutter(padding-right, 2);
-			@include unit(line-height, 4); font-size: 14px; color: $ghost; font-weight: 300; text-shadow: 0 -1px 0 rgba($shadow, .42);
+			@include gutter(padding-left, 2);
+			@include gutter(padding-right, 2);
+			@include unit(line-height, 4);
+			font-size: 14px;
+			font-weight: 300;
+			text-shadow: 0 -1px 0 rgba($shadow, .42);
 
 			@include inline-children($up:true);
 
@@ -117,8 +120,10 @@
 		}
 
 		&__icon {
-			@include inline-middle($up:true); height: 17px; margin-right: 2px;
-			fill: $ghost;
+			@include inline-middle($up:true);
+			height: 17px;
+			margin-right: 2px;
+			fill: $text;
 		}
 	}
 }

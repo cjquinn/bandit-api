@@ -1,0 +1,24 @@
+@mixin absolute-fill {	
+	position: absolute; top: 0; left: 0;
+	width: 100%; height: 100%;
+}
+
+@mixin fixed-fill {	
+	position: fixed; top: 0; left: 0;
+	width: 100%; height: 100%;
+}
+
+@mixin absolute-centre {
+	position: absolute; top: 50%; left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin absolute-centre-x {
+	position: absolute; left: 50%;
+	transform: translateX(-50%);
+}
+
+@mixin absolute-centre-y {
+	position: absolute; top: 50%;
+	transform: translateY(-50%);
+}

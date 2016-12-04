@@ -20,7 +20,17 @@ elixir.config.browserSync.proxy = config.browserSync.proxy;
  * Mix!
  */
 elixir(function(mix) {
+    // Copy files
+    mix.copy(
+        elixir.config.assetsPath + '/img',
+        elixir.config.publicPath + '/img'
+    );
+
+    // Scripts
     mix.webpack('main.js');
+
+    // Styles
+    mix.sass('style.scss');
 
     // browserSync
     mix.browserSync();

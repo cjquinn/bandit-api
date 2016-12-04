@@ -1,0 +1,40 @@
+html, body {
+	min-height: 100%;
+
+	&.is--unscrollable {
+        overflow: hidden;
+        height: 100%;
+    }
+}
+
+html {
+	overflow-x: hidden; overflow-y: scroll;
+	height: 100%;
+}
+
+body {
+	height: 100%; @include unit(padding, 1); 
+	background: $body__background;
+}
+
+.app {
+	@include container; padding: $unit/2;
+	background-color: $app__base;
+	border-radius: 6px;
+
+	@media (break('<', 'xxxlarge')) {
+		@include unit(margin-top, 7);
+	}
+}
+
+	.view {
+		position: relative; /* for .prompt's */
+	}
+
+		.display {
+
+			@media (min-width: 600px) {
+				@include unit(padding-top, 2); @include unit(padding-bottom, 2);
+			}
+			
+		}

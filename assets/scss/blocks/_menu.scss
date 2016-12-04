@@ -1,0 +1,114 @@
+.menu {
+
+	@media (break('<', 'xxxlarge')) {
+
+		/*
+			Mobile Menu Styles
+		*/
+		position: absolute; top: 0; left: 0;
+		width: 100%; @include unit(padding, 1);
+
+		&__whole {
+			@include fixed-fill; z-index: 1000;
+			display: none; padding: 10px;
+
+			&.is--open {
+				display: block;
+				animation: menuRollOut .4s ease-in-out; animation-fill-mode: forwards;
+				background: $body__background;
+			}
+
+			.menu__toggle {
+				margin-bottom: 10px;
+			}
+		}
+
+		&__logo {
+			float: left;
+
+			&__svg {
+				@include unit(height, 5);
+			}
+		}
+
+		&__current {
+			float: left;
+		}
+
+		&__toggle {
+			position: relative;
+			float: right; @include size(43px);
+
+			&__svg {
+				width: 18px;
+			}
+		}
+
+		&__list {
+			clear: both;
+		}
+
+		/*
+			Mobile Menu Styles
+		*/
+	}
+
+	@media (break('>=', 'xxxlarge')) {
+		background: $app__inset;
+		border-radius: 4px 0 0 4px; box-shadow: inset -1px 0px 2px $shadow, inset -3px 0px 19px rgba($shadow, 0.10);
+
+		&__logo {
+			display: block; @include unit(padding-top, 2); @include unit(padding-bottom, 2);
+
+			&__svg {
+				width: 66px; height: auto;
+				transform: translateX(-25%);
+			}
+
+		}
+
+		&__toggle {
+			display: none;
+		}
+	}
+
+	&__padding {
+		@include unit(padding-left, 2); @include unit(padding-right, 2);
+	}
+
+	&__list {
+
+		&__item {
+			// @include unit(margin-bottom, 1);
+			text-transform: uppercase; letter-spacing: .03em; font-weight: bold; font-size: 14px;
+
+
+			&.is--active {
+				
+			}
+
+		}
+	}
+
+	&__link {
+		position: relative;
+		display: block;
+		@include unit(line-height, 5); white-space: nowrap;
+		transition: all .2s ease;
+
+		&:hover,
+		&:focus {
+			background-color: rgba($mirage, .25);
+		}
+
+		&.is--active {
+			background-color: rgba($mirage, .37);
+			color: $link-water;
+		}
+
+	}
+
+	&__button {
+	}
+
+}

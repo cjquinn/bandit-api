@@ -1,0 +1,116 @@
+$blue-charcoal: #000207;
+$vulcan: #0F1221;
+$mirage: #1D2438;
+$mirage2: #171C2D;
+$mirage3: #131627;
+$mirage4: #181E31;
+$pickled-bluewood: #27304A;
+$fiord: #3C4563;
+
+$link-water: #DCE4F7;
+$cornflower: #91AEE6;
+$sail: #ADC8FA;
+$gray-chateau: #A3A9B5;
+$ghost: #C1C5CD;
+$abbey: #555659;
+
+$slogging: #626F94;
+
+$win: #9CEB6E;
+$win--glow: #CAFFAD;
+$loss: #FA5741;
+$loss--glow: #F25440;
+$draw: #505466;
+
+/*
+	levels
+
+
+start @ 50
+
+bandit
+
+53, 54, 55 (purple - dark to light)
+50, 51, 52 (blue - dark to light)
+47, 48, 49 (green - dark to light)
+47, 48, 49 (red - dark to light)
+
+*/
+
+$level100: #FF7048;
+
+$level55: #D03CE0;
+$level54: #9C2FD6;
+$level53: #482D96;
+
+$level52: #40DCFF;
+$level51: #009BF0;
+$level50: #0D5FA0;
+
+$level49: #00E26B;
+$level48: #00B359;
+$level47: #0F743D;
+
+$level46: #F72531;
+$level45: #CF1F45;
+$level44: #7A134C;
+
+$level-colours: (
+	100: $level100,
+
+	55: $level55,
+	54: $level54,
+	53: $level53,
+
+	52: $level52,
+	51: $level51,
+	50: $level50,
+
+	49: $level49,
+	48: $level48,
+	47: $level47,
+
+	46: $level46,
+	45: $level45,
+	44: $level44,
+);
+
+
+/**/
+
+$light: $link-water;
+$shadow: $blue-charcoal;
+$dark: $shadow;
+
+/**/
+
+$bandit: $level100;
+
+$body__background: $blue-charcoal;
+
+$app__base: $mirage;
+$app__inset: $vulcan; // behind navigation + view tabs
+
+$block__base: $pickled-bluewood;
+$block__footer: $mirage4;
+
+$text: $link-water;
+$text--link: $sail;
+
+$selected: $level100;
+
+$header__base: $mirage2;
+
+$button__base: $mirage;
+
+$match__base: $mirage3;
+
+$tabs__text: $sail;
+$tabs__text--active: $level100;
+$tabs__text--disabled: $abbey;
+
+
+/**/
+
+$black: #000;
+$white: #fff;

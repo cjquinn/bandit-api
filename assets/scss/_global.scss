@@ -1,0 +1,19 @@
+.clip-hexagon {
+	@include clip-hexagon;
+
+	&__contents {
+		@include absolute-fill; overflow: hidden;
+	}
+}
+
+.icon-inline {
+	@include inline-middle;
+}
+
+.is--flippedX {
+	transform: scaleX(-1);
+}
+
+.relative {
+	position: relative;
+}

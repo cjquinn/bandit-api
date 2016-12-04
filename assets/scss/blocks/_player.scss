@@ -1,0 +1,112 @@
+.player {
+	$block: #{&};	
+	display: flex; justify-content: space-between; align-items: center; @include unit(height, 7); padding: 0 22px;
+
+	&__id {
+		display: flex; align-items: center;
+		line-height: 18px;
+
+		@media (min-width: 700px) {
+			line-height: 20px;
+		}
+
+		&__stats {
+			@include font-size($size:small); color: $gray-chateau; font-weight: 100;
+		}
+
+		&__level {
+
+			&.is--level {
+				&47 { color: $level47; }
+				&48 { color: $level48; }
+				&49 { color: $level49; }
+				&50 { color: $level50; }
+				&51 { color: $level51; }
+				&52 { color: $level52; }
+				&53 { color: $level53; }
+				&54 { color: $level54; }
+				&55 { color: $level55; }
+				&100 { color: $level100; }
+			}
+
+		}
+
+		&__rating {
+
+		}
+
+		&__result {
+			margin-left: 10px;
+		}
+	}
+
+	&__player-photo {
+		margin-right: 10px;
+
+		&__image {
+		}
+
+	}
+
+	&__number {
+	}
+
+	&.is--you {
+		&:before {
+			@include absolute-fill;
+			background-image: linear-gradient;
+			@include no-content;
+		}
+	}
+
+	&.is--sibling {
+		// @include unit(height, 6);
+		// background: none;
+
+		&1 {
+			opacity: .55;
+		}
+
+		&2 {
+			opacity: .2;
+		}
+
+		.player-photo {
+
+			width: 26px; margin-left: 5px; margin-right: 15px;
+
+			@media (min-width: 600px) {
+				width: 38px;
+			}
+
+		}
+	}
+
+	&.is--opponent {
+		@include justify-space-between;
+
+		&:hover, &:focus {
+			cursor: default;
+			background: $mirage3;
+		}
+	}
+
+	&:hover, &:focus {
+		opacity: 1;
+	}
+}
+
+
+.box-result {
+	width: 170px /* magic number, won't work for smallscreens */;
+
+	&__score {
+		&__hyphen {
+		}
+	}
+
+	&__respond {
+		text-align: center;
+		@include inline-children;
+	}
+}

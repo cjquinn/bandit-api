@@ -1,0 +1,10 @@
+.mask {
+	&.is--level {
+		@each $colour in $level-colours {
+
+			&#{nth($colour, 1)} {
+				fill: nth($colour, 2);
+			}
+		}
+	}
+}

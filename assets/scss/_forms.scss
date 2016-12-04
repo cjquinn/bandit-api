@@ -1,0 +1,87 @@
+input, select {
+	border-radius: 0;
+}
+
+.form {
+	@include unit(padding-top, 2); @include unit(padding-bottom, 2); 
+	background: $mirage4;
+
+	.prompt__message & {
+		padding-left: $unit; padding-right: $unit; padding-bottom: $unit;
+	}
+
+	> * + * {
+        @include unit(margin-top, 2); 
+    }
+
+	&__input {
+		$unitSize: 6;
+		display: block; width: 100%; @include unit(height, $unitSize); padding: 0 $unit*2;
+		@include unit(line-height, $unitSize);
+		background: $mirage3; border: none;
+		box-shadow: inset 0px -1px 0px 0px rgba($shadow, .5);
+		border-radius: 4px;
+		-webkit-appearance: none;
+	}
+
+	&__label {
+		display: block; @include unit(margin-bottom, 1); padding-left: 8px /* gutter * 2 - block's 6px padding */;
+		font-weight: 300;
+	}
+
+	&__stepper {
+		position: relative;
+
+		.pick {
+			position: absolute; right: 6px;
+
+			&.is--up {
+				top: 4px;
+			}
+
+			&.is--down {
+				bottom: 4px;
+			}
+
+			&__icon {
+				position: relative;
+
+				&.is--up {
+					transform: rotate(-90deg);
+				}
+
+				&.is--down {
+					transform: rotate(90deg);
+				}
+			}
+
+			@media (min-width: 600px) {
+				right: 13px;
+
+				&.is--up {
+					top: 8px;
+				}
+
+				&.is--down {
+					bottom: 8px;
+				}
+			}
+		}
+	}
+
+	&__select {
+		
+		select {
+			display: block; width: 100%; padding: 16px 0;
+			color: $text--link; font-weight: 300;
+			background: none; border: none; appearance: none;
+		}
+
+		.rarr {
+			position: absolute; top: 50%; right: 0;
+			width: 8px;
+			fill: $text--link;
+			transform: translateY(-50%) rotate(90deg);
+		}
+	}
+}

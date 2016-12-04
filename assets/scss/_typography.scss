@@ -1,0 +1,142 @@
+$font-stack: 'Europa', 'europa', Calibri, 'Helvetica Neue', Helvetica;
+
+body {
+	font: 16px/1 $font-stack; color: $text;
+}
+
+a {
+	color: $text--link;
+	
+	&:hover, &:focus {
+
+	}
+}
+
+h1, .h1,
+h2, .h2,
+h3, .h3,
+h4, .h4,
+h5, .h5,
+h6, .h6 {
+	color: $link-water;
+}
+
+h1, .h1 {
+	font-size: 22px; font-weight: 300;
+
+	&__small {
+		font-size: 20px;
+	}
+}
+
+h2, .h2 {
+	font-size: 21px; font-weight: 300;
+
+	&__small {
+		font-size: 18px;
+	}
+}
+
+h3, .h3 {
+	font-size: 19px; font-weight: bold;
+
+	&__small {
+		font-size: 16px;
+	}
+}
+
+h4, .h4 {
+	font-size: 18px; font-weight: 300;
+
+	&__small {
+		font-size: 14px;
+	}
+}
+
+h5, .h5 {
+	font-size: 14px; font-weight: bold;
+}
+
+@media (min-width: 800px) {
+
+	h1, .h1 {
+		font-size: 31px; font-weight: 300;
+
+		&__small {
+			font-size: 21px;
+		}
+	}
+
+	h2, .h2 {
+		font-size: 28px; font-weight: 300;
+
+		&__small {
+			font-size: 20px;
+		}
+	}
+
+	h3, .h3 {
+		font-size: 24px; font-weight: bold;
+
+		&__small {
+			font-size: 17px;
+		}
+	}
+
+	h4, .h4 {
+		font-size: 24px; font-weight: 300;
+
+		&__small {
+			font-size: 17px;
+		}
+	}
+
+}
+
+li {
+	list-style: none;
+}
+
+.caps {
+	text-transform: uppercase;
+}
+
+.paragraph-spacing {
+	> * + * {
+		margin-top: .5em;
+	}
+}
+
+.content {
+	line-height: 1.35; font-weight: 300;
+}
+
+.points-won {
+	color: $win;
+}
+
+.points-loss {
+	color: $loss;
+}
+
+.score {
+	text-align: center; font-size: 0; white-space: nowrap;
+
+	> * {
+		@include font-size($size: xxlarge);
+	}
+
+	&__hyphen {
+	// 	opacity: .5;
+		margin: 0 3px 0;
+	}
+}
+
+.text--level {
+	@each $colour in $level-colours {
+
+		&#{nth($colour, 1)} {
+			color: nth($colour, 2);
+		}
+	}
+}

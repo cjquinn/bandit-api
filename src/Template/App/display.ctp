@@ -1,3 +1,3 @@
 <div id="root"></div>
 
-<?= $this->Html->script('bundle') ?>
+<?= $this->append('scriptBottom', $this->Html->script('bundle')) ?>

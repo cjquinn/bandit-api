@@ -1,0 +1,157 @@
+/*
+	layout
+*/
+
+@mixin clearfix {
+  &:before, &:after { content: ""; display: table; } &:after { clear: both; }
+}
+
+@mixin clearfix-after {
+  &:after { content: ""; display: table; clear: both; }
+}
+
+@mixin absolute-fill {	
+	position: absolute; top: 0; left: 0;
+	width: 100%; height: 100%;
+}
+
+@mixin fixed-fill {	
+	position: fixed; top: 0; left: 0;
+	width: 100%; height: 100%;
+}
+
+@mixin absolute-centre {
+	position: absolute; top: 50%; left: 50%;
+	transform: translate(-50%, -50%);
+}
+
+@mixin absolute-centre-x {
+	position: absolute; left: 50%;
+	transform: translateX(-50%);
+}
+
+@mixin absolute-centre-y {
+	position: absolute; top: 50%;
+	transform: translateY(-50%);
+}
+
+@mixin container {
+	max-width: 1500px; margin: 0 auto;
+}
+
+@mixin inline-middle($up: false) {
+	display: inline-block; vertical-align: middle;
+	
+	@if $up {
+		position: relative; top: -2px;
+	}
+}
+
+@mixin inline-children($up: false) {
+
+	> * {
+		display: inline-block; vertical-align: middle;
+		
+		@if $up {
+			position: relative; top: -2px;
+		}
+	}
+
+}
+
+@mixin align-items-centre {
+	display: flex; align-items: center;
+}
+
+@mixin justify-space-between {
+	display: flex; justify-content: space-between; align-items: center;
+}
+
+@mixin justify-space-between-baseline {
+	display: flex; justify-content: space-between; align-items: center;
+}
+
+.justify-space-between-baseline {
+	@include justify-space-between-baseline;
+}
+
+@mixin size($size) {
+	width: $size; height: $size;
+}
+
+$unit: 12px;
+$unit--small: 10px;
+
+@mixin unit($property, $multiplier) {
+
+	#{$property}: #{($multiplier * $unit)};
+
+	@media (max-width: 600px) {
+		#{$property}: #{($multiplier * $unit--small)};
+	}
+
+}
+
+$gutter: 10px;
+
+@mixin gutter($property, $multiplier) {
+
+	#{$property}: #{($multiplier * $gutter)};
+
+}
+
+@mixin font-size($size) {
+
+	@if $size == small { font-size: 14px; }
+
+	@else if $size == xsmall { font-size: 14px; font-weight: bold; }
+
+	@else if $size == xxsmall { font-size: 16px; }
+
+	@else if $size == xxlarge { font-size: 24px; font-weight: bold; }
+
+}
+
+
+
+/*	
+	typography
+*/
+
+@mixin no-text {
+	text-indent: 100%; white-space: nowrap; overflow: hidden;
+}
+
+@mixin no-content {
+	content: "";
+}
+
+@mixin ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis; white-space: nowrap;
+}
+
+
+
+/*
+	backgrounds
+*/
+
+@mixin background-cover {
+	background-repeat: no-repeat; background-size: cover; background-position: center center;
+}
+
+/*
+	box shadows
+*/
+
+$block--shadow: 0px 2px 2px 0px rgba($black, .25), inset 0px 1px 0px 0px rgba($link-water,0.08), inset 0px 12px 18px 0px #313B5C;
+
+
+/*
+	masks
+*/
+
+@mixin clip-hexagon {
+	clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}

@@ -13,6 +13,7 @@ import ResetPassword from './Auth/ResetPassword';
 // Club
 import ClubSettings from './Club/ClubSettings';
 import CreateClub from './Club/CreateClub';
+import InvitePlayer from './Club/InvitePlayer';
 
 // Leaderboard
 import Leaderboard from './Leaderboard/Leaderboard';
@@ -27,36 +28,40 @@ import AddWins from './Result/AddWins';
 import Result from './Result/Result';
 import Results from './Result/Results';
 
-const App = () => {
-    return (
-        <Router history={hashHistory}>
-            <Route path="/" component={Default}>
-                <IndexRoute component={Dashboard} />
-                // Auth
-                <Route path="activate-account" component={ActivateAccount} />
-                <Route path="login" component={Login} />
-                <Route path="request-password-reset" component={RequestPasswordReset} />
-                <Route path="reset-password" component={ResetPassword} />
-                // Club
-                <Route path="club-settings" component={ClubSettings} />
-                <Route path="create-club" component={CreateClub} />
-                // Leaderboard
-                <Route path="leaderboard" component={Leaderboard} />
-                // Player
-                <Route path="/players" component={Default}>
-                    <IndexRoute component={Players} />
-                    <Route path=":id" component={Player} />
-                </Route>
-                <Route path="/settings" component={PlayerSettings} />
-                // Result
-                <Route path="/add-wins" component={AddWins} />
-                <Route path="/results" component={Default}>
-                    <IndexRoute component={Results} />
-                    <Route path=":id" component={Result} />
-                </Route>
+const App = () => (
+    <Router history={hashHistory}>
+        <Route path="/" component={Default}>
+            <IndexRoute component={Dashboard} />
+
+            // Auth
+            <Route path="activate-account" component={ActivateAccount} />
+            <Route path="login" component={Login} />
+            <Route path="request-password-reset" component={RequestPasswordReset} />
+            <Route path="reset-password" component={ResetPassword} />
+
+            // Club
+            <Route path="club-settings" component={ClubSettings} />
+            <Route path="create-club" component={CreateClub} />
+            <Route path="invite-player" component={InvitePlayer} />
+
+            // Leaderboard
+            <Route path="leaderboard" component={Leaderboard} />
+
+            // Player
+            <Route path="/players" component={Default}>
+                <IndexRoute component={Players} />
+                <Route path=":id" component={Player} />
             </Route>
-        </Router>
-    );
-};
+            <Route path="/settings" component={PlayerSettings} />
+
+            // Result
+            <Route path="/add-wins" component={AddWins} />
+            <Route path="/results" component={Default}>
+                <IndexRoute component={Results} />
+                <Route path=":id" component={Result} />
+            </Route>
+        </Route>
+    </Router>
+);
 
 export default App;

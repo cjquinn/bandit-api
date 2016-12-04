@@ -156,38 +156,41 @@
 
 	$block: #{&};
 
-	&:hover,
-	&:focus {
+	@media (min-width: 600px) {
 
-		#{$block}__backgrounds {
-			opacity: .2;
+		&:hover,
+		&:focus {
 
-			@media (min-width: 700px) {
-				transition: all .2s ease;
-			}
-		}
-
-		&.is--draw {
 			#{$block}__backgrounds {
-				opacity: .24;
-			}
-		}
+				opacity: .2;
 
-		#{$block}__player__rating {
-			opacity: 1;
-			max-height: 20px;
-
-			@media (min-width: 700px) {
-				transition: all .2s ease;
+				@media (min-width: 700px) {
+					transition: all .2s ease;
+				}
 			}
-		}
 
-		#{$block}__player__name {
-			&:before {
-				display: none;
+			&.is--draw {
+				#{$block}__backgrounds {
+					opacity: .24;
+				}
 			}
-			&__full {
-				display: block;
+
+			#{$block}__player__rating {
+				opacity: 1;
+				max-height: 20px;
+
+				@media (min-width: 700px) {
+					transition: all .2s ease;
+				}
+			}
+
+			#{$block}__player__name {
+				&:before {
+					display: none;
+				}
+				&__full {
+					display: block;
+				}
 			}
 		}
 	}

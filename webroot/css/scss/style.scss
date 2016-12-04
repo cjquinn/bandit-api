@@ -1,15 +1,24 @@
-@import "colours";
-@import "break";
-@import "mixins";
+@import "_variables/colours";
+@import "_variables/breakpoints";
+@import "_variables/typography";
+
+@import "_mixins/position";
+@import "_mixins/display";
+@import "_mixins/typography";
+@import "_mixins/background";
+
+@import "_functions/break";
 
 @import "reset";
 
-@import "grids";
-@import "typography";
+@import "common/grids";
+@import "common/typography";
+@import "common/fonts";
+@import "common/animation";
+@import "common/forms";
 
 @import "document";
 @import "global";
-@import "forms";
 
 /*
     elements
@@ -52,5 +61,3 @@
 
 
 
-@import "fonts";
-@import "animation";

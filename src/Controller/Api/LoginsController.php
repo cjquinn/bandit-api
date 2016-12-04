@@ -67,7 +67,7 @@ class LoginsController extends ApiController
                 'errors' => $login->errors(),
                 '_serialize' => 'errors'
             ]);
-            
+
             $this->response->statusCode(400);
         }
     }

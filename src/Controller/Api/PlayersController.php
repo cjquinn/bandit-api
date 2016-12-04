@@ -10,12 +10,8 @@ class PlayersController extends ApiController
     /**
      * @return bool
      */
-    public function isAuthorized($user)
+    public function isAuthorized(array $user)
     {
-        if (!parent::isAuthorized($user)) {
-            return false;
-        }
-
         // Invalid player id
         if ($this->request->action === 'edit' &&
             $this->Auth->user('player.id') !== (int)$this->request->params['id']
@@ -23,7 +19,7 @@ class PlayersController extends ApiController
             return false;
         }
 
-        return true;
+        return parent::isAuthorized($user);
     }
 
     /**
@@ -76,7 +72,7 @@ class PlayersController extends ApiController
             if (!empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name'))) {
                 $this->Players->setProfilePicture($player, $this->request->data['losing_profile_picture']['tmp_name'], 'losing');
             }
-            
+
             if (!empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))) {
                 $this->Players->setProfilePicture($player, $this->request->data['winning_profile_picture']['tmp_name'], 'winning');
             }

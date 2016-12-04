@@ -10,12 +10,8 @@ class ResultsController extends ApiController
     /**
      * @return bool
      */
-    public function isAuthorized($user)
+    public function isAuthorized(array $user)
     {
-        if (!parent::isAuthorized($user)) {
-            return false;
-        }
-
         if ($this->request->action === 'add') {
             $losingPlayerId = Hash::get($this->request->data, 'losing_player_id');
 
@@ -52,7 +48,7 @@ class ResultsController extends ApiController
             }
         }
 
-        return true;
+        return parent::isAuthorized($user);
     }
 
     /**

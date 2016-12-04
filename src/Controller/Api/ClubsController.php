@@ -20,7 +20,7 @@ class ClubsController extends ApiController
     /**
      * @return bool
      */
-    public function isAuthorized($user)
+    public function isAuthorized(array $user)
     {
         // Non founder
         if ($this->request->action === 'edit' &&

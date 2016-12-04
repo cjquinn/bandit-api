@@ -12,7 +12,7 @@ class DisputesController extends ApiController
     public function initialize()
     {
         parent::initialize();
-        
+
         $this->_result = $this->Disputes->Results->get($this->request->params['result_id'], [
             'contain' => [
                 'Disputes'
@@ -23,12 +23,8 @@ class DisputesController extends ApiController
     /**
      * @return bool
      */
-    public function isAuthorized($user)
+    public function isAuthorized(array $user)
     {
-        if (!parent::isAuthorized($user)) {
-            return false;
-        }
-
         if ($this->request->action === 'add') {
             // Time expired
             if (!$this->_result->submitted->wasWithinLast('24 hours')) {
@@ -69,7 +65,7 @@ class DisputesController extends ApiController
             return false;
         }
 
-        return true;
+        return parent::isAuthorized($user);
     }
 
     /**

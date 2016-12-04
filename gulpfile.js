@@ -1,10 +1,10 @@
-import elixir from 'laravel-elixir';
-import fs from 'fs';
+var elixir = require('laravel-elixir');
+var fs = require('fs');
 
 /**
  * Config
  */
-const config = JSON.parse(fs.readFileSync('./.gulprc', 'utf8'));
+var config = JSON.parse(fs.readFileSync('./.gulprc', 'utf8'));
 
 elixir.config.assetsPath = 'assets';
 elixir.config.notifications = config.notifications;

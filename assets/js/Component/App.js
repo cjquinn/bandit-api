@@ -48,18 +48,14 @@ const App = () => (
             <Route path="leaderboard" component={Leaderboard} />
 
             // Player
-            <Route path="/players" component={Default}>
-                <IndexRoute component={Players} />
-                <Route path=":id" component={Player} />
-            </Route>
+            <Route path="/players" component={Players} />
+            <Route path="/players/:id" component={Player} />
             <Route path="/settings" component={PlayerSettings} />
 
             // Result
             <Route path="/add-wins" component={AddWins} />
-            <Route path="/results" component={Default}>
-                <IndexRoute component={Results} />
-                <Route path=":id" component={Result} />
-            </Route>
+            <Route path="/results" component={Results} />
+            <Route path="/results/:id" component={Result} />
         </Route>
     </Router>
 );

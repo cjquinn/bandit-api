@@ -50,7 +50,7 @@ const App = () => (
 
             // Dispute
             <Route path="disputes" component={Disputes} />
-            <Route path="dispute/:id" component={Dispute} />
+            <Route path="disputes/:id" component={Dispute} />
 
             // Leaderboard
             <Route path="leaderboard" component={Leaderboard} />

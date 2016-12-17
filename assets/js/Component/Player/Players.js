@@ -1,5 +1,10 @@
 import React from 'react';
 
-const Players = () => <h1>Players</h1>;
+import PlayerSynopsis from './PlayerSynopsis';
+
+const Players = () =>
+    <ol>
+        {[...Array(5)].map(() => <PlayerSynopsis />)}
+    </ol>
 
 export default Players;

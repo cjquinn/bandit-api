@@ -33,7 +33,7 @@
             "single"
         ],
         "semi": [
-            "error",
+            "warning",
             "always"
         ],
         "space-before-blocks": [

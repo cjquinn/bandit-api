@@ -1,5 +1,10 @@
 import React from 'react';
 
-const Results = () => <h1>Results</h1>;
+import ResultSynopsis from './ResultSynopsis';
+
+const Results = () =>
+    <ol>
+        {[...Array(5)].map(() => <ResultSynopsis />)}
+    </ol>
 
 export default Results;

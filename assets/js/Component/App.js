@@ -19,8 +19,8 @@ import InvitePlayer from './Club/InvitePlayer';
 import Leaderboard from './Leaderboard/Leaderboard';
 
 // Player
-import Player from './Player/Player';
 import Players from './Player/Players';
+import Player from './Player/Player';
 import PlayerSettings from './Player/PlayerSettings';
 
 // Result

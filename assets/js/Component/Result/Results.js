@@ -1,10 +1,8 @@
 import React from 'react';
 
-import ResultSynopsis from './ResultSynopsis';
+import ResultStream from '../Stream/ResultStream';
 
 const Results = () =>
-    <ol>
-        {[...Array(5)].map(() => <ResultSynopsis />)}
-    </ol>
+    <ResultStream />
 
 export default Results;

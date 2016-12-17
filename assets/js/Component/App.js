@@ -15,6 +15,10 @@ import ClubSettings from './Club/ClubSettings';
 import CreateClub from './Club/CreateClub';
 import InvitePlayer from './Club/InvitePlayer';
 
+// Dispute
+import Dispute from './Dispute/Dispute';
+import Disputes from './Dispute/Disputes';
+
 // Leaderboard
 import Leaderboard from './Leaderboard/Leaderboard';
 
@@ -44,18 +48,22 @@ const App = () => (
             <Route path="create-club" component={CreateClub} />
             <Route path="invite-player" component={InvitePlayer} />
 
+            // Dispute
+            <Route path="disputes" component={Disputes} />
+            <Route path="dispute/:id" component={Dispute} />
+
             // Leaderboard
             <Route path="leaderboard" component={Leaderboard} />
 
             // Player
-            <Route path="/players" component={Players} />
-            <Route path="/players/:id" component={Player} />
-            <Route path="/settings" component={PlayerSettings} />
+            <Route path="players" component={Players} />
+            <Route path="players/:id" component={Player} />
+            <Route path="settings" component={PlayerSettings} />
 
             // Result
-            <Route path="/add-wins" component={AddWins} />
-            <Route path="/results" component={Results} />
-            <Route path="/results/:id" component={Result} />
+            <Route path="add-wins" component={AddWins} />
+            <Route path="results" component={Results} />
+            <Route path="results/:id" component={Result} />
         </Route>
     </Router>
 );

@@ -1,12 +1,9 @@
 import React from 'react';
 
-const Default = (props) => {
-    return (
-        <div>
-            {props.children}
-        </div>
-    );
-};
+const Default = (props) =>
+    <div>
+        {props.children}
+    </div>
 
 Default.propTypes = {
     children: React.PropTypes.element.isRequired

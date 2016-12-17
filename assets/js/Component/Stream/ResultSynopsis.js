@@ -1,7 +1,7 @@
 import React from 'react';
 
 const ResultSynopsis = () =>
-    <dl result>
+    <dl>
         <dt>Date:</dt>
         <dd>Tuesday 13th January 2015</dd>
 

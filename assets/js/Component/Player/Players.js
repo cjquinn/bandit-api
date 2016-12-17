@@ -1,10 +1,8 @@
 import React from 'react';
 
-import PlayerSynopsis from './PlayerSynopsis';
+import PlayerStream from '../Stream/PlayerStream';
 
 const Players = () =>
-    <ol>
-        {[...Array(5)].map(() => <PlayerSynopsis />)}
-    </ol>
+    <PlayerStream />
 
 export default Players;

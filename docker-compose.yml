@@ -1,7 +1,7 @@
 version: '2'
 services:
   nginx:
-    image: cjquinn/cakephp-nginx:latest
+    image: cjquinn/cakephp-nginx
     ports:
      - 80:80
     volumes:
@@ -9,7 +9,7 @@ services:
     networks:
      - network
   fpm:
-    image: cjquinn/cakephp-fpm:latest
+    image: cjquinn/cakephp-fpm
     volumes:
      - .:/usr/share/nginx/html
     networks:

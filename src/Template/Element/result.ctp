@@ -1,15 +1,8 @@
-<?php /*<dt>Date:</dt>
-<dd>Tuesday 13th January 2015</dd>*/?>
-
-<ol class="results">
-
-<?php for ($result=1; $result <= 5; $result++) : ?>
-
 <li class="result">
 
     <div class="result__score">
         <dt aria-role="hidden">Match Score:</dt>
-        <dd><span aria-role="hidden">Alan Baker</span> <?=rand(3, 5)?> <span class="result__score__dash">&ndash;</span> <span aria-role="hidden">Brett Southland</span> <?=rand(0, 2)?></dd>
+        <dd><span aria-role="hidden">Alan Baker</span> 2 <span class="result__score__dash">&ndash;</span> <span aria-role="hidden">Brett Southland</span> 1</dd>
     </div>
 
     <?php for ($player=1; $player <= 2; $player++) : ?>
@@ -22,7 +15,7 @@
 
     <div class="result__player result__player--<?=strtolower($verdict)?> result__player--<?=$player;?> player">
 
-        <div class="player__photo clip-hexagon" role="presentation" style="background-image: url('http://userphoto.russellbishop.co.uk/get.php?id=<?=rand(0, 40)?>');">
+        <div class="player__photo clip-hexagon" role="presentation" style="background-image: url('/img/temp/users/a.jpg');">
 
             <div class="level is--level<?=$level?>"></div>
 
@@ -44,7 +37,3 @@
     <?php endfor; ?>
 
 </li>
-
-<?php endfor; ?>
-
-</ol>

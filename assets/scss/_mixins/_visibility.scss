@@ -1,0 +1,9 @@
+@mixin hide {
+  position: absolute;
+  visibility: hidden;
+}
+
+@mixin show {
+  position: static;
+  visibility: visible;
+}

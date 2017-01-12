@@ -27,7 +27,6 @@
 			position: relative; top: -2px;
 		}
 	}
-
 }
 
 @mixin align-items-centre {
@@ -46,6 +45,24 @@
 
 .justify-space-between-baseline {
 	@include justify-space-between-baseline;
+}
+
+/**
+ * Sizing Mixins
+ */
+@mixin aspect-ratio($paddingValue) {
+  position: relative;
+
+  &:before {
+    display: block;
+    width: 100%;
+    padding-top: $paddingValue;
+    content: '';
+  }
+
+  > * {
+    position: absolute;
+  }
 }
 
 @mixin size($size) {

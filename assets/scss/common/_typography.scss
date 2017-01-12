@@ -1,10 +1,12 @@
 :root {
-  @include font-scale(map-get($font-sizes, smallest), #{map-get($font-sizes, largest)});
-  font-size: #{map-get($font-sizes, smallest)}px;
+  @include font-scale(14, 18);
+  // font-size: #{map-get($font-sizes, smallest)};
 }
 
 body {
-	font: 16px/1 $font-stack; color: $text;
+	line-height: 1;
+  font-family: $font-stack;
+  color: $text;
 }
 
 a {
@@ -101,6 +103,17 @@ li {
 	list-style: none;
 }
 
+[aria-role="hidden"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
 .caps {
 	text-transform: uppercase;
 }
@@ -115,25 +128,20 @@ li {
 	line-height: 1.35; font-weight: 300;
 }
 
-.points-won {
-	color: $win;
+.u-gained {
+  color: $win;
+
+  &:before {
+    content: '+';
+  }
 }
 
-.points-loss {
-	color: $loss;
-}
+.u-lost {
+  color: $loss;
 
-.score {
-	text-align: center; font-size: 0; white-space: nowrap;
-
-	> * {
-		@include font-size($size: xxlarge);
-	}
-
-	&__hyphen {
-	// 	opacity: .5;
-		margin: 0 3px 0;
-	}
+  &:before {
+    content: '-';
+  }
 }
 
 .text--level {

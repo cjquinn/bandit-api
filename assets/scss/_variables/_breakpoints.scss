@@ -1,5 +1,7 @@
 $breakpoints: (
   imaginous: 320,
+  variatious: 1100,
+
   xxsmall: 490,
   xsmall: 545,
   xxmedium: 700,
@@ -10,6 +12,5 @@ $breakpoints: (
   xlarge: 1020,
 );
 
-$context: (
-
-);
+$windowSmallest: map-get($breakpoints, imaginous);
+$windowLargest: map-get($breakpoints, variatious);

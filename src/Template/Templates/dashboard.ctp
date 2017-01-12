@@ -21,7 +21,7 @@
 
                     for ($k = 0; $k < 1; $k++) {
 
-                        echo $this->element('playerDisputing');
+                        echo $this->element('result');
 
                     }
 
@@ -38,33 +38,18 @@
                 <small class="h4__small">See newest games</small>
             </a>
 
-            <ol class="stream matches">
+            <ol class="stream matches results">
 
                 <?php
 
-                    $stream = 1;
+                    $stream = 5;
 
                     for ($k = 0; $k < $stream; $k++) {
 
-                        echo $this->element('matchBandit');
+                        echo $this->element('result');
 
                     }
 
-                    $stream = 3;
-
-                    for ($k = 0; $k < $stream; $k++) {
-
-                        echo $this->element('match');
-
-                    }
-
-                    $stream = 1;
-
-                    for ($k = 0; $k < $stream; $k++) {
-
-                        echo $this->element('matchLoss');
-
-                    }
                 ?>
 
             </ol>

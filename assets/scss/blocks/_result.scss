@@ -1,0 +1,97 @@
+.results {
+
+  .result {
+    transition: opacity .2s ease-out;
+  }
+
+  &:hover {
+    .result {
+      opacity: .55;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.result {
+  @include font-scale(14, 16);
+  // font-size: 14px;
+  display: flex;
+  align-items: center;
+
+  &__player {
+    $block: #{&};
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-between;
+    min-height: 6em;
+    padding: .5em;
+
+    &--1 {
+      order: 1;
+
+      > :first-child {
+        order: 2;
+      }
+
+      > :last-child {
+        order: 1;
+      }
+    }
+
+    &--2 {
+      order: 3;
+      text-align: right;
+
+      > :first-child {
+
+      }
+
+      > :last-child {
+      }
+    }
+
+    $glowDiameter: 100%;
+
+    &--winner {
+      &.#{$block}--1 {
+        background-image: radial-gradient( circle farthest-corner at top left, rgba($win--glow, .14) 0%, rgba($win--glow, 0) $glowDiameter);
+      }
+
+      &#{$block}--2 {
+        background-image: radial-gradient( circle farthest-corner at top right, rgba($win--glow, .14) 0%, rgba($win--glow, 0) $glowDiameter);
+      }
+    }
+
+    &--loser {
+      &#{$block}--1 {
+        background-image: radial-gradient( circle farthest-corner at top left, rgba($loss--glow, .14) 0%, rgba($loss--glow, 0) $glowDiameter);
+      }
+
+      &#{$block}--2 {
+        background-image: radial-gradient( circle farthest-corner at top right, rgba($loss--glow, .14) 0%, rgba($loss--glow, 0) $glowDiameter);
+      }
+    }
+  }
+
+  &__score {
+    order: 2;
+    padding-right: 1em;
+    padding-left: 1em;
+    font-size: 1.5em;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+
+    &__dash {
+      font-size: 1em;
+      font-weight: normal;
+    }
+  }
+
+  &__points {
+    font-weight: 300;
+  }
+}

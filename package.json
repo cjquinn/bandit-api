@@ -16,11 +16,11 @@
     "gulp": "^3.9.1",
     "laravel-elixir": "^6.0.0-15",
     "laravel-elixir-browsersync-official": "^1.0.0",
-    "laravel-elixir-webpack-official": "^1.0.10"
+    "laravel-elixir-webpack-official": "^1.0.10",
+    "sass-lint": "^1.10.2"
   },
   "scripts": {
     "build": "gulp",
     "watch": "gulp watch"
   }
 }
-

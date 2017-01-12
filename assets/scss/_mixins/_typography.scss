@@ -12,15 +12,17 @@
 
 @mixin font-scale($smallest, $largest) {
 
-  @media (max-width: #{map-get($context, largest)}px){
-    font-size: calc( #{$smallest}px + (#{$largest} - #{$smallest}) * ( (100vw - #{map-get($context, smallest)}px) / ( #{map-get($context, largest)} - #{map-get($context, smallest)}) ));
+  @media (max-width: #{$windowLargest)}px){
+    font-size: calc( #{$smallest}px + (#{$largest} - #{$smallest}) * ( (100vw - #{$windowSmallest}px) / ( #{$windowLargest)} - #{$windowSmallest}) ));
   }
 
-  @media (min-width: #{map-get($context, largest)}px){
+  @media (min-width: #{$windowLargest)}px){
     font-size: #{$largest}px;
   }
 
 }
+
+// font-size: calc( 15px + (18 - 15) * ( (100vw - 320px) / ( 1430 - 320) ));
 
 @mixin no-text {
 	text-indent: 100%; white-space: nowrap; overflow: hidden;
@@ -31,6 +33,8 @@
 }
 
 @mixin ellipsis {
-	overflow: hidden;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
 	text-overflow: ellipsis; white-space: nowrap;
 }

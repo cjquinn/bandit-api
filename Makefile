@@ -1,8 +1,6 @@
 .PHONY: cake composer down install migrate seed test up update
 
-MAKEPATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-PWD := $(dir $(MAKEPATH))
-PROJECT := $(shell basename $(CURDIR))
+PROJECT=banditapi
 
 CMD=""
 
@@ -11,7 +9,7 @@ bash:
 		-v $(PWD):/opt \
 		-w /opt \
 		--network=$(PROJECT)_network \
-		cjquinn/cakephp-fpm:latest \
+		wearelighthouse/php-fpm:latest \
 		bash
 
 cake:
@@ -19,7 +17,7 @@ cake:
 		-v $(PWD):/opt \
 		-w /opt \
 		--network=$(PROJECT)_network \
-		cjquinn/cakephp-fpm:latest \
+		wearelighthouse/php-fpm:latest \
 		bin/cake $(CMD)
 
 composer:
@@ -27,7 +25,7 @@ composer:
 		-v $(PWD):/opt \
 		-w /opt \
 		--network=$(PROJECT)_network \
-		cjquinn/cakephp-fpm:latest \
+		wearelighthouse/php-fpm:latest \
 		composer $(CMD)
 
 down:
@@ -47,7 +45,7 @@ test:
 		-v $(PWD):/opt \
 		-w /opt \
 		--network=$(PROJECT)_network \
-		cjquinn/cakephp-fpm:latest \
+		wearelighthouse/php-fpm:latest \
 		vendor/bin/phpunit
 
 test-group:
@@ -55,12 +53,11 @@ test-group:
 		-v $(PWD):/opt \
 		-w /opt \
 		--network=$(PROJECT)_network \
-		cjquinn/cakephp-fpm:latest \
+		wearelighthouse/php-fpm:latest \
 		vendor/bin/phpunit --group testing
 
 up:
 	docker-compose up -d
-	npm run watch
 
 update:
 	make install

@@ -6,13 +6,6 @@ use Cake\Routing\Router;
 Router::defaultRouteClass('DashedRoute');
 
 Router::scope('/', function ($routes) {
-    $routes->connect('/', [
-        'controller' => 'App',
-        'action' => 'display'
-    ], [
-        '_name' => 'home'
-    ]);
-
     /**
      * Templates
      */
@@ -126,18 +119,6 @@ Router::prefix('api', function ($routes) {
             ]
         ]);
 
-        $routes->connect('/login', [
-            'controller' => 'Logins',
-            'action' => 'login',
-            '_method' => 'POST'
-        ]);
-
-        $routes->connect('/logout', [
-            'controller' => 'Logins',
-            'action' => 'logout',
-            '_method' => 'GET'
-        ]);
-
         $routes->connect('/request-password-reset', [
             'controller' => 'Logins',
             'action' => 'requestPasswordReset',
@@ -154,6 +135,12 @@ Router::prefix('api', function ($routes) {
                 'PATCH',
                 'PUT'
             ]
+        ]);
+
+        $routes->connect('/token', [
+            'controller' => 'Logins',
+            'action' => 'token',
+            '_method' => 'POST'
         ]);
 
         $routes->connect('/activate-account/validate-token', [

@@ -35,7 +35,7 @@ class LoginsControllerTest extends IntegrationTestCase
         $this->put('/api/auth/activate-account.json?token=123', [
             'password' => ''
         ]);
-        
+
         $this->assertResponseCode(400);
     }
 
@@ -61,7 +61,7 @@ class LoginsControllerTest extends IntegrationTestCase
         $this->put('/api/auth/activate-account.json?token=123', [
             'password' => 'password'
         ]);
-        
+
         $this->assertResponseCode(200);
     }
 
@@ -150,7 +150,7 @@ class LoginsControllerTest extends IntegrationTestCase
         $this->put('/api/auth/request-password-reset.json', [
             'email' => 'christy@bandit.localhost'
         ]);
-        
+
         $this->assertResponseCode(200);
     }
 
@@ -175,7 +175,7 @@ class LoginsControllerTest extends IntegrationTestCase
         $this->put('/api/auth/reset-password.json?token=123', [
             'password' => ''
         ]);
-        
+
         $this->assertResponseCode(400);
     }
 
@@ -200,7 +200,7 @@ class LoginsControllerTest extends IntegrationTestCase
         $this->put('/api/auth/reset-password.json?token=123', [
             'password' => 'password'
         ]);
-        
+
         $this->assertResponseCode(200);
     }
 
@@ -212,7 +212,7 @@ class LoginsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
 
         $this->get('/api/auth/activate-account/validate-token.json');
-        
+
         $this->assertResponseCode(403);
     }
 

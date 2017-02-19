@@ -75,37 +75,6 @@ class LoginsController extends ApiController
     /**
      * @return void
      */
-    public function login()
-    {
-        $login = $this->Auth->identify();
-
-        if ($login) {
-            $this->Auth->setUser($login);
-
-            $this->set([
-                'login' => $login,
-                '_serialize' => 'login'
-            ]);
-        } else {
-            $this->set('_serialize', true);
-
-            $this->response->statusCode(400);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    public function logout()
-    {
-        $this->Auth->logout();
-
-        $this->set('_serialize', true);
-    }
-
-    /**
-     * @return void
-     */
     public function requestPasswordReset()
     {
         $login = $this->Logins
@@ -140,6 +109,25 @@ class LoginsController extends ApiController
         }
 
         $this->set('_serialize', true);
+    }
+
+    /**
+     * @return void
+     */
+    public function token()
+    {
+        $login = $this->Auth->identify();
+
+        if ($login) {
+            $this->set([
+                'token' => $this->Logins->generateToken($login['id']),
+                '_serialize' => 'login'
+            ]);
+        } else {
+            $this->set('_serialize', true);
+
+            $this->response->statusCode(400);
+        }
     }
 
     /**

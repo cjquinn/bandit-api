@@ -2,12 +2,10 @@
 
 namespace App\Controller\Api;
 
-use App\Controller\AppController;
-
-use Cake\Event\Event;
+use Cake\Controller\Controller;
 use Cake\ORM\TableRegistry;
 
-class ApiController extends AppController
+class ApiController extends Controller
 {
 
     /**
@@ -17,15 +15,27 @@ class ApiController extends AppController
     {
         parent::initialize();
 
+        $this->loadComponent('Auth', [
+            'authenticate' => [
+                'all' => [
+                    'finder' => 'auth',
+                    'userModel' => 'Logins'
+                ],
+                'ADmad/JwtAuth.Jwt' => [
+                    'fields' => ['username' => 'id'],
+                    'parameter' => 'token',
+                    'queryDatasource' => true
+                ],
+                'Form' => [
+                    'fields' => ['username' => 'email']
+                ]
+            ],
+            'authorize' => 'Controller',
+            'storage' => 'Memory',
+            'unauthorizedRedirect' => false
+        ]);
+        $this->loadComponent('Cookie');
         $this->loadComponent('RequestHandler');
-    }
-
-    /**
-     * @return void
-     */
-    public function beforeFilter(Event $event)
-    {
-        $this->Auth->config('unauthorizedRedirect', false);
     }
 
     /**
@@ -40,11 +50,16 @@ class ApiController extends AppController
         }
 
         if (isset($this->request->params['club_id'])) {
-            if (!TableRegistry::get('Players')->isAssignedToClub($this->Auth->user('player.id'), $this->request->params['club_id'])) {
+            $playerIsAsignedToClub = TableRegistry::get('Players')->isAssignedToClub(
+                $this->Auth->user('player.id'),
+                $this->request->params['club_id']
+            );
+
+            if (!$playerIsAsignedToClub) {
                 return false;
             }
         }
 
-        return parent::isAuthorized($user);
+        return true;
     }
 }

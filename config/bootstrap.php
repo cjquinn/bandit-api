@@ -181,7 +181,7 @@ Request::addDetector('tablet', function ($request) {
  * Plugin::load('Migrations'); //Loads a single plugin named Migrations
  *
  */
-
+Plugin::load('ADmad/JwtAuth');
 Plugin::load('Migrations');
 
 /**

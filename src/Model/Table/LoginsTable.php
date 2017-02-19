@@ -10,8 +10,11 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
+use Cake\Utility\Salt;
 use Cake\Utility\Text;
 use Cake\Validation\Validator;
+
+use Firebase\JWT\JWT;
 
 class LoginsTable extends Table
 {
@@ -26,7 +29,7 @@ class LoginsTable extends Table
                 'Players'
             ]
         ]);
-        
+
         $this->addBehavior('Timestamp');
     }
 
@@ -166,6 +169,22 @@ class LoginsTable extends Table
             ->where(['password IS NOT' => null]);
 
         return $query;
+    }
+
+    /**
+     * Generates a JWT
+     *
+     * @return string
+     */
+    public function generateToken($id)
+    {
+        return JWT::encode(
+            [
+                'sub' => $id,
+                'exp' =>  time() + 604800
+            ],
+            Security::salt()
+        );
     }
 
     /**

@@ -21,22 +21,13 @@ class LoginsController extends ApiController
     {
         parent::beforeFilter($event);
 
-        $allowedActions = [
+        $this->Auth->allow([
             'activateAccount',
-            'logout',
             'requestPasswordReset',
             'resetPassword',
+            'token',
             'validateToken'
-        ];
-        $bypassActions = array_replace($allowedActions, [1 => 'login']);
-
-        $this->Auth->allow($allowedActions);
-
-        if ($this->Auth->user() &&
-            in_array($this->request->action, $bypassActions)
-        ) {
-            throw new ForbiddenException('You are not authorized to access that location.');
-        }
+        ]);
     }
 
     /**

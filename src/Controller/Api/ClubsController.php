@@ -14,7 +14,7 @@ class ClubsController extends ApiController
     {
         parent::beforeFilter($event);
 
-        $this->Auth->allow(['add']);
+        $this->Auth->allow('add');
     }
 
     /**
@@ -46,8 +46,9 @@ class ClubsController extends ApiController
     {
         $fieldList = ['name'];
 
-        if ($this->Auth->user()) {
-            $this->request->data['founding_player_id'] = $this->Auth->user('player.id');
+        $user = $this->Auth->identify();
+        if ($user) {
+            $this->request->data['founding_player_id'] = $user['player']['id'];
 
             $fieldList[] = 'founding_player_id';
         } else {

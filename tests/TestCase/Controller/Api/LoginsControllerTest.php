@@ -68,67 +68,6 @@ class LoginsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testLoginBadData()
-    {
-        $logins = TableRegistry::get('Logins');
-        $login = $logins->get(1);
-
-        $login->set([
-            'password' => 'password'
-        ]);
-        $logins->save($login);
-
-        $this->_setAjaxRequest();
-
-        $this->post('/api/auth/login.json', [
-            'email' => 'christy@bandit.localhost',
-            'password' => 'incorrect password',
-            'remember_me' => false
-        ]);
-
-        $this->assertResponseCode(400);
-    }
-
-    /**
-     * @return void
-     */
-    public function testLoginPost()
-    {
-        $logins = TableRegistry::get('Logins');
-        $login = $logins->get(1);
-
-        $login->set([
-            'password' => 'password'
-        ]);
-        $logins->save($login);
-
-        $this->_setAjaxRequest();
-
-        $this->post('/api/auth/login.json', [
-            'email' => 'christy@bandit.localhost',
-            'password' => 'password',
-            'remember_me' => false
-        ]);
-
-        $this->assertResponseCode(200);
-    }
-
-    /**
-     * @return void
-     */
-    public function testLogoutGet()
-    {
-        $this->_setAjaxRequest();
-
-        $this->get('/api/auth/logout.json');
-
-        $this->assertResponseCode(200);
-    }
-
-
-    /**
-     * @return void
-     */
     public function testRequestPasswordResetInvalidEmail()
     {
         $this->_setAjaxRequest();
@@ -199,6 +138,38 @@ class LoginsControllerTest extends IntegrationTestCase
 
         $this->put('/api/auth/reset-password.json?token=123', [
             'password' => 'password'
+        ]);
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function testTokenBadData()
+    {
+        $this->_setAjaxRequest();
+
+        $this->post('/api/auth/token.json', [
+            'email' => 'christy@bandit.localhost',
+            'password' => 'incorrect password',
+            'remember_me' => false
+        ]);
+
+        $this->assertResponseCode(400);
+    }
+
+    /**
+     * @return void
+     */
+    public function testTokenPost()
+    {
+        $this->_setAjaxRequest();
+
+        $this->post('/api/auth/token.json', [
+            'email' => 'christy@bandit.localhost',
+            'password' => 'password',
+            'remember_me' => false
         ]);
 
         $this->assertResponseCode(200);

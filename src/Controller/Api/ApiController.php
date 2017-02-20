@@ -31,6 +31,7 @@ class ApiController extends Controller
                 ]
             ],
             'authorize' => 'Controller',
+            'loginAction' => false,
             'storage' => 'Memory',
             'unauthorizedRedirect' => false
         ]);

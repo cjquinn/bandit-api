@@ -2,6 +2,8 @@
 
 namespace App\Test\TestCase\Controller;
 
+use Cake\ORM\TableRegistry;
+
 trait ControllerTestTrait
 {
 
@@ -23,16 +25,13 @@ trait ControllerTestTrait
      */
     private function _setAuthSession($id)
     {
-        $this->session([
-            'Auth' => [
-                'User' => [
-                    'id' => $id,
-                    'player' => [
-                        'id' => $id
-                    ]
-                ]
-            ]
-        ]);
+        $token = TableRegistry::get('Logins')->generateToken($id);
+
+        if (!isset($this->_request['headers'])) {
+            $this->_request['headers'] = [];
+        }
+
+        $this->_request['headers']['Authorization'] = 'Bearer ' . $token;
     }
 
     /**
@@ -42,10 +41,10 @@ trait ControllerTestTrait
     {
         $_ENV['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
 
-        $this->configRequest([
-            'headers' => [
-                'Accept' => 'application/json'
-            ]
-        ]);
+        if (!isset($this->_request['headers'])) {
+            $this->_request['headers'] = [];
+        }
+
+        $this->_request['headers']['Accept'] = 'application/json';
     }
 }

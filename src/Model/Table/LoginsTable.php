@@ -10,7 +10,7 @@ use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Utility\Hash;
-use Cake\Utility\Salt;
+use Cake\Utility\Security;
 use Cake\Utility\Text;
 use Cake\Validation\Validator;
 

@@ -61,35 +61,35 @@ class LoginsTable extends Table
         $validator = $this->validationPassword($validator);
 
         if (!defined('TESTING')) {
-            $validator
-                ->requirePresence('losing_profile_picture')
-                ->notEmpty('losing_profile_picture')
-                ->add('losing_profile_picture', 'file', [
-                    'rule' => [
-                        'uploadedFile',
-                        [
-                            'types' => [
-                                'image/jpeg',
-                                'image/png'
-                            ]
-                        ]
-                    ]
-                ]);
+            // $validator
+            //     ->requirePresence('losing_profile_picture')
+            //     ->notEmpty('losing_profile_picture')
+            //     ->add('losing_profile_picture', 'file', [
+            //         'rule' => [
+            //             'uploadedFile',
+            //             [
+            //                 'types' => [
+            //                     'image/jpeg',
+            //                     'image/png'
+            //                 ]
+            //             ]
+            //         ]
+            //     ]);
 
-            $validator
-                ->requirePresence('winning_profile_picture')
-                ->notEmpty('winning_profile_picture')
-                ->add('winning_profile_picture', 'file', [
-                    'rule' => [
-                        'uploadedFile',
-                        [
-                            'types' => [
-                                'image/jpeg',
-                                'image/png'
-                            ]
-                        ]
-                    ]
-                ]);
+            // $validator
+            //     ->requirePresence('winning_profile_picture')
+            //     ->notEmpty('winning_profile_picture')
+            //     ->add('winning_profile_picture', 'file', [
+            //         'rule' => [
+            //             'uploadedFile',
+            //             [
+            //                 'types' => [
+            //                     'image/jpeg',
+            //                     'image/png'
+            //                 ]
+            //             ]
+            //         ]
+            //     ]);
         }
 
         return $validator;

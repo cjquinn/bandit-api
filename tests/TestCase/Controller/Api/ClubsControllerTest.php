@@ -27,7 +27,8 @@ class ClubsControllerTest extends IntegrationTestCase
             'founding_player' => [
                 'name' => 'Alex Farthing',
                 'login' => [
-                    'email' => 'alex@gmail.com'
+                    'email' => 'alex@gmail.com',
+                    'password' => 'password'
                 ]
             ]
         ]);

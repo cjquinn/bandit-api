@@ -44,6 +44,7 @@ class ClubsController extends ApiController
      */
     public function add()
     {
+        $associated = [];
         $fieldList = ['name'];
 
         $user = $this->Auth->identify();
@@ -52,10 +53,16 @@ class ClubsController extends ApiController
 
             $fieldList[] = 'founding_player_id';
         } else {
+            $associated = [
+                'FoundingPlayers.Logins' => [
+                    'validate' => 'activate'
+                ]
+            ];
             $fieldList[] = 'founding_player';
         }
 
         $club = $this->Clubs->newEntity($this->request->data, [
+            'associated' => $associated,
             'fieldList' => $fieldList
         ]);
 

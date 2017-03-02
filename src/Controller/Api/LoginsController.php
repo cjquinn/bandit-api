@@ -83,6 +83,7 @@ class LoginsController extends ApiController
             $this->response->statusCode(400);
         }
 
+
         $this->set('_serialize', true);
     }
 

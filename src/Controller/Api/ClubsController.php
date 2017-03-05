@@ -54,9 +54,7 @@ class ClubsController extends ApiController
             $fieldList[] = 'founding_player_id';
         } else {
             $associated = [
-                'FoundingPlayers.Logins' => [
-                    'validate' => 'activate'
-                ]
+                'FoundingPlayers.Logins'
             ];
             $fieldList[] = 'founding_player';
         }

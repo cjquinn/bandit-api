@@ -100,6 +100,18 @@ class LoginsTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+        $validator = $this->validationEmail($validator);
+
+        $validator = $this->validationPassword($validator);
+
+        return $validator;
+    }
+
+    /**
+     * @return \Cake\Validation\Validator
+     */
+    public function validationEmail(Validator $validator)
+    {
         $validator
             ->requirePresence('email', 'create')
             ->notEmpty('email')

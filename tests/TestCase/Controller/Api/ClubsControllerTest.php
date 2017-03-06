@@ -35,10 +35,10 @@ class ClubsControllerTest extends IntegrationTestCase
 
         $this->assertResponseCode(200);
 
-        $club = json_decode($this->_response->body(), true);
+        $data = json_decode($this->_response->body(), true);
         $this->assertTrue(TableRegistry::get('ClubsPlayers')->exists([
-            'club_id' => $club['id'],
-            'player_id' => $club['founding_player_id']
+            'club_id' => $data['club']['id'],
+            'player_id' => $data['club']['founding_player_id']
         ]));
     }
 
@@ -73,9 +73,9 @@ class ClubsControllerTest extends IntegrationTestCase
 
         $this->assertResponseCode(200);
 
-        $club = json_decode($this->_response->body(), true);
+        $data = json_decode($this->_response->body(), true);
         $this->assertTrue(TableRegistry::get('ClubsPlayers')->exists([
-            'club_id' => $club['id'],
+            'club_id' => $data['club']['id'],
             'player_id' => 1
         ]));
     }

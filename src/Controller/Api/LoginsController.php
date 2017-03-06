@@ -113,7 +113,7 @@ class LoginsController extends ApiController
         if ($login) {
             $this->set([
                 'token' => $this->Logins->generateToken($login['id']),
-                '_serialize' => 'login'
+                '_serialize' => 'token'
             ]);
         } else {
             $this->set('_serialize', true);

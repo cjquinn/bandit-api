@@ -66,16 +66,18 @@ class ClubsController extends ApiController
 
         $this->set('club', $club);
 
-        if ($this->Clubs->save($club)) {
-            $this->set('_serialize', 'club');
-        } else {
-            $this->set([
-                'errors' => $club->errors(),
-                '_serialize' => true
-            ]);
+        if (!$this->Clubs->save($club)) {
+            $this->set('errors', $club->errors());
 
             $this->response->statusCode(400);
+        } elseif ($club->player) {
+            $this->set(
+                'token',
+                $this->Clubs->Players->Logins->generateToken($club->player->login_id)
+            );
         }
+
+        $this->set('_serialize', true);
     }
 
     /**

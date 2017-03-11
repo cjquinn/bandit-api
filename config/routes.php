@@ -137,9 +137,9 @@ Router::prefix('api', function ($routes) {
             ]
         ]);
 
-        $routes->connect('/token', [
+        $routes->connect('/login', [
             'controller' => 'Logins',
-            'action' => 'token',
+            'action' => 'login',
             '_method' => 'POST'
         ]);
 

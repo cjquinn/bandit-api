@@ -19,6 +19,9 @@ class ClubsPlayersController extends ApiController
             $this->response->statusCode(400);
         }
 
-        $this->set('_serialize', true);
+        $this->set([
+            'clubsPlayer' => $clubsPlayer,
+            'errors' => $clubsPlayer->errors()
+        ]);
     }
 }

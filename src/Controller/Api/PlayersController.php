@@ -49,18 +49,14 @@ class PlayersController extends ApiController
             ]
         ]);
 
-        $this->set('player', $player);
-
-        if ($this->Players->save($player)) {
-            $this->set('_serialize', 'player');
-        } else {
-            $this->set([
-                'errors' => $player->errors(),
-                '_serialize' => true
-            ]);
-
+        if (!$this->Players->save($player)) {
             $this->response->statusCode(400);
         }
+
+        $this->set([
+            'player' => $player,
+            'errors' => $player->errors()
+        ]);
     }
 
     /**
@@ -76,27 +72,31 @@ class PlayersController extends ApiController
 
         $this->Players->patchEntity($player, $this->request->data);
 
-        if (!$player->errors()) {
-            if (!empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name'))) {
-                $this->Players->setProfilePicture($player, $this->request->data['losing_profile_picture']['tmp_name'], 'losing');
-            }
+        // if (!$player->errors()) {
+        //     if (!empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name'))) {
+        //         $this->Players->setProfilePicture(
+        //             $player,
+        //             $this->request->data['losing_profile_picture']['tmp_name'],
+        //             'losing'
+        //         );
+        //     }
 
-            if (!empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))) {
-                $this->Players->setProfilePicture($player, $this->request->data['winning_profile_picture']['tmp_name'], 'winning');
-            }
-        }
+        //     if (!empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))) {
+        //         $this->Players->setProfilePicture(
+        //             $player,
+        //             $this->request->data['winning_profile_picture']['tmp_name'],
+        //             'winning'
+        //         );
+        //     }
+        // }
 
-        $this->set('player', $player);
-
-        if ($this->Players->save($player)) {
-            $this->set('_serialize', 'player');
-        } else {
-            $this->set([
-                'errors' => $player->errors(),
-                '_serialize' => true
-            ]);
-
+        if (!$this->Players->save($player)) {
             $this->response->statusCode(400);
         }
+
+        $this->set([
+            'player' => $player,
+            'errors' => $player->errors()
+        ]);
     }
 }

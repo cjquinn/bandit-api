@@ -67,18 +67,14 @@ class ResultsController extends ApiController
         $result->set('club_id', $this->request->params['club_id']);
         $result->set('winning_player_id', $this->Auth->user('player.id'));
 
-        $this->set('result', $result);
-
-        if ($this->Results->save($result)) {
-            $this->set('_serialize', 'result');
-        } else {
-            $this->set([
-                'errors' => $result->errors(),
-                '_serialize' => true
-            ]);
-
+        if (!$this->Results->save($result)) {
             $this->response->statusCode(400);
         }
+
+        $this->set([
+            'result' => $result,
+            'errors' => $result->errors()
+        ]);
     }
 
     /**
@@ -109,10 +105,7 @@ class ResultsController extends ApiController
                 'club_id' => $this->request->params['club_id']
             ]);
 
-        $this->set([
-            'results' => $results,
-            '_serialize' => 'results'
-        ]);
+        $this->set('results', $results);
     }
 
     /**
@@ -127,9 +120,6 @@ class ResultsController extends ApiController
             ]
         ]);
 
-        $this->set([
-            'result' => $result,
-            '_serialize' => 'result'
-        ]);
+        $this->set('result', $result);
     }
 }

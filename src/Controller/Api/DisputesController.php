@@ -77,18 +77,14 @@ class DisputesController extends ApiController
 
         $dispute->set('result_id', $this->_result->id);
 
-        $this->set('dispute', $dispute);
-
-        if ($this->Disputes->save($dispute)) {
-            $this->set('_serialize', 'dispute');
-        } else {
-            $this->set([
-                'errors' => $dispute->errors(),
-                '_serialize' => true
-            ]);
-
+        if (!$this->Disputes->save($dispute)) {
             $this->response->statusCode(400);
         }
+
+        $this->set([
+            'dispute' => $dispute,
+            'errors' => $dispute->errors()
+        ]);
     }
 
     /**
@@ -112,17 +108,13 @@ class DisputesController extends ApiController
             ]
         ]);
 
-        $this->set('dispute', $this->_result->dispute);
-
-        if ($this->Disputes->save($this->_result->dispute)) {
-            $this->set('_serialize', true);
-        } else {
-            $this->set([
-                'errors' => $this->_result->dispute->errors(),
-                '_serialize' => true
-            ]);
-
+        if (!$this->Disputes->save($this->_result->dispute)) {
             $this->response->statusCode(400);
         }
+
+        $this->set([
+            'dispute' => $this->_result->dispute,
+            'errors' => $this->_result->dispute->errors()
+        ]);
     }
 }

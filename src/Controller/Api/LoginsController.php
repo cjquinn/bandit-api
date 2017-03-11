@@ -23,9 +23,9 @@ class LoginsController extends ApiController
 
         $this->Auth->allow([
             'activateAccount',
+            'login',
             'requestPasswordReset',
             'resetPassword',
-            'token',
             'validateToken'
         ]);
     }
@@ -39,26 +39,52 @@ class LoginsController extends ApiController
 
         $this->Logins->activateAccount($login, $this->request->data);
 
-        if (!$login->errors() &&
-            !empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name')) &&
-            !empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))
-        ) {
-            $this->Logins->Players->setProfilePicture($login->player, $this->request->data['losing_profile_picture']['tmp_name'], 'losing');
+        // if (!$login->errors() &&
+        //     !empty(Hash::get($this->request->data, 'losing_profile_picture.tmp_name')) &&
+        //     !empty(Hash::get($this->request->data, 'winning_profile_picture.tmp_name'))
+        // ) {
+        //     $this->Logins->Players->setProfilePicture(
+        //         $login->player,
+        //         $this->request->data['losing_profile_picture']['tmp_name'],
+        //         'losing'
+        //     );
 
-            $this->Logins->Players->setProfilePicture($login->player, $this->request->data['winning_profile_picture']['tmp_name'], 'winning');
-        }
+        //     $this->Logins->Players->setProfilePicture(
+        //         $login->player,
+        //         $this->request->data['winning_profile_picture']['tmp_name'],
+        //         'winning'
+        //     );
+        // }
 
         if ($this->Logins->save($login)) {
+            $this->set(
+                'token',
+                $this->Logins->generateToken($login->id)
+            );
+        } else {
+            $this->response->statusCode(400);
+        }
+
+        $this->set([
+            'email' => $login->email,
+            'errors' => $login->errors(),
+            '_serialize' => 'email'
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function login()
+    {
+        $login = $this->Auth->identify();
+
+        if ($login) {
             $this->set([
-                'email' => $login->email,
-                '_serialize' => 'email'
+                'login' => $login,
+                'token' => $this->Logins->generateToken($login['id'])
             ]);
         } else {
-            $this->set([
-                'errors' => $login->errors(),
-                '_serialize' => 'errors'
-            ]);
-
             $this->response->statusCode(400);
         }
     }
@@ -83,7 +109,6 @@ class LoginsController extends ApiController
             $this->response->statusCode(400);
         }
 
-
         $this->set('_serialize', true);
     }
 
@@ -101,25 +126,6 @@ class LoginsController extends ApiController
         }
 
         $this->set('_serialize', true);
-    }
-
-    /**
-     * @return void
-     */
-    public function token()
-    {
-        $login = $this->Auth->identify();
-
-        if ($login) {
-            $this->set([
-                'token' => $this->Logins->generateToken($login['id']),
-                '_serialize' => 'token'
-            ]);
-        } else {
-            $this->set('_serialize', true);
-
-            $this->response->statusCode(400);
-        }
     }
 
     /**

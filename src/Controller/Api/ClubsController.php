@@ -64,11 +64,7 @@ class ClubsController extends ApiController
             'fieldList' => $fieldList
         ]);
 
-        $this->set('club', $club);
-
         if (!$this->Clubs->save($club)) {
-            $this->set('errors', $club->errors());
-
             $this->response->statusCode(400);
         } elseif ($club->player) {
             $this->set(
@@ -77,7 +73,10 @@ class ClubsController extends ApiController
             );
         }
 
-        $this->set('_serialize', true);
+        $this->set([
+            'club' => $club,
+            'errors' => $club->errors()
+        ]);
     }
 
     /**
@@ -90,18 +89,14 @@ class ClubsController extends ApiController
 
         $this->Clubs->patchEntity($club, $this->request->data);
 
-        $this->set('club', $club);
-
-        if ($this->Clubs->save($club)) {
-            $this->set('_serialize', 'club');
-        } else {
-            $this->set([
-                'errors' => $club->errors,
-                '_serialize' => true
-            ]);
-
+        if (!$this->Clubs->save($club)) {
             $this->response->statusCode(400);
         }
+
+        $this->set([
+            'club' => $club,
+            'errors' => $club->errors()
+        ]);
     }
 
     /**
@@ -119,10 +114,7 @@ class ClubsController extends ApiController
                 return $q;
             });
 
-        $this->set([
-            'clubs' => $clubs,
-            '_serialize' => 'clubs'
-        ]);
+        $this->set('clubs', $clubs);
     }
 
     /**
@@ -133,9 +125,6 @@ class ClubsController extends ApiController
     {
         $club = $this->Clubs->get($id);
 
-        $this->set([
-            'club' => $club,
-            '_serialize' => 'club'
-        ]);
+        $this->set('club', $club);
     }
 }

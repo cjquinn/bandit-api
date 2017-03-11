@@ -74,7 +74,7 @@ class PlayersControllerTest extends IntegrationTestCase
 
         $this->assertTrue(TableRegistry::get('ClubsPlayers')->exists([
             'club_id' => 1,
-            'player_id' => json_decode($this->_response->body(), true)['id']
+            'player_id' => json_decode($this->_response->body(), true)['player']['id']
         ]));
     }
 
@@ -91,6 +91,21 @@ class PlayersControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditBadData()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->put('/api/players/1.json', [
+            'name' => ''
+        ]);
+
+        $this->assertResponseCode(400);
     }
 
     /**

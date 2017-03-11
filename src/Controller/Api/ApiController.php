@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use Cake\Controller\Controller;
+use Cake\Event\Event;
 use Cake\ORM\TableRegistry;
 
 class ApiController extends Controller
@@ -62,5 +63,13 @@ class ApiController extends Controller
         }
 
         return true;
+    }
+
+    /**
+     * @return void
+     */
+    public function beforeRender(Event $event)
+    {
+        $this->set('_serialize', true);
     }
 }

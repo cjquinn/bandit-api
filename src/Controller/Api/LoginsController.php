@@ -85,6 +85,12 @@ class LoginsController extends ApiController
                 'token' => $this->Logins->generateToken($login['id'])
             ]);
         } else {
+            $this->set('errors', [
+                '_error' => [
+                    'invalid' => 'Invalid email or password, please try again'
+                ]
+            ]);
+
             $this->response->statusCode(400);
         }
     }

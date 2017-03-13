@@ -30,10 +30,6 @@ class PlayersTable extends Table
     {
         $this->addAssociations([
             'belongsTo' => [
-                'CurrentClubs' => [
-                    'className' => 'Clubs',
-                    'foreignKey' => 'current_club_id'
-                ],
                 'Logins'
             ],
             'belongsToMany' => [
@@ -104,7 +100,6 @@ class PlayersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['current_club_id'], 'Clubs'));
         $rules->add($rules->existsIn(['login_id'], 'Logins'));
 
         return $rules;

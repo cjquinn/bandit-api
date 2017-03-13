@@ -214,6 +214,7 @@ Type::build('datetime')
  */
 
 Plugin::load('ADmad/JwtAuth');
+Plugin::load('Migrations');
 
 /**
  * Aws

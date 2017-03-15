@@ -45,9 +45,7 @@ class ApiController extends Controller
      */
     public function isAuthorized(array $user)
     {
-        if (!$this->request->is('ajax') ||
-            !$this->request->is('json')
-        ) {
+        if (!$this->request->is('json')) {
             return false;
         }
 

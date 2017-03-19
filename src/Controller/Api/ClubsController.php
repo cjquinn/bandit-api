@@ -112,7 +112,8 @@ class ClubsController extends ApiController
                 ]);
 
                 return $q;
-            });
+            })
+            ->order('Clubs.name');
 
         $this->set('clubs', $clubs);
     }

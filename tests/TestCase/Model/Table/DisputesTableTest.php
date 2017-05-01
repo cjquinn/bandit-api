@@ -5,20 +5,10 @@ namespace App\Test\TestCase\Model\Table;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
-use DateTime;
-
 class DisputesTableTest extends TestCase
 {
 
-    public $fixtures = [
-        'app.clubs',
-        'app.clubs_players',
-        'app.disputes',
-        'app.histories',
-        'app.logins',
-        'app.players',
-        'app.results'
-    ];
+    public $fixtures = [];
 
     /**
      * @return void
@@ -43,62 +33,62 @@ class DisputesTableTest extends TestCase
     /**
      * @return void
      */
-    public function testAfterSaveResolved()
-    {
-        $dispute = $this->Disputes->get(2);
+    // public function testAfterSaveResolved()
+    // {
+    //     $dispute = $this->Disputes->get(2);
 
-        $dispute->set('is_resolved', true);
+    //     $dispute->set('is_resolved', true);
 
-        $this->Disputes->save($dispute);
+    //     $this->Disputes->save($dispute);
 
-        $losingPlayer = $this->Disputes->Results->Players->get($dispute->result->losing_player_id);
-        $winningPlayer = $this->Disputes->Results->Players->get($dispute->result->winning_player_id);
+    //     $losingPlayer = $this->Disputes->Results->Players->get($dispute->result->losing_player_id);
+    //     $winningPlayer = $this->Disputes->Results->Players->get($dispute->result->winning_player_id);
 
-        $this->assertEquals(2, $losingPlayer->reputation);
-        $this->assertEquals(0, $winningPlayer->reputation);
-    }
-
-    /**
-     * @return void
-     */
-    public function testAfterSaveUnresolved()
-    {
-        $dispute = $this->Disputes->get(2);
-
-        $dispute->set('is_resolved', false);
-
-        $this->Disputes->save($dispute);
-
-        $losingPlayer = $this->Disputes->Results->Players->get($dispute->result->losing_player_id);
-        $winningPlayer = $this->Disputes->Results->Players->get($dispute->result->winning_player_id);
-
-        $this->assertEquals(-8, $losingPlayer->reputation);
-        $this->assertEquals(-10, $winningPlayer->reputation);
-    }
+    //     $this->assertEquals(2, $losingPlayer->reputation);
+    //     $this->assertEquals(0, $winningPlayer->reputation);
+    // }
 
     /**
      * @return void
      */
-    public function testAfterSaveTimeExpired()
-    {
-        $result = $this->Disputes->Results->get(2);
+    // public function testAfterSaveUnresolved()
+    // {
+    //     $dispute = $this->Disputes->get(2);
 
-        $result->set('submitted', new DateTime('49 hours ago'));
+    //     $dispute->set('is_resolved', false);
 
-        $this->Disputes->Results->save($result, [
-            'ignoreEvents' => true
-        ]);
+    //     $this->Disputes->save($dispute);
 
-        $dispute = $this->Disputes->get(2);
+    //     $losingPlayer = $this->Disputes->Results->Players->get($dispute->result->losing_player_id);
+    //     $winningPlayer = $this->Disputes->Results->Players->get($dispute->result->winning_player_id);
 
-        $dispute->set('is_resolved', true);
+    //     $this->assertEquals(-8, $losingPlayer->reputation);
+    //     $this->assertEquals(-10, $winningPlayer->reputation);
+    // }
 
-        $this->Disputes->save($dispute);
+    /**
+     * @return void
+     */
+    // public function testAfterSaveTimeExpired()
+    // {
+    //     $result = $this->Disputes->Results->get(2);
 
-        $losingPlayer = $this->Disputes->Results->Players->get($dispute->result->losing_player_id);
-        $winningPlayer = $this->Disputes->Results->Players->get($dispute->result->winning_player_id);
+    //     $result->set('submitted', new DateTime('49 hours ago'));
 
-        $this->assertEquals(2, $losingPlayer->reputation);
-        $this->assertEquals(-10, $winningPlayer->reputation);
-    }
+    //     $this->Disputes->Results->save($result, [
+    //         'ignoreEvents' => true
+    //     ]);
+
+    //     $dispute = $this->Disputes->get(2);
+
+    //     $dispute->set('is_resolved', true);
+
+    //     $this->Disputes->save($dispute);
+
+    //     $losingPlayer = $this->Disputes->Results->Players->get($dispute->result->losing_player_id);
+    //     $winningPlayer = $this->Disputes->Results->Players->get($dispute->result->winning_player_id);
+
+    //     $this->assertEquals(2, $losingPlayer->reputation);
+    //     $this->assertEquals(-10, $winningPlayer->reputation);
+    // }
 }

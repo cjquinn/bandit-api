@@ -37,13 +37,13 @@ class CreatePlayers extends AbstractMigration
             'null' => false
         ]);
 
-        $table->addColumn('losses', 'integer', [
+        $table->addColumn('wins', 'integer', [
             'default' => 0,
             'limit' => 11,
             'null' => false
         ]);
 
-        $table->addColumn('wins', 'integer', [
+        $table->addColumn('losses', 'integer', [
             'default' => 0,
             'limit' => 11,
             'null' => false

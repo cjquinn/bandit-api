@@ -4,17 +4,13 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Result;
 
-use ArrayObject;
-
+use Cake\Database\Schema\Table as Schema;
 use Cake\Event\Event;
 use Cake\I18n\Time;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
-use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
-
-use DateTime;
 
 class ResultsTable extends Table
 {
@@ -27,36 +23,15 @@ class ResultsTable extends Table
         $this->addAssociations([
             'belongsTo' => [
                 'Clubs',
-                'LosingPlayers' => [
+                'PlayerAs' => [
                     'className' => 'Players',
-                    'foreignKey' => 'losing_player_id'
+                    'foreignKey' => 'player_a_id',
+                    'propertyName' => 'player_a'
                 ],
-                'Players',
-                'WinningPlayers' => [
+                'PlayerBs' => [
                     'className' => 'Players',
-                    'foreignKey' => 'winning_player_id'
-                ]
-            ],
-            'hasOne' => [
-                'Disputes' => [
-                    'dependent' => true
-                ],
-                'Histories' => [
-                    'foreignKey' => 'result_id',
-                ],
-                'LosingPlayerHistories' => [
-                    'className' => 'Histories',
-                    'foreignKey' => 'result_id',
-                    'conditions' => [
-                        'LosingPlayerHistories.is_winner' => false
-                    ]
-                ],
-                'WinningPlayerHistories' => [
-                    'className' => 'Histories',
-                    'foreignKey' => 'result_id',
-                    'conditions' => [
-                        'WinningPlayerHistories.is_winner' => true
-                    ]
+                    'foreignKey' => 'player_b_id',
+                    'propertyName' => 'player_b'
                 ]
             ]
         ]);
@@ -70,8 +45,16 @@ class ResultsTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
-            ->requirePresence('losing_player_id', 'create')
-            ->nonNegativeInteger('losing_player_id');
+            ->requirePresence('player_b_id', 'create')
+            ->notEmpty('player_b_id');
+
+        $validator
+            ->requirePresence('player_a_score', 'create')
+            ->notEmpty('player_a_score');
+
+        $validator
+            ->requirePresence('player_b_score', 'create')
+            ->notEmpty('player_b_score');
 
         return $validator;
     }
@@ -82,8 +65,8 @@ class ResultsTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->existsIn(['club_id'], 'Clubs'));
-        $rules->add($rules->existsIn(['losing_player_id'], 'Players'));
-        $rules->add($rules->existsIn(['winning_player_id'], 'Players'));
+        $rules->add($rules->existsIn(['player_a_id'], 'PlayerAs'));
+        $rules->add($rules->existsIn(['player_b_id'], 'PlayerBs'));
 
         return $rules;
     }
@@ -91,104 +74,16 @@ class ResultsTable extends Table
     /**
      * @return void
      */
-    public function beforeSave(Event $event, Result $result, ArrayObject $options)
+    public function beforeSave(Event $event, Result $result)
     {
-        if (!isset($options['ignoreEvents'])) {
-            $losingPlayer = $this->Players->get($result->losing_player_id);
-            $winningPlayer = $this->Players->get($result->winning_player_id);
-
-            if ($result->isNew()) {
-                $this->Players->updateReputation($losingPlayer, 1);
-                $this->Players->updateReputation($winningPlayer, 1);
-            } elseif (!$result->losing_player_history || !$result->winning_player_history) {
-                $this->loadInto($result, [
-                    'LosingPlayerHistories',
-                    'WinningPlayerHistories'
-                ]);
-            }
-
-            if (!$result->submitted) {
-                $result->set('submitted', new Time());
-            }
-
-            $date = new DateTime($result->submitted->i18nFormat('Y-M-d'));
-            $this->Players->updateRatings($losingPlayer, $winningPlayer, $result->club_id, $date);
-
-            $this->patchEntity($result, [
-                'losing_player_history' => [
-                    'player' => $losingPlayer,
-                ],
-                'winning_player_history' => [
-                    'player' => $winningPlayer
-                ]
-            ], [
-                'fieldList' => [
-                    'losing_player_history',
-                    'winning_player_history'
-                ],
-                'validate' => false
-            ]);
+        if ($result->player_a_id === $result->player_b_id) {
+            return false;
         }
-    }
 
-    /**
-     * @return void
-     */
-    public function beforeDelete(Event $event, Result $result, ArrayObject $options)
-    {
-        $results = $this->find('tree', [
-            'result' => $result
-        ]);
+        $snapshots = $this->Clubs->Players->snapshots($result);
 
-        $revertedPlayers = [];
-
-        $results = $results->filter(function ($r) use ($result, &$revertedPlayers) {
-            if (!isset($revertedPlayers[$r->losing_player_history->player_id])) {
-                $this->Players->revert($r->losing_player_history);
-                $revertedPlayers[$r->losing_player_history->player_id] = true;
-            }
-
-            if (!isset($revertedPlayers[$r->winning_player_history->player_id])) {
-                $this->Players->revert($r->winning_player_history);
-                $revertedPlayers[$r->winning_player_history->player_id] = true;
-            }
-
-            if ($r->id === $result->id) {
-                $this->Histories->delete($r->losing_player_history);
-                $this->Histories->delete($r->winning_player_history);
-
-                return false;
-            }
-
-            return true;
-        });
-
-        foreach ($results as $result) {
-            $result->dirty('*', true);
-
-            $this->save($result);
-        }
-    }
-
-    /**
-     * @return void
-     */
-    public function afterDelete(Event $event, Result $result, ArrayObject $options)
-    {
-        $players = $this->Players
-            ->find()
-            ->where([
-                'id IN' => [
-                    $result->losing_player_id,
-                    $result->winning_player_id
-                ]
-            ]);
-
-        foreach ($players as $player) {
-            $this->Players->updateReputation($player, -1);
-
-            $this->Players->save($player);
-        }
+        $result->set('player_a_snapshot', $snapshots['a']);
+        $result->set('player_b_snapshot', $snapshots['b']);
     }
 
     /**
@@ -200,55 +95,44 @@ class ResultsTable extends Table
             ->where([
                 'Results.id IN' => $this->idTree($options['result'])
             ])
-            ->contain([
-                'LosingPlayerHistories',
-                'WinningPlayerHistories'
-            ])
             ->order([
-                'submitted' => 'ASC'
+                'Results.created' => 'ASC'
             ]);
 
         return $query;
     }
 
     /**
-     * @param null|\App\Model\Entity\Result $result The result
      * @return array
      */
-    public function idTree($result)
+    public function idTree(Result $result = null)
     {
         if (!$result) {
             return [];
         }
 
         $playerIds = [
-            $result->losing_player_id,
-            $result->winning_player_id
-        ];
-        $where = [
-            'club_id' => $result->club_id,
-            'submitted >' => $result->submitted
+            $result->player_a_id,
+            $result->player_b_id
         ];
 
-        if ($result->id) {
-            $where['id !='] = $result->id;
-        }
+        $where = [
+            'id !=' => $result->id,
+            'club_id' => $result->club_id,
+            'created >=' => $result->created
+        ];
 
         $left = $this
             ->find()
-            ->where($where + ['losing_player_id IN' => $playerIds])
+            ->where($where + ['player_a_id IN' => $playerIds])
             ->first();
 
         $right = $this
             ->find()
-            ->where($where + ['winning_player_id IN' => $playerIds])
+            ->where($where + ['player_b_id IN' => $playerIds])
             ->first();
 
-        if ($result->id) {
-            return [$result->id => $result->id] + $this->idTree($left) + $this->idTree($right);
-        }
-
-        return $this->idTree($left) + $this->idTree($right);
+        return [$result->id => $result->id] + $this->idTree($left) + $this->idTree($right);
     }
 
     /**
@@ -264,11 +148,11 @@ class ResultsTable extends Table
     /**
      * @return bool
      */
-    public function isOwnedBy($id, $winningPlayerId)
+    public function isOwnedBy($id, $playerAId)
     {
         return $this->exists([
             'id' => $id,
-            'winning_player_id' => $winningPlayerId
+            'player_a_id' => $playerAId
         ]);
     }
 
@@ -279,7 +163,18 @@ class ResultsTable extends Table
     {
         return $this->exists([
             'id' => $id,
-            'submitted >=' => new DateTime('-' . $period)
+            'created >=' => new Time('-' . $period)
         ]);
+    }
+
+    /**
+     * @return \Cake\Database\Schema\Table
+     */
+    protected function _initializeSchema(Schema $schema)
+    {
+        $schema->columnType('player_a_snapshot', 'json');
+        $schema->columnType('player_b_snapshot', 'json');
+
+        return $schema;
     }
 }

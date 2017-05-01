@@ -4,8 +4,7 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Club;
 
-use ArrayObject;
-
+use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -114,7 +113,7 @@ class ClubsTable extends Table
     /**
      * @return void
      */
-    public function afterSave(Event $event, Club $club, ArrayObject $options)
+    public function afterSave(Event $event, Club $club)
     {
         if ($club->isNew()) {
             $this->patchEntity($club, [
@@ -131,12 +130,43 @@ class ClubsTable extends Table
     }
 
     /**
+     * @return array
+     */
+    public function dailySnapshot($id, $playerId, $date)
+    {
+        $result = $this->Results
+            ->findByClubId($id)
+            ->where([
+                'OR' => [
+                    ['player_a_id' => $playerId],
+                    ['player_b_id' => $playerId]
+                ],
+                'created <' => $date
+            ])
+            ->order(['created' => 'DESC'])
+            ->first();
+
+        if ($result) {
+            return $result->player_a_id === $playerId
+                ? $result->player_a_snapshot
+                : $result->player_b_snapshot;
+        }
+
+        return [
+            'rating' => Configure::read('Bandit.initialRating'),
+            'difference' => 0,
+            'losses' => 0,
+            'wins' => 0
+        ];
+    }
+
+    /**
      * @return bool
      */
-    public function isOwnedBy($clubId, $userId)
+    public function isOwnedBy($id, $userId)
     {
         return $this->exists([
-            'id' => $clubId,
+            'id' => $id,
             'founder_id' => $userId
         ]);
     }
@@ -144,10 +174,10 @@ class ClubsTable extends Table
     /**
      * @return bool
      */
-    public function hasMember($clubId, $userId)
+    public function hasMember($id, $userId)
     {
         return $this->Players->exists([
-            'club_id' => $clubId,
+            'club_id' => $id,
             'user_id' => $userId
         ]);
     }

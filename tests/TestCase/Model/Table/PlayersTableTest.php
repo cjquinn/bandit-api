@@ -2,21 +2,18 @@
 
 namespace App\Test\TestCase\Model\Table;
 
+use Cake\Core\Configure;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
-
-use DateTime;
 
 class PlayersTableTest extends TestCase
 {
 
     public $fixtures = [
         'app.clubs',
-        'app.clubs_players',
-        'app.histories',
-        'app.logins',
         'app.players',
-        'app.results'
+        'app.results',
+        'app.users'
     ];
 
     /**
@@ -42,96 +39,160 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
-    public function testRevert()
+    public function testBeforeSave()
     {
-        $history = $this->Players->Histories->get([
-            'player_id' => 1,
-            'result_id' => 1
-        ]);
+        $player = $this->Players->newEntity();
 
-        $this->Players->revert($history);
+        $player->set('club_id', 1);
+        $player->set('user_id', 1);
 
-        $club = $this->Players->Club
-            ->find()
-            ->where([
-                'club_id' => 1,
-                'player_id' => 1
-            ])
-            ->firstOrFail();
+        $this->Players->save($player);
+
+        $this->assertEquals($player->rating, Configure::read('Bandit.initialRating'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testExpectedScores()
+    {
+        $expectedScores = $this->Players->expectedScores(1200, 1200);
+
+        $this->assertTrue(is_array($expectedScores));
 
         $expected = [
-            'club_id' => 1,
-            'player_id' => 1,
-            'losses' => 0,
-            'rating' => 1200,
-            'wins' => 0
+            'a' => 0.5,
+            'b' => 0.5
         ];
-        $this->assertEquals($expected, $club->toArray());
+        $this->assertEquals($expected, $expectedScores);
+
+        $expectedScores = $this->Players->expectedScores(1216, 1184);
+
+        $expected = [
+            'a' => 0.5459219228,
+            'b' => 0.4540780772
+        ];
+        $this->assertEquals($expected, $expectedScores);
+
+        $expectedScores = $this->Players->expectedScores(1215, 1185);
+
+        $expected = [
+            'a' => 0.543066492,
+            'b' => 0.456933508
+        ];
+        $this->assertEquals($expected, $expectedScores);
     }
 
     /**
      * @return void
      */
-    public function testUpdateRating()
+    public function testRatingChange()
     {
-        $club = $this->Players->Club->get([
-            'player_id' => 1,
-            'club_id' => 1
+        // Expected scores
+        $expectedScores = $this->Players->expectedScores(1200, 1200);
+
+        // Player A wins
+        $ratingChange = $this->Players->ratingChange($expectedScores['a'], 1, 40);
+
+        $expected = 20;
+        $this->assertEquals($expected, $ratingChange);
+
+        // Player B loses
+        $ratingChange = $this->Players->ratingChange($expectedScores['b'], 0, 40);
+
+        $expected = -20;
+        $this->assertEquals($expected, $ratingChange);
+
+        // Expected scores
+        $expectedScores = $this->Players->expectedScores(1216, 1184);
+
+        // Player A draws
+        $ratingChange = $this->Players->ratingChange($expectedScores['a'], 0.5, 40);
+
+        $expected = -2;
+        $this->assertEquals($expected, $ratingChange);
+
+        // Player B draws
+        $ratingChange = $this->Players->ratingChange($expectedScores['b'], 0.5, 40);
+
+        $expected = 2;
+        $this->assertEquals($expected, $ratingChange);
+
+        // Expected scores
+        $expectedScores = $this->Players->expectedScores(1215, 1185);
+
+        // Player A loses
+        $ratingChange = $this->Players->ratingChange($expectedScores['a'], 0, 40);
+
+        $expected = -22;
+        $this->assertEquals($expected, $ratingChange);
+
+        // Player B wins
+        $ratingChange = $this->Players->ratingChange($expectedScores['b'], 1, 40);
+
+        $expected = 22;
+        $this->assertEquals($expected, $ratingChange);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSnapshot()
+    {
+        $player = $this->Players->get(1);
+
+        $snapshot = $this->Players->snapshot($player, 0.5, 4, 2);
+
+        $this->assertEquals(1255, $player->rating);
+        $this->assertEquals(6, $player->wins);
+        $this->assertEquals(3, $player->losses);
+
+        $expected = [
+            'rating' => 1255,
+            'difference' => 40,
+            'wins' => 6,
+            'losses' => 3
+        ];
+        $this->assertEquals($expected, $snapshot);
+    }
+
+    /**
+     * @return void
+     */
+    public function testSnapshots()
+    {
+        $result = $this->Players->Clubs->Results->newEntity([
+            'player_b_id' => 7,
+            'player_a_score' => 1,
+            'player_b_score' => 0
         ]);
 
-        // 1154 + round(32 * (1 - 0))
-        $this->Players->updateRating($club, 0, 1);
+        $result->set('club_id', 1);
+        $result->set('player_a_id', 6);
 
-        $this->assertEquals(1186, $club->rating);
+        $snapshots = $this->Players->snapshots($result);
 
-        $club->losses = 15;
-        $club->wins = 16;
+        $expected = [
+            'a' => [
+                'rating' => 1238,
+                'difference' => 18,
+                'wins' => 2,
+                'losses' => 0
+            ],
+            'b' => [
+                'rating' => 1162,
+                'difference' => -18,
+                'wins' => 0,
+                'losses' => 2
+            ]
+        ];
+        $this->assertEquals($expected, $snapshots);
 
-        // 1186 + round(24 * (1 - 0))
-        $this->Players->updateRating($club, 0, 1);
+        // Reputation updated
+        $userA = $this->Players->Users->get(6);
+        $userB = $this->Players->Users->get(7);
 
-        $this->assertEquals(1210, $club->rating);
-    }
-
-    /**
-     * @return void
-     */
-    public function testUpdateRatings()
-    {
-        $date = new DateTime('today');
-
-        $christy = $this->Players
-            ->findById(1)
-            ->find('club', [
-                'clubId' => 1
-            ])
-            ->firstOrFail();
-        $russell = $this->Players
-            ->findById(2)
-            ->find('club', [
-                'clubId' => 1
-            ])
-            ->firstOrFail();
-        $tom = $this->Players
-            ->findById(3)
-            ->find('club', [
-                'clubId' => 1
-            ])
-            ->firstOrFail();
-
-        // +14 -14
-        $this->Players->updateRatings($christy, $russell, 1, $date);
-
-        $this->assertEquals(1140, $christy->club->rating);
-        $this->assertEquals(1244, $russell->club->rating);
-
-        $this->Players->save($christy);
-        $this->Players->save($russell);
-
-        // +16 -16
-        $this->Players->updateRatings($russell, $tom, 1, $date);
-
-        $this->assertEquals(1228, $russell->club->rating);
-        $this->assertEquals(1232, $tom->club->rating);
+        $this->assertEquals(2, $userA->reputation);
+        $this->assertEquals(2, $userB->reputation);
     }
 }

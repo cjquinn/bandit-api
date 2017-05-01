@@ -14,7 +14,7 @@ class CreateUsers extends AbstractMigration
         $table->addColumn('name', 'string', [
             'default' => null,
             'limit' => 255,
-            'null' => false
+            'null' => true
         ]);
 
         $table->addColumn('reputation', 'integer', [

@@ -121,8 +121,6 @@ class UsersTable extends Table
             ->notEmpty('email')
             ->email('email');
 
-        $validator = $this->validationPassword($validator);
-
         return $validator;
     }
 
@@ -175,5 +173,17 @@ class UsersTable extends Table
             ->firstOrFail();
 
         return $user;
+    }
+
+    /**
+     * @return void
+     */
+    public function updateReputation($id, $difference)
+    {
+        $user = $this->get($id);
+
+        $user->set('reputation', $user->reputation + $difference);
+
+        $this->save($user);
     }
 }

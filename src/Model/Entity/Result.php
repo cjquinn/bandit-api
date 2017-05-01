@@ -20,6 +20,9 @@ class Result extends Entity
 {
 
     protected $_accessible = [
+        'player_b_id' => true,
+        'player_a_score' => true,
+        'player_b_score' => true,
         '*' => false
     ];
 }

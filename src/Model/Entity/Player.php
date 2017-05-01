@@ -9,8 +9,10 @@ use Cake\ORM\Entity;
  * @property int $club_id
  * @property int $user_id
  * @property int $rating
- * @property int $losses
  * @property int $wins
+ * @property int $losses
+ * @property \Cake\I18n\Time $created
+ * @property \Cake\I18n\Time $modified
  */
 class Player extends Entity
 {
@@ -34,18 +36,5 @@ class Player extends Entity
         }
 
         return 10;
-    }
-
-    /**
-     * @return array
-     */
-    protected function _getSnapshot()
-    {
-        return [
-            'rating' => $this->rating,
-            'difference' => $this->rating - $this->getOriginal('rating'),
-            'losses' => $this->losses,
-            'wins' => $this->wins
-        ];
     }
 }

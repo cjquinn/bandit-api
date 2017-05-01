@@ -8,12 +8,7 @@ use Cake\TestSuite\TestCase;
 class ClubsTableTest extends TestCase
 {
 
-    public $fixtures = [
-        'app.clubs',
-        'app.clubs_players',
-        'app.logins',
-        'app.players',
-    ];
+    public $fixtures = [];
 
     /**
      * @return void
@@ -38,29 +33,60 @@ class ClubsTableTest extends TestCase
     /**
      * @return void
      */
-    public function testValidation()
+    public function testPatchEntityNewUser()
     {
-        // founding_player_id must be set if founding_player isn't set
-        $errors = $this->Clubs->validator()->errors([
-            'name' => 'Ping Pong Game On'
-        ]);
+        $club = $this->Clubs->newEntity();
+
+        $this->Clubs->patchEntityNewUser($club, []);
 
         $expected = [
-            'founding_player' => [
+            'name' => [
+                '_required' => 'This field is required'
+            ],
+            'founder' => [
                 '_required' => 'This field is required'
             ]
         ];
+        $this->assertEquals($expected, $club->errors());
 
-        $this->assertEquals($errors, $expected);
-
-        // founding_player is not required is an exisiting player_id is supplied
-        $errors = $this->Clubs->validator()->errors([
+        $this->Clubs->patchEntityNewUser($club, [
             'name' => 'Ping Pong Game On',
-            'founding_player_id' => 1
+            'founder' => [
+                'name' => 'Alex Farthing',
+                'email' => 'alex@gmail.com',
+                'password' => 'password'
+            ]
         ]);
 
-        $expected = [];
+        $this->assertEmpty($club->errors());
+        $this->assertNotNull($club->founder);
+    }
 
-        $this->assertEquals($errors, $expected);
+    /**
+     * @return void
+     */
+    public function testPatchEntityExistingUser()
+    {
+        $club = $this->Clubs->newEntity();
+
+        $this->Clubs->patchEntityExistingUser($club, []);
+
+        $expected = [
+            'name' => [
+                '_required' => 'This field is required'
+            ],
+            'founder_id' => [
+                '_required' => 'This field is required'
+            ]
+        ];
+        $this->assertEquals($expected, $club->errors());
+
+        $this->Clubs->patchEntityExistingUser($club, [
+            'name' => 'Ping Pong Game On',
+            'founder_id' => 1
+        ]);
+
+        $this->assertEmpty($club->errors());
+        $this->assertNotNull($club->founder_id);
     }
 }

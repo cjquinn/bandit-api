@@ -43,24 +43,18 @@ class ClubsController extends ApiController
      */
     public function add()
     {
-        $associated = [];
-        $fieldList = ['name'];
-
+        $club = $this->Clubs->newEntity();
         $user = $this->Auth->identify();
+
+        $patchEntity = 'patchEntityNewUser';
 
         if ($user) {
             $this->request->data['founder_id'] = $user['id'];
 
-            $fieldList[] = 'founder_id';
-        } else {
-            $associated = ['Founders'];
-            $fieldList[] = 'founder';
+            $patchEntity = 'patchEntityExistingUser';
         }
 
-        $club = $this->Clubs->newEntity($this->request->data, [
-            'associated' => $associated,
-            'fieldList' => $fieldList
-        ]);
+        $this->Clubs->{$patchEntity}($club, $this->request->data);
 
         if ($this->Clubs->save($club)) {
             $this->set(

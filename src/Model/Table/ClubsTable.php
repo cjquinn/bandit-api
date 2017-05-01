@@ -33,6 +33,35 @@ class ClubsTable extends Table
     }
 
     /**
+     * @return void
+     */
+    public function patchEntityExistingUser(Club $club, array $data)
+    {
+        $this->patchEntity($club, $data, [
+            'fieldList' => [
+                'name',
+                'founder_id'
+            ],
+            'validate' => 'existingUser'
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function patchEntityNewUser(Club $club, array $data)
+    {
+        $this->patchEntity($club, $data, [
+            'associated' => ['Founders'],
+            'fieldList' => [
+                'name',
+                'founder'
+            ],
+            'validate' => 'newUser'
+        ]);
+    }
+
+    /**
      * @return \Cake\Validation\Validator
      */
     public function validationDefault(Validator $validator)
@@ -41,17 +70,33 @@ class ClubsTable extends Table
             ->requirePresence('name', 'create')
             ->notEmpty('name');
 
-        $validator
-            ->requirePresence('founder', function ($context) {
-                return !isset($context['data']['founder_id']) && $context['newRecord'];
-            })
-            ->notEmpty('founder');
+        return $validator;
+    }
+
+    /**
+     * @return \Cake\Validation\Validator
+     */
+    public function validationExistingUser(Validator $validator)
+    {
+        $validator = $this->validationDefault($validator);
 
         $validator
-            ->requirePresence('founder_id', function ($context) {
-                return !isset($context['data']['founder']) && $context['newRecord'];
-            })
+            ->requirePresence('founder_id')
             ->notEmpty('founder_id');
+
+        return $validator;
+    }
+
+    /**
+     * @return \Cake\Validation\Validator
+     */
+    public function validationNewUser(Validator $validator)
+    {
+        $validator = $this->validationDefault($validator);
+
+        $validator
+            ->requirePresence('founder')
+            ->notEmpty('founder');
 
         return $validator;
     }

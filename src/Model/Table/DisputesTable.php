@@ -25,7 +25,7 @@ class DisputesTable extends Table
             ]
         ]);
 
-        $this->primaryKey('result_id');
+        $this->addBehavior('Timestamp');
     }
 
     /**

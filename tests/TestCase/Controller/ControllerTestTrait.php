@@ -23,7 +23,7 @@ trait ControllerTestTrait
      */
     private function _setAuthSession($id)
     {
-        $token = TableRegistry::get('Users')->generateToken($id);
+        $token = TableRegistry::get('Users')->generateJwt($id);
 
         if (!isset($this->_request['headers'])) {
             $this->_request['headers'] = [];

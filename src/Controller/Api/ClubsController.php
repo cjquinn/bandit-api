@@ -6,7 +6,6 @@ use Cake\Event\Event;
 
 class ClubsController extends ApiController
 {
-
     /**
      * @return void
      */
@@ -24,14 +23,14 @@ class ClubsController extends ApiController
     {
         // Non founder
         if ($this->request->action === 'edit' &&
-            !$this->Clubs->Players->isFounder($this->Auth->user('player.id'), $this->request->params['id'])
+            !$this->Clubs->isOwnedBy($this->request->params['id'], $this->Auth->user('id'))
         ) {
             return false;
         }
 
         // Unassigned
         if ($this->request->action === 'view' &&
-            !$this->Clubs->Players->isAssignedToClub($this->Auth->user('player.id'), $this->request->params['id'])
+            !$this->Clubs->hasMember($this->request->params['id'], $this->Auth->user('id'))
         ) {
             return false;
         }
@@ -48,15 +47,14 @@ class ClubsController extends ApiController
         $fieldList = ['name'];
 
         $user = $this->Auth->identify();
-        if ($user) {
-            $this->request->data['founding_player_id'] = $user['player']['id'];
 
-            $fieldList[] = 'founding_player_id';
+        if ($user) {
+            $this->request->data['founder_id'] = $user['id'];
+
+            $fieldList[] = 'founder_id';
         } else {
-            $associated = [
-                'FoundingPlayers.Logins'
-            ];
-            $fieldList[] = 'founding_player';
+            $associated = ['Founders'];
+            $fieldList[] = 'founder';
         }
 
         $club = $this->Clubs->newEntity($this->request->data, [
@@ -64,13 +62,13 @@ class ClubsController extends ApiController
             'fieldList' => $fieldList
         ]);
 
-        if (!$this->Clubs->save($club)) {
-            $this->response->statusCode(400);
-        } elseif ($club->player) {
+        if ($this->Clubs->save($club)) {
             $this->set(
                 'token',
-                $this->Clubs->Players->Logins->generateToken($club->player->login_id)
+                $this->Clubs->Founders->generateJwt($club->founder_id)
             );
+        } else {
+            $this->response->statusCode(400);
         }
 
         $this->set([
@@ -108,7 +106,7 @@ class ClubsController extends ApiController
             ->find()
             ->innerJoinWith('Players', function ($q) {
                 $q->where([
-                    'Players.id' => $this->Auth->user('player.id')
+                    'Players.user_id' => $this->Auth->user('id')
                 ]);
 
                 return $q;

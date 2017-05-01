@@ -60,6 +60,8 @@ class ResultsTable extends Table
                 ]
             ]
         ]);
+
+        $this->addBehavior('Timestamp');
     }
 
     /**

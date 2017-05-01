@@ -13,36 +13,6 @@ class ClubsControllerTest extends IntegrationTestCase
     use ControllerTestTrait;
 
     /**
-     * The creation of a club when not logged in.
-     * Requires the user to signup at the same time.
-     *
-     * @return void
-     */
-    public function testAddUnauthorised()
-    {
-        $this->_setAjaxRequest();
-
-        $this->post('/api/clubs.json', [
-            'name' => 'Ping Pong Game On',
-            'founding_player' => [
-                'name' => 'Alex Farthing',
-                'login' => [
-                    'email' => 'alex@gmail.com',
-                    'password' => 'password'
-                ]
-            ]
-        ]);
-
-        $this->assertResponseCode(200);
-
-        $data = json_decode($this->_response->body(), true);
-        $this->assertTrue(TableRegistry::get('ClubsPlayers')->exists([
-            'club_id' => $data['club']['id'],
-            'player_id' => $data['club']['founding_player_id']
-        ]));
-    }
-
-    /**
      * @return void
      */
     public function testAddBadData()
@@ -55,6 +25,28 @@ class ClubsControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(400);
+    }
+
+    /**
+     * The creation of a club when not logged in.
+     * Requires the user to signup at the same time.
+     *
+     * @return void
+     */
+    public function testAddUnauthorised()
+    {
+        $this->_setAjaxRequest();
+
+        $this->post('/api/clubs.json', [
+            'name' => 'Ping Pong Game On',
+            'founder' => [
+                'name' => 'Alex Farthing',
+                'email' => 'alex@gmail.com',
+                'password' => 'password'
+            ]
+        ]);
+
+        $this->assertResponseCode(200);
     }
 
     /**
@@ -72,12 +64,6 @@ class ClubsControllerTest extends IntegrationTestCase
         ]);
 
         $this->assertResponseCode(200);
-
-        $data = json_decode($this->_response->body(), true);
-        $this->assertTrue(TableRegistry::get('ClubsPlayers')->exists([
-            'club_id' => $data['club']['id'],
-            'player_id' => 1
-        ]));
     }
 
     /**

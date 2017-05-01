@@ -45,23 +45,14 @@ Router::prefix('api', function ($routes) {
         ]
     ], function ($routes) {
         /**
-         * ClubsPlayers
-         */
-        $routes->connect('/players/:player_id', [
-            'controller' => 'ClubsPlayers',
-            'action' => 'add',
-            '_method' => 'POST'
-        ], [
-            'pass' => [
-                'club_id',
-                'player_id'
-            ]
-        ]);
-
-        /**
          * Players
          */
-        $routes->resources('Players', ['only' => 'create']);
+        $routes->resources('Players', [
+            'only' => [
+                'create',
+                'delete'
+            ]
+        ]);
 
         /**
          * Results
@@ -77,38 +68,27 @@ Router::prefix('api', function ($routes) {
             /**
              * Disputes
              */
-            $routes->resources('Disputes', ['only' => 'create']);
-
-            $routes->scope('/disputes', function ($routes) {
-                $routes->connect('/', [
-                    'controller' => 'Disputes',
-                    'action' => 'delete',
-                    '_method' => 'DELETE'
-                ]);
-
-                $routes->connect('/', [
-                    'controller' => 'Disputes',
-                    'action' => 'edit',
-                    '_method' => [
-                        'PATCH',
-                        'PUT'
-                    ]
-                ]);
-            });
+            $routes->resources('Disputes', [
+                'only' => [
+                    'create',
+                    'update',
+                    'delete'
+                ]
+            ]);
         });
     });
 
     /**
-     * Players
+     * Users
      */
-    $routes->resources('Players', ['only' => 'update']);
+    $routes->resources('Users', ['only' => 'update']);
 
     /**
      * Auth
      */
     $routes->scope('/auth', function ($routes) {
         /**
-         * Logins
+         * Users
          */
         $routes->connect('/activate-account', [
             'controller' => 'Users',

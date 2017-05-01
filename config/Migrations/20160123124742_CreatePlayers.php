@@ -2,14 +2,14 @@
 
 use Migrations\AbstractMigration;
 
-class CreateResults extends AbstractMigration
+class CreatePlayers extends AbstractMigration
 {
     /**
      * @return void
      */
     public function change()
     {
-        $table = $this->table('results');
+        $table = $this->table('players');
 
         $table->addColumn('club_id', 'integer', [
             'default' => null,
@@ -21,45 +21,31 @@ class CreateResults extends AbstractMigration
             'delete' => 'RESTRICT'
         ]);
 
-        $table->addColumn('player_a_id', 'integer', [
+        $table->addColumn('user_id', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false
         ]);
-        $table->addForeignKey('player_a_id', 'players', 'id', [
+        $table->addForeignKey('user_id', 'users', 'id', [
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
 
-        $table->addColumn('player_b_id', 'integer', [
-            'default' => null,
-            'limit' => 11,
-            'null' => false
-        ]);
-        $table->addForeignKey('player_b_id', 'players', 'id', [
-            'update' => 'RESTRICT',
-            'delete' => 'RESTRICT'
-        ]);
-
-        $table->addColumn('player_a_score', 'integer', [
+        $table->addColumn('rating', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false
         ]);
 
-        $table->addColumn('player_b_score', 'integer', [
-            'default' => null,
+        $table->addColumn('losses', 'integer', [
+            'default' => 0,
             'limit' => 11,
             'null' => false
         ]);
 
-        $table->addColumn('player_a_snapshot', 'text', [
-            'default' => null,
-            'null' => false
-        ]);
-
-        $table->addColumn('player_b_snapshot', 'text', [
-            'default' => null,
+        $table->addColumn('wins', 'integer', [
+            'default' => 0,
+            'limit' => 11,
             'null' => false
         ]);
 

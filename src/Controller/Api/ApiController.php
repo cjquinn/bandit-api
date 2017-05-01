@@ -19,12 +19,11 @@ class ApiController extends Controller
         $this->loadComponent('Auth', [
             'authenticate' => [
                 'all' => [
-                    'finder' => 'auth',
-                    'userModel' => 'Logins'
+                    'finder' => 'auth'
                 ],
                 'ADmad/JwtAuth.Jwt' => [
                     'fields' => ['username' => 'id'],
-                    'parameter' => 'token',
+                    'parameter' => 'jwt',
                     'queryDatasource' => true
                 ],
                 'Form' => [

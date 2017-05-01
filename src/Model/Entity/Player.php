@@ -2,61 +2,50 @@
 
 namespace App\Model\Entity;
 
-use Aws\S3\S3Client;
-
-use Cake\Core\Configure;
 use Cake\ORM\Entity;
 
 /**
  * @property int $id
- * @property int $login_id
- * @property string $name
- * @property int $reputation
+ * @property int $club_id
+ * @property int $user_id
+ * @property int $rating
+ * @property int $losses
+ * @property int $wins
  */
 class Player extends Entity
 {
 
     protected $_accessible = [
-        'name' => true,
-        'login' => true,
-        '*' => false
+        '*' => true
     ];
 
     /**
-     * @return string
+     * @return int
+     * @see https://en.wikipedia.org/wiki/Elo_rating_system#Mathematical_details
      */
-    protected function _getLosingProfilePictureUrl()
+    protected function _getKFactor()
     {
-        return $this->_getProfilePicture('losing');
+        if ($this->losses + $this->wins < 30) {
+            return 40;
+        }
+
+        if ($this->rating < 2400) {
+            return 20;
+        }
+
+        return 10;
     }
 
     /**
-     * @return string
+     * @return array
      */
-    protected function _getWinningProfilePictureUrl()
+    protected function _getSnapshot()
     {
-        return $this->_getProfilePicture('winning');
-    }
-
-    /**
-     * @param string $type The type of profile picture
-     * @return string
-     */
-    private function _getProfilePicture($type)
-    {
-        $s3 = new S3Client([
-            'credentials' => Configure::read('Aws.credentials'),
-            'region' => Configure::read('Aws.region'),
-            'version' => 'latest'
-        ]);
-
-        $command = $s3->getCommand('GetObject', [
-            'Bucket' => Configure::read('Aws.S3.bucket'),
-            'Key' => Configure::read('Aws.S3.keyBase') . $this->id . DS . $type . '_profile_picture.jpg'
-        ]);
-
-        $request = $s3->createPresignedRequest($command, '+20 minutes');
-
-        return (string)$request->getUri();
+        return [
+            'rating' => $this->rating,
+            'difference' => $this->rating - $this->getOriginal('rating'),
+            'losses' => $this->losses,
+            'wins' => $this->wins
+        ];
     }
 }

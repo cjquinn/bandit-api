@@ -16,46 +16,23 @@ class PlayersFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'login_id' => 1,
-                'name' => 'Christy Quinn',
-                'reputation' => 3
+                'club_id' => 1,
+                'user_id' => 1,
+                'rating' => 1220,
+                'losses' => 0,
+                'wins' => 1,
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
             ],
             [
                 'id' => 2,
-                'login_id' => 2,
-                'name' => 'Russell Bishop',
-                'reputation' => 2
-            ],
-            [
-                'id' => 3,
-                'login_id' => 3,
-                'name' => 'Tom Lippitt',
-                'reputation' => 1
-            ],
-            [
-                'id' => 4,
-                'name' => 'Bob Fellows',
-                'reputation' => 0
-            ],
-            [
-                'id' => 5,
-                'name' => 'Alex Day',
-                'reputation' => 0
-            ],
-            [
-                'id' => 6,
-                'name' => 'Sam Kind',
-                'reputation' => 0
-            ],
-            [
-                'id' => 7,
-                'name' => 'Rodger Bally',
-                'reputation' => 0
-            ],
-            [
-                'id' => 8,
-                'name' => 'Tommy Castle',
-                'reputation' => 0
+                'club_id' => 1,
+                'user_id' => 2,
+                'rating' => 1180,
+                'losses' => 1,
+                'wins' => 0,
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
             ]
         ];
 

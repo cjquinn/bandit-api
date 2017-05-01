@@ -9,23 +9,21 @@ trait ControllerTestTrait
 
     public $fixtures = [
         'app.clubs',
-        'app.clubs_players',
         'app.disputes',
-        'app.histories',
-        'app.logins',
         'app.players',
-        'app.results'
+        'app.results',
+        'app.users'
     ];
 
     /**
      * Sets session up for Auth component
      *
-     * @param $id The id of the login
+     * @param $id The id of the user
      * @return void
      */
     private function _setAuthSession($id)
     {
-        $token = TableRegistry::get('Logins')->generateToken($id);
+        $token = TableRegistry::get('Users')->generateToken($id);
 
         if (!isset($this->_request['headers'])) {
             $this->_request['headers'] = [];

@@ -7,17 +7,20 @@ use Cake\ORM\Entity;
 
 /**
  * @property int $id
+ * @property string $name
+ * @property int $reputation
  * @property string $email
  * @property string $password
  * @property string $token
- * @property datetime $token_sent
- * @property datetime $created
- * @property datetime $modified
+ * @property \Cake\I18n\Time $token_sent
+ * @property \Cake\I18n\Time $created
+ * @property \Cake\I18n\Time $modified
  */
-class Login extends Entity
+class User extends Entity
 {
 
     protected $_accessible = [
+        'name' => true,
         'email' => true,
         'password' => true,
         '*' => false,
@@ -38,7 +41,7 @@ class Login extends Entity
             return (new DefaultPasswordHasher)->hash($password);
         }
     }
-    
+
     /**
      * @return bool
      */

@@ -16,13 +16,10 @@ class ClubsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'founding_player_id' => 1,
-                'name' => 'Squelch'
-            ],
-            [
-                'id' => 2,
-                'founding_player_id' => 1,
-                'name' => 'Ping Pong'
+                'founder_id' => 1,
+                'name' => 'Squelch',
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
             ]
         ];
 

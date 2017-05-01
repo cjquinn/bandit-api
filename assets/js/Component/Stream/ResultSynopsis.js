@@ -36,7 +36,7 @@ const ResultSynopsis = () =>
                         <dt>Level:</dt>
                         <dd>Knight</dd>
 
-                        <dt>Points gained:</dt>
+                        <dt>Points lost:</dt>
                         <dd>15</dd>
                     </dl>
                 </dd>

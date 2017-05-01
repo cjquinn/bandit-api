@@ -5,11 +5,11 @@ namespace App\Test\Fixture;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\TestSuite\Fixture\TestFixture;
 
-class LoginsFixture extends TestFixture
+class UsersFixture extends TestFixture
 {
 
     public $import = [
-        'table' => 'logins'
+        'table' => 'users'
     ];
 
     public function init()
@@ -17,21 +17,18 @@ class LoginsFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'email' => 'christy@bandit.localhost',
+                'name' => 'Christy Quinn',
+                'reputation' => 1,
+                'email' => 'christy@bandit.play',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
             ],
             [
                 'id' => 2,
-                'email' => 'russell@bandit.localhost',
-                'password' => (new DefaultPasswordHasher)->hash('password'),
-                'created' => date('Y-m-d H:i:s'),
-                'modified' => date('Y-m-d H:i:s')
-            ],
-            [
-                'id' => 3,
-                'email' => 'tom@bandit.localhost',
+                'name' => 'Russell Bishop',
+                'reputation' => 1,
+                'email' => 'russell@bandit.play',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')

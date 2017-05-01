@@ -111,54 +111,33 @@ Router::prefix('api', function ($routes) {
          * Logins
          */
         $routes->connect('/activate-account', [
-            'controller' => 'Logins',
+            'controller' => 'Users',
             'action' => 'activateAccount',
             '_method' => [
-                'PATCH',
-                'PUT'
+                'GET',
+                'PATCH'
             ]
         ]);
 
         $routes->connect('/request-password-reset', [
-            'controller' => 'Logins',
+            'controller' => 'Users',
             'action' => 'requestPasswordReset',
-            '_method' => [
-                'PATCH',
-                'PUT'
-            ]
+            '_method' => 'PATCH'
         ]);
 
         $routes->connect('/reset-password', [
-            'controller' => 'Logins',
+            'controller' => 'Users',
             'action' => 'resetPassword',
             '_method' => [
-                'PATCH',
-                'PUT'
+                'GET',
+                'PATCH'
             ]
         ]);
 
         $routes->connect('/login', [
-            'controller' => 'Logins',
+            'controller' => 'Users',
             'action' => 'login',
             '_method' => 'POST'
-        ]);
-
-        $routes->connect('/activate-account/validate-token', [
-            'controller' => 'Logins',
-            'action' => 'validateToken',
-            '_method' => 'GET',
-            'parentAction' => 'activateAccount'
-        ], [
-            'pass' => ['parentAction']
-        ]);
-
-        $routes->connect('/reset-password/validate-token', [
-            'controller' => 'Logins',
-            'action' => 'validateToken',
-            '_method' => 'GET',
-            'parentAction' => 'resetPassword'
-        ], [
-            'pass' => ['parentAction']
         ]);
     });
 });

@@ -7,15 +7,19 @@ use Cake\ORM\Entity;
 /**
  * @property int $id
  * @property int $club_id
- * @property int $losing_player_id
- * @property int $winning_player_id
- * @property datetime $submitted
+ * @property int $player_a_id
+ * @property int $player_b_id
+ * @property int $player_a_score
+ * @property int $player_b_score
+ * @property json $player_a_snapshot
+ * @property json $player_b_snapshot
+ * @property \Cake\I18n\Time $created
+ * @property \Cake\I18n\Time $modified
  */
 class Result extends Entity
 {
 
     protected $_accessible = [
-        'losing_player_id' => true,
         '*' => false
     ];
 }

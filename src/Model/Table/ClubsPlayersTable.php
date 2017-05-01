@@ -33,7 +33,7 @@ class ClubsPlayersTable extends Table
     {
         $rules->add($rules->existsIn(['club_id'], 'Clubs'));
         $rules->add($rules->existsIn(['player_id'], 'Players'));
-        
+
         return $rules;
     }
 
@@ -45,5 +45,29 @@ class ClubsPlayersTable extends Table
         if ($entity->isNew()) {
             $entity->set('rating', Configure::read('Bandit.initialRating'));
         }
+    }
+
+    /**
+     * @return array
+     * @see https://en.wikipedia.org/wiki/Elo_rating_system#Mathematical_details
+     */
+    public function expectedScores($ratingA, $ratingB)
+    {
+        $a = 1 / (1 + pow(10, ($ratingB - $ratingA) / 400));
+        $b = 1 - $a;
+
+        return [
+            'a' => $a,
+            'b' => $b
+        ];
+    }
+
+    /**
+     * @return int
+     * @see https://en.wikipedia.org/wiki/Elo_rating_system#Mathematical_details
+     */
+    public function ratingChange($expectedScore, $score, $kFactor)
+    {
+        return round($kFactor * ($score - $expectedScore));
     }
 }

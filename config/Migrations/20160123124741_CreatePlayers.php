@@ -27,11 +27,6 @@ class CreatePlayers extends AbstractMigration
             'limit' => 255,
             'null' => false,
         ]);
-        $table->addColumn('rating', 'integer', [
-            'default' => null,
-            'limit' => 11,
-            'null' => false,
-        ]);
         $table->addColumn('reputation', 'integer', [
             'default' => 0,
             'limit' => 11,

@@ -81,7 +81,10 @@ Router::prefix('api', function ($routes) {
     /**
      * Users
      */
-    $routes->resources('Users', ['only' => 'update']);
+    $routes->connect('/account', [
+        'controller' => 'Users',
+        'action' => 'account'
+    ]);
 
     /**
      * Auth

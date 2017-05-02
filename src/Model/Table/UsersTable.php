@@ -165,6 +165,7 @@ class UsersTable extends Table
     /**
      * @param array $query The request query object $this->request->query
      * @return bool|\App\Model\Entity\User
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
     public function getByToken($query)
     {

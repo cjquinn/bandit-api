@@ -38,7 +38,60 @@ class ResultsTableTest extends TestCase
     /**
      * @return void
      */
-    public function testBeforeSave()
+    public function testBeforeSaveInvalidPlayerB()
+    {
+        $result = $this->Results->newEntity();
+
+        $this->Results->patchEntity($result, [
+            // Can't add a result against yourself
+            'player_b_id' => 1,
+            'player_a_score' => 3,
+            'player_b_score' => 0
+        ]);
+
+        $result->set('club_id', 1);
+        $result->set('player_a_id', 1);
+
+        $this->assertFalse($this->Results->save($result));
+
+        $expected = [
+            '_error' => [
+                'invalid' => 'You cannot add results against yourself'
+            ]
+        ];
+        $this->assertEquals($expected, $result->errors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testBeforeSaveUnassignedPlayerB()
+    {
+        $result = $this->Results->newEntity();
+
+        $this->Results->patchEntity($result, [
+            'player_b_id' => 8,
+            'player_a_score' => 3,
+            'player_b_score' => 0
+        ]);
+
+        $result->set('club_id', 1);
+        $result->set('player_a_id', 1);
+
+        $this->assertFalse($this->Results->save($result));
+
+        $expected = [
+            '_error' => [
+                'invalid' => 'You can only add results against members of this club'
+            ]
+        ];
+        $this->assertEquals($expected, $result->errors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testBeforeSaveSnapshots()
     {
         $result = $this->Results->newEntity();
 
@@ -49,14 +102,7 @@ class ResultsTableTest extends TestCase
         ]);
 
         $result->set('club_id', 1);
-        $result->set('player_a_id', 1);
-
-        // Can't add a result against yourself
-        $this->assertFalse($this->Results->save($result));
-
         $result->set('player_a_id', 2);
-
-        $this->Results->save($result);
 
         // Snapshots should be set
         $this->assertTrue($this->Results->save($result) !== false);

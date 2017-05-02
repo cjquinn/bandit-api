@@ -33,6 +33,9 @@ class ResultsTable extends Table
                     'foreignKey' => 'player_b_id',
                     'propertyName' => 'player_b'
                 ]
+            ],
+            'hasOne' => [
+                'Disputes'
             ]
         ]);
 
@@ -77,6 +80,18 @@ class ResultsTable extends Table
     public function beforeSave(Event $event, Result $result)
     {
         if ($result->player_a_id === $result->player_b_id) {
+            $result->errors('_error', [
+                'invalid' => 'You cannot add results against yourself'
+            ]);
+
+            return false;
+        }
+
+        if (!$this->Clubs->hasMember($result->club_id, $result->player_b_id)) {
+            $result->errors('_error', [
+                'invalid' => 'You can only add results against members of this club'
+            ]);
+
             return false;
         }
 
@@ -148,12 +163,16 @@ class ResultsTable extends Table
     /**
      * @return bool
      */
-    public function isOwnedBy($id, $playerAId)
+    public function isOwnedBy($id, $userId)
     {
-        return $this->exists([
-            'id' => $id,
-            'player_a_id' => $playerAId
-        ]);
+        return !$this
+            ->findById($id)
+            ->innerJoinWith('PlayerAs', function ($q) use ($userId) {
+                $q->where(['PlayerAs.user_id' => $userId]);
+
+                return $q;
+            })
+            ->isEmpty();
     }
 
     /**

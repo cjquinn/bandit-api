@@ -12,28 +12,15 @@ class ResultsController extends ApiController
      */
     public function isAuthorized(array $user)
     {
-        if ($this->request->action === 'add') {
-            $losingPlayerId = Hash::get($this->request->data, 'losing_player_id');
-
-            // Invalid losing player
-            if ($losingPlayerId === $this->Auth->user('player.id')) {
-                return false;
-            }
-
-            // Unassigned losing player
-            if (!$this->Results->Players->isAssignedToClub($losingPlayerId, $this->request->params['club_id'])) {
-                return false;
-            }
-
-            // Existing disputes
-            if ($this->Results->Players->hasDisputes($this->Auth->user('player.id'), $this->request->params['club_id'])) {
-                return false;
-            }
+        if ($this->request->action === 'add' &&
+            $this->Results->Clubs->hasDisputingMember($this->request->params['club_id'], $this->Auth->user('id'))
+        ) {
+            return false;
         }
 
         if ($this->request->action === 'delete') {
             // Invalid player
-            if (!$this->Results->isOwnedBy($this->request->params['id'], $this->Auth->user('player.id'))) {
+            if (!$this->Results->isOwnedBy($this->request->params['id'], $this->Auth->user('id'))) {
                 return false;
             }
 
@@ -58,14 +45,16 @@ class ResultsController extends ApiController
     {
         $result = $this->Results->newEntity();
 
-        if ($this->Results->Players->isFounder($this->Auth->user('player.id'), $this->request->params['club_id'])) {
-            $result->accessible('submitted', true);
-        }
-
         $this->Results->patchEntity($result, $this->request->data);
 
         $result->set('club_id', $this->request->params['club_id']);
-        $result->set('winning_player_id', $this->Auth->user('player.id'));
+        $result->set(
+            'player_a_id',
+            $this->Results->Clubs->getPlayerId(
+                $this->request->params['club_id'],
+                $this->Auth->user('id')
+            )
+        );
 
         if (!$this->Results->save($result)) {
             $this->response->statusCode(400);
@@ -83,15 +72,6 @@ class ResultsController extends ApiController
      */
     public function delete($id)
     {
-        $result = $this->Results->get($id, [
-            'conditions' => [
-                'club_id' => $this->request->params['club_id']
-            ]
-        ]);
-
-        $this->Results->delete($result);
-
-        $this->set('_serialize', true);
     }
 
     /**

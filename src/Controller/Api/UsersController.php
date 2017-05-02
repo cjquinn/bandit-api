@@ -25,6 +25,13 @@ class UsersController extends ApiController
 
     /**
      * @return void
+     */
+    public function account()
+    {
+    }
+
+    /**
+     * @return void
      * @throws \Cake\Network\Exception\ForbiddenException
      */
     public function activateAccount()

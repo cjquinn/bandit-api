@@ -49,14 +49,10 @@ class ApiController extends Controller
         }
 
         if (isset($this->request->params['club_id'])) {
-            $playerIsAsignedToClub = TableRegistry::get('Players')->isAssignedToClub(
-                $this->Auth->user('player.id'),
-                $this->request->params['club_id']
+            return TableRegistry::get('Clubs')->hasMember(
+                $this->request->params['club_id'],
+                $this->Auth->user('id')
             );
-
-            if (!$playerIsAsignedToClub) {
-                return false;
-            }
         }
 
         return true;

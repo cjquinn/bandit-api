@@ -2,6 +2,7 @@
 
 namespace App\Test\Fixture;
 
+use Cake\I18n\Time;
 use Cake\TestSuite\Fixture\TestFixture;
 
 class DisputesFixture extends TestFixture
@@ -16,12 +17,12 @@ class DisputesFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'result_id' => 1,
+                'result_id' => 3,
                 'player_a_score' => null,
                 'player_b_score' => null,
                 'is_resolved' => null,
-                'created' => date('Y-m-d H:i:s'),
-                'modified' => date('Y-m-d H:i:s')
+                'created' => new Time('2 days ago'),
+                'modified' => new Time('2 days ago')
             ]
         ];
 

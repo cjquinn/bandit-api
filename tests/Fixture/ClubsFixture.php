@@ -20,6 +20,13 @@ class ClubsFixture extends TestFixture
                 'name' => 'Squelch',
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 2,
+                'founder_id' => 8,
+                'name' => 'Ping Pong Game On',
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
             ]
         ];
 

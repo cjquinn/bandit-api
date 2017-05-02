@@ -77,6 +77,15 @@ class UsersFixture extends TestFixture
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 8,
+                'name' => 'Gareth',
+                'reputation' => 0,
+                'email' => 'gareth@bandit.play',
+                'password' => (new DefaultPasswordHasher)->hash('password'),
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
             ]
         ];
 

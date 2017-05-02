@@ -161,14 +161,51 @@ class ClubsTable extends Table
     }
 
     /**
+     * @return int
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     */
+    public function getPlayerId($id, $userId)
+    {
+        return $this->Players
+            ->find()
+            ->select(['id'])
+            ->where([
+                'club_id' => $id,
+                'user_id' => $userId
+            ])
+            ->hydrate(false)
+            ->firstOrFail()['id'];
+    }
+
+    /**
      * @return bool
      */
-    public function isOwnedBy($id, $userId)
+    public function hasDisputingMember($id, $userId)
     {
-        return $this->exists([
-            'id' => $id,
-            'founder_id' => $userId
-        ]);
+        return !$this->Players
+            ->find()
+            ->where([
+                'Players.club_id' => $id,
+                'Players.user_id' => $userId
+            ])
+            ->join([
+                'Results' => [
+                    'table' => 'results',
+                    'type' => 'INNER',
+                    'conditions' => [
+                        'OR' => [
+                            'Players.id = Results.player_a_id',
+                            'Players.id = Results.player_b_id'
+                        ]
+                    ]
+                ],
+                'Disputes' => [
+                    'table' => 'disputes',
+                    'type' => 'INNER',
+                    'conditions' => 'Results.id = Disputes.result_id'
+                ]
+            ])
+            ->isEmpty();
     }
 
     /**
@@ -179,6 +216,17 @@ class ClubsTable extends Table
         return $this->Players->exists([
             'club_id' => $id,
             'user_id' => $userId
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOwnedBy($id, $userId)
+    {
+        return $this->exists([
+            'id' => $id,
+            'founder_id' => $userId
         ]);
     }
 }

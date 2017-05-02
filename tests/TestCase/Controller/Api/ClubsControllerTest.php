@@ -77,7 +77,7 @@ class ClubsControllerTest extends IntegrationTestCase
             'name' => 'Squelch Bandit'
         ]);
 
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(401);
     }
 
     /**
@@ -134,7 +134,7 @@ class ClubsControllerTest extends IntegrationTestCase
 
         $this->get('/api/clubs.json');
 
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(401);
     }
 
     /**
@@ -159,7 +159,7 @@ class ClubsControllerTest extends IntegrationTestCase
 
         $this->get('/api/clubs/1.json');
 
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(401);
     }
 
     /**

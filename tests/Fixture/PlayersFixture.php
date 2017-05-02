@@ -83,6 +83,16 @@ class PlayersFixture extends TestFixture
                 'losses' => 1,
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
+            ],
+            [
+                'id' => 8,
+                'club_id' => 2,
+                'user_id' => 8,
+                'rating' => 1200,
+                'wins' => 0,
+                'losses' => 0,
+                'created' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
             ]
         ];
 

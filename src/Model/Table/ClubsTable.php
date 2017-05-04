@@ -116,16 +116,12 @@ class ClubsTable extends Table
     public function afterSave(Event $event, Club $club)
     {
         if ($club->isNew()) {
-            $this->patchEntity($club, [
-                'players' => [
-                    ['user_id' => $club->founder_id]
-                ]
-            ], [
-                'fieldList' => ['players'],
-                'validate' => false
-            ]);
+            $player = $this->Players->newEntity();
 
-            $this->save($club);
+            $player->set('club_id', $club->id);
+            $player->set('user_id', $club->founder_id);
+
+            $this->Players->save($player);
         }
     }
 

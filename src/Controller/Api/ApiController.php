@@ -48,6 +48,7 @@ class ApiController extends Controller
             return false;
         }
 
+
         if (isset($this->request->params['club_id'])) {
             return TableRegistry::get('Clubs')->hasMember(
                 $this->request->params['club_id'],

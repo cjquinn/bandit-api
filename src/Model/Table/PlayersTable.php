@@ -10,6 +10,7 @@ use Cake\Event\Event;
 use Cake\I18n\Time;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\Validation\Validator;
 
 class PlayersTable extends Table
 {
@@ -32,6 +33,36 @@ class PlayersTable extends Table
     /**
      * @return void
      */
+    public function patchEntityAdd(Player $player, array $data)
+    {
+        $this->patchEntity($player, $data, [
+            'fieldList' => [
+                'user'
+            ],
+            'validate' => 'add'
+        ]);
+
+        if (!$player->errors()) {
+            $user = $this->Users
+                ->findByEmail($data['user']['email'])
+                ->first();
+
+            if ($user) {
+                if ($this->Clubs->hasMember($player->club_id, $user->id)) {
+                    $player->user->errors('email', [
+                        'duplicate' => 'A member of this club already exists with that email'
+                    ]);
+                } else {
+                    $player->set('user_id', $user->id);
+                    $player->unsetProperty('user');
+                }
+            }
+        }
+    }
+
+    /**
+     * @return void
+     */
     public function patchEntityStats(Player $player, array $data)
     {
         $this->patchEntity($player, $data, [
@@ -42,6 +73,18 @@ class PlayersTable extends Table
             ],
             'validate' => false
         ]);
+    }
+
+    /**
+     * @return \Cake\Validation\Validator
+     */
+    public function validationAdd(Validator $validator)
+    {
+        $validator
+            ->requirePresence('user')
+            ->notEmpty('user');
+
+        return $validator;
     }
 
     /**

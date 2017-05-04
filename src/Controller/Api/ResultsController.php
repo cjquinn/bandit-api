@@ -45,8 +45,6 @@ class ResultsController extends ApiController
     {
         $result = $this->Results->newEntity();
 
-        $this->Results->patchEntity($result, $this->request->data);
-
         $result->set('club_id', $this->request->params['club_id']);
         $result->set(
             'player_a_id',
@@ -55,6 +53,8 @@ class ResultsController extends ApiController
                 $this->Auth->user('id')
             )
         );
+
+        $this->Results->patchEntity($result, $this->request->data);
 
         if (!$this->Results->save($result)) {
             $this->response->statusCode(400);

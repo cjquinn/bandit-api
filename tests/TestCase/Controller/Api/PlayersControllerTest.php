@@ -27,10 +27,10 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testAddUnassigned()
+    public function testUnassigned()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(9);
+        $this->_setAuthSession(8);
 
         $this->post('/api/clubs/1/players.json', []);
 
@@ -45,12 +45,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->post('/api/clubs/1/players.json', [
-            'name' => '',
-            'login' => [
-                'email' => ''
-            ]
-        ]);
+        $this->post('/api/clubs/1/players.json', []);
 
         $this->assertResponseCode(400);
     }
@@ -64,60 +59,9 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAuthSession(1);
 
         $this->post('/api/clubs/1/players.json', [
-            'name' => 'Nathan Rathbone',
-            'login' => [
-                'email' => 'nathan@bandit.localhost'
+            'user' => [
+                'email' => 'christyjquinn@gmail.com'
             ]
-        ]);
-
-        $this->assertResponseCode(200);
-
-        $this->assertTrue(TableRegistry::get('ClubsPlayers')->exists([
-            'club_id' => 1,
-            'player_id' => json_decode($this->_response->body(), true)['player']['id']
-        ]));
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditInvalidPlayerId()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
-
-        $this->put('/api/players/2.json', [
-            'name' => 'Christy J Quinn'
-        ]);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditBadData()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
-
-        $this->put('/api/players/1.json', [
-            'name' => ''
-        ]);
-
-        $this->assertResponseCode(400);
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditPut()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
-
-        $this->put('/api/players/1.json', [
-            'name' => 'Christy J Quinn'
         ]);
 
         $this->assertResponseCode(200);

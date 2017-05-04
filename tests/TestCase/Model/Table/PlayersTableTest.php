@@ -39,6 +39,74 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testPatchEntityAdd()
+    {
+        // Bad data
+        $player = $this->Players->newEntity();
+
+        $player->set('club_id', 1);
+
+        $this->Players->patchEntityAdd($player, []);
+
+        $expected = [
+            'user' => [
+                '_required' => 'This field is required'
+            ]
+        ];
+        $this->assertEquals($expected, $player->errors());
+
+        // New user
+        $player = $this->Players->newEntity();
+
+        $player->set('club_id', 1);
+
+        $this->Players->patchEntityAdd($player, [
+            'user' => [
+                'email' => 'some@new.player'
+            ]
+        ]);
+
+        $this->assertNotNull($player->user);
+        $this->assertEquals('some@new.player', $player->user->email);
+
+        // Existing user non member
+        $player = $this->Players->newEntity();
+
+        $player->set('club_id', 1);
+
+        $this->Players->patchEntityAdd($player, [
+            'user' => [
+                'email' => 'gareth@bandit.play'
+            ]
+        ]);
+
+        $this->assertNull($player->user);
+        $this->assertEquals(8, $player->user_id);
+
+        // Existing user member
+        $player = $this->Players->newEntity();
+
+        $player->set('club_id', 1);
+
+        $this->Players->patchEntityAdd($player, [
+            'user' => [
+                'email' => 'christy@bandit.play'
+            ]
+        ]);
+
+        $expected = [
+            'user' => [
+                'email' => [
+                    'duplicate' => 'A member of this club already exists with that email'
+                ]
+            ]
+        ];
+        $this->assertEquals($expected, $player->errors());
+    }
+
+    /**
+     * @return void
+     */
     public function testBeforeSave()
     {
         $player = $this->Players->newEntity();

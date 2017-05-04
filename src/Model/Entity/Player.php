@@ -18,7 +18,7 @@ class Player extends Entity
 {
 
     protected $_accessible = [
-        '*' => true
+        '*' => false
     ];
 
     /**

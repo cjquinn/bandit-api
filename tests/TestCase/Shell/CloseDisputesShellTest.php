@@ -13,12 +13,10 @@ class CloseDisputesShellTest extends TestCase
 
     public $fixtures = [
         'app.clubs',
-        'app.clubs_players',
         'app.disputes',
-        'app.histories',
-        'app.logins',
         'app.players',
-        'app.results'
+        'app.results',
+        'app.users'
     ];
 
     /**

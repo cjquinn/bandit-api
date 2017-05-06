@@ -115,10 +115,10 @@ class ResultsTableTest extends TestCase
      */
     public function testFindTree()
     {
-        $firstResult = $this->Results->get(2);
+        $result = $this->Results->get(2);
 
         $query = $this->Results->find('tree', [
-            'result' => $firstResult
+            'result' => $result
         ]);
         $this->assertInstanceOf('Cake\ORM\Query', $query);
 
@@ -131,15 +131,37 @@ class ResultsTableTest extends TestCase
      */
     public function testIdTree()
     {
-        $firstResult = $this->Results->get(2);
-
-        $resultTree = $this->Results->idTree($firstResult);
+        $result = $this->Results->get(2);
+        $resultTree = $this->Results->idTree($result);
 
         $expected = [
             2 => 2,
             3 => 3,
             7 => 7,
             5 => 5
+        ];
+        $this->assertEquals($expected, $resultTree);
+
+        // First result is being deleted
+        $result->set('is_deleted', true);
+        $resultTree = $this->Results->idTree($result);
+
+        $expected = [
+            2 => 2,
+            3 => 3,
+            7 => 7,
+            5 => 5
+        ];
+        $this->assertEquals($expected, $resultTree);
+
+        // Result up the tree is deleted
+        $this->Results->updateAll(['is_deleted' => true], ['id' => 5]);
+        $resultTree = $this->Results->idTree($result);
+
+        $expected = [
+            2 => 2,
+            3 => 3,
+            7 => 7
         ];
         $this->assertEquals($expected, $resultTree);
     }

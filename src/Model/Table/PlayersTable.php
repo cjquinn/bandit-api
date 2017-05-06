@@ -133,6 +133,32 @@ class PlayersTable extends Table
     }
 
     /**
+     * @param \App\Model\Entity\Results $result
+     * @param string $player - The letter of the player in the result (player_a|player_b)
+     * @return bool
+     */
+    public function revert(Result $result, $player)
+    {
+        $snapshot = $result->{$player . '_snapshot'};
+        $wins = $result->{$player . '_score'};
+        $losses = $player === 'player_a'
+            ? $result->player_b_score
+            : $result->player_a_score;
+
+        $player = $this->get($result->{$player . '_id'});
+
+        $this->patchEntityStats($player, [
+            'rating' => $snapshot['rating'] - $snapshot['difference'],
+            'wins' => $snapshot['wins'] - $wins,
+            'losses' => $snapshot['losses'] - $losses
+        ]);
+
+        $this->save($player, ['atomic' => false]);
+
+        return true;
+    }
+
+    /**
      * @return array
      */
     public function snapshot(Player $player, $expectedScore, $wins, $losses)
@@ -153,7 +179,7 @@ class PlayersTable extends Table
             'losses' => $player->losses
         ];
 
-        $this->save($player);
+        $this->save($player, ['atomic' => false]);
 
         return $snapshot;
     }

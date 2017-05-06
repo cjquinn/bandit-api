@@ -63,6 +63,11 @@ class CreateResults extends AbstractMigration
             'null' => false
         ]);
 
+        $table->addColumn('is_deleted', 'boolean', [
+            'default' => false,
+            'null' => false
+        ]);
+
         $table->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false

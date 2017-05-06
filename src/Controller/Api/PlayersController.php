@@ -6,6 +6,24 @@ class PlayersController extends ApiController
 {
 
     /**
+     * @return bool
+     */
+    public function isAuthorized(array $user)
+    {
+        if (!$this->Players->Clubs->isOwnedBy($this->request->params['club_id'], $this->Auth->user('id'))) {
+            return false;
+        }
+
+        if ($this->request->action === 'delete' &&
+            (int)$this->request->params['id'] === $this->Auth->user('id')
+        ) {
+            return false;
+        }
+
+        return parent::isAuthorized($user);
+    }
+
+    /**
      * @return void\Cake\Network\Response
      */
     public function add()
@@ -28,8 +46,20 @@ class PlayersController extends ApiController
 
     /**
      * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
     public function delete($id)
     {
+        $player = $this->Players->get($id, [
+            'conditions' => [
+                'club_id' => $this->request->params['club_id']
+            ]
+        ]);
+
+        $player->set('is_member', false);
+
+        $this->Players->save($player);
+
+        $this->set('player', $player);
     }
 }

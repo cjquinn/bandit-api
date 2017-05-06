@@ -82,7 +82,8 @@ class ResultsController extends ApiController
         $results = $this->Results
             ->find()
             ->where([
-                'club_id' => $this->request->params['club_id']
+                'club_id' => $this->request->params['club_id'],
+                'is_deleted' => false
             ]);
 
         $this->set('results', $results);
@@ -96,7 +97,8 @@ class ResultsController extends ApiController
     {
         $result = $this->Results->get($id, [
             'conditions' => [
-                'club_id' => $this->request->params['club_id']
+                'club_id' => $this->request->params['club_id'],
+                'is_deleted' => false
             ]
         ]);
 

@@ -211,7 +211,8 @@ class ClubsTable extends Table
     {
         return $this->Players->exists([
             'club_id' => $id,
-            'user_id' => $userId
+            'user_id' => $userId,
+            'is_member' => true
         ]);
     }
 

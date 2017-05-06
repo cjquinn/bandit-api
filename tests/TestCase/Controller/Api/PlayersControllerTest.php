@@ -40,6 +40,19 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testNonFounder()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(2);
+
+        $this->post('/api/clubs/1/players.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testAddBadData()
     {
         $this->_setAjaxRequest();
@@ -63,6 +76,46 @@ class PlayersControllerTest extends IntegrationTestCase
                 'email' => 'christyjquinn@gmail.com'
             ]
         ]);
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteFounder()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->delete('/api/clubs/1/players/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+
+    /**
+     * @return void
+     */
+    public function testDeleteInvalidPlayer()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->delete('/api/clubs/1/players/8.json');
+
+        $this->assertResponseCode(404);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteDelete()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->delete('/api/clubs/1/players/2.json');
 
         $this->assertResponseCode(200);
     }

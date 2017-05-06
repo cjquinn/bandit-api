@@ -95,10 +95,13 @@ class ResultsTable extends Table
             return false;
         }
 
-        $snapshots = $this->Clubs->Players->snapshots($result);
+        // TODO: test this
+        if (!$result->is_deleted) {
+            $snapshots = $this->Clubs->Players->snapshots($result);
 
-        $result->set('player_a_snapshot', $snapshots['a']);
-        $result->set('player_b_snapshot', $snapshots['b']);
+            $result->set('player_a_snapshot', $snapshots['a']);
+            $result->set('player_b_snapshot', $snapshots['b']);
+        }
     }
 
     /**
@@ -134,6 +137,7 @@ class ResultsTable extends Table
         $where = [
             'id !=' => $result->id,
             'club_id' => $result->club_id,
+            'is_deleted' => false,
             'created >=' => $result->created
         ];
 
@@ -173,6 +177,38 @@ class ResultsTable extends Table
                 return $q;
             })
             ->isEmpty();
+    }
+
+    /**
+     * @return void
+     */
+    public function softDelete(Result $result)
+    {
+        // TODO: write tests
+        $this->connection()->transactional(function () use ($result) {
+            $result->set('is_deleted', true);
+
+            $results = $this->find('tree', [
+                'result' => $result
+            ]);
+
+            $players = ['player_a', 'player_b'];
+
+            // Revert all players in result tree
+            foreach ($results as $result) {
+                foreach ($players as $player) {
+                    $playerId = $result->{$player . '_id'};
+
+                    if (!isset($revertedPlayers[$playerId])) {
+                        $revertedPlayers[$playerId] = $this->Players->revert($result, $player);
+                    }
+                }
+
+                $result->dirty('*', true);
+
+                $this->save($result, ['atomic' => false]);
+            }
+        });
     }
 
     /**

@@ -95,7 +95,6 @@ class ResultsTable extends Table
             return false;
         }
 
-        // TODO: test this
         if (!$result->is_deleted) {
             $snapshots = $this->Clubs->Players->snapshots($result);
 
@@ -151,6 +150,10 @@ class ResultsTable extends Table
             ->where($where + ['player_b_id IN' => $playerIds])
             ->first();
 
+        if ($result->is_deleted) {
+            return $this->idTree($left) + $this->idTree($right);
+        }
+
         return [$result->id => $result->id] + $this->idTree($left) + $this->idTree($right);
     }
 
@@ -184,9 +187,12 @@ class ResultsTable extends Table
      */
     public function softDelete(Result $result)
     {
-        // TODO: write tests
         $this->connection()->transactional(function () use ($result) {
             $result->set('is_deleted', true);
+
+            $this->save($result);
+
+            // These players need to be reverted!!
 
             $results = $this->find('tree', [
                 'result' => $result
@@ -200,13 +206,15 @@ class ResultsTable extends Table
                     $playerId = $result->{$player . '_id'};
 
                     if (!isset($revertedPlayers[$playerId])) {
-                        $revertedPlayers[$playerId] = $this->Players->revert($result, $player);
+                        $revertedPlayers[$playerId] = $this->Clubs->Players->revert($result, $player);
                     }
                 }
 
                 $result->dirty('*', true);
 
-                $this->save($result, ['atomic' => false]);
+                $this->save($result);
+
+                die;
             }
         });
     }

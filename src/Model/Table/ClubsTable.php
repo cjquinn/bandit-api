@@ -137,6 +137,7 @@ class ClubsTable extends Table
                     ['player_a_id' => $playerId],
                     ['player_b_id' => $playerId]
                 ],
+                'is_deleted' => false,
                 'created <' => $date
             ])
             ->order(['created' => 'DESC'])

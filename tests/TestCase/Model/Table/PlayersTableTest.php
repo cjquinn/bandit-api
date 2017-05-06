@@ -205,6 +205,30 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testRevert()
+    {
+        $result = $this->Players->Clubs->Results->get(1);
+
+        $this->assertTrue($this->Players->revert($result, 'player_a'));
+
+        $playerA = $this->Players->get($result->player_a_id);
+
+        $this->assertEquals(1200, $playerA->rating);
+        $this->assertEquals(0, $playerA->wins);
+        $this->assertEquals(0, $playerA->losses);
+
+        $this->assertTrue($this->Players->revert($result, 'player_b'));
+
+        $playerB = $this->Players->get($result->player_b_id);
+
+        $this->assertEquals(1200, $playerB->rating);
+        $this->assertEquals(0, $playerB->wins);
+        $this->assertEquals(0, $playerB->losses);
+    }
+
+    /**
+     * @return void
+     */
     public function testSnapshot()
     {
         $player = $this->Players->get(1);

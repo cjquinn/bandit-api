@@ -153,7 +153,7 @@ class PlayersTable extends Table
             'losses' => $snapshot['losses'] - $losses
         ]);
 
-        $this->save($player, ['atomic' => false]);
+        $this->save($player);
 
         return true;
     }
@@ -179,7 +179,7 @@ class PlayersTable extends Table
             'losses' => $player->losses
         ];
 
-        $this->save($player, ['atomic' => false]);
+        $this->save($player);
 
         return $snapshot;
     }

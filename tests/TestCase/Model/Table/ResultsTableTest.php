@@ -113,6 +113,23 @@ class ResultsTableTest extends TestCase
     /**
      * @return void
      */
+    public function testBeforeSaveDeleted()
+    {
+        $result = $this->Results->get(1);
+        $result->set('is_deleted', true);
+
+        $playerASnapshot = $result->player_a_snapshot;
+        $playerBSnapshot = $result->player_b_snapshot;
+
+        $this->Results->save($result);
+
+        $this->assertEquals($playerASnapshot, $result->player_a_snapshot);
+        $this->assertEquals($playerBSnapshot, $result->player_b_snapshot);
+    }
+
+    /**
+     * @return void
+     */
     public function testFindTree()
     {
         $result = $this->Results->get(2);
@@ -147,7 +164,6 @@ class ResultsTableTest extends TestCase
         $resultTree = $this->Results->idTree($result);
 
         $expected = [
-            2 => 2,
             3 => 3,
             7 => 7,
             5 => 5
@@ -164,5 +180,121 @@ class ResultsTableTest extends TestCase
             7 => 7
         ];
         $this->assertEquals($expected, $resultTree);
+    }
+
+    /**
+     * @return void
+     * @group testing
+     */
+    public function testSoftDelete()
+    {
+        $resultToDelete = $this->Results->get(2);
+        $this->Results->softDelete($resultToDelete);
+
+        // Result is deleted
+        $this->assertTrue($resultToDelete->is_deleted);
+
+        // Results up the tree have been amended
+        $expected = [
+            3 => [
+                'a' => [
+                    'rating' => 1201,
+                    'difference' => 21,
+                    'wins' => 1,
+                    'losses' => 1
+                ],
+                'b' => [
+                    'rating' => 1179,
+                    'difference' => -21,
+                    'wins' => 0,
+                    'losses' => 1
+                ]
+            ],
+            5 => [
+                'a' => [
+                    'rating' => 1202,
+                    'difference' => 22,
+                    'wins' => 1,
+                    'losses' => 1
+                ],
+                'b' => [
+                    'rating' => 1198,
+                    'difference' => -22,
+                    'wins' => 1,
+                    'losses' => 1
+                ]
+            ],
+            7 => [
+                'a' => [
+                    'rating' => 1239,
+                    'difference' => 19,
+                    'wins' => 2,
+                    'losses' => 0
+                ],
+                'b' => [
+                    'rating' => 1182,
+                    'difference' => -19,
+                    'wins' => 1,
+                    'losses' => 2
+                ]
+            ]
+        ];
+
+        foreach ($expected as $resultId => $snapShots) {
+            $result = $this->Results->get($resultId);
+
+            $this->assertEquals($snapShots['a'], $result->player_a_snapshot);
+            $this->assertEquals($snapShots['b'], $result->player_b_snapshot);
+        }
+
+        // Players stats have been amended
+        $expected = [
+            1 => [
+                'rating' => 1198,
+                'wins' => 1,
+                'losses' => 1
+            ],
+            2 => [
+                'rating' => 1182,
+                'wins' => 1,
+                'losses' => 2
+            ],
+            3 => [
+                'rating' => 1179,
+                'wins' => 0,
+                'losses' => 1
+            ],
+            4 => [
+                'rating' => 1239,
+                'wins' => 2,
+                'losses' => 0
+            ],
+            5 => [
+                'rating' => 1202,
+                'wins' => 1,
+                'losses' => 1
+            ]
+        ];
+
+        foreach ($expected as $playerId => $stats) {
+            $player = $this->Results->Clubs->Players->get($playerId);
+
+            $this->assertEquals($stats['rating'], $player->rating);
+            $this->assertEquals($stats['wins'], $player->wins);
+            $this->assertEquals($stats['losses'], $player->losses);
+        }
+
+        // Both users reputation is reduced by one
+        $playerA = $this->Results->PlayerAs->get($resultToDelete->player_a_id, [
+            'contain' => ['Users']
+        ]);
+
+        $this->assertEquals(2, $playerA->user->reputation);
+
+        $playerB = $this->Results->PlayerBs->get($resultToDelete->player_b_id, [
+            'contain' => ['Users']
+        ]);
+
+        $this->assertEquals(3, $playerB->user->reputation);
     }
 }

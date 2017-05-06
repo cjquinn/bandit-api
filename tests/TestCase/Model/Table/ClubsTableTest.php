@@ -185,5 +185,19 @@ class ClubsTableTest extends TestCase
             'losses' => 0
         ];
         $this->assertEquals($expected, $dailySnapshot);
+
+        // 4 days ago deleted, from 3 days ago
+        $this->Clubs->Results->updateAll(['is_deleted' => true], ['id' => 1]);
+
+        $date = new Time('3 days ago');
+        $dailySnapshot = $this->Clubs->dailySnapshot(1, 1, $date->i18nFormat('Y-M-d'));
+
+        $expected = [
+            'rating' => Configure::read('Bandit.initialRating'),
+            'difference' => 0,
+            'wins' => 0,
+            'losses' => 0
+        ];
+        $this->assertEquals($expected, $dailySnapshot);
     }
 }

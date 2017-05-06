@@ -185,6 +185,6 @@ class UsersTable extends Table
 
         $user->set('reputation', $user->reputation + $difference);
 
-        $this->save($user, ['atomic' => false]);
+        $this->save($user);
     }
 }

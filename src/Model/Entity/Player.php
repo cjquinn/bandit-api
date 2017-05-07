@@ -11,7 +11,7 @@ use Cake\ORM\Entity;
  * @property int $rating
  * @property int $wins
  * @property int $losses
- * @property boolean $is_member
+ * @property boolean $is_active
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
  */

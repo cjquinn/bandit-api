@@ -224,6 +224,17 @@ class PlayersTableTest extends TestCase
         $this->assertEquals(1200, $playerB->rating);
         $this->assertEquals(0, $playerB->wins);
         $this->assertEquals(0, $playerB->losses);
+
+        // Deleted result
+        $result->set('is_deleted', true);
+
+        $this->assertTrue($this->Players->revert($result, 'player_a'));
+
+        $playerA = $this->Players->get($result->player_a_id, [
+            'contain' => ['Users']
+        ]);
+
+        $this->assertEquals(2, $playerA->user->reputation);
     }
 
     /**

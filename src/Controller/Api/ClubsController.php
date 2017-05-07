@@ -101,7 +101,7 @@ class ClubsController extends ApiController
             ->innerJoinWith('Players', function ($q) {
                 $q->where([
                     'Players.user_id' => $this->Auth->user('id'),
-                    'Players.is_member' => true
+                    'Players.is_active' => true
                 ]);
 
                 return $q;

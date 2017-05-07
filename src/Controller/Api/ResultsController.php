@@ -72,6 +72,16 @@ class ResultsController extends ApiController
      */
     public function delete($id)
     {
+        $result = $this->Results->get($id, [
+            'conditions' => [
+                'club_id' => $this->request->params['club_id'],
+                'is_deleted' => false
+            ]
+        ]);
+
+        $this->Results->softDelete($result);
+
+        $this->set('result', $result);
     }
 
     /**

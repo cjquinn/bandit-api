@@ -150,10 +150,6 @@ class ResultsTable extends Table
             ->where($where + ['player_b_id IN' => $playerIds])
             ->first();
 
-        if ($result->is_deleted) {
-            return $this->idTree($left) + $this->idTree($right);
-        }
-
         return [$result->id => $result->id] + $this->idTree($left) + $this->idTree($right);
     }
 
@@ -192,17 +188,15 @@ class ResultsTable extends Table
 
             $this->save($result);
 
-            // These players need to be reverted!!
-
+            // Find tree of affected results
             $results = $this->find('tree', [
                 'result' => $result
             ]);
 
-            $players = ['player_a', 'player_b'];
-
-            // Revert all players in result tree
+            // Revert all players in result tree and resave results
+            $revertedPlayers = [];
             foreach ($results as $result) {
-                foreach ($players as $player) {
+                foreach (['player_a', 'player_b'] as $player) {
                     $playerId = $result->{$player . '_id'};
 
                     if (!isset($revertedPlayers[$playerId])) {
@@ -213,8 +207,6 @@ class ResultsTable extends Table
                 $result->dirty('*', true);
 
                 $this->save($result);
-
-                die;
             }
         });
     }

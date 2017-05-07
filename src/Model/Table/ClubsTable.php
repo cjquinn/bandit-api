@@ -183,23 +183,26 @@ class ClubsTable extends Table
             ->find()
             ->where([
                 'Players.club_id' => $id,
-                'Players.user_id' => $userId
+                'Players.user_id' => $userId,
+                'Players.is_active' => true
             ])
             ->join([
                 'Results' => [
                     'table' => 'results',
                     'type' => 'INNER',
                     'conditions' => [
-                        'OR' => [
-                            'Players.id = Results.player_a_id',
-                            'Players.id = Results.player_b_id'
-                        ]
+                        // Just the player who added the result
+                        'Players.id = Results.player_a_id',
+                        'Results.is_deleted' => false
                     ]
                 ],
                 'Disputes' => [
                     'table' => 'disputes',
                     'type' => 'INNER',
-                    'conditions' => 'Results.id = Disputes.result_id'
+                    'conditions' => [
+                        'Results.id = Disputes.result_id',
+                        'Disputes.is_resolved IS' => null
+                    ]
                 ]
             ])
             ->isEmpty();
@@ -213,7 +216,7 @@ class ClubsTable extends Table
         return $this->Players->exists([
             'club_id' => $id,
             'user_id' => $userId,
-            'is_member' => true
+            'is_active' => true
         ]);
     }
 

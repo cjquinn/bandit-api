@@ -14,7 +14,7 @@ class PlayersController extends ApiController
             return false;
         }
 
-        if ($this->request->action === 'delete' &&
+        if ($this->request->action === 'edit' &&
             (int)$this->request->params['id'] === $this->Auth->user('id')
         ) {
             return false;
@@ -48,7 +48,7 @@ class PlayersController extends ApiController
      * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
-    public function delete($id)
+    public function edit($id)
     {
         $player = $this->Players->get($id, [
             'conditions' => [
@@ -56,7 +56,7 @@ class PlayersController extends ApiController
             ]
         ]);
 
-        $player->set('is_member', false);
+        $player->set('is_active', !$player->is_active);
 
         $this->Players->save($player);
 

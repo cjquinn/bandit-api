@@ -50,7 +50,7 @@ Router::prefix('api', function ($routes) {
         $routes->resources('Players', [
             'only' => [
                 'create',
-                'delete'
+                'update'
             ]
         ]);
 

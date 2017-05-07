@@ -83,12 +83,12 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteFounder()
+    public function testEditFounder()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->delete('/api/clubs/1/players/1.json');
+        $this->patch('/api/clubs/1/players/1.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -97,12 +97,12 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteInvalidPlayer()
+    public function testEditInvalidPlayer()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->delete('/api/clubs/1/players/8.json');
+        $this->patch('/api/clubs/1/players/8.json', []);
 
         $this->assertResponseCode(404);
     }
@@ -110,12 +110,12 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteDelete()
+    public function testEditPatch()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->delete('/api/clubs/1/players/2.json');
+        $this->patch('/api/clubs/1/players/2.json', []);
 
         $this->assertResponseCode(200);
     }

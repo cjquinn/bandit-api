@@ -49,7 +49,7 @@ class CreatePlayers extends AbstractMigration
             'null' => false
         ]);
 
-        $table->addColumn('is_member', 'boolean', [
+        $table->addColumn('is_active', 'boolean', [
             'default' => true,
             'null' => false
         ]);

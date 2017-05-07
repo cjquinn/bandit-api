@@ -44,7 +44,7 @@ class ResultsControllerTest extends IntegrationTestCase
     public function testAddExistingDisputes()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(3);
+        $this->_setAuthSession(2);
 
         $this->post('/api/clubs/1/results.json', [
             'player_b_id' => 1,
@@ -142,7 +142,7 @@ class ResultsControllerTest extends IntegrationTestCase
 
         $this->delete('/api/clubs/1/results/7.json');
 
-        $this->assertResponseCode(123);
+        $this->assertResponseCode(200);
     }
 
     /**

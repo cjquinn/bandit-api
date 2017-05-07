@@ -36,9 +36,7 @@ class PlayersTable extends Table
     public function patchEntityAdd(Player $player, array $data)
     {
         $this->patchEntity($player, $data, [
-            'fieldList' => [
-                'user'
-            ],
+            'fieldList' => ['user'],
             'validate' => 'add'
         ]);
 
@@ -154,6 +152,10 @@ class PlayersTable extends Table
         ]);
 
         $this->save($player);
+
+        if ($result->is_deleted) {
+            $this->Users->updateReputation($player->user_id, -1);
+        }
 
         return true;
     }

@@ -11,7 +11,12 @@ class DisputesController extends ApiController
     public function isAuthorized(array $user)
     {
         // Invalid result id
-        if (!$this->Disputes->Results->isOwnedBy($this->request->params['result_id'], $this->request->params['club_id'])) {
+        if (!$this->Disputes->Results
+                ->isOwnedBy(
+                    $this->request->params['result_id'],
+                    $this->request->params['club_id']
+                )
+        ) {
             return false;
         }
 

@@ -4,9 +4,6 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Dispute;
 
-use ArrayObject;
-
-use Cake\Event\Event;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -29,26 +26,60 @@ class DisputesTable extends Table
     }
 
     /**
+     * @return void
+     */
+    public function patchEntityAdd(Dispute $dispute, array $data)
+    {
+        $this->patchEntity($dispute, $data, [
+            'fieldList' => [
+                'player_a_score',
+                'player_b_score',
+                'message'
+            ],
+            'validate' => 'add'
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function patchEntityEdit(Dispute $dispute, array $data)
+    {
+        $this->patchEntity($dispute, $data, [
+            'fieldList' => ['is_resolved'],
+            'validate' => 'edit'
+        ]);
+    }
+
+    /**
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
+    public function validationAdd(Validator $validator)
     {
         $validator
-            ->requirePresence('player_a_score', 'create')
+            ->requirePresence('player_a_score')
             ->notEmpty('player_a_score')
             ->nonNegativeInteger('player_a_score');
 
         $validator
-            ->requirePresence('player_b_score', 'create')
+            ->requirePresence('player_b_score')
             ->notEmpty('player_b_score')
             ->nonNegativeInteger('player_b_score');
 
         $validator
-            ->requirePresence('message', 'create')
+            ->requirePresence('message')
             ->allowEmpty('message');
 
+        return $validator;
+    }
+
+    /**
+     * @return \Cake\Validation\Validator
+     */
+    public function validationEdit(Validator $validator)
+    {
         $validator
-            ->requirePresence('is_resolved', 'update')
+            ->requirePresence('is_resolved')
             ->notEmpty('is_resolved')
             ->boolean('is_resolved');
 
@@ -63,6 +94,19 @@ class DisputesTable extends Table
         $rules->add($rules->existsIn(['result_id'], 'Results'));
 
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function close(Dispute $dispute)
+    {
+        // If time expired
+            // player_a gets -10 rep, result is deleted
+        // If not resolved
+            // Both players get -10 rep, result is deleted
+        // If resolved
+            // Scores on result is updated
     }
 
     /**

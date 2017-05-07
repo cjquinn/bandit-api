@@ -6,63 +6,53 @@ class DisputesController extends ApiController
 {
 
     /**
-     * @return void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException
-     */
-    public function initialize()
-    {
-        parent::initialize();
-
-        $this->_result = $this->Disputes->Results->get($this->request->params['result_id'], [
-            'contain' => [
-                'Disputes'
-            ]
-        ]);
-    }
-
-    /**
      * @return bool
      */
     public function isAuthorized(array $user)
     {
+        // Invalid result id
+        if (!$this->Disputes->Results->isOwnedBy($this->request->params['result_id'], $this->request->params['club_id'])) {
+            return false;
+        }
+
         if ($this->request->action === 'add') {
             // Time expired
-            if (!$this->_result->submitted->wasWithinLast('24 hours')) {
+            if (!$this->Disputes->Results->wasWithinLast($this->request->params['result_id'], '24 hours')) {
                 return false;
             }
 
             // Existing dispute
-            if ($this->_result->dispute) {
+            if ($this->Disputes->Results->isDisputed($this->request->params['result_id'])) {
                 return false;
             }
         }
 
-        // Resolved dispute
-        if ($this->request->action === 'delete' &&
-            $this->_result->dispute->is_resolved
-        ) {
-            return false;
-        }
-
-        // Invalid winning player
+        // Invalid player a
         if ($this->request->action === 'edit' &&
-            $this->_result->winning_player_id !== $this->Auth->user('player.id')
+            !$this->Disputes->Results->wasCreatedBy($this->request->params['result_id'], $this->Auth->user('id'))
         ) {
             return false;
         }
 
-        // Invalid losing player
+        // Invalid player b
         if (($this->request->action === 'add' || $this->request->action === 'delete') &&
-            $this->_result->losing_player_id !== $this->Auth->user('player.id')
+            !$this->Disputes->Results->isAgainst($this->request->params['result_id'], $this->Auth->user('id'))
         ) {
             return false;
         }
 
-        // Time expired
-        if (($this->request->action === 'delete' || $this->request->action === 'edit') &&
-            !$this->_result->submitted->wasWithinLast('48 hours')
+        if ($this->request->action === 'delete' ||
+            $this->request->action === 'edit'
         ) {
-            return false;
+            // Closed
+            if ($this->Disputes->isClosed($this->request->params['id'])) {
+                return false;
+            }
+
+            // Time expired
+            if (!$this->Disputes->Results->wasWithinLast($this->request->params['result_id'], '48 hours')) {
+                return false;
+            }
         }
 
         return parent::isAuthorized($user);
@@ -73,18 +63,6 @@ class DisputesController extends ApiController
      */
     public function add()
     {
-        $dispute = $this->Disputes->newEntity($this->request->data);
-
-        $dispute->set('result_id', $this->_result->id);
-
-        if (!$this->Disputes->save($dispute)) {
-            $this->response->statusCode(400);
-        }
-
-        $this->set([
-            'dispute' => $dispute,
-            'errors' => $dispute->errors()
-        ]);
     }
 
     /**
@@ -92,9 +70,6 @@ class DisputesController extends ApiController
      */
     public function delete()
     {
-        $this->Disputes->delete($this->_result->dispute);
-
-        $this->set('_serialize', true);
     }
 
     /**
@@ -102,19 +77,5 @@ class DisputesController extends ApiController
      */
     public function edit()
     {
-        $this->Disputes->patchEntity($this->_result->dispute, $this->request->data, [
-            'fieldList' => [
-                'is_resolved'
-            ]
-        ]);
-
-        if (!$this->Disputes->save($this->_result->dispute)) {
-            $this->response->statusCode(400);
-        }
-
-        $this->set([
-            'dispute' => $this->_result->dispute,
-            'errors' => $this->_result->dispute->errors()
-        ]);
     }
 }

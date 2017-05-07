@@ -20,7 +20,7 @@ class ResultsController extends ApiController
 
         if ($this->request->action === 'delete') {
             // Invalid player
-            if (!$this->Results->isOwnedBy($this->request->params['id'], $this->Auth->user('id'))) {
+            if (!$this->Results->wasCreatedBy($this->request->params['id'], $this->Auth->user('id'))) {
                 return false;
             }
 

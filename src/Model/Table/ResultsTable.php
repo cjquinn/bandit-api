@@ -53,11 +53,13 @@ class ResultsTable extends Table
 
         $validator
             ->requirePresence('player_a_score', 'create')
-            ->notEmpty('player_a_score');
+            ->notEmpty('player_a_score')
+            ->nonNegativeInteger('player_a_score');
 
         $validator
             ->requirePresence('player_b_score', 'create')
-            ->notEmpty('player_b_score');
+            ->notEmpty('player_b_score')
+            ->nonNegativeInteger('player_b_score');
 
         return $validator;
     }
@@ -156,6 +158,21 @@ class ResultsTable extends Table
     /**
      * @return bool
      */
+    public function isAgainst($id, $userId)
+    {
+        return !$this
+            ->findById($id)
+            ->innerJoinWith('PlayerBs', function ($q) use ($userId) {
+                $q->where(['PlayerBs.user_id' => $userId]);
+
+                return $q;
+            })
+            ->isEmpty();
+    }
+
+    /**
+     * @return bool
+     */
     public function isDisputed($id)
     {
         return $this->Disputes->exists([
@@ -166,16 +183,12 @@ class ResultsTable extends Table
     /**
      * @return bool
      */
-    public function isOwnedBy($id, $userId)
+    public function isOwnedBy($id, $clubId)
     {
-        return !$this
-            ->findById($id)
-            ->innerJoinWith('PlayerAs', function ($q) use ($userId) {
-                $q->where(['PlayerAs.user_id' => $userId]);
-
-                return $q;
-            })
-            ->isEmpty();
+        return $this->exists([
+            'id' => $id,
+            'club_id' => $clubId
+        ]);
     }
 
     /**
@@ -209,6 +222,21 @@ class ResultsTable extends Table
                 $this->save($result);
             }
         });
+    }
+
+    /**
+     * @return bool
+     */
+    public function wasCreatedBy($id, $userId)
+    {
+        return !$this
+            ->findById($id)
+            ->innerJoinWith('PlayerAs', function ($q) use ($userId) {
+                $q->where(['PlayerAs.user_id' => $userId]);
+
+                return $q;
+            })
+            ->isEmpty();
     }
 
     /**

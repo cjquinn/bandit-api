@@ -44,10 +44,10 @@ class ResultsControllerTest extends IntegrationTestCase
     public function testAddExistingDisputes()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(2);
+        $this->_setAuthSession(1);
 
         $this->post('/api/clubs/1/results.json', [
-            'player_b_id' => 1,
+            'player_b_id' => 2,
             'player_a_score' => 1,
             'player_b_score' => 0
         ]);
@@ -61,7 +61,7 @@ class ResultsControllerTest extends IntegrationTestCase
     public function testAddBadData()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(2);
 
         $this->post('/api/clubs/1/results.json', []);
 
@@ -74,10 +74,10 @@ class ResultsControllerTest extends IntegrationTestCase
     public function testAddPost()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(2);
 
         $this->post('/api/clubs/1/results.json', [
-            'player_b_id' => 2,
+            'player_b_id' => 1,
             'player_a_score' => 1,
             'player_b_score' => 0
         ]);

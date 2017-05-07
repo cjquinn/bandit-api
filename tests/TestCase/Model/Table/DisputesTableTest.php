@@ -33,62 +33,8 @@ class DisputesTableTest extends TestCase
     /**
      * @return void
      */
-    // public function testAfterSaveResolved()
-    // {
-    //     $dispute = $this->Disputes->get(2);
-
-    //     $dispute->set('is_resolved', true);
-
-    //     $this->Disputes->save($dispute);
-
-    //     $losingPlayer = $this->Disputes->Results->Players->get($dispute->result->losing_player_id);
-    //     $winningPlayer = $this->Disputes->Results->Players->get($dispute->result->winning_player_id);
-
-    //     $this->assertEquals(2, $losingPlayer->reputation);
-    //     $this->assertEquals(0, $winningPlayer->reputation);
-    // }
-
-    /**
-     * @return void
-     */
-    // public function testAfterSaveUnresolved()
-    // {
-    //     $dispute = $this->Disputes->get(2);
-
-    //     $dispute->set('is_resolved', false);
-
-    //     $this->Disputes->save($dispute);
-
-    //     $losingPlayer = $this->Disputes->Results->Players->get($dispute->result->losing_player_id);
-    //     $winningPlayer = $this->Disputes->Results->Players->get($dispute->result->winning_player_id);
-
-    //     $this->assertEquals(-8, $losingPlayer->reputation);
-    //     $this->assertEquals(-10, $winningPlayer->reputation);
-    // }
-
-    /**
-     * @return void
-     */
-    // public function testAfterSaveTimeExpired()
-    // {
-    //     $result = $this->Disputes->Results->get(2);
-
-    //     $result->set('submitted', new DateTime('49 hours ago'));
-
-    //     $this->Disputes->Results->save($result, [
-    //         'ignoreEvents' => true
-    //     ]);
-
-    //     $dispute = $this->Disputes->get(2);
-
-    //     $dispute->set('is_resolved', true);
-
-    //     $this->Disputes->save($dispute);
-
-    //     $losingPlayer = $this->Disputes->Results->Players->get($dispute->result->losing_player_id);
-    //     $winningPlayer = $this->Disputes->Results->Players->get($dispute->result->winning_player_id);
-
-    //     $this->assertEquals(2, $losingPlayer->reputation);
-    //     $this->assertEquals(-10, $winningPlayer->reputation);
-    // }
+    public function testTest()
+    {
+        $this->markTestIncomplete();
+    }
 }

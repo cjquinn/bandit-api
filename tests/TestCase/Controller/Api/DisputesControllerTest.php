@@ -4,8 +4,6 @@ namespace App\Test\TestCase\Controller\Api;
 
 use App\Test\TestCase\Controller\ControllerTestTrait;
 
-use Cake\I18n\Time;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
 class DisputesControllerTest extends IntegrationTestCase
@@ -20,9 +18,7 @@ class DisputesControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/api/clubs/1/results/3/disputes.json', [
-            'message' => ''
-        ]);
+        $this->post('/api/clubs/1/results/7/disputes.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -32,21 +28,23 @@ class DisputesControllerTest extends IntegrationTestCase
      */
     public function testUnassigned()
     {
-        $clubsPlayers = TableRegistry::get('ClubsPlayers');
-
-        $clubsPlayer = $clubsPlayers->get([
-            'club_id' => 1,
-            'player_id' => 1
-        ]);
-
-        $clubsPlayers->delete($clubsPlayer);
-
         $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(8);
 
-        $this->post('/api/clubs/1/results/3/disputes.json', [
-            'message' => ''
-        ]);
+        $this->post('/api/clubs/1/results/7/disputes.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testInvalidResultId()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(8);
+
+        $this->post('/api/clubs/2/results/7/disputes.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -57,26 +55,9 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testAddTimeExpired()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
-
-        $this->post('/api/clubs/1/results/1/disputes.json', [
-            'message' => ''
-        ]);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testAddInvalidLosingPlayer()
-    {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->post('/api/clubs/1/results/3/disputes.json', [
-            'message' => ''
-        ]);
+        $this->post('/api/clubs/1/results/1/disputes.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -86,21 +67,38 @@ class DisputesControllerTest extends IntegrationTestCase
      */
     public function testAddExistingDispute()
     {
-        $results = TableRegistry::get('Results');
-
-        $result = $results->get(2);
-        $result->set('submitted', new Time('today'));
-
-        $results->save($result);
-
         $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(7);
 
-        $this->post('/api/clubs/1/results/2/disputes.json', [
-            'message' => ''
-        ]);
+        $this->post('/api/clubs/1/results/6/disputes.json', []);
 
         $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddInvalidPlayerB()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(4);
+
+        $this->post('/api/clubs/1/results/7/disputes.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAddBadData()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(2);
+
+        $this->post('/api/clubs/1/results/7/disputes.json', []);
+
+        $this->assertResponseCode(400);
     }
 
     /**
@@ -109,10 +107,11 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testAddPost()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(2);
 
-        $this->post('/api/clubs/1/results/3/disputes.json', [
-            'message' => ''
+        $this->post('/api/clubs/1/results/7/disputes.json', [
+            'player_a_score' => 0,
+            'player_b_score' => 1
         ]);
 
         $this->assertResponseCode(200);
@@ -121,19 +120,12 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteResolvedDispute()
+    public function testDeleteInvalidPlayerB()
     {
-        $disputes = TableRegistry::get('Disputes');
-        $dispute = $disputes->get(2);
-        $dispute->set('is_resolved', true);
-        $disputes->save($dispute, [
-            'ignoreEvents' => true
-        ]);
-
         $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(6);
 
-        $this->delete('/api/clubs/1/results/2/disputes.json');
+        $this->delete('/api/clubs/1/results/6/disputes/3.json');
 
         $this->assertResponseCode(403);
     }
@@ -141,12 +133,25 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testDeleteInvalidLosingPlayer()
+    public function testDeleteClosedDispute()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(3);
+        $this->_setAuthSession(1);
 
-        $this->delete('/api/clubs/1/results/2/disputes.json');
+        $this->delete('/api/clubs/1/results/5/disputes/2.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteTimeExpired()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(2);
+
+        $this->delete('/api/clubs/1/results/2/disputes/1.json');
 
         $this->assertResponseCode(403);
     }
@@ -157,9 +162,9 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testDeleteDelete()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(7);
 
-        $this->delete('/api/clubs/1/results/2/disputes.json');
+        $this->delete('/api/clubs/1/results/6/disputes/3.json');
 
         $this->assertResponseCode(200);
     }
@@ -167,19 +172,12 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditTimeExpired()
+    public function testEditInvalidPlayerA()
     {
-        $results = TableRegistry::get('Results');
-        $result = $results->get(2);
-        $result->set('submitted', new Time('3 days ago'));
-        $results->save($result);
-
         $this->_setAjaxRequest();
-        $this->_setAuthSession(3);
+        $this->_setAuthSession(7);
 
-        $this->put('/api/clubs/1/results/2/disputes.json', [
-            'is_resolved' => 1
-        ]);
+        $this->patch('/api/clubs/1/results/6/disputes/3.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -187,14 +185,25 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditInvalidWinningPlayer()
+    public function testEditClosedDispute()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(5);
+
+        $this->patch('/api/clubs/1/results/5/disputes/2.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditTimeExpired()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/api/clubs/1/results/2/disputes.json', [
-            'is_resolved' => 1
-        ]);
+        $this->patch('/api/clubs/1/results/2/disputes/1.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -205,11 +214,9 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testEditBadData()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(3);
+        $this->_setAuthSession(6);
 
-        $this->put('/api/clubs/1/results/2/disputes.json', [
-            'is_resolved' => 'Not a boolean!'
-        ]);
+        $this->patch('/api/clubs/1/results/6/disputes/3.json', []);
 
         $this->assertResponseCode(400);
     }
@@ -220,10 +227,10 @@ class DisputesControllerTest extends IntegrationTestCase
     public function testEditPut()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(3);
+        $this->_setAuthSession(6);
 
-        $this->put('/api/clubs/1/results/2/disputes.json', [
-            'is_resolved' => 0
+        $this->patch('/api/clubs/1/results/6/disputes/3.json', [
+            'is_resolved' => true
         ]);
 
         $this->assertResponseCode(200);

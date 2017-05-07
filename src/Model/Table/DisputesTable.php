@@ -34,16 +34,23 @@ class DisputesTable extends Table
     public function validationDefault(Validator $validator)
     {
         $validator
+            ->requirePresence('player_a_score', 'create')
+            ->notEmpty('player_a_score')
+            ->nonNegativeInteger('player_a_score');
+
+        $validator
+            ->requirePresence('player_b_score', 'create')
+            ->notEmpty('player_b_score')
+            ->nonNegativeInteger('player_b_score');
+
+        $validator
             ->requirePresence('message', 'create')
             ->allowEmpty('message');
 
         $validator
             ->requirePresence('is_resolved', 'update')
             ->notEmpty('is_resolved')
-            ->add('is_resolved', 'boolean', [
-                'rule' => 'boolean',
-                'message' => 'This is a boolean flag'
-            ]);
+            ->boolean('is_resolved');
 
         return $validator;
     }
@@ -59,34 +66,13 @@ class DisputesTable extends Table
     }
 
     /**
-     * @return void
+     * @return bool
      */
-    public function afterSave(Event $event, Dispute $dispute, ArrayObject $options)
+    public function isClosed($id)
     {
-        if (!isset($options['ignoreEvents'])) {
-            if (!$dispute->isNew()) {
-                if (!$dispute->result) {
-                    $this->loadInto($dispute, [
-                        'Results' => [
-                            'LosingPlayers',
-                            'WinningPlayers'
-                        ]
-                    ]);
-                }
-
-                if (!$dispute->result->submitted->wasWithinLast('48 hours')) {
-                    $this->Results->Players->updateReputation($dispute->result->winning_player, -10);
-                } elseif (!$dispute->is_resolved) {
-                    $this->Results->Players->updateReputation($dispute->result->losing_player, -10);
-                    $this->Results->Players->updateReputation($dispute->result->winning_player, -10);
-
-                    $this->Results->Players->save($dispute->result->losing_player);
-                }
-
-                $this->Results->Players->save($dispute->result->winning_player);
-
-                $this->Results->delete($dispute->result);
-            }
-        }
+        return $this->exists([
+            'id' => $id,
+            'is_resolved IS NOT' => null
+        ]);
     }
 }

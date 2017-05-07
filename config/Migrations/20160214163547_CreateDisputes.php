@@ -34,6 +34,11 @@ class CreateDisputes extends AbstractMigration
             'null' => true
         ]);
 
+        $table->addColumn('message', 'text', [
+            'default' => null,
+            'null' => true
+        ]);
+
         $table->addColumn('is_resolved', 'boolean', [
             'default' => null,
             'null' => true

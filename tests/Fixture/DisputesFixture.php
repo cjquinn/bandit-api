@@ -17,12 +17,30 @@ class DisputesFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'result_id' => 3,
+                'result_id' => 2,
                 'player_a_score' => null,
                 'player_b_score' => null,
                 'is_resolved' => null,
-                'created' => new Time('2 days ago'),
-                'modified' => new Time('2 days ago')
+                'created' => new Time('3 day ago'),
+                'modified' => new Time('3 day ago')
+            ],
+            [
+                'id' => 2,
+                'result_id' => 5,
+                'player_a_score' => 1,
+                'player_b_score' => 0,
+                'is_resolved' => true,
+                'created' => new Time('1 day ago'),
+                'modified' => new Time('1 day ago')
+            ],
+            [
+                'id' => 3,
+                'result_id' => 6,
+                'player_a_score' => null,
+                'player_b_score' => null,
+                'is_resolved' => null,
+                'created' => new Time('1 day ago'),
+                'modified' => new Time('1 day ago')
             ]
         ];
 

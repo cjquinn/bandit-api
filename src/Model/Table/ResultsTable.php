@@ -229,7 +229,6 @@ class ResultsTable extends Table
             $result->set('is_deleted', true);
 
             $this->save($result);
-
             $this->saveTree($result);
         });
     }

@@ -68,19 +68,63 @@ class DisputesController extends ApiController
      */
     public function add()
     {
+        $dispute = $this->Disputes->newEntity();
+
+        $dispute->set('result_id', $this->request->params['result_id']);
+
+        $this->Disputes->patchEntityAdd($dispute, $this->request->data);
+
+        if (!$this->Disputes->save($dispute)) {
+            $this->response->statusCode(400);
+        }
+
+        $this->set([
+            'dispute' => $dispute,
+            'errors' => $dispute->errors()
+        ]);
     }
 
     /**
      * @return void
      */
-    public function delete()
+    public function delete($id)
     {
+        $dispute = $this->Disputes->get($id);
+
+        $this->Disputes->delete($dispute);
+
+        $this->set('dispute', $dispute);
     }
 
     /**
      * @return void
      */
-    public function edit()
+    public function edit($id)
     {
+        $dispute = $this->Disputes->get($id);
+
+        $this->Disputes->patchEntityEdit($dispute, $this->request->data);
+
+        if ($this->Disputes->close($dispute)) {
+            // Get updated results
+            $result = $this->Disputes->Results->get($dispute->result_id);
+            $results = $this->Disputes->Results
+                ->find('tree', [
+                    'result' => $result
+                ])
+                ->contain([
+                    'PlayerAs.Users',
+                    'PlayerBs.Users'
+                ]);
+
+            $this->set('results', $results);
+        } else {
+            $this->response->statusCode(400);
+        }
+
+        $this->set([
+            'dispute' => $dispute,
+            'errors' => $dispute->errors()
+        ]);
     }
 }

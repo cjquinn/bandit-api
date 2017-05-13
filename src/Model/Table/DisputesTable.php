@@ -66,9 +66,7 @@ class DisputesTable extends Table
             ->notEmpty('player_b_score')
             ->nonNegativeInteger('player_b_score');
 
-        $validator
-            ->requirePresence('message')
-            ->allowEmpty('message');
+        $validator->allowEmpty('message');
 
         return $validator;
     }
@@ -97,10 +95,14 @@ class DisputesTable extends Table
     }
 
     /**
-     * @return void
+     * @return bool
      */
     public function close(Dispute $dispute)
     {
+        if ($dispute->errors()) {
+            return false;
+        }
+
         $this->connection()->transactional(function () use ($dispute) {
             $result = $this->Results->get($dispute->result_id, [
                 'contain' => [
@@ -132,6 +134,8 @@ class DisputesTable extends Table
             $this->Results->save($result);
             $this->Results->saveTree($result);
         });
+
+        return true;
     }
 
     /**

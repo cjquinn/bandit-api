@@ -81,7 +81,20 @@ class ResultsController extends ApiController
 
         $this->Results->softDelete($result);
 
-        $this->set('result', $result);
+        // Get updated results
+        $results = $this->Results
+            ->find('tree', [
+                'result' => $result
+            ])
+            ->contain([
+                'PlayerAs.Users',
+                'PlayerBs.Users'
+            ]);
+
+        $this->set([
+            'result' => $result,
+            'results' => $results
+        ]);
     }
 
     /**

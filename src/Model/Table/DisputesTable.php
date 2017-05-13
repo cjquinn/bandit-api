@@ -101,12 +101,34 @@ class DisputesTable extends Table
      */
     public function close(Dispute $dispute)
     {
-        // If time expired
-            // player_a gets -10 rep, result is deleted
-        // If not resolved
-            // Both players get -10 rep, result is deleted
-        // If resolved
-            // Scores on result is updated
+        $this->connection()->transactional(function () use ($dispute) {
+            $result = $this->Results->get($dispute->result_id, [
+                'contain' => [
+                    'PlayerAs',
+                    'PlayerBs'
+                ]
+            ]);
+
+            if (!$result->created->wasWithinLast('48 hours')) {
+                $this->Results->softDelete($result);
+
+                $this->Results->PlayerAs->Users->updateReputation($result->player_a->user_id, -10);
+                return;
+            }
+
+            if (!$dispute->is_resolved) {
+                $this->Results->softDelete($result);
+                $this->Results->PlayerAs->Users->updateReputation($result->player_a->user_id, -10);
+                $this->Results->PlayerBs->Users->updateReputation($result->player_b->user_id, -10);
+                return;
+            }
+
+            $result->set('player_a_score', $dispute->player_a_score);
+            $result->set('player_b_score', $dispute->player_b_score);
+
+            $this->Results->save($result);
+            $this->Results->saveTree($result);
+        });
     }
 
     /**

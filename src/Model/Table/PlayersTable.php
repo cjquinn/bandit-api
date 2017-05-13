@@ -137,25 +137,27 @@ class PlayersTable extends Table
      */
     public function revert(Result $result, $player)
     {
-        $snapshot = $result->{$player . '_snapshot'};
-        $wins = $result->{$player . '_score'};
-        $losses = $player === 'player_a'
-            ? $result->player_b_score
-            : $result->player_a_score;
+        $this->connection()->transactional(function () use ($result, $player) {
+            $snapshot = $result->{$player . '_snapshot'};
+            $wins = $result->{$player . '_score'};
+            $losses = $player === 'player_a'
+                ? $result->player_b_score
+                : $result->player_a_score;
 
-        $player = $this->get($result->{$player . '_id'});
+            $player = $this->get($result->{$player . '_id'});
 
-        $this->patchEntityStats($player, [
-            'rating' => $snapshot['rating'] - $snapshot['difference'],
-            'wins' => $snapshot['wins'] - $wins,
-            'losses' => $snapshot['losses'] - $losses
-        ]);
+            $this->patchEntityStats($player, [
+                'rating' => $snapshot['rating'] - $snapshot['difference'],
+                'wins' => $snapshot['wins'] - $wins,
+                'losses' => $snapshot['losses'] - $losses
+            ]);
 
-        $this->save($player);
+            $this->save($player);
 
-        if ($result->is_deleted) {
-            $this->Users->updateReputation($player->user_id, -1);
-        }
+            if ($result->is_deleted) {
+                $this->Users->updateReputation($player->user_id, -1);
+            }
+        });
 
         return true;
     }
@@ -191,50 +193,55 @@ class PlayersTable extends Table
      */
     public function snapshots(Result $result)
     {
-        $playerA = $this->get($result->player_a_id);
-        $playerB = $this->get($result->player_b_id);
+        $playerASnapShot = [];
+        $playerBSnapShot = [];
 
-        $date = $result->created
-            ? $result->created->i18nFormat('Y-M-d')
-            : Time::now()->i18nFormat('Y-M-d');
+        $this->connection()->transactional(function () use ($result, &$playerASnapShot, &$playerBSnapShot) {
+            $playerA = $this->get($result->player_a_id);
+            $playerB = $this->get($result->player_b_id);
 
-        // Get daily player rating
-        $playerADailySnapshot = $this->Clubs->dailySnapshot(
-            $result->club_id,
-            $playerA->id,
-            $date
-        );
-        $playerBDailySnapshot = $this->Clubs->dailySnapshot(
-            $result->club_id,
-            $playerB->id,
-            $date
-        );
+            $date = $result->created
+                ? $result->created->i18nFormat('Y-M-d')
+                : Time::now()->i18nFormat('Y-M-d');
 
-        // Expected scores from daily rating
-        $expectedScores = $this->expectedScores(
-            $playerADailySnapshot['rating'],
-            $playerBDailySnapshot['rating']
-        );
+            // Get daily player rating
+            $playerADailySnapshot = $this->Clubs->dailySnapshot(
+                $result->club_id,
+                $playerA->id,
+                $date
+            );
+            $playerBDailySnapshot = $this->Clubs->dailySnapshot(
+                $result->club_id,
+                $playerB->id,
+                $date
+            );
 
-        // Update player stats
-        $playerASnapShot = $this->snapshot(
-            $playerA,
-            $expectedScores['a'],
-            $result->player_a_score,
-            $result->player_b_score
-        );
-        $playerBSnapShot = $this->snapshot(
-            $playerB,
-            $expectedScores['b'],
-            $result->player_b_score,
-            $result->player_a_score
-        );
+            // Expected scores from daily rating
+            $expectedScores = $this->expectedScores(
+                $playerADailySnapshot['rating'],
+                $playerBDailySnapshot['rating']
+            );
 
-        if ($result->isNew()) {
-            // Update reputation for new results
-            $this->Users->updateReputation($playerA->user_id, 1);
-            $this->Users->updateReputation($playerB->user_id, 1);
-        }
+            // Update player stats
+            $playerASnapShot = $this->snapshot(
+                $playerA,
+                $expectedScores['a'],
+                $result->player_a_score,
+                $result->player_b_score
+            );
+            $playerBSnapShot = $this->snapshot(
+                $playerB,
+                $expectedScores['b'],
+                $result->player_b_score,
+                $result->player_a_score
+            );
+
+            if ($result->isNew()) {
+                // Update reputation for new results
+                $this->Users->updateReputation($playerA->user_id, 1);
+                $this->Users->updateReputation($playerB->user_id, 1);
+            }
+        });
 
         return [
             'a' => $playerASnapShot,

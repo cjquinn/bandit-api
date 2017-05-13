@@ -194,13 +194,9 @@ class ResultsTable extends Table
     /**
      * @return void
      */
-    public function softDelete(Result $result)
+    public function saveTree(Result $result)
     {
         $this->connection()->transactional(function () use ($result) {
-            $result->set('is_deleted', true);
-
-            $this->save($result);
-
             // Find tree of affected results
             $results = $this->find('tree', [
                 'result' => $result
@@ -221,6 +217,20 @@ class ResultsTable extends Table
 
                 $this->save($result);
             }
+        });
+    }
+
+    /**
+     * @return void
+     */
+    public function softDelete(Result $result)
+    {
+        $this->connection()->transactional(function () use ($result) {
+            $result->set('is_deleted', true);
+
+            $this->save($result);
+
+            $this->saveTree($result);
         });
     }
 

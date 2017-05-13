@@ -18,8 +18,8 @@ class DisputesFixture extends TestFixture
             [
                 'id' => 1,
                 'result_id' => 2,
-                'player_a_score' => null,
-                'player_b_score' => null,
+                'player_a_score' => 2,
+                'player_b_score' => 1,
                 'is_resolved' => null,
                 'created' => new Time('3 day ago'),
                 'modified' => new Time('3 day ago')
@@ -36,8 +36,8 @@ class DisputesFixture extends TestFixture
             [
                 'id' => 3,
                 'result_id' => 6,
-                'player_a_score' => null,
-                'player_b_score' => null,
+                'player_a_score' => 2,
+                'player_b_score' => 1,
                 'is_resolved' => null,
                 'created' => new Time('1 day ago'),
                 'modified' => new Time('1 day ago')

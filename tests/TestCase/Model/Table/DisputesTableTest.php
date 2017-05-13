@@ -50,6 +50,8 @@ class DisputesTableTest extends TestCase
 
         $this->Disputes->close($dispute);
 
+        $this->assertTrue($this->Disputes->exists(['id' => 3, 'is_resolved' => true]));
+
         // Scores on result should be updated
         $result = $this->Disputes->Results->get($dispute->result_id);
 
@@ -132,6 +134,8 @@ class DisputesTableTest extends TestCase
 
         $this->Disputes->close($dispute);
 
+        $this->assertTrue($this->Disputes->exists(['id' => 3, 'is_resolved' => false]));
+
         // Result should be deleted
         $result = $this->Disputes->Results->get($dispute->result_id, [
             'contain' => [
@@ -160,6 +164,8 @@ class DisputesTableTest extends TestCase
         ]);
 
         $this->Disputes->close($dispute);
+
+        $this->assertTrue($this->Disputes->exists(['id' => 1, 'is_resolved' => false]));
 
         // Result should be deleted
         $result = $this->Disputes->Results->get($dispute->result_id, [

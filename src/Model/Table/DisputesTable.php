@@ -112,27 +112,28 @@ class DisputesTable extends Table
             ]);
 
             if (!$result->created->wasWithinLast('48 hours')) {
+                $dispute->set('is_resolved', false);
+
                 $this->Results->softDelete($result);
 
                 $this->Results->PlayerAs->Users->updateReputation($result->player_a->user_id, -10);
-                return;
-            }
-
-            if (!$dispute->is_resolved) {
+            } elseif (!$dispute->is_resolved) {
                 $this->Results->softDelete($result);
+
                 $this->Results->PlayerAs->Users->updateReputation($result->player_a->user_id, -10);
                 $this->Results->PlayerBs->Users->updateReputation($result->player_b->user_id, -10);
-                return;
+            } else {
+                $this->Results->PlayerAs->revert($result, 'player_a');
+                $this->Results->PlayerBs->revert($result, 'player_b');
+
+                $result->set('player_a_score', $dispute->player_a_score);
+                $result->set('player_b_score', $dispute->player_b_score);
+
+                $this->Results->save($result);
+                $this->Results->saveTree($result);
             }
 
-            $this->Results->PlayerAs->revert($result, 'player_a');
-            $this->Results->PlayerBs->revert($result, 'player_b');
-
-            $result->set('player_a_score', $dispute->player_a_score);
-            $result->set('player_b_score', $dispute->player_b_score);
-
-            $this->Results->save($result);
-            $this->Results->saveTree($result);
+            $this->save($dispute);
         });
 
         return true;

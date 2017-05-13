@@ -28,6 +28,7 @@ class CloseDisputesShellTest extends TestCase
 
         $this->io = $this->createMock('Cake\Console\ConsoleIo');
         $this->CloseDisputes = new CloseDisputesShell($this->io);
+        $this->Disputes = TableRegistry::get('Disputes');
     }
 
     /**
@@ -36,6 +37,7 @@ class CloseDisputesShellTest extends TestCase
     public function tearDown()
     {
         unset($this->CloseDisputes);
+        unset($this->Disputes);
 
         parent::tearDown();
     }
@@ -45,6 +47,10 @@ class CloseDisputesShellTest extends TestCase
      */
     public function testMain()
     {
-        $this->markTestIncomplete();
+        $this->CloseDisputes->main();
+
+        $dispute = $this->Disputes->get(1);
+
+        $this->assertFalse($dispute->is_resolved);
     }
 }

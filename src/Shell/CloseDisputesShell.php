@@ -20,16 +20,17 @@ class CloseDisputesShell extends Shell
             ->find()
             ->innerJoinWith('Results', function ($q) {
                 $q->where([
-                    'created <' => new DateTime('48 hours ago')
+                    'Results.created <' => new DateTime('48 hours ago')
                 ]);
 
                 return $q;
-            });
+            })
+            ->where(['is_resolved IS' => null]);
 
         foreach ($disputes as $dipute) {
             $dipute->set('is_resolved', false);
 
-            $this->Disputes->save($dipute);
+            $this->Disputes->close($dipute);
         }
     }
 }

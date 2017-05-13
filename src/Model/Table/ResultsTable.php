@@ -213,7 +213,7 @@ class ResultsTable extends Table
                     }
                 }
 
-                $result->dirty('*', true);
+                $result->dirty('modified', true);
 
                 $this->save($result);
             }

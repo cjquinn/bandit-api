@@ -68,8 +68,8 @@ class PlayersFixture extends TestFixture
                 'id' => 6,
                 'club_id' => 1,
                 'user_id' => 6,
-                'rating' => 1220,
-                'wins' => 1,
+                'rating' => 1238,
+                'wins' => 2,
                 'losses' => 0,
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
@@ -78,9 +78,9 @@ class PlayersFixture extends TestFixture
                 'id' => 7,
                 'club_id' => 1,
                 'user_id' => 7,
-                'rating' => 1180,
+                'rating' => 1162,
                 'wins' => 0,
-                'losses' => 1,
+                'losses' => 2,
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
             ],

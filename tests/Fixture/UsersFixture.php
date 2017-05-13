@@ -63,7 +63,7 @@ class UsersFixture extends TestFixture
             [
                 'id' => 6,
                 'name' => 'Sam',
-                'reputation' => 1,
+                'reputation' => 2,
                 'email' => 'sam@bandit.play',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
@@ -72,7 +72,7 @@ class UsersFixture extends TestFixture
             [
                 'id' => 7,
                 'name' => 'Dom',
-                'reputation' => 1,
+                'reputation' => 2,
                 'email' => 'dom@bandit.play',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),

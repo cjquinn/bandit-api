@@ -174,6 +174,28 @@ class ResultsFixture extends TestFixture
                 'created' => new Time('today'),
                 'modified' => new Time('today')
             ],
+            [
+                'id' => 8,
+                'club_id' => 1,
+                'player_a_id' => 6,
+                'player_b_id' => 7,
+                'player_a_score' => 1,
+                'player_b_score' => 0,
+                'player_a_snapshot' => json_encode([
+                    'rating' => 1238,
+                    'difference' => 18,
+                    'wins' => 2,
+                    'losses' => 0
+                ]),
+                'player_b_snapshot' => json_encode([
+                    'rating' => 1162,
+                    'difference' => -18,
+                    'wins' => 0,
+                    'losses' => 2
+                ]),
+                'created' => new Time('today'),
+                'modified' => new Time('today')
+            ]
         ];
 
         parent::init();

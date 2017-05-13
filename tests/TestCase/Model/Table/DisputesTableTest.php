@@ -53,8 +53,69 @@ class DisputesTableTest extends TestCase
         // Scores on result should be updated
         $result = $this->Disputes->Results->get($dispute->result_id);
 
-        $this->assertEquals(2, $result->player_a_score);
+        $this->assertEquals(3, $result->player_a_score);
         $this->assertEquals(1, $result->player_b_score);
+
+        $expected = [
+            'a' => [
+                'rating' => 1240,
+                'difference' => 40,
+                'wins' => 3,
+                'losses' => 1
+            ],
+            'b' => [
+                'rating' => 1160,
+                'difference' => -40,
+                'wins' => 1,
+                'losses' => 3
+            ]
+        ];
+
+        $this->assertEquals($expected['a'], $result->player_a_snapshot);
+        $this->assertEquals($expected['b'], $result->player_b_snapshot);
+
+        // One result up the tree!
+        $result = $this->Disputes->Results->get(8);
+
+        $expected = [
+            'a' => [
+                'rating' => 1255,
+                'difference' => 15,
+                'wins' => 4,
+                'losses' => 1
+            ],
+            'b' => [
+                'rating' => 1145,
+                'difference' => -15,
+                'wins' => 1,
+                'losses' => 4
+            ]
+        ];
+
+        $this->assertEquals($expected['a'], $result->player_a_snapshot);
+        $this->assertEquals($expected['b'], $result->player_b_snapshot);
+
+        // Players updated
+        $expected = [
+            6 => [
+                'rating' => 1255,
+                'wins' => 4,
+                'losses' => 1
+            ],
+            7 => [
+                'rating' => 1145,
+                'wins' => 1,
+                'losses' => 4
+            ]
+        ];
+
+        foreach ($expected as $playerId => $stats) {
+            $player = $this->Disputes->Results->PlayerAs->get($playerId);
+
+            $this->assertEquals($stats['rating'], $player->rating);
+            $this->assertEquals($stats['wins'], $player->wins);
+            $this->assertEquals($stats['losses'], $player->losses);
+        }
     }
 
     /**
@@ -82,8 +143,8 @@ class DisputesTableTest extends TestCase
         $this->assertTrue($result->is_deleted);
 
         // Users rep should be -10 each
-        $this->assertEquals(-10, $result->player_a->user->reputation);
-        $this->assertEquals(-10, $result->player_b->user->reputation);
+        $this->assertEquals(-9, $result->player_a->user->reputation);
+        $this->assertEquals(-9, $result->player_b->user->reputation);
     }
 
     /**
@@ -113,7 +174,5 @@ class DisputesTableTest extends TestCase
         // Users rep should be -10 each
         $this->assertEquals(-8, $result->player_a->user->reputation);
         $this->assertEquals(3, $result->player_b->user->reputation);
-
-        $this->markTestIncomplete();
     }
 }

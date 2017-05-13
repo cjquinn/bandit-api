@@ -123,6 +123,9 @@ class DisputesTable extends Table
                 return;
             }
 
+            $this->Results->PlayerAs->revert($result, 'player_a');
+            $this->Results->PlayerBs->revert($result, 'player_b');
+
             $result->set('player_a_score', $dispute->player_a_score);
             $result->set('player_b_score', $dispute->player_b_score);
 

@@ -277,16 +277,16 @@ class PlayersTableTest extends TestCase
 
         $expected = [
             'a' => [
-                'rating' => 1238,
+                'rating' => 1256,
                 'difference' => 18,
-                'wins' => 2,
+                'wins' => 3,
                 'losses' => 0
             ],
             'b' => [
-                'rating' => 1162,
+                'rating' => 1144,
                 'difference' => -18,
                 'wins' => 0,
-                'losses' => 2
+                'losses' => 3
             ]
         ];
         $this->assertEquals($expected, $snapshots);
@@ -295,7 +295,7 @@ class PlayersTableTest extends TestCase
         $userA = $this->Players->Users->get(6);
         $userB = $this->Players->Users->get(7);
 
-        $this->assertEquals(2, $userA->reputation);
-        $this->assertEquals(2, $userB->reputation);
+        $this->assertEquals(3, $userA->reputation);
+        $this->assertEquals(3, $userB->reputation);
     }
 }

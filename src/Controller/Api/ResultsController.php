@@ -58,6 +58,11 @@ class ResultsController extends ApiController
 
         if (!$this->Results->save($result)) {
             $this->response->statusCode(400);
+        } else {
+            $this->Results->loadInto($result, [
+                'PlayerAs.Users',
+                'PlayerBs.Users'
+            ]);
         }
 
         $this->set([
@@ -102,7 +107,8 @@ class ResultsController extends ApiController
             ->where([
                 'Results.club_id' => $this->request->params['club_id'],
                 'is_deleted' => false
-            ]);
+            ])
+            ->order(['Results.created' => 'DESC']);
 
         $this->set('results', $results);
     }
@@ -115,7 +121,7 @@ class ResultsController extends ApiController
     {
         $result = $this->Results->get($id, [
             'conditions' => [
-                'club_id' => $this->request->params['club_id'],
+                'Results.club_id' => $this->request->params['club_id'],
                 'is_deleted' => false
             ],
             'finder' => 'populated'

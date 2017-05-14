@@ -83,13 +83,8 @@ class ResultsController extends ApiController
 
         // Get updated results
         $results = $this->Results
-            ->find('tree', [
-                'result' => $result
-            ])
-            ->contain([
-                'PlayerAs.Users',
-                'PlayerBs.Users'
-            ]);
+            ->find('tree', ['result' => $result])
+            ->find('populated');
 
         $this->set([
             'result' => $result,
@@ -103,9 +98,9 @@ class ResultsController extends ApiController
     public function index()
     {
         $results = $this->Results
-            ->find()
+            ->find('populated')
             ->where([
-                'club_id' => $this->request->params['club_id'],
+                'Results.club_id' => $this->request->params['club_id'],
                 'is_deleted' => false
             ]);
 
@@ -122,7 +117,8 @@ class ResultsController extends ApiController
             'conditions' => [
                 'club_id' => $this->request->params['club_id'],
                 'is_deleted' => false
-            ]
+            ],
+            'finder' => 'populated'
         ]);
 
         $this->set('result', $result);

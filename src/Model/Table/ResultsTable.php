@@ -108,6 +108,19 @@ class ResultsTable extends Table
     /**
      * @return \Cake\ORM\Query
      */
+    public function findPopulated(Query $query, array $options)
+    {
+        $query->contain([
+            'PlayerAs.Users',
+            'PlayerBs.Users'
+        ]);
+
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
     public function findTree(Query $query, array $options)
     {
         $query

@@ -109,13 +109,8 @@ class DisputesController extends ApiController
             // Get updated results
             $result = $this->Disputes->Results->get($dispute->result_id);
             $results = $this->Disputes->Results
-                ->find('tree', [
-                    'result' => $result
-                ])
-                ->contain([
-                    'PlayerAs.Users',
-                    'PlayerBs.Users'
-                ]);
+                ->find('tree', ['result' => $result])
+                ->find('populated');
 
             $this->set('results', $results);
         } else {

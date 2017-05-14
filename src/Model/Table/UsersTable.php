@@ -106,7 +106,9 @@ class UsersTable extends Table
             ->requirePresence('name')
             ->notEmpty('name');
 
-        $validator = $this->validationPassword($validator);
+        $validator
+            ->requirePresence('password')
+            ->notEmpty('password');
 
         return $validator;
     }
@@ -114,7 +116,28 @@ class UsersTable extends Table
     /**
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
+    public function validationAdd(Validator $validator)
+    {
+        $validator
+            ->requirePresence('name')
+            ->notEmpty('name');
+
+        $validator
+            ->requirePresence('email')
+            ->notEmpty('email')
+            ->email('email');
+
+        $validator
+            ->requirePresence('password')
+            ->notEmpty('password');
+
+        return $validator;
+    }
+
+    /**
+     * @return \Cake\Validation\Validator
+     */
+    public function validationInvite(Validator $validator)
     {
         $validator
             ->requirePresence('email')

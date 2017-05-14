@@ -62,4 +62,21 @@ class PlayersController extends ApiController
 
         $this->set('player', $player);
     }
+
+    /**
+     * @return void
+     */
+    public function index()
+    {
+        $players = $this->Players
+            ->findByClubId($this->request->params['club_id'])
+            ->contain(['Users'])
+            ->innerJoinWith('Users', function ($q) {
+                $q->find('auth');
+
+                return $q;
+            });
+
+        $this->set('players', $players);
+    }
 }

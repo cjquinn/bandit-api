@@ -51,7 +51,11 @@ class ClubsTable extends Table
     public function patchEntityNewUser(Club $club, array $data)
     {
         $this->patchEntity($club, $data, [
-            'associated' => ['Founders'],
+            'associated' => [
+                'Founders' => [
+                    'validate' => 'add'
+                ]
+            ],
             'fieldList' => [
                 'name',
                 'founder'
@@ -211,11 +215,11 @@ class ClubsTable extends Table
     /**
      * @return bool
      */
-    public function hasMember($id, $userId)
+    public function hasMember($id, $memberId, $memberKey = 'user_id')
     {
         return $this->Players->exists([
             'club_id' => $id,
-            'user_id' => $userId,
+            $memberKey => $memberId,
             'is_active' => true
         ]);
     }

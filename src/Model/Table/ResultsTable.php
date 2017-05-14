@@ -82,15 +82,15 @@ class ResultsTable extends Table
     public function beforeSave(Event $event, Result $result)
     {
         if ($result->player_a_id === $result->player_b_id) {
-            $result->errors('_error', [
+            $result->errors('player_b_id', [
                 'invalid' => 'You cannot add results against yourself'
             ]);
 
             return false;
         }
 
-        if (!$this->Clubs->hasMember($result->club_id, $result->player_b_id)) {
-            $result->errors('_error', [
+        if (!$this->Clubs->hasMember($result->club_id, $result->player_b_id, 'id')) {
+            $result->errors('player_b_id', [
                 'invalid' => 'You can only add results against members of this club'
             ]);
 

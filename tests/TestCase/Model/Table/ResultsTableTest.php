@@ -55,7 +55,7 @@ class ResultsTableTest extends TestCase
         $this->assertFalse($this->Results->save($result));
 
         $expected = [
-            '_error' => [
+            'player_b_id' => [
                 'invalid' => 'You cannot add results against yourself'
             ]
         ];
@@ -81,7 +81,7 @@ class ResultsTableTest extends TestCase
         $this->assertFalse($this->Results->save($result));
 
         $expected = [
-            '_error' => [
+            'player_b_id' => [
                 'invalid' => 'You can only add results against members of this club'
             ]
         ];

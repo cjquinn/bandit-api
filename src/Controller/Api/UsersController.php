@@ -76,18 +76,23 @@ class UsersController extends ApiController
         $user = $this->Auth->identify();
 
         if ($user) {
-            $this->set([
-                'user' => $user,
-                'jwt' => $this->Users->generateJwt($user['id'])
-            ]);
-        } else {
-            $this->set('errors', [
-                '_error' => [
-                    'invalid' => 'Invalid email or password, please try again'
-                ]
-            ]);
+            $this->set('user', $user);
 
-            $this->response->statusCode(400);
+            if ($this->request->header('authorization')) {
+                $this->set('jwt', $this->Users->generateJwt($user['id']));
+            }
+        } else {
+            if ($this->request->header('authorization')) {
+                $this->response->statusCode(401);
+            } else {
+                $this->set('errors', [
+                    '_error' => [
+                        'invalid' => 'Invalid email or password, please try again'
+                    ]
+                ]);
+
+                $this->response->statusCode(400);
+            }
         }
     }
 

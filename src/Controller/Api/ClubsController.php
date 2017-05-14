@@ -57,10 +57,12 @@ class ClubsController extends ApiController
         $this->Clubs->{$patchEntity}($club, $this->request->data);
 
         if ($this->Clubs->save($club)) {
-            $this->set(
-                'token',
-                $this->Clubs->Founders->generateJwt($club->founder_id)
-            );
+            if (!$user) {
+                $this->set(
+                    'jwt',
+                    $this->Clubs->Founders->generateJwt($club->founder_id)
+                );
+            }
         } else {
             $this->response->statusCode(400);
         }

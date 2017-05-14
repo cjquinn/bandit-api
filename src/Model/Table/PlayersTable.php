@@ -37,7 +37,12 @@ class PlayersTable extends Table
     {
         $this->patchEntity($player, $data, [
             'fieldList' => ['user'],
-            'validate' => 'add'
+            'validate' => 'add',
+            'associated' => [
+                'Users' => [
+                    'validate' => 'invite'
+                ]
+            ]
         ]);
 
         if (!$player->errors()) {

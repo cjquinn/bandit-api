@@ -10,7 +10,8 @@ class PlayersController extends ApiController
      */
     public function isAuthorized(array $user)
     {
-        if (!$this->Players->Clubs->isOwnedBy($this->request->params['club_id'], $this->Auth->user('id'))) {
+        if (in_array($this->request->action, ['add', 'edit']) &&
+            !$this->Players->Clubs->isOwnedBy($this->request->params['club_id'], $this->Auth->user('id'))) {
             return false;
         }
 

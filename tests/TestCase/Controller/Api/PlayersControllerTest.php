@@ -40,7 +40,7 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testNonFounder()
+    public function testAddNonFounder()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
@@ -83,7 +83,20 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditFounder()
+    public function testEditNonFounder()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(2);
+
+        $this->patch('/api/clubs/1/players/2.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditDeactivateFounder()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
@@ -116,6 +129,19 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAuthSession(1);
 
         $this->patch('/api/clubs/1/players/2.json', []);
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function testIndex()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(2);
+
+        $this->get('/api/clubs/1/players.json');
 
         $this->assertResponseCode(200);
     }

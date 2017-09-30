@@ -83,7 +83,7 @@ class UsersController extends ApiController
             }
         } else {
             if ($this->request->header('authorization')) {
-                $this->response->statusCode(401);
+                $this->response->statusCode(403);
             } else {
                 $this->set('errors', [
                     '_error' => [

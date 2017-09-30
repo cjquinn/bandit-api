@@ -2,8 +2,6 @@
 
 namespace App\Controller\Api;
 
-use Cake\Utility\Hash;
-
 class ResultsController extends ApiController
 {
 
@@ -108,7 +106,8 @@ class ResultsController extends ApiController
                 'Results.club_id' => $this->request->params['club_id'],
                 'is_deleted' => false
             ])
-            ->order(['Results.created' => 'DESC']);
+            ->order(['Results.created' => 'DESC'])
+            ->limit(20);
 
         $this->set('results', $results);
     }

@@ -10,13 +10,13 @@ class PlayersController extends AppController
      */
     public function isAuthorized(array $user)
     {
-        if (in_array($this->request->getParam('action'), ['add', 'edit']) &&
+        if (in_array($this->request->getParam('action'), ['add', 'toggleActive']) &&
             !$this->Players->Clubs->isOwnedBy($this->request->getParam('club_id'), $this->Auth->user('id'))
         ) {
             return false;
         }
 
-        if ($this->request->getParam('action') === 'edit' &&
+        if ($this->request->getParam('action') === 'toggleActive' &&
             (int)$this->request->getParam('id') === $this->Auth->user('id')
         ) {
             return false;
@@ -48,11 +48,29 @@ class PlayersController extends AppController
 
     /**
      * @return void
+     */
+    public function index()
+    {
+        // TODO: add filtering and pagination
+        // TODO: Make custom finder method
+        $players = $this->Players
+            ->findByClubId($this->request->getParam('club_id'))
+            ->contain(['Users'])
+            ->innerJoinWith('Users', function ($q) {
+                $q->find('auth');
+
+                return $q;
+            });
+
+        $this->set('players', $players);
+    }
+
+    /**
+     * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
-    public function edit($id)
+    public function toggleActive($id)
     {
-        // TODO: rename action to toggleActive
         $player = $this->Players->get($id, [
             'conditions' => [
                 'club_id' => $this->request->getParam('club_id')
@@ -69,18 +87,8 @@ class PlayersController extends AppController
     /**
      * @return void
      */
-    public function index()
+    public function view()
     {
-        // TODO: Make custom finder method
-        $players = $this->Players
-            ->findByClubId($this->request->getParam('club_id'))
-            ->contain(['Users'])
-            ->innerJoinWith('Users', function ($q) {
-                $q->find('auth');
-
-                return $q;
-            });
-
-        $this->set('players', $players);
+        // TODO: implement
     }
 }

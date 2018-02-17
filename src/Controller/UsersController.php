@@ -26,13 +26,6 @@ class UsersController extends AppController
 
     /**
      * @return void
-     */
-    public function account()
-    {
-    }
-
-    /**
-     * @return void
      * @throws \Cake\Network\Exception\ForbiddenException
      */
     public function activateAccount()
@@ -67,6 +60,22 @@ class UsersController extends AppController
                 $this->response->statusCode(400);
             }
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function currentUser()
+    {
+        // TODO: implement
+    }
+
+    /**
+     * @return void
+     */
+    public function edit()
+    {
+        // TODO: implement
     }
 
     /**
@@ -133,5 +142,13 @@ class UsersController extends AppController
         }
 
         $this->set('_serialize', true);
+    }
+
+    /**
+     * @return void
+     */
+    public function uploadAvatar()
+    {
+        // TODO: implement
     }
 }

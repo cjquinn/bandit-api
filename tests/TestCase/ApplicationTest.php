@@ -3,6 +3,7 @@
 namespace App\Test\TestCase;
 
 use App\Application;
+use App\Routing\Middleware\CorsMiddleware;
 
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\MiddlewareQueue;
@@ -23,8 +24,9 @@ class ApplicationTest extends IntegrationTestCase
         $middleware = new MiddlewareQueue();
         $middleware = $app->middleware($middleware);
 
-        $this->assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->get(0));
-        $this->assertInstanceOf(AssetMiddleware::class, $middleware->get(1));
-        $this->assertInstanceOf(RoutingMiddleware::class, $middleware->get(2));
+        $this->assertInstanceOf(CorsMiddleware::class, $middleware->get(0));
+        $this->assertInstanceOf(ErrorHandlerMiddleware::class, $middleware->get(1));
+        $this->assertInstanceOf(AssetMiddleware::class, $middleware->get(2));
+        $this->assertInstanceOf(RoutingMiddleware::class, $middleware->get(3));
     }
 }

@@ -50,7 +50,7 @@ class ClubsController extends AppController
         $patchEntity = 'patchEntityNewUser';
 
         if ($user) {
-            $this->request->data = $this->request->withData(
+            $this->request = $this->request->withData(
                 'founder_id',
                 $user['id']
             );

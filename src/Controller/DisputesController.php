@@ -126,4 +126,20 @@ class DisputesController extends AppController
             'errors' => $dispute->errors()
         ]);
     }
+
+    /**
+     * @return void
+     */
+    public function index()
+    {
+        // TODO: implement
+    }
+
+    /**
+     * @return void
+     */
+    public function view()
+    {
+        // TODO: implement
+    }
 }

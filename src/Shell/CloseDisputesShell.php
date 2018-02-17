@@ -19,9 +19,9 @@ class CloseDisputesShell extends Shell
         // TODO: make custom finder methods
         $disputes = $this->Disputes
             ->find()
-            ->innerJoinWith('Results', function ($q) {
+            ->innerJoinWith('Matches', function ($q) {
                 $q->where([
-                    'Results.created <' => new DateTime('48 hours ago')
+                    'Matches.created <' => new DateTime('48 hours ago')
                 ]);
 
                 return $q;

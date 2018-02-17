@@ -20,7 +20,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->get('/auth/activate-account.json');
+        $this->get('/users/activate-account.json');
 
         $this->assertResponseCode(404);
     }
@@ -44,7 +44,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->get('/auth/activate-account.json?token=123');
+        $this->get('/users/activate-account.json?token=123');
 
         $this->assertResponseCode(403);
     }
@@ -66,7 +66,7 @@ class UsersControllerTest extends IntegrationTestCase
         ]);
         $users->save($user);
 
-        $this->get('/auth/activate-account.json?token=123');
+        $this->get('/users/activate-account.json?token=123');
 
         $this->assertResponseCode(403);
     }
@@ -90,7 +90,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $users->save($user);
 
-        $this->get('/auth/activate-account.json?token=123');
+        $this->get('/users/activate-account.json?token=123');
 
         $this->assertResponseCode(200);
     }
@@ -114,7 +114,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->patch('/auth/activate-account.json?token=123', [
+        $this->patch('/users/activate-account.json?token=123', [
             'password' => ''
         ]);
 
@@ -140,7 +140,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->patch('/auth/activate-account.json?token=123', [
+        $this->patch('/users/activate-account.json?token=123', [
             'name' => 'Christy Quinn',
             'password' => 'password'
         ]);
@@ -155,7 +155,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/auth/login.json', [
+        $this->post('/users/login.json', [
             'email' => 'christy@bandit.play',
             'password' => 'incorrect password',
             'remember_me' => false
@@ -171,7 +171,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/auth/login.json', [
+        $this->post('/users/login.json', [
             'email' => 'christy@bandit.play',
             'password' => 'password',
             'remember_me' => false
@@ -187,7 +187,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->put('/auth/request-password-reset.json', [
+        $this->put('/users/request-password-reset.json', [
             'email' => 'incorrect@bandit.localhost'
         ]);
 
@@ -201,7 +201,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->patch('/auth/request-password-reset.json', [
+        $this->patch('/users/request-password-reset.json', [
             'email' => 'christy@bandit.play'
         ]);
 
@@ -215,7 +215,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->get('/auth/reset-password.json');
+        $this->get('/users/reset-password.json');
 
         $this->assertResponseCode(404);
     }
@@ -239,7 +239,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->get('/auth/reset-password.json?token=123');
+        $this->get('/users/reset-password.json?token=123');
 
         $this->assertResponseCode(403);
     }
@@ -262,7 +262,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->patch('/auth/reset-password.json?token=123', [
+        $this->patch('/users/reset-password.json?token=123', [
             'password' => ''
         ]);
 
@@ -287,7 +287,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->patch('/auth/reset-password.json?token=123', [
+        $this->patch('/users/reset-password.json?token=123', [
             'password' => 'password'
         ]);
 

@@ -20,13 +20,16 @@ Router::scope('/', function ($routes) {
         ]
     ], function ($routes) {
         /**
-         * Players
+         * Leaderboards
          */
-        $routes->resources('Players', [
+        $routes->resources('Leaderboards', [
             'only' => [
-                'create',
-                'index',
-                'update'
+                'all-time',
+                'weekly'
+            ],
+            'map' => [
+                'all-time' => ['action' => 'allTime'],
+                'weekly' => ['action' => 'weekly']
             ]
         ]);
 
@@ -47,58 +50,77 @@ Router::scope('/', function ($routes) {
             $routes->resources('Disputes', [
                 'only' => [
                     'create',
+                    'delete',
+                    'index',
                     'update',
-                    'delete'
+                    'view'
                 ]
             ]);
         });
+
+        /**
+         * Players
+         */
+        $routes->resources('Players', [
+            'only' => [
+                'create',
+                'index',
+                ':id/toggle-active',
+                'view'
+            ],
+            'map' => [
+                ':id/toggle-active' => [
+                    'action' => 'toggleActive',
+                    'method' => 'PATCH'
+                ]
+            ]
+        ]);
     });
 
     /**
      * Users
      */
-    $routes->connect('/account', [
-        'controller' => 'Users',
-        'action' => 'account'
+    $routes->resources('Users', [
+        'only' => [
+            'activate-account',
+            'current-user',
+            'login',
+            'request-password-reset',
+            'reset-password',
+            'upload-avatar',
+            'update-settings'
+        ],
+        'map' => [
+            'activate-account' => [
+                'action' => 'activateAccount',
+                'method' => ['GET', 'PATCH']
+            ],
+            'current-user' => [
+                'action' => 'currentUser',
+                'method' => 'GET'
+            ],
+            'login' => [
+                'action' => 'login',
+                'method' => 'POST'
+            ],
+            'request-password-reset' => [
+                'action' => 'requestPasswordReset',
+                'method' => 'PATCH'
+            ],
+            'reset-password' => [
+                'action' => 'resetPassword',
+                'method' => ['GET', 'PATCH']
+            ],
+            'upload-avatar' => [
+                'action' => 'uploadAvatar',
+                'method' => 'PATCH'
+            ],
+            'update-settings' => [
+                'action' => 'edit',
+                'method' => 'PUT'
+            ]
+        ]
     ]);
-
-    /**
-     * Auth
-     */
-    $routes->scope('/auth', function ($routes) {
-        /**
-         * Users
-         */
-        $routes->connect('/activate-account', [
-            'controller' => 'Users',
-            'action' => 'activateAccount',
-            '_method' => [
-                'GET',
-                'PATCH'
-            ]
-        ]);
-
-        $routes->connect('/request-password-reset', [
-            'controller' => 'Users',
-            'action' => 'requestPasswordReset',
-            '_method' => 'PATCH'
-        ]);
-
-        $routes->connect('/reset-password', [
-            'controller' => 'Users',
-            'action' => 'resetPassword',
-            '_method' => [
-                'GET',
-                'PATCH'
-            ]
-        ]);
-
-        $routes->connect('/login', [
-            'controller' => 'Users',
-            'action' => 'login',
-            '_method' => 'POST'
-        ]);
-    });
 });
 
 Plugin::routes();

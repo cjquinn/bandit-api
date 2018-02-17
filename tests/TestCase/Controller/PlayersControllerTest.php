@@ -83,12 +83,12 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditNonFounder()
+    public function testToggleActiveNonFounder()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->patch('/clubs/1/players/2.json', []);
+        $this->patch('/clubs/1/players/2/toggle-active.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -96,12 +96,12 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditDeactivateFounder()
+    public function testToggleActiveDeactivateFounder()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->patch('/clubs/1/players/1.json', []);
+        $this->patch('/clubs/1/players/1/toggle-active.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -110,12 +110,12 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditInvalidPlayer()
+    public function testToggleActiveInvalidPlayer()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->patch('/clubs/1/players/8.json', []);
+        $this->patch('/clubs/1/players/8/toggle-active.json', []);
 
         $this->assertResponseCode(404);
     }
@@ -123,12 +123,12 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditPatch()
+    public function testToggleActivePatch()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->patch('/clubs/1/players/2.json', []);
+        $this->patch('/clubs/1/players/2/toggle-active.json', []);
 
         $this->assertResponseCode(200);
     }

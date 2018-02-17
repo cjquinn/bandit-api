@@ -28,9 +28,7 @@ class CreateUsers extends AbstractMigration
             'limit' => 255,
             'null' => false
         ]);
-        $table->addIndex(['email'], [
-            'unique' => true
-        ]);
+        $table->addIndex(['email'], ['unique' => true]);
 
         $table->addColumn('password', 'string', [
             'default' => null,
@@ -44,11 +42,6 @@ class CreateUsers extends AbstractMigration
             'null' => true
         ]);
 
-        $table->addColumn('token_sent', 'datetime', [
-            'default' => null,
-            'null' => true
-        ]);
-
         $table->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false
@@ -57,6 +50,11 @@ class CreateUsers extends AbstractMigration
         $table->addColumn('modified', 'datetime', [
             'default' => null,
             'null' => false
+        ]);
+
+        $table->addColumn('token_sent', 'datetime', [
+            'default' => null,
+            'null' => true
         ]);
 
         $table->create();

@@ -24,7 +24,7 @@ class ClubsTable extends Table
             ],
             'hasMany' => [
                 'Players',
-                'Results'
+                'Matches'
             ]
         ]);
 
@@ -120,6 +120,7 @@ class ClubsTable extends Table
     public function afterSave(Event $event, Club $club)
     {
         if ($club->isNew()) {
+            // Need to create player afterwards as club_id is required
             $player = $this->Players->newEntity();
 
             $player->set('club_id', $club->id);
@@ -134,23 +135,24 @@ class ClubsTable extends Table
      */
     public function dailySnapshot($id, $playerId, $date)
     {
-        $result = $this->Results
+        $match = $this->Matches
             ->findByClubId($id)
             ->where([
                 'OR' => [
                     ['player_a_id' => $playerId],
                     ['player_b_id' => $playerId]
                 ],
-                'is_deleted' => false,
+                // TODO: make use of beforeFind
+                'deleted IS' => null,
                 'created <' => $date
             ])
             ->order(['created' => 'DESC'])
             ->first();
 
-        if ($result) {
-            return $result->player_a_id === $playerId
-                ? $result->player_a_snapshot
-                : $result->player_b_snapshot;
+        if ($match) {
+            return $match->player_a_id === $playerId
+                ? $match->player_a_snapshot
+                : $match->player_b_snapshot;
         }
 
         return [
@@ -191,20 +193,21 @@ class ClubsTable extends Table
                 'Players.is_active' => true
             ])
             ->join([
-                'Results' => [
-                    'table' => 'results',
+                'Matches' => [
+                    'table' => 'matches',
                     'type' => 'INNER',
                     'conditions' => [
-                        // Just the player who added the result
-                        'Players.id = Results.player_a_id',
-                        'Results.is_deleted' => false
+                        // Just the player who added the match
+                        'Players.id = Matches.player_a_id',
+                        // TODO: make use of beforeFind
+                        'Matches.deleted IS' => null
                     ]
                 ],
                 'Disputes' => [
                     'table' => 'disputes',
                     'type' => 'INNER',
                     'conditions' => [
-                        'Results.id = Disputes.result_id',
+                        'Matches.id = Disputes.match_id',
                         'Disputes.is_resolved IS' => null
                     ]
                 ]

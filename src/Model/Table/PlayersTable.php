@@ -3,7 +3,7 @@
 namespace App\Model\Table;
 
 use App\Model\Entity\Player;
-use App\Model\Entity\Result;
+use App\Model\Entity\Match;
 
 use Cake\Core\Configure;
 use Cake\Event\Event;
@@ -136,20 +136,20 @@ class PlayersTable extends Table
     }
 
     /**
-     * @param \App\Model\Entity\Results $result
-     * @param string $player - The letter of the player in the result (player_a|player_b)
+     * @param \App\Model\Entity\Matches $match
+     * @param string $player - The letter of the player in the match (player_a|player_b)
      * @return bool
      */
-    public function revert(Result $result, $player)
+    public function revert(Match $match, $player)
     {
-        $this->connection()->transactional(function () use ($result, $player) {
-            $snapshot = $result->{$player . '_snapshot'};
-            $wins = $result->{$player . '_score'};
+        $this->connection()->transactional(function () use ($match, $player) {
+            $snapshot = $match->{$player . '_snapshot'};
+            $wins = $match->{$player . '_score'};
             $losses = $player === 'player_a'
-                ? $result->player_b_score
-                : $result->player_a_score;
+                ? $match->player_b_score
+                : $match->player_a_score;
 
-            $player = $this->get($result->{$player . '_id'});
+            $player = $this->get($match->{$player . '_id'});
 
             $this->patchEntityStats($player, [
                 'rating' => $snapshot['rating'] - $snapshot['difference'],
@@ -159,7 +159,8 @@ class PlayersTable extends Table
 
             $this->save($player);
 
-            if ($result->is_deleted) {
+            // Removed reputation gained from deleted match
+            if ($match->deleted) {
                 $this->Users->updateReputation($player->user_id, -1);
             }
         });
@@ -196,27 +197,27 @@ class PlayersTable extends Table
     /**
      * @return array
      */
-    public function snapshots(Result $result)
+    public function snapshots(Match $match)
     {
         $playerASnapShot = [];
         $playerBSnapShot = [];
 
-        $this->connection()->transactional(function () use ($result, &$playerASnapShot, &$playerBSnapShot) {
-            $playerA = $this->get($result->player_a_id);
-            $playerB = $this->get($result->player_b_id);
+        $this->connection()->transactional(function () use ($match, &$playerASnapShot, &$playerBSnapShot) {
+            $playerA = $this->get($match->player_a_id);
+            $playerB = $this->get($match->player_b_id);
 
-            $date = $result->created
-                ? $result->created->i18nFormat('Y-M-d')
+            $date = $match->created
+                ? $match->created->i18nFormat('Y-M-d')
                 : Time::now()->i18nFormat('Y-M-d');
 
             // Get daily player rating
             $playerADailySnapshot = $this->Clubs->dailySnapshot(
-                $result->club_id,
+                $match->club_id,
                 $playerA->id,
                 $date
             );
             $playerBDailySnapshot = $this->Clubs->dailySnapshot(
-                $result->club_id,
+                $match->club_id,
                 $playerB->id,
                 $date
             );
@@ -231,18 +232,18 @@ class PlayersTable extends Table
             $playerASnapShot = $this->snapshot(
                 $playerA,
                 $expectedScores['a'],
-                $result->player_a_score,
-                $result->player_b_score
+                $match->player_a_score,
+                $match->player_b_score
             );
             $playerBSnapShot = $this->snapshot(
                 $playerB,
                 $expectedScores['b'],
-                $result->player_b_score,
-                $result->player_a_score
+                $match->player_b_score,
+                $match->player_a_score
             );
 
-            if ($result->isNew()) {
-                // Update reputation for new results
+            if ($match->isNew()) {
+                // Update reputation for new matches
                 $this->Users->updateReputation($playerA->user_id, 1);
                 $this->Users->updateReputation($playerB->user_id, 1);
             }

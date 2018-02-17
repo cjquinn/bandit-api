@@ -42,9 +42,9 @@ class AppController extends Controller
      */
     public function isAuthorized(array $user)
     {
-        if (isset($this->request->params['club_id'])) {
+        if ($this->request->getParam('club_id')) {
             return TableRegistry::get('Clubs')->hasMember(
-                $this->request->params['club_id'],
+                $this->request->getParam('club_id'),
                 $this->Auth->user('id')
             );
         }

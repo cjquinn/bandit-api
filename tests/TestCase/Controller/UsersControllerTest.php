@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\TestCase\Controller\Api;
+namespace App\Test\TestCase\Controller;
 
 use App\Test\TestCase\Controller\ControllerTestTrait;
 
@@ -20,7 +20,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->get('/api/auth/activate-account.json');
+        $this->get('/auth/activate-account.json');
 
         $this->assertResponseCode(404);
     }
@@ -44,7 +44,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->get('/api/auth/activate-account.json?token=123');
+        $this->get('/auth/activate-account.json?token=123');
 
         $this->assertResponseCode(403);
     }
@@ -66,7 +66,7 @@ class UsersControllerTest extends IntegrationTestCase
         ]);
         $users->save($user);
 
-        $this->get('/api/auth/activate-account.json?token=123');
+        $this->get('/auth/activate-account.json?token=123');
 
         $this->assertResponseCode(403);
     }
@@ -90,7 +90,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $users->save($user);
 
-        $this->get('/api/auth/activate-account.json?token=123');
+        $this->get('/auth/activate-account.json?token=123');
 
         $this->assertResponseCode(200);
     }
@@ -114,7 +114,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->patch('/api/auth/activate-account.json?token=123', [
+        $this->patch('/auth/activate-account.json?token=123', [
             'password' => ''
         ]);
 
@@ -140,7 +140,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->patch('/api/auth/activate-account.json?token=123', [
+        $this->patch('/auth/activate-account.json?token=123', [
             'name' => 'Christy Quinn',
             'password' => 'password'
         ]);
@@ -155,7 +155,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/api/auth/login.json', [
+        $this->post('/auth/login.json', [
             'email' => 'christy@bandit.play',
             'password' => 'incorrect password',
             'remember_me' => false
@@ -171,7 +171,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/api/auth/login.json', [
+        $this->post('/auth/login.json', [
             'email' => 'christy@bandit.play',
             'password' => 'password',
             'remember_me' => false
@@ -187,7 +187,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->put('/api/auth/request-password-reset.json', [
+        $this->put('/auth/request-password-reset.json', [
             'email' => 'incorrect@bandit.localhost'
         ]);
 
@@ -201,7 +201,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->patch('/api/auth/request-password-reset.json', [
+        $this->patch('/auth/request-password-reset.json', [
             'email' => 'christy@bandit.play'
         ]);
 
@@ -215,7 +215,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->get('/api/auth/reset-password.json');
+        $this->get('/auth/reset-password.json');
 
         $this->assertResponseCode(404);
     }
@@ -239,7 +239,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->get('/api/auth/reset-password.json?token=123');
+        $this->get('/auth/reset-password.json?token=123');
 
         $this->assertResponseCode(403);
     }
@@ -262,7 +262,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->patch('/api/auth/reset-password.json?token=123', [
+        $this->patch('/auth/reset-password.json?token=123', [
             'password' => ''
         ]);
 
@@ -287,7 +287,7 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
 
-        $this->patch('/api/auth/reset-password.json?token=123', [
+        $this->patch('/auth/reset-password.json?token=123', [
             'password' => 'password'
         ]);
 

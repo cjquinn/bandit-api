@@ -10,52 +10,52 @@ class DisputesController extends AppController
      */
     public function isAuthorized(array $user)
     {
-        // Invalid result id
-        if (!$this->Disputes->Results
+        // Invalid match id
+        if (!$this->Disputes->Matches
                 ->isOwnedBy(
-                    $this->request->params['result_id'],
-                    $this->request->params['club_id']
+                    $this->request->getParam('match_id'),
+                    $this->request->getParam('club_id')
                 )
         ) {
             return false;
         }
 
-        if ($this->request->action === 'add') {
+        if ($this->request->getParam('action') === 'add') {
             // Time expired
-            if (!$this->Disputes->Results->wasWithinLast($this->request->params['result_id'], '24 hours')) {
+            if (!$this->Disputes->Matches->wasWithinLast($this->request->getParam('match_id'), '24 hours')) {
                 return false;
             }
 
             // Existing dispute
-            if ($this->Disputes->Results->isDisputed($this->request->params['result_id'])) {
+            if ($this->Disputes->Matches->isDisputed($this->request->getParam('match_id'))) {
                 return false;
             }
         }
 
         // Invalid player a
-        if ($this->request->action === 'edit' &&
-            !$this->Disputes->Results->wasCreatedBy($this->request->params['result_id'], $this->Auth->user('id'))
+        if ($this->request->getParam('action') === 'edit' &&
+            !$this->Disputes->Matches->wasCreatedBy($this->request->getParam('match_id'), $this->Auth->user('id'))
         ) {
             return false;
         }
 
         // Invalid player b
-        if (($this->request->action === 'add' || $this->request->action === 'delete') &&
-            !$this->Disputes->Results->isAgainst($this->request->params['result_id'], $this->Auth->user('id'))
+        if (($this->request->getParam('action') === 'add' || $this->request->getParam('action') === 'delete') &&
+            !$this->Disputes->Matches->isAgainst($this->request->getParam('match_id'), $this->Auth->user('id'))
         ) {
             return false;
         }
 
-        if ($this->request->action === 'delete' ||
-            $this->request->action === 'edit'
+        if ($this->request->getParam('action') === 'delete' ||
+            $this->request->getParam('action') === 'edit'
         ) {
             // Closed
-            if ($this->Disputes->isClosed($this->request->params['id'])) {
+            if ($this->Disputes->isClosed($this->request->getParam('id'))) {
                 return false;
             }
 
             // Time expired
-            if (!$this->Disputes->Results->wasWithinLast($this->request->params['result_id'], '48 hours')) {
+            if (!$this->Disputes->Matches->wasWithinLast($this->request->getParam('match_id'), '48 hours')) {
                 return false;
             }
         }
@@ -70,9 +70,10 @@ class DisputesController extends AppController
     {
         $dispute = $this->Disputes->newEntity();
 
-        $dispute->set('result_id', $this->request->params['result_id']);
+        // TODO: make patchEntityAdd take a match_id
+        $dispute->set('match_id', $this->request->getParam('match_id'));
 
-        $this->Disputes->patchEntityAdd($dispute, $this->request->data);
+        $this->Disputes->patchEntityAdd($dispute, $this->request->getData());
 
         if (!$this->Disputes->save($dispute)) {
             $this->response->statusCode(400);
@@ -86,6 +87,7 @@ class DisputesController extends AppController
 
     /**
      * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
     public function delete($id)
     {
@@ -98,21 +100,23 @@ class DisputesController extends AppController
 
     /**
      * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
     public function edit($id)
     {
+        // TODO: rename action to resolve
         $dispute = $this->Disputes->get($id);
 
-        $this->Disputes->patchEntityEdit($dispute, $this->request->data);
+        $this->Disputes->patchEntityEdit($dispute, $this->request->getData());
 
         if ($this->Disputes->close($dispute)) {
-            // Get updated results
-            $result = $this->Disputes->Results->get($dispute->result_id);
-            $results = $this->Disputes->Results
-                ->find('tree', ['result' => $result])
+            // Get updated matches
+            $match = $this->Disputes->Matches->get($dispute->match_id);
+            $matches = $this->Disputes->Matches
+                ->find('tree', ['match' => $match])
                 ->find('populated');
 
-            $this->set('results', $results);
+            $this->set('matches', $matches);
         } else {
             $this->response->statusCode(400);
         }

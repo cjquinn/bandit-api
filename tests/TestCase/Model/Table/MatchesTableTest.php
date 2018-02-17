@@ -2,16 +2,17 @@
 
 namespace App\Test\TestCase\Model\Table;
 
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
-class ResultsTableTest extends TestCase
+class MatchesTableTest extends TestCase
 {
 
     public $fixtures = [
         'app.clubs',
         'app.players',
-        'app.results',
+        'app.matches',
         'app.users'
     ];
 
@@ -22,7 +23,7 @@ class ResultsTableTest extends TestCase
     {
         parent::setUp();
 
-        $this->Results = TableRegistry::get('Results');
+        $this->Matches = TableRegistry::get('Matches');
     }
 
     /**
@@ -30,7 +31,7 @@ class ResultsTableTest extends TestCase
      */
     public function tearDown()
     {
-        unset($this->Results);
+        unset($this->Matches);
 
         parent::tearDown();
     }
@@ -40,26 +41,26 @@ class ResultsTableTest extends TestCase
      */
     public function testBeforeSaveInvalidPlayerB()
     {
-        $result = $this->Results->newEntity();
+        $match = $this->Matches->newEntity();
 
-        $this->Results->patchEntity($result, [
-            // Can't add a result against yourself
+        $this->Matches->patchEntity($match, [
+            // Can't add a match against yourself
             'player_b_id' => 1,
             'player_a_score' => 3,
             'player_b_score' => 0
         ]);
 
-        $result->set('club_id', 1);
-        $result->set('player_a_id', 1);
+        $match->set('club_id', 1);
+        $match->set('player_a_id', 1);
 
-        $this->assertFalse($this->Results->save($result));
+        $this->assertFalse($this->Matches->save($match));
 
         $expected = [
             'player_b_id' => [
-                'invalid' => 'You cannot add results against yourself'
+                'invalid' => 'You cannot add matches against yourself'
             ]
         ];
-        $this->assertEquals($expected, $result->errors());
+        $this->assertEquals($expected, $match->errors());
     }
 
     /**
@@ -67,25 +68,25 @@ class ResultsTableTest extends TestCase
      */
     public function testBeforeSaveUnassignedPlayerB()
     {
-        $result = $this->Results->newEntity();
+        $match = $this->Matches->newEntity();
 
-        $this->Results->patchEntity($result, [
+        $this->Matches->patchEntity($match, [
             'player_b_id' => 8,
             'player_a_score' => 3,
             'player_b_score' => 0
         ]);
 
-        $result->set('club_id', 1);
-        $result->set('player_a_id', 1);
+        $match->set('club_id', 1);
+        $match->set('player_a_id', 1);
 
-        $this->assertFalse($this->Results->save($result));
+        $this->assertFalse($this->Matches->save($match));
 
         $expected = [
             'player_b_id' => [
-                'invalid' => 'You can only add results against members of this club'
+                'invalid' => 'You can only add matches against members of this club'
             ]
         ];
-        $this->assertEquals($expected, $result->errors());
+        $this->assertEquals($expected, $match->errors());
     }
 
     /**
@@ -93,21 +94,21 @@ class ResultsTableTest extends TestCase
      */
     public function testBeforeSaveSnapshots()
     {
-        $result = $this->Results->newEntity();
+        $match = $this->Matches->newEntity();
 
-        $this->Results->patchEntity($result, [
+        $this->Matches->patchEntity($match, [
             'player_b_id' => 1,
             'player_a_score' => 3,
             'player_b_score' => 0
         ]);
 
-        $result->set('club_id', 1);
-        $result->set('player_a_id', 2);
+        $match->set('club_id', 1);
+        $match->set('player_a_id', 2);
 
         // Snapshots should be set
-        $this->assertTrue($this->Results->save($result) !== false);
-        $this->assertTrue(is_array($result->player_a_snapshot));
-        $this->assertTrue(is_array($result->player_b_snapshot));
+        $this->assertTrue($this->Matches->save($match) !== false);
+        $this->assertTrue(is_array($match->player_a_snapshot));
+        $this->assertTrue(is_array($match->player_b_snapshot));
     }
 
     /**
@@ -115,16 +116,16 @@ class ResultsTableTest extends TestCase
      */
     public function testBeforeSaveDeleted()
     {
-        $result = $this->Results->get(1);
-        $result->set('is_deleted', true);
+        $match = $this->Matches->get(1);
+        $match->set('deleted', new Time());
 
-        $playerASnapshot = $result->player_a_snapshot;
-        $playerBSnapshot = $result->player_b_snapshot;
+        $playerASnapshot = $match->player_a_snapshot;
+        $playerBSnapshot = $match->player_b_snapshot;
 
-        $this->Results->save($result);
+        $this->Matches->save($match);
 
-        $this->assertEquals($playerASnapshot, $result->player_a_snapshot);
-        $this->assertEquals($playerBSnapshot, $result->player_b_snapshot);
+        $this->assertEquals($playerASnapshot, $match->player_a_snapshot);
+        $this->assertEquals($playerBSnapshot, $match->player_b_snapshot);
     }
 
     /**
@@ -132,10 +133,10 @@ class ResultsTableTest extends TestCase
      */
     public function testFindTree()
     {
-        $result = $this->Results->get(2);
+        $match = $this->Matches->get(2);
 
-        $query = $this->Results->find('tree', [
-            'result' => $result
+        $query = $this->Matches->find('tree', [
+            'match' => $match
         ]);
         $this->assertInstanceOf('Cake\ORM\Query', $query);
 
@@ -148,8 +149,8 @@ class ResultsTableTest extends TestCase
      */
     public function testIdTree()
     {
-        $result = $this->Results->get(2);
-        $resultTree = $this->Results->idTree($result);
+        $match = $this->Matches->get(2);
+        $matchTree = $this->Matches->idTree($match);
 
         $expected = [
             2 => 2,
@@ -157,18 +158,18 @@ class ResultsTableTest extends TestCase
             7 => 7,
             5 => 5
         ];
-        $this->assertEquals($expected, $resultTree);
+        $this->assertEquals($expected, $matchTree);
 
-        // Result up the tree is deleted
-        $this->Results->updateAll(['is_deleted' => true], ['id' => 5]);
-        $resultTree = $this->Results->idTree($result);
+        // Matches up the tree is deleted
+        $this->Matches->updateAll(['deleted' => new Time()], ['id' => 5]);
+        $matchTree = $this->Matches->idTree($match);
 
         $expected = [
             2 => 2,
             3 => 3,
             7 => 7
         ];
-        $this->assertEquals($expected, $resultTree);
+        $this->assertEquals($expected, $matchTree);
     }
 
     /**
@@ -176,13 +177,13 @@ class ResultsTableTest extends TestCase
      */
     public function testSoftDelete()
     {
-        $resultToDelete = $this->Results->get(2);
-        $this->Results->softDelete($resultToDelete);
+        $matchToDelete = $this->Matches->get(2);
+        $this->Matches->softDelete($matchToDelete);
 
-        // Result is deleted
-        $this->assertTrue($resultToDelete->is_deleted);
+        // Match is deleted
+        $this->assertNotNull($matchToDelete->deleted);
 
-        // Results up the tree have been amended
+        // Matches up the tree have been amended
         $expected = [
             3 => [
                 'a' => [
@@ -228,11 +229,11 @@ class ResultsTableTest extends TestCase
             ]
         ];
 
-        foreach ($expected as $resultId => $snapShots) {
-            $result = $this->Results->get($resultId);
+        foreach ($expected as $matchId => $snapShots) {
+            $match = $this->Matches->get($matchId);
 
-            $this->assertEquals($snapShots['a'], $result->player_a_snapshot);
-            $this->assertEquals($snapShots['b'], $result->player_b_snapshot);
+            $this->assertEquals($snapShots['a'], $match->player_a_snapshot);
+            $this->assertEquals($snapShots['b'], $match->player_b_snapshot);
         }
 
         // Players stats have been amended
@@ -265,7 +266,7 @@ class ResultsTableTest extends TestCase
         ];
 
         foreach ($expected as $playerId => $stats) {
-            $player = $this->Results->Clubs->Players->get($playerId);
+            $player = $this->Matches->Clubs->Players->get($playerId);
 
             $this->assertEquals($stats['rating'], $player->rating);
             $this->assertEquals($stats['wins'], $player->wins);
@@ -273,13 +274,13 @@ class ResultsTableTest extends TestCase
         }
 
         // Both users reputation is reduced by one
-        $playerA = $this->Results->PlayerAs->get($resultToDelete->player_a_id, [
+        $playerA = $this->Matches->PlayerAs->get($matchToDelete->player_a_id, [
             'contain' => ['Users']
         ]);
 
         $this->assertEquals(2, $playerA->user->reputation);
 
-        $playerB = $this->Results->PlayerBs->get($resultToDelete->player_b_id, [
+        $playerB = $this->Matches->PlayerBs->get($matchToDelete->player_b_id, [
             'contain' => ['Users']
         ]);
 

@@ -2,7 +2,7 @@
 
 namespace App\Model\Table;
 
-use App\Model\Entity\Result;
+use App\Model\Entity\Match;
 
 use Cake\Database\Schema\Table as Schema;
 use Cake\Event\Event;
@@ -12,7 +12,7 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
-class ResultsTable extends Table
+class MatchesTable extends Table
 {
 
     /**
@@ -79,29 +79,29 @@ class ResultsTable extends Table
     /**
      * @return void
      */
-    public function beforeSave(Event $event, Result $result)
+    public function beforeSave(Event $event, Match $match)
     {
-        if ($result->player_a_id === $result->player_b_id) {
-            $result->errors('player_b_id', [
-                'invalid' => 'You cannot add results against yourself'
+        if ($match->player_a_id === $match->player_b_id) {
+            $match->errors('player_b_id', [
+                'invalid' => 'You cannot add matches against yourself'
             ]);
 
             return false;
         }
 
-        if (!$this->Clubs->hasMember($result->club_id, $result->player_b_id, 'id')) {
-            $result->errors('player_b_id', [
-                'invalid' => 'You can only add results against members of this club'
+        if (!$this->Clubs->hasMember($match->club_id, $match->player_b_id, 'id')) {
+            $match->errors('player_b_id', [
+                'invalid' => 'You can only add matches against members of this club'
             ]);
 
             return false;
         }
 
-        if (!$result->is_deleted) {
-            $snapshots = $this->Clubs->Players->snapshots($result);
+        if (!$match->deleted) {
+            $snapshots = $this->Clubs->Players->snapshots($match);
 
-            $result->set('player_a_snapshot', $snapshots['a']);
-            $result->set('player_b_snapshot', $snapshots['b']);
+            $match->set('player_a_snapshot', $snapshots['a']);
+            $match->set('player_b_snapshot', $snapshots['b']);
         }
     }
 
@@ -125,10 +125,10 @@ class ResultsTable extends Table
     {
         $query
             ->where([
-                'Results.id IN' => $this->idTree($options['result'])
+                'Matches.id IN' => $this->idTree($options['match'])
             ])
             ->order([
-                'Results.created' => 'ASC'
+                'Matches.created' => 'ASC'
             ]);
 
         return $query;
@@ -137,22 +137,22 @@ class ResultsTable extends Table
     /**
      * @return array
      */
-    public function idTree(Result $result = null)
+    public function idTree(Match $match = null)
     {
-        if (!$result) {
+        if (!$match) {
             return [];
         }
 
         $playerIds = [
-            $result->player_a_id,
-            $result->player_b_id
+            $match->player_a_id,
+            $match->player_b_id
         ];
 
         $where = [
-            'id !=' => $result->id,
-            'club_id' => $result->club_id,
-            'is_deleted' => false,
-            'created >=' => $result->created
+            'id !=' => $match->id,
+            'club_id' => $match->club_id,
+            'deleted IS' => null,
+            'created >=' => $match->created
         ];
 
         $left = $this
@@ -165,7 +165,7 @@ class ResultsTable extends Table
             ->where($where + ['player_b_id IN' => $playerIds])
             ->first();
 
-        return [$result->id => $result->id] + $this->idTree($left) + $this->idTree($right);
+        return [$match->id => $match->id] + $this->idTree($left) + $this->idTree($right);
     }
 
     /**
@@ -189,7 +189,7 @@ class ResultsTable extends Table
     public function isDisputed($id)
     {
         return $this->Disputes->exists([
-            'result_id' => $id
+            'match_id' => $id
         ]);
     }
 
@@ -207,28 +207,28 @@ class ResultsTable extends Table
     /**
      * @return void
      */
-    public function saveTree(Result $result)
+    public function saveTree(Match $match)
     {
-        $this->connection()->transactional(function () use ($result) {
-            // Find tree of affected results
-            $results = $this->find('tree', [
-                'result' => $result
+        $this->connection()->transactional(function () use ($match) {
+            // Find tree of affected matches
+            $matches = $this->find('tree', [
+                'match' => $match
             ]);
 
-            // Revert all players in result tree and resave results
+            // Revert all players in match tree and resave matches
             $revertedPlayers = [];
-            foreach ($results as $result) {
+            foreach ($matches as $match) {
                 foreach (['player_a', 'player_b'] as $player) {
-                    $playerId = $result->{$player . '_id'};
+                    $playerId = $match->{$player . '_id'};
 
                     if (!isset($revertedPlayers[$playerId])) {
-                        $revertedPlayers[$playerId] = $this->Clubs->Players->revert($result, $player);
+                        $revertedPlayers[$playerId] = $this->Clubs->Players->revert($match, $player);
                     }
                 }
 
-                $result->dirty('modified', true);
+                $match->dirty('modified', true);
 
-                $this->save($result);
+                $this->save($match);
             }
         });
     }
@@ -236,13 +236,13 @@ class ResultsTable extends Table
     /**
      * @return void
      */
-    public function softDelete(Result $result)
+    public function softDelete(Match $match)
     {
-        $this->connection()->transactional(function () use ($result) {
-            $result->set('is_deleted', true);
+        $this->connection()->transactional(function () use ($match) {
+            $match->set('deleted', new Time());
 
-            $this->save($result);
-            $this->saveTree($result);
+            $this->save($match);
+            $this->saveTree($match);
         });
     }
 
@@ -277,8 +277,8 @@ class ResultsTable extends Table
      */
     protected function _initializeSchema(Schema $schema)
     {
-        $schema->columnType('player_a_snapshot', 'json');
-        $schema->columnType('player_b_snapshot', 'json');
+        $schema->setColumnType('player_a_snapshot', 'json');
+        $schema->setColumnType('player_b_snapshot', 'json');
 
         return $schema;
     }

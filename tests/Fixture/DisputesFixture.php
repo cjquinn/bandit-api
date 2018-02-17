@@ -17,7 +17,7 @@ class DisputesFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
-                'result_id' => 2,
+                'match_id' => 2,
                 'player_a_score' => 2,
                 'player_b_score' => 1,
                 'is_resolved' => null,
@@ -26,7 +26,7 @@ class DisputesFixture extends TestFixture
             ],
             [
                 'id' => 2,
-                'result_id' => 5,
+                'match_id' => 5,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
                 'is_resolved' => true,
@@ -35,7 +35,7 @@ class DisputesFixture extends TestFixture
             ],
             [
                 'id' => 3,
-                'result_id' => 6,
+                'match_id' => 6,
                 'player_a_score' => 3,
                 'player_b_score' => 1,
                 'is_resolved' => null,

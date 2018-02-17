@@ -5,11 +5,11 @@ namespace App\Test\Fixture;
 use Cake\I18n\Time;
 use Cake\TestSuite\Fixture\TestFixture;
 
-class ResultsFixture extends TestFixture
+class MatchesFixture extends TestFixture
 {
 
     public $import = [
-        'table' => 'results'
+        'table' => 'matches'
     ];
 
     public function init()

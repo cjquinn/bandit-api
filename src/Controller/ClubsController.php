@@ -22,15 +22,15 @@ class ClubsController extends AppController
     public function isAuthorized(array $user)
     {
         // Non founder
-        if ($this->request->action === 'edit' &&
-            !$this->Clubs->isOwnedBy($this->request->params['id'], $this->Auth->user('id'))
+        if ($this->request->getParam('action') === 'edit' &&
+            !$this->Clubs->isOwnedBy($this->request->getParam('id'), $this->Auth->user('id'))
         ) {
             return false;
         }
 
         // Unassigned
-        if ($this->request->action === 'view' &&
-            !$this->Clubs->hasMember($this->request->params['id'], $this->Auth->user('id'))
+        if ($this->request->getParam('action') === 'view' &&
+            !$this->Clubs->hasMember($this->request->getParam('id'), $this->Auth->user('id'))
         ) {
             return false;
         }
@@ -46,16 +46,21 @@ class ClubsController extends AppController
         $club = $this->Clubs->newEntity();
         $user = $this->Auth->identify();
 
+        // TODO: Refactor into one patchEntityAdd
         $patchEntity = 'patchEntityNewUser';
 
         if ($user) {
-            $this->request->data['founder_id'] = $user['id'];
+            $this->request->data = $this->request->withData(
+                'founder_id',
+                $user['id']
+            );
 
             $patchEntity = 'patchEntityExistingUser';
         }
 
-        $this->Clubs->{$patchEntity}($club, $this->request->data);
+        $this->Clubs->{$patchEntity}($club, $this->request->getData());
 
+        // TODO: remove else clause
         if ($this->Clubs->save($club)) {
             if (!$user) {
                 $this->set(
@@ -81,7 +86,7 @@ class ClubsController extends AppController
     {
         $club = $this->Clubs->get($id);
 
-        $this->Clubs->patchEntity($club, $this->request->data);
+        $this->Clubs->patchEntity($club, $this->request->getData());
 
         if (!$this->Clubs->save($club)) {
             $this->response->statusCode(400);
@@ -98,6 +103,7 @@ class ClubsController extends AppController
      */
     public function index()
     {
+        // TODO: make custom finder method
         $clubs = $this->Clubs
             ->find()
             ->innerJoinWith('Players', function ($q) {

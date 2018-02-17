@@ -15,7 +15,7 @@ class CloseDisputesShellTest extends TestCase
         'app.clubs',
         'app.disputes',
         'app.players',
-        'app.results',
+        'app.matches',
         'app.users'
     ];
 

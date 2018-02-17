@@ -16,6 +16,7 @@ class CloseDisputesShell extends Shell
      */
     public function main()
     {
+        // TODO: make custom finder methods
         $disputes = $this->Disputes
             ->find()
             ->innerJoinWith('Results', function ($q) {

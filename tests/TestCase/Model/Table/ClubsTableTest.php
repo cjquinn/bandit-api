@@ -13,7 +13,7 @@ class ClubsTableTest extends TestCase
     public $fixtures = [
         'app.clubs',
         'app.players',
-        'app.results',
+        'app.matches',
         'app.users'
     ];
 
@@ -187,7 +187,7 @@ class ClubsTableTest extends TestCase
         $this->assertEquals($expected, $dailySnapshot);
 
         // 4 days ago deleted, from 3 days ago
-        $this->Clubs->Results->updateAll(['is_deleted' => true], ['id' => 1]);
+        $this->Clubs->Matches->updateAll(['deleted' => new Time()], ['id' => 1]);
 
         $date = new Time('3 days ago');
         $dailySnapshot = $this->Clubs->dailySnapshot(1, 1, $date->i18nFormat('Y-M-d'));

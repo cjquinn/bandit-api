@@ -11,13 +11,13 @@ class CreateDisputes extends AbstractMigration
     {
         $table = $this->table('disputes');
 
-        $table->addColumn('result_id', 'integer', [
+        $table->addColumn('match_id', 'integer', [
             'default' => null,
             'limit' => 11,
             'null' => false
         ]);
 
-        $table->addForeignKey('result_id', 'results', 'id', [
+        $table->addForeignKey('match_id', 'matches', 'id', [
             'update' => 'RESTRICT',
             'delete' => 'RESTRICT'
         ]);
@@ -39,7 +39,7 @@ class CreateDisputes extends AbstractMigration
             'null' => true
         ]);
 
-        $table->addColumn('is_resolved', 'boolean', [
+        $table->addColumn('resolved', 'boolean', [
             'default' => null,
             'null' => true
         ]);

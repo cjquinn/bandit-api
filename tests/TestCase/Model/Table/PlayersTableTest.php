@@ -3,6 +3,7 @@
 namespace App\Test\TestCase\Model\Table;
 
 use Cake\Core\Configure;
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
@@ -12,7 +13,7 @@ class PlayersTableTest extends TestCase
     public $fixtures = [
         'app.clubs',
         'app.players',
-        'app.results',
+        'app.matches',
         'app.users'
     ];
 
@@ -207,30 +208,30 @@ class PlayersTableTest extends TestCase
      */
     public function testRevert()
     {
-        $result = $this->Players->Clubs->Results->get(1);
+        $match = $this->Players->Clubs->Matches->get(1);
 
-        $this->assertTrue($this->Players->revert($result, 'player_a'));
+        $this->assertTrue($this->Players->revert($match, 'player_a'));
 
-        $playerA = $this->Players->get($result->player_a_id);
+        $playerA = $this->Players->get($match->player_a_id);
 
         $this->assertEquals(1200, $playerA->rating);
         $this->assertEquals(0, $playerA->wins);
         $this->assertEquals(0, $playerA->losses);
 
-        $this->assertTrue($this->Players->revert($result, 'player_b'));
+        $this->assertTrue($this->Players->revert($match, 'player_b'));
 
-        $playerB = $this->Players->get($result->player_b_id);
+        $playerB = $this->Players->get($match->player_b_id);
 
         $this->assertEquals(1200, $playerB->rating);
         $this->assertEquals(0, $playerB->wins);
         $this->assertEquals(0, $playerB->losses);
 
-        // Deleted result
-        $result->set('is_deleted', true);
+        // Deleted match
+        $match->set('deleted', new Time());
 
-        $this->assertTrue($this->Players->revert($result, 'player_a'));
+        $this->assertTrue($this->Players->revert($match, 'player_a'));
 
-        $playerA = $this->Players->get($result->player_a_id, [
+        $playerA = $this->Players->get($match->player_a_id, [
             'contain' => ['Users']
         ]);
 
@@ -264,16 +265,16 @@ class PlayersTableTest extends TestCase
      */
     public function testSnapshots()
     {
-        $result = $this->Players->Clubs->Results->newEntity([
+        $match = $this->Players->Clubs->Matches->newEntity([
             'player_b_id' => 7,
             'player_a_score' => 1,
             'player_b_score' => 0
         ]);
 
-        $result->set('club_id', 1);
-        $result->set('player_a_id', 6);
+        $match->set('club_id', 1);
+        $match->set('player_a_id', 6);
 
-        $snapshots = $this->Players->snapshots($result);
+        $snapshots = $this->Players->snapshots($match);
 
         $expected = [
             'a' => [

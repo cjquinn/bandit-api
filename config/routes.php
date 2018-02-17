@@ -31,9 +31,9 @@ Router::scope('/', function ($routes) {
         ]);
 
         /**
-         * Results
+         * Matches
          */
-        $routes->resources('Results', [
+        $routes->resources('Matches', [
             'only' => [
                 'create',
                 'delete',

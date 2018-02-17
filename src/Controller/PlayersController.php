@@ -10,13 +10,14 @@ class PlayersController extends AppController
      */
     public function isAuthorized(array $user)
     {
-        if (in_array($this->request->action, ['add', 'edit']) &&
-            !$this->Players->Clubs->isOwnedBy($this->request->params['club_id'], $this->Auth->user('id'))) {
+        if (in_array($this->request->getParam('action'), ['add', 'edit']) &&
+            !$this->Players->Clubs->isOwnedBy($this->request->getParam('club_id'), $this->Auth->user('id'))
+        ) {
             return false;
         }
 
-        if ($this->request->action === 'edit' &&
-            (int)$this->request->params['id'] === $this->Auth->user('id')
+        if ($this->request->getParam('action') === 'edit' &&
+            (int)$this->request->getParam('id') === $this->Auth->user('id')
         ) {
             return false;
         }
@@ -31,9 +32,9 @@ class PlayersController extends AppController
     {
         $player = $this->Players->newEntity();
 
-        $player->set('club_id', $this->request->params['club_id']);
+        $player->set('club_id', $this->request->getParam('club_id'));
 
-        $this->Players->patchEntityAdd($player, $this->request->data);
+        $this->Players->patchEntityAdd($player, $this->request->getData());
 
         if (!$this->Players->save($player)) {
             $this->response->statusCode(400);
@@ -51,9 +52,10 @@ class PlayersController extends AppController
      */
     public function edit($id)
     {
+        // TODO: rename action to toggleActive
         $player = $this->Players->get($id, [
             'conditions' => [
-                'club_id' => $this->request->params['club_id']
+                'club_id' => $this->request->getParam('club_id')
             ]
         ]);
 
@@ -69,8 +71,9 @@ class PlayersController extends AppController
      */
     public function index()
     {
+        // TODO: Make custom finder method
         $players = $this->Players
-            ->findByClubId($this->request->params['club_id'])
+            ->findByClubId($this->request->getParam('club_id'))
             ->contain(['Users'])
             ->innerJoinWith('Users', function ($q) {
                 $q->find('auth');

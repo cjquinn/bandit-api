@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\TestCase\Controller\Api;
+namespace App\Test\TestCase\Controller;
 
 use App\Test\TestCase\Controller\ControllerTestTrait;
 
@@ -19,7 +19,7 @@ class PlayersControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/api/clubs/1/players.json', []);
+        $this->post('/clubs/1/players.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -32,7 +32,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(8);
 
-        $this->post('/api/clubs/1/players.json', []);
+        $this->post('/clubs/1/players.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -45,7 +45,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->post('/api/clubs/1/players.json', []);
+        $this->post('/clubs/1/players.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -58,7 +58,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->post('/api/clubs/1/players.json', []);
+        $this->post('/clubs/1/players.json', []);
 
         $this->assertResponseCode(400);
     }
@@ -71,7 +71,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->post('/api/clubs/1/players.json', [
+        $this->post('/clubs/1/players.json', [
             'user' => [
                 'email' => 'christyjquinn@gmail.com'
             ]
@@ -88,7 +88,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->patch('/api/clubs/1/players/2.json', []);
+        $this->patch('/clubs/1/players/2.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -101,7 +101,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->patch('/api/clubs/1/players/1.json', []);
+        $this->patch('/clubs/1/players/1.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -115,7 +115,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->patch('/api/clubs/1/players/8.json', []);
+        $this->patch('/clubs/1/players/8.json', []);
 
         $this->assertResponseCode(404);
     }
@@ -128,7 +128,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->patch('/api/clubs/1/players/2.json', []);
+        $this->patch('/clubs/1/players/2.json', []);
 
         $this->assertResponseCode(200);
     }
@@ -141,7 +141,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->get('/api/clubs/1/players.json');
+        $this->get('/clubs/1/players.json');
 
         $this->assertResponseCode(200);
     }

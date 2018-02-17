@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\TestCase\Controller\Api;
+namespace App\Test\TestCase\Controller;
 
 use App\Test\TestCase\Controller\ControllerTestTrait;
 
@@ -18,7 +18,7 @@ class DisputesControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/api/clubs/1/results/7/disputes.json', []);
+        $this->post('/clubs/1/matches/7/disputes.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -31,7 +31,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(8);
 
-        $this->post('/api/clubs/1/results/7/disputes.json', []);
+        $this->post('/clubs/1/matches/7/disputes.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -39,12 +39,12 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testInvalidResultId()
+    public function testInvalidMatchId()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(8);
 
-        $this->post('/api/clubs/2/results/7/disputes.json', []);
+        $this->post('/clubs/2/matches/7/disputes.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -57,7 +57,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->post('/api/clubs/1/results/1/disputes.json', []);
+        $this->post('/clubs/1/matches/1/disputes.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -70,7 +70,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(7);
 
-        $this->post('/api/clubs/1/results/6/disputes.json', []);
+        $this->post('/clubs/1/matches/6/disputes.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -83,7 +83,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(4);
 
-        $this->post('/api/clubs/1/results/7/disputes.json', []);
+        $this->post('/clubs/1/matches/7/disputes.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -96,7 +96,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->post('/api/clubs/1/results/7/disputes.json', []);
+        $this->post('/clubs/1/matches/7/disputes.json', []);
 
         $this->assertResponseCode(400);
     }
@@ -109,7 +109,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->post('/api/clubs/1/results/7/disputes.json', [
+        $this->post('/clubs/1/matches/7/disputes.json', [
             'player_a_score' => 0,
             'player_b_score' => 1
         ]);
@@ -125,7 +125,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(6);
 
-        $this->delete('/api/clubs/1/results/6/disputes/3.json');
+        $this->delete('/clubs/1/matches/6/disputes/3.json');
 
         $this->assertResponseCode(403);
     }
@@ -138,7 +138,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->delete('/api/clubs/1/results/5/disputes/2.json');
+        $this->delete('/clubs/1/matches/5/disputes/2.json');
 
         $this->assertResponseCode(403);
     }
@@ -151,7 +151,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->delete('/api/clubs/1/results/2/disputes/1.json');
+        $this->delete('/clubs/1/matches/2/disputes/1.json');
 
         $this->assertResponseCode(403);
     }
@@ -164,7 +164,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(7);
 
-        $this->delete('/api/clubs/1/results/6/disputes/3.json');
+        $this->delete('/clubs/1/matches/6/disputes/3.json');
 
         $this->assertResponseCode(200);
     }
@@ -177,7 +177,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(7);
 
-        $this->patch('/api/clubs/1/results/6/disputes/3.json', []);
+        $this->patch('/clubs/1/matches/6/disputes/3.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -190,7 +190,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(5);
 
-        $this->patch('/api/clubs/1/results/5/disputes/2.json', []);
+        $this->patch('/clubs/1/matches/5/disputes/2.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -203,7 +203,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->patch('/api/clubs/1/results/2/disputes/1.json', []);
+        $this->patch('/clubs/1/matches/2/disputes/1.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -216,7 +216,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(6);
 
-        $this->patch('/api/clubs/1/results/6/disputes/3.json', []);
+        $this->patch('/clubs/1/matches/6/disputes/3.json', []);
 
         $this->assertResponseCode(400);
     }
@@ -229,7 +229,7 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(6);
 
-        $this->patch('/api/clubs/1/results/6/disputes/3.json', [
+        $this->patch('/clubs/1/matches/6/disputes/3.json', [
             'is_resolved' => true
         ]);
 

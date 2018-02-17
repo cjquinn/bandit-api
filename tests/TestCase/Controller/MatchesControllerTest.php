@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\TestCase\Controller\Api;
+namespace App\Test\TestCase\Controller;
 
 use App\Test\TestCase\Controller\ControllerTestTrait;
 
@@ -8,7 +8,7 @@ use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
-class ResultsControllerTest extends IntegrationTestCase
+class MatchesControllerTest extends IntegrationTestCase
 {
 
     use ControllerTestTrait;
@@ -20,7 +20,7 @@ class ResultsControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/api/clubs/1/results.json', []);
+        $this->post('/clubs/1/matches.json', []);
 
         $this->assertResponseCode(403);
     }
@@ -33,7 +33,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(8);
 
-        $this->get('/api/clubs/1/results.json');
+        $this->get('/clubs/1/matches.json');
 
         $this->assertResponseCode(403);
     }
@@ -46,7 +46,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->post('/api/clubs/1/results.json', [
+        $this->post('/clubs/1/matches.json', [
             'player_b_id' => 2,
             'player_a_score' => 1,
             'player_b_score' => 0
@@ -63,7 +63,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->post('/api/clubs/1/results.json', []);
+        $this->post('/clubs/1/matches.json', []);
 
         $this->assertResponseCode(400);
     }
@@ -76,7 +76,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->post('/api/clubs/1/results.json', [
+        $this->post('/clubs/1/matches.json', [
             'player_b_id' => 1,
             'player_a_score' => 1,
             'player_b_score' => 0
@@ -93,7 +93,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAuthSession(1);
         $this->_setAjaxRequest();
 
-        $this->delete('/api/clubs/1/results/3.json');
+        $this->delete('/clubs/1/matches/3.json');
 
         $this->assertResponseCode(403);
     }
@@ -103,18 +103,18 @@ class ResultsControllerTest extends IntegrationTestCase
      */
     public function testDeleteExistingDispute()
     {
-        // Make sure result delete time isn't expired
-        $results = TableRegistry::get('Results');
+        // Make sure match delete time isn't expired
+        $matches = TableRegistry::get('Matches');
 
-        $result = $results->get(3);
-        $result->set('created', new Time('today'));
+        $match = $matches->get(3);
+        $match->set('created', new Time('today'));
 
-        $results->save($result);
+        $matches->save($match);
 
         $this->_setAuthSession(3);
         $this->_setAjaxRequest();
 
-        $this->delete('/api/clubs/1/results/3.json');
+        $this->delete('/clubs/1/matches/3.json');
 
         $this->assertResponseCode(403);
     }
@@ -127,7 +127,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAuthSession(1);
         $this->_setAjaxRequest();
 
-        $this->delete('/api/clubs/1/results/1.json');
+        $this->delete('/clubs/1/matches/1.json');
 
         $this->assertResponseCode(403);
     }
@@ -140,7 +140,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAuthSession(4);
         $this->_setAjaxRequest();
 
-        $this->delete('/api/clubs/1/results/7.json');
+        $this->delete('/clubs/1/matches/7.json');
 
         $this->assertResponseCode(200);
     }
@@ -153,7 +153,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->get('/api/clubs/1/results.json');
+        $this->get('/clubs/1/matches.json');
 
         $this->assertResponseCode(200);
     }
@@ -166,7 +166,7 @@ class ResultsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->get('/api/clubs/1/results/1.json');
+        $this->get('/clubs/1/matches/1.json');
 
         $this->assertResponseCode(200);
     }

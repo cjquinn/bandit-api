@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\TestCase\Controller\Api;
+namespace App\Test\TestCase\Controller;
 
 use App\Test\TestCase\Controller\ControllerTestTrait;
 
@@ -20,7 +20,7 @@ class ClubsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->post('/api/clubs.json', [
+        $this->post('/clubs.json', [
             'name' => ''
         ]);
 
@@ -37,7 +37,7 @@ class ClubsControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->post('/api/clubs.json', [
+        $this->post('/clubs.json', [
             'name' => 'Ping Pong Game On',
             'founder' => [
                 'name' => 'Alex Farthing',
@@ -59,7 +59,7 @@ class ClubsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->post('/api/clubs.json', [
+        $this->post('/clubs.json', [
             'name' => 'Ping Pong Game On'
         ]);
 
@@ -73,7 +73,7 @@ class ClubsControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->put('/api/clubs/1.json', [
+        $this->put('/clubs/1.json', [
             'name' => 'Squelch Bandit'
         ]);
 
@@ -88,7 +88,7 @@ class ClubsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->put('/api/clubs/1.json', [
+        $this->put('/clubs/1.json', [
             'name' => 'Squelch Bandit'
         ]);
 
@@ -103,7 +103,7 @@ class ClubsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/api/clubs/1.json', [
+        $this->put('/clubs/1.json', [
             'name' => ''
         ]);
 
@@ -118,7 +118,7 @@ class ClubsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->put('/api/clubs/1.json', [
+        $this->put('/clubs/1.json', [
             'name' => 'Squelch Bandit'
         ]);
 
@@ -132,7 +132,7 @@ class ClubsControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->get('/api/clubs.json');
+        $this->get('/clubs.json');
 
         $this->assertResponseCode(403);
     }
@@ -145,7 +145,7 @@ class ClubsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->get('/api/clubs.json');
+        $this->get('/clubs.json');
 
         $this->assertResponseCode(200);
     }
@@ -157,7 +157,7 @@ class ClubsControllerTest extends IntegrationTestCase
     {
         $this->_setAjaxRequest();
 
-        $this->get('/api/clubs/1.json');
+        $this->get('/clubs/1.json');
 
         $this->assertResponseCode(403);
     }
@@ -170,7 +170,7 @@ class ClubsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
-        $this->get('/api/clubs/2.json');
+        $this->get('/clubs/2.json');
 
         $this->assertResponseCode(403);
     }
@@ -183,7 +183,7 @@ class ClubsControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->get('/api/clubs/1.json');
+        $this->get('/clubs/1.json');
 
         $this->assertResponseCode(200);
     }

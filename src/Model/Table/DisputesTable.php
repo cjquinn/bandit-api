@@ -18,7 +18,7 @@ class DisputesTable extends Table
     {
         $this->addAssociations([
             'belongsTo' => [
-                'Results'
+                'Matches'
             ]
         ]);
 
@@ -89,7 +89,7 @@ class DisputesTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
-        $rules->add($rules->existsIn(['result_id'], 'Results'));
+        $rules->add($rules->existsIn(['match_id'], 'Matches'));
 
         return $rules;
     }
@@ -104,33 +104,33 @@ class DisputesTable extends Table
         }
 
         $this->connection()->transactional(function () use ($dispute) {
-            $result = $this->Results->get($dispute->result_id, [
+            $match = $this->Matches->get($dispute->match_id, [
                 'contain' => [
                     'PlayerAs',
                     'PlayerBs'
                 ]
             ]);
 
-            if (!$result->created->wasWithinLast('48 hours')) {
+            if (!$match->created->wasWithinLast('48 hours')) {
                 $dispute->set('is_resolved', false);
 
-                $this->Results->softDelete($result);
+                $this->Matches->softDelete($match);
 
-                $this->Results->PlayerAs->Users->updateReputation($result->player_a->user_id, -10);
+                $this->Matches->PlayerAs->Users->updateReputation($match->player_a->user_id, -10);
             } elseif (!$dispute->is_resolved) {
-                $this->Results->softDelete($result);
+                $this->Matches->softDelete($match);
 
-                $this->Results->PlayerAs->Users->updateReputation($result->player_a->user_id, -10);
-                $this->Results->PlayerBs->Users->updateReputation($result->player_b->user_id, -10);
+                $this->Matches->PlayerAs->Users->updateReputation($match->player_a->user_id, -10);
+                $this->Matches->PlayerBs->Users->updateReputation($match->player_b->user_id, -10);
             } else {
-                $this->Results->PlayerAs->revert($result, 'player_a');
-                $this->Results->PlayerBs->revert($result, 'player_b');
+                $this->Matches->PlayerAs->revert($match, 'player_a');
+                $this->Matches->PlayerBs->revert($match, 'player_b');
 
-                $result->set('player_a_score', $dispute->player_a_score);
-                $result->set('player_b_score', $dispute->player_b_score);
+                $match->set('player_a_score', $dispute->player_a_score);
+                $match->set('player_b_score', $dispute->player_b_score);
 
-                $this->Results->save($result);
-                $this->Results->saveTree($result);
+                $this->Matches->save($match);
+                $this->Matches->saveTree($match);
             }
 
             $this->save($dispute);

@@ -5,6 +5,7 @@ namespace App\Controller;
 use Cake\Event\Event;
 use Cake\Network\Exception\ForbiddenException;
 
+// TODO: Replace with Shopanalyst API UsersController
 class UsersController extends AppController
 {
 

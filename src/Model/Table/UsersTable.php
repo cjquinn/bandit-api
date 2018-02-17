@@ -16,6 +16,7 @@ use Cake\Validation\Validator;
 
 use Firebase\JWT\JWT;
 
+// TODO: replace with Shopanalyst API
 class UsersTable extends Table
 {
 

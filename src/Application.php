@@ -4,7 +4,6 @@ namespace App;
 
 use App\Routing\Middleware\CorsMiddleware;
 
-use Cake\Core\Configure;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
 use Cake\Routing\Middleware\AssetMiddleware;
@@ -15,14 +14,14 @@ class Application extends BaseApplication
     /**
      * @return \Cake\Http\MiddlewareQueue
      */
-    public function middleware($middleware)
+    public function middleware($middlewareQueue)
     {
-        $middleware
+        $middlewareQueue
             ->add(CorsMiddleware::class)
             ->add(ErrorHandlerMiddleware::class)
             ->add(AssetMiddleware::class)
             ->add(RoutingMiddleware::class);
 
-        return $middleware;
+        return $middlewareQueue;
     }
 }

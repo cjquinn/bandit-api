@@ -6,31 +6,6 @@ use Cake\Routing\Router;
 Router::defaultRouteClass('DashedRoute');
 
 Router::scope('/', function ($routes) {
-    /**
-     * Templates
-     */
-    $routes->connect('/templates/:template', [
-        'controller' => 'Templates',
-        'action' => 'display'
-    ], [
-        'pass' => ['template']
-    ]);
-
-    $routes->connect('/templates/login', [
-        'controller' => 'Templates',
-        'action' => 'login'
-    ]);
-
-    $routes->connect('/templates/onboarding', [
-        'controller' => 'Templates',
-        'action' => 'onboarding'
-    ]);
-});
-
-/**
- * RESTful API
- */
-Router::prefix('api', function ($routes) {
     $routes->extensions(['json']);
 
     /**

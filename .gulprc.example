@@ -1,6 +1,0 @@
-{
-    "browserSync": {
-        "proxy": "localhost"
-    },
-    "notifications": false
-}

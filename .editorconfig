@@ -20,6 +20,5 @@ indent_size = 2
 [Makefile]
 indent_style = tab
 
-[*.scss]
-indent_style = space
-indent_size = 2
+[*.twig]
+insert_final_newline = false

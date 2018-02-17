@@ -13,7 +13,7 @@
 
     <!-- Add any additional test suites you want to run here -->
     <testsuites>
-        <testsuite name="App">
+        <testsuite name="app">
             <directory>./tests/TestCase</directory>
         </testsuite>
         <!-- Add plugin test suites here. -->
@@ -32,8 +32,9 @@
 
     <!-- Ignore vendor tests in code coverage reports -->
     <filter>
-        <blacklist>
-            <directory suffix=".php">./vendor/</directory>
-        </blacklist>
+        <whitelist>
+            <directory suffix=".php">./src/</directory>
+            <directory suffix=".php">./plugins/*/src/</directory>
+        </whitelist>
     </filter>
 </phpunit>

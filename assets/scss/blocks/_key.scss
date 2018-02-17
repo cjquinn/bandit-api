@@ -1,8 +1,0 @@
-.key {
-	background: $mirage4;
-	@include inline-children;
-
-	&__stat {
-		@include inline-children;
-	}
-}

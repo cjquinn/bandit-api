@@ -6,7 +6,6 @@ use App\Routing\Middleware\CorsMiddleware;
 
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
 use Cake\Http\BaseApplication;
-use Cake\Routing\Middleware\AssetMiddleware;
 use Cake\Routing\Middleware\RoutingMiddleware;
 
 class Application extends BaseApplication
@@ -19,7 +18,6 @@ class Application extends BaseApplication
         $middlewareQueue
             ->add(CorsMiddleware::class)
             ->add(ErrorHandlerMiddleware::class)
-            ->add(AssetMiddleware::class)
             ->add(RoutingMiddleware::class);
 
         return $middlewareQueue;

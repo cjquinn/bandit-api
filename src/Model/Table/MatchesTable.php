@@ -47,6 +47,7 @@ class MatchesTable extends Table
      */
     public function validationDefault(Validator $validator)
     {
+        // TODO: add test cases
         $validator
             ->requirePresence('player_b_id', 'create')
             ->notEmpty('player_b_id');

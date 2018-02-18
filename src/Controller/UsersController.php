@@ -153,7 +153,7 @@ class UsersController extends AppController
     /**
      * @return void
      */
-    public function uploadAvatar()
+    public function updateAvatar()
     {
         // TODO: implement
     }

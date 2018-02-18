@@ -87,7 +87,7 @@ Router::scope('/', function ($routes) {
             'login',
             'request-password-reset',
             'reset-password',
-            'upload-avatar',
+            'update-avatar',
             'update-settings'
         ],
         'map' => [
@@ -111,7 +111,7 @@ Router::scope('/', function ($routes) {
                 'action' => 'resetPassword',
                 'method' => ['GET', 'PATCH']
             ],
-            'upload-avatar' => [
+            'update-avatar' => [
                 'action' => 'uploadAvatar',
                 'method' => 'PATCH'
             ],

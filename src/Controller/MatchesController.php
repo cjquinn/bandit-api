@@ -10,13 +10,13 @@ class MatchesController extends AppController
      */
     public function isAuthorized(array $user)
     {
-        if ($this->request->action === 'add' &&
+        if ($this->request->getParam('action') === 'add' &&
             $this->Matches->Clubs->hasDisputingMember($this->request->getParam('club_id'), $this->Auth->user('id'))
         ) {
             return false;
         }
 
-        if ($this->request->action === 'delete') {
+        if ($this->request->getParam('action') === 'delete') {
             // Invalid player
             if (!$this->Matches->wasCreatedBy($this->request->getParam('id'), $this->Auth->user('id'))) {
                 return false;

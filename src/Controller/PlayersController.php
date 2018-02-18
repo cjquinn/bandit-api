@@ -60,6 +60,9 @@ class PlayersController extends AppController
         $players = $this->paginate(
             $this->Players
                 ->findByClubId($this->request->getParam('club_id'))
+                ->find('ordered', [
+                    'orderBy' => $this->request->getQuery('orderBy', 'a-z')
+                ])
                 ->find('populated')
         );
 

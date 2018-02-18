@@ -263,6 +263,37 @@ class PlayersTable extends Table
     /**
      * @return \Cake\ORM\Query
      */
+    public function findOrdered(Query $query, array $options)
+    {
+        switch ($options['orderBy']) {
+            case 'a-z':
+                $query
+                    ->leftJoinWith('Users')
+                    ->orderAsc('Users.name');
+                break;
+
+            case 'games':
+                $query
+                    ->select(['total_matches' => sprintf(
+                        '%s + %s',
+                        $this->aliasField('wins'),
+                        $this->aliasField('losses')
+                    )])
+                    ->orderDesc('total_matches')
+                    ->enableAutoFields(true);
+                break;
+
+            case 'rating':
+                $query->orderDesc('rating');
+                break;
+        }
+
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
     public function findPopulated(Query $query, array $options)
     {
         $query

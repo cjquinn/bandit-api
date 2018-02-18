@@ -186,12 +186,12 @@ class ClubsTable extends Table
      */
     public function findByUserId(Query $query, array $options)
     {
-        if (!isset($options['id'])) {
-            throw Exception('Missing id key in options');
+        if (!isset($options['userId'])) {
+            throw Exception('Missing userId key in options');
         }
 
         $query->innerJoinWith('Players', function ($q) use ($options) {
-            $q->where(['Players.user_id' => $options['id']]);
+            $q->where(['Players.user_id' => $options['userId']]);
 
             return $q;
         });

@@ -28,8 +28,10 @@ class DisputesTable extends Table
     /**
      * @return void
      */
-    public function patchEntityAdd(Dispute $dispute, array $data)
+    public function patchEntityAdd(Dispute $dispute, array $data, $matchId)
     {
+        $dispute->set('match_id', $matchId);
+
         $this->patchEntity($dispute, $data, [
             'fieldList' => [
                 'player_a_score',

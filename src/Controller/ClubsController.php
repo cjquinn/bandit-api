@@ -90,9 +90,8 @@ class ClubsController extends AppController
      */
     public function index()
     {
-        $clubs = $this->Clubs->find('byUserId', [
-            'id' => $this->Auth->user('id')
-        ]);
+        $clubs = $this->Clubs
+            ->find('byUserId', ['userId' => $this->Auth->user('id')]);
 
         $this->set('clubs', $clubs);
     }

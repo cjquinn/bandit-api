@@ -70,10 +70,11 @@ class DisputesController extends AppController
     {
         $dispute = $this->Disputes->newEntity();
 
-        // TODO: make patchEntityAdd take a match_id
-        $dispute->set('match_id', $this->request->getParam('match_id'));
-
-        $this->Disputes->patchEntityAdd($dispute, $this->request->getData());
+        $this->Disputes->patchEntityAdd(
+            $dispute,
+            $this->request->getData(),
+            $this->request->getParam('match_id')
+        );
 
         if (!$this->Disputes->save($dispute)) {
             $this->response->statusCode(400);
@@ -83,6 +84,37 @@ class DisputesController extends AppController
             'dispute' => $dispute,
             'errors' => $dispute->errors()
         ]);
+    }
+
+    /**
+     * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     */
+    public function close($id)
+    {
+        $dispute = $this->Disputes->get($id);
+
+        $this->Disputes->patchEntityEdit($dispute, $this->request->getData());
+
+        $success = $this->Disputes->close($dispute);
+
+        $this->set([
+            'dispute' => $dispute,
+            'errors' => $dispute->errors()
+        ]);
+
+        if (!$success) {
+            $this->response->statusCode(400);
+            return;
+        }
+
+        // Get updated matches
+        $match = $this->Disputes->Matches->get($dispute->match_id);
+        $matches = $this->Disputes->Matches
+            ->find('tree', ['match' => $match])
+            ->find('populated');
+
+        $this->set('matches', $matches);
     }
 
     /**
@@ -100,46 +132,11 @@ class DisputesController extends AppController
 
     /**
      * @return void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException
-     */
-    public function edit($id)
-    {
-        // TODO: rename action to resolve
-        $dispute = $this->Disputes->get($id);
-
-        $this->Disputes->patchEntityEdit($dispute, $this->request->getData());
-
-        if ($this->Disputes->close($dispute)) {
-            // Get updated matches
-            $match = $this->Disputes->Matches->get($dispute->match_id);
-            $matches = $this->Disputes->Matches
-                ->find('tree', ['match' => $match])
-                ->find('populated');
-
-            $this->set('matches', $matches);
-        } else {
-            $this->response->statusCode(400);
-        }
-
-        $this->set([
-            'dispute' => $dispute,
-            'errors' => $dispute->errors()
-        ]);
-    }
-
-    /**
-     * @return void
      */
     public function index()
     {
-        // TODO: implement
-    }
+        $disputes = $this->Disputes->find('byUserId', ['userId' => $this->Auth->user('id')]);
 
-    /**
-     * @return void
-     */
-    public function view()
-    {
-        // TODO: implement
+        $this->set('disputes', $disputes);
     }
 }

@@ -52,8 +52,13 @@ Router::scope('/', function ($routes) {
                     'create',
                     'delete',
                     'index',
-                    'update',
-                    'view'
+                    ':id/close'
+                ],
+                'map' => [
+                    ':id/close' => [
+                        'action' => 'close',
+                        'method' => 'PATCH'
+                    ]
                 ]
             ]);
         });

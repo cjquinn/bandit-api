@@ -4,20 +4,28 @@ namespace App\Controller;
 
 class PlayersController extends AppController
 {
+    public $paginate = ['limit' => 10];
+
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->loadComponent('Paginator');
+    }
 
     /**
      * @return bool
      */
     public function isAuthorized(array $user)
     {
-        if (in_array($this->request->getParam('action'), ['add', 'toggleActive']) &&
+        if ($this->request->getParam('action') === 'add' &&
             !$this->Players->Clubs->isOwnedBy($this->request->getParam('club_id'), $this->Auth->user('id'))
         ) {
             return false;
         }
 
-        if ($this->request->getParam('action') === 'toggleActive' &&
-            (int)$this->request->getParam('id') === $this->Auth->user('id')
+        if ($this->request->getParam('id') &&
+            !$this->Players->isOwnedBy($this->request->getParam('id'), $this->request->getParam('club_id'))
         ) {
             return false;
         }
@@ -26,15 +34,13 @@ class PlayersController extends AppController
     }
 
     /**
-     * @return void\Cake\Network\Response
+     * @return void
      */
     public function add()
     {
         $player = $this->Players->newEntity();
 
-        $player->set('club_id', $this->request->getParam('club_id'));
-
-        $this->Players->patchEntityAdd($player, $this->request->getData());
+        $this->Players->patchEntityAdd($player, $this->request->getData(), $this->request->getParam('club_id'));
 
         if (!$this->Players->save($player)) {
             $this->response->statusCode(400);
@@ -51,44 +57,26 @@ class PlayersController extends AppController
      */
     public function index()
     {
-        // TODO: add filtering and pagination
-        // TODO: Make custom finder method
-        $players = $this->Players
-            ->findByClubId($this->request->getParam('club_id'))
-            ->contain(['Users'])
-            ->innerJoinWith('Users', function ($q) {
-                $q->find('auth');
+        $players = $this->paginate(
+            $this->Players
+                ->findByClubId($this->request->getParam('club_id'))
+                ->find('populated')
+        );
 
-                return $q;
-            });
-
-        $this->set('players', $players);
+        $this->set([
+            'players' => $players,
+            'total' => $this->request->paging['Players']['count']
+        ]);
     }
 
     /**
      * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
-    public function toggleActive($id)
+    public function view($id)
     {
-        $player = $this->Players->get($id, [
-            'conditions' => [
-                'club_id' => $this->request->getParam('club_id')
-            ]
-        ]);
-
-        $player->set('is_active', !$player->is_active);
-
-        $this->Players->save($player);
+        $player = $this->Players->get($id, ['finder' => 'populated']);
 
         $this->set('player', $player);
-    }
-
-    /**
-     * @return void
-     */
-    public function view()
-    {
-        // TODO: implement
     }
 }

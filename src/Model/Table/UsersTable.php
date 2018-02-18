@@ -162,7 +162,7 @@ class UsersTable extends Table
     }
 
     /**
-     * @return void|boolean
+     * @return void
      */
     public function patchEntityEdit(User $user, array $data)
     {
@@ -170,21 +170,23 @@ class UsersTable extends Table
 
         $this->patchEntity($user, $data, ['validate' => 'edit']);
 
-        if ($user->current_password &&
-            $user->new_password
+        if (!$user->current_password ||
+            !$user->new_password
         ) {
-            if (!(new DefaultPasswordHasher)->check($user->current_password, $user->password)) {
-                $user->unsetProperty(['current_password', 'new_password']);
-
-                $user->setError('current_password', [
-                    'match' => 'The password you entered was incorrect'
-                ]);
-
-                return false;
-            }
-
-            $user->set('password', $user->new_password);
+            return;
         }
+
+        if (!(new DefaultPasswordHasher)->check($user->current_password, $user->password)) {
+            $user->unsetProperty(['current_password', 'new_password']);
+
+            $user->setError('current_password', [
+                'match' => 'The password you entered was incorrect'
+            ]);
+
+            return;
+        }
+
+        $user->set('password', $user->new_password);
     }
 
     /**

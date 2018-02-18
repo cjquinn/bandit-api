@@ -42,58 +42,82 @@ class PlayersTableTest extends TestCase
      */
     public function testPatchEntityAdd()
     {
-        // Bad data
+        // Required
         $player = $this->Players->newEntity();
+        $data = [];
+        $clubId = 1;
 
-        $player->set('club_id', 1);
-
-        $this->Players->patchEntityAdd($player, []);
+        $this->Players->patchEntityAdd($player, $data, $clubId);
 
         $expected = [
             'user' => [
                 '_required' => 'This field is required'
             ]
         ];
-        $this->assertEquals($expected, $player->errors());
+        $this->assertEquals($expected, $player->getErrors());
+        $this->assertEquals($clubId, $player->club_id);
+
+        // Nested
+        $player = $this->Players->newEntity();
+        $data = [
+            'user' => 'A user'
+        ];
+        $clubId = 1;
+
+        $this->Players->patchEntityAdd($player, $data, $clubId);
+
+        $expected = [
+            'user' => [
+                '_nested' => 'The provided value is invalid'
+            ]
+        ];
+        $this->assertEquals($expected, $player->getErrors());
+        $this->assertEquals($clubId, $player->club_id);
 
         // New user
         $player = $this->Players->newEntity();
-
-        $player->set('club_id', 1);
-
-        $this->Players->patchEntityAdd($player, [
+        $data = [
             'user' => [
                 'email' => 'some@new.player'
             ]
-        ]);
+        ];
+        $clubId = 1;
+
+        $this->Players->patchEntityAdd($player, $data, $clubId);
 
         $this->assertNotNull($player->user);
         $this->assertEquals('some@new.player', $player->user->email);
+        $this->assertEquals($clubId, $player->club_id);
 
         // Existing user non member
         $player = $this->Players->newEntity();
-
-        $player->set('club_id', 1);
-
-        $this->Players->patchEntityAdd($player, [
+        $data = [
             'user' => [
                 'email' => 'gareth@banditmatch.com'
             ]
-        ]);
+        ];
+        $clubId = 1;
+        $userId = $this->Players->Users
+            ->findByEmail('gareth@banditmatch.com')
+            ->enableHydration(false)
+            ->first()['id'];
+
+        $this->Players->patchEntityAdd($player, $data, $clubId);
 
         $this->assertNull($player->user);
-        $this->assertEquals(8, $player->user_id);
+        $this->assertEquals($userId, $player->user_id);
+        $this->assertEquals($clubId, $player->club_id);
 
         // Existing user member
         $player = $this->Players->newEntity();
-
-        $player->set('club_id', 1);
-
-        $this->Players->patchEntityAdd($player, [
+        $data = [
             'user' => [
                 'email' => 'christy@banditmatch.com'
             ]
-        ]);
+        ];
+        $clubId = 1;
+
+        $this->Players->patchEntityAdd($player, $data, $clubId);
 
         $expected = [
             'user' => [
@@ -102,7 +126,7 @@ class PlayersTableTest extends TestCase
                 ]
             ]
         ];
-        $this->assertEquals($expected, $player->errors());
+        $this->assertEquals($expected, $player->getErrors());
     }
 
     /**

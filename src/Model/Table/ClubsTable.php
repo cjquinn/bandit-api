@@ -13,6 +13,8 @@ use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
+use Exception;
+
 class ClubsTable extends Table
 {
 
@@ -168,7 +170,7 @@ class ClubsTable extends Table
                 'club_id' => $id,
                 'user_id' => $userId
             ])
-            ->hydrate(false)
+            ->enableHydration(false)
             ->firstOrFail()['id'];
     }
 
@@ -182,6 +184,7 @@ class ClubsTable extends Table
 
     /**
      * @return \Cake\ORM\Query
+     * @throws \Exception
      */
     public function findByUserId(Query $query, array $options)
     {
@@ -190,10 +193,7 @@ class ClubsTable extends Table
         }
 
         $query->innerJoinWith('Players', function ($q) use ($options) {
-            $q->where([
-                'Players.user_id' => $options['id'],
-                'Players.is_active' => true
-            ]);
+            $q->where(['Players.user_id' => $options['id']]);
 
             return $q;
         });
@@ -206,34 +206,37 @@ class ClubsTable extends Table
      */
     public function hasDisputingMember($id, $userId)
     {
-        return !$this->Players
-            ->find()
-            ->where([
-                'Players.club_id' => $id,
-                'Players.user_id' => $userId,
-                'Players.is_active' => true
-            ])
-            ->join([
-                'Matches' => [
-                    'table' => 'matches',
-                    'type' => 'INNER',
-                    'conditions' => [
-                        // Just the player who added the match
-                        'Players.id = Matches.player_a_id',
-                        // TODO: make use of beforeFind
-                        'Matches.deleted IS' => null
+        return (bool)count(
+            $this->Players
+                ->find()
+                ->where([
+                    'Players.club_id' => $id,
+                    'Players.user_id' => $userId
+                ])
+                ->join([
+                    'Matches' => [
+                        'table' => 'matches',
+                        'type' => 'INNER',
+                        'conditions' => [
+                            // Just the player who added the match
+                            'Players.id = Matches.player_a_id',
+                            // TODO: make use of beforeFind
+                            'Matches.deleted IS' => null
+                        ]
+                    ],
+                    'Disputes' => [
+                        'table' => 'disputes',
+                        'type' => 'INNER',
+                        'conditions' => [
+                            'Matches.id = Disputes.match_id',
+                            'Disputes.is_resolved IS' => null
+                        ]
                     ]
-                ],
-                'Disputes' => [
-                    'table' => 'disputes',
-                    'type' => 'INNER',
-                    'conditions' => [
-                        'Matches.id = Disputes.match_id',
-                        'Disputes.is_resolved IS' => null
-                    ]
-                ]
-            ])
-            ->isEmpty();
+                ])
+                ->limit(1)
+                ->enableHydration(false)
+                ->toArray()
+        );
     }
 
     /**
@@ -243,8 +246,7 @@ class ClubsTable extends Table
     {
         return $this->Players->exists([
             'club_id' => $id,
-            $memberKey => $memberId,
-            'is_active' => true
+            $memberKey => $memberId
         ]);
     }
 

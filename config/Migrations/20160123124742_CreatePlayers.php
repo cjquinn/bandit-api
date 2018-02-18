@@ -49,11 +49,6 @@ class CreatePlayers extends AbstractMigration
             'null' => false
         ]);
 
-        $table->addColumn('is_active', 'boolean', [
-            'default' => true,
-            'null' => false
-        ]);
-
         $table->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false

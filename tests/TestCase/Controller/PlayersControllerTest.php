@@ -17,37 +17,26 @@ class PlayersControllerTest extends IntegrationTestCase
      */
     public function testUnauthorised()
     {
-        $this->_setAjaxRequest();
-
-        $this->post('/clubs/1/players.json', []);
-
-        $this->assertResponseCode(403);
+        $this->_testUnauthorised([
+            'post' => '/clubs/1/players.json',
+            'get' => '/clubs/1/players.json',
+            'get' => '/clubs/1/players/1.json'
+        ]);
     }
 
     /**
      * @return void
      */
-    public function testUnassigned()
+    public function testAuthorised()
     {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(8);
-
-        $this->post('/clubs/1/players.json', []);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testAddNonFounder()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(2);
-
-        $this->post('/clubs/1/players.json', []);
-
-        $this->assertResponseCode(403);
+        $this->_testAuthorised([
+            // Unassigned
+            'get' => '/clubs/2/players.json',
+            // Non founder
+            'post' => '/clubs/2/players.json',
+            // Invalid player
+            'get' => '/clubs/1/players/8.json'
+        ]);
     }
 
     /**
@@ -83,52 +72,12 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testToggleActiveNonFounder()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(2);
-
-        $this->patch('/clubs/1/players/2/toggle-active.json', []);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testToggleActiveDeactivateFounder()
+    public function testIndex()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->patch('/clubs/1/players/1/toggle-active.json', []);
-
-        $this->assertResponseCode(403);
-    }
-
-
-    /**
-     * @return void
-     */
-    public function testToggleActiveInvalidPlayer()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
-
-        $this->patch('/clubs/1/players/8/toggle-active.json', []);
-
-        $this->assertResponseCode(404);
-    }
-
-    /**
-     * @return void
-     */
-    public function testToggleActivePatch()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
-
-        $this->patch('/clubs/1/players/2/toggle-active.json', []);
+        $this->get('/clubs/1/players.json');
 
         $this->assertResponseCode(200);
     }
@@ -136,12 +85,12 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testIndex()
+    public function testView()
     {
         $this->_setAjaxRequest();
-        $this->_setAuthSession(2);
+        $this->_setAuthSession(1);
 
-        $this->get('/clubs/1/players.json');
+        $this->get('/clubs/1/players/1.json');
 
         $this->assertResponseCode(200);
     }

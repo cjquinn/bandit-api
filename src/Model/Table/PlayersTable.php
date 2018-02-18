@@ -8,6 +8,7 @@ use App\Model\Entity\Match;
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\I18n\Time;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -31,36 +32,63 @@ class PlayersTable extends Table
     }
 
     /**
+     * @return \Cake\Validation\Validator
+     */
+    public function validationAdd(Validator $validator)
+    {
+        $validator
+            ->requirePresence('user')
+            ->notEmpty('user')
+            ->addNested('user', $this->Users->getValidator('invite'));
+
+        return $validator;
+    }
+
+    /**
+     * @return \Cake\ORM\RulesChecker
+     */
+    public function buildRules(RulesChecker $rules)
+    {
+        $rules->add($rules->existsIn(['club_id'], 'Clubs'));
+        $rules->add($rules->existsIn(['user_id'], 'Users'));
+
+        return $rules;
+    }
+
+    /**
      * @return void
      */
-    public function patchEntityAdd(Player $player, array $data)
+    public function patchEntityAdd(Player $player, array $data, $clubId)
     {
+        $player->set('club_id', $clubId);
+
         $this->patchEntity($player, $data, [
             'fieldList' => ['user'],
-            'validate' => 'add',
-            'associated' => [
-                'Users' => [
-                    'validate' => 'invite'
-                ]
-            ]
+            'validate' => 'add'
         ]);
 
-        if (!$player->errors()) {
-            $user = $this->Users
-                ->findByEmail($data['user']['email'])
-                ->first();
-
-            if ($user) {
-                if ($this->Clubs->hasMember($player->club_id, $user->id)) {
-                    $player->user->errors('email', [
-                        'duplicate' => 'A member of this club already exists with that email'
-                    ]);
-                } else {
-                    $player->set('user_id', $user->id);
-                    $player->unsetProperty('user');
-                }
-            }
+        if ($player->getErrors()) {
+            return;
         }
+
+        $user = $this->Users
+            ->findByEmail($player->user->email)
+            ->first();
+
+        if (!$user) {
+            return;
+        }
+
+        if ($this->Clubs->hasMember($player->club_id, $user->id)) {
+            $player->user->setError('email', [
+                'duplicate' => 'A member of this club already exists with that email'
+            ]);
+
+            return;
+        }
+
+        $player->set('user_id', $user->id);
+        $player->unsetProperty('user');
     }
 
     /**
@@ -76,29 +104,6 @@ class PlayersTable extends Table
             ],
             'validate' => false
         ]);
-    }
-
-    /**
-     * @return \Cake\Validation\Validator
-     */
-    public function validationAdd(Validator $validator)
-    {
-        $validator
-            ->requirePresence('user')
-            ->notEmpty('user');
-
-        return $validator;
-    }
-
-    /**
-     * @return \Cake\ORM\RulesChecker
-     */
-    public function buildRules(RulesChecker $rules)
-    {
-        $rules->add($rules->existsIn(['club_id'], 'Clubs'));
-        $rules->add($rules->existsIn(['user_id'], 'Users'));
-
-        return $rules;
     }
 
     /**
@@ -253,5 +258,32 @@ class PlayersTable extends Table
             'a' => $playerASnapShot,
             'b' => $playerBSnapShot
         ];
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findPopulated(Query $query, array $options)
+    {
+        $query
+            ->contain(['Users'])
+            ->innerJoinWith('Users', function ($q) {
+                $q->find('auth');
+
+                return $q;
+            });
+
+        return $query;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOwnedBy($id, $clubId)
+    {
+        return $this->exists([
+            'id' => $id,
+            'club_id' => $clubId
+        ]);
     }
 }

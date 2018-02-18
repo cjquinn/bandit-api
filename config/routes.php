@@ -65,14 +65,7 @@ Router::scope('/', function ($routes) {
             'only' => [
                 'create',
                 'index',
-                ':id/toggle-active',
                 'view'
-            ],
-            'map' => [
-                ':id/toggle-active' => [
-                    'action' => 'toggleActive',
-                    'method' => 'PATCH'
-                ]
             ]
         ]);
     });

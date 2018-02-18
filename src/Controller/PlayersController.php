@@ -4,15 +4,6 @@ namespace App\Controller;
 
 class PlayersController extends AppController
 {
-    public $paginate = ['limit' => 10];
-
-    public function initialize()
-    {
-        parent::initialize();
-
-        $this->loadComponent('Paginator');
-    }
-
     /**
      * @return bool
      */
@@ -57,14 +48,9 @@ class PlayersController extends AppController
      */
     public function index()
     {
-        $players = $this->paginate(
-            $this->Players
-                ->findByClubId($this->request->getParam('club_id'))
-                ->find('ordered', [
-                    'orderBy' => $this->request->getQuery('orderBy', 'a-z')
-                ])
-                ->find('populated')
-        );
+        $players = $this->Players
+            ->findByClubId($this->request->getParam('club_id'))
+            ->find('populated');
 
         $this->set([
             'players' => $players,

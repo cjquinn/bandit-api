@@ -39,54 +39,109 @@ class MatchesTableTest extends TestCase
     /**
      * @return void
      */
-    public function testBeforeSaveInvalidPlayerB()
+    public function testPatchEntityAdd()
     {
+        // Required
         $match = $this->Matches->newEntity();
+        $data = [];
+        $clubId = 1;
+        $playerId = 1;
 
-        $this->Matches->patchEntity($match, [
-            // Can't add a match against yourself
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $expected = [
+            'player_b_id' => [
+                '_required' => 'This field is required'
+            ],
+            'player_a_score' => [
+                '_required' => 'This field is required'
+            ],
+            'player_b_score' => [
+                '_required' => 'This field is required'
+            ]
+        ];
+
+        $this->assertEquals($expected, $match->getErrors());
+
+        // Empty
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_b_id' => '',
+            'player_a_score' => '',
+            'player_b_score' => ''
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $expected = [
+            'player_b_id' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'player_a_score' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'player_b_score' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        $this->assertEquals($expected, $match->getErrors());
+
+        // Invalid player b
+        $match = $this->Matches->newEntity();
+        $data = [
             'player_b_id' => 1,
             'player_a_score' => 3,
             'player_b_score' => 0
-        ]);
+        ];
+        $clubId = 1;
+        $playerId = 1;
 
-        $match->set('club_id', 1);
-        $match->set('player_a_id', 1);
-
-        $this->assertFalse($this->Matches->save($match));
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
 
         $expected = [
             'player_b_id' => [
                 'invalid' => 'You cannot add matches against yourself'
             ]
         ];
-        $this->assertEquals($expected, $match->errors());
-    }
 
-    /**
-     * @return void
-     */
-    public function testBeforeSaveUnassignedPlayerB()
-    {
+        $this->assertEquals($expected, $match->getErrors());
+
+        // Unassigned player b
         $match = $this->Matches->newEntity();
-
-        $this->Matches->patchEntity($match, [
+        $data = [
             'player_b_id' => 8,
             'player_a_score' => 3,
             'player_b_score' => 0
-        ]);
+        ];
+        $clubId = 1;
+        $playerId = 1;
 
-        $match->set('club_id', 1);
-        $match->set('player_a_id', 1);
-
-        $this->assertFalse($this->Matches->save($match));
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
 
         $expected = [
             'player_b_id' => [
                 'invalid' => 'You can only add matches against members of this club'
             ]
         ];
-        $this->assertEquals($expected, $match->errors());
+
+        $this->assertEquals($expected, $match->getErrors());
+
+        // Valid
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_b_id' => 2,
+            'player_a_score' => 3,
+            'player_b_score' => 0
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $this->assertEmpty($match->getErrors());
     }
 
     /**
@@ -95,15 +150,15 @@ class MatchesTableTest extends TestCase
     public function testBeforeSaveSnapshots()
     {
         $match = $this->Matches->newEntity();
-
-        $this->Matches->patchEntity($match, [
-            'player_b_id' => 1,
+        $data = [
+            'player_b_id' => 2,
             'player_a_score' => 3,
             'player_b_score' => 0
-        ]);
+        ];
+        $clubId = 1;
+        $playerId = 1;
 
-        $match->set('club_id', 1);
-        $match->set('player_a_id', 2);
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
 
         // Snapshots should be set
         $this->assertTrue($this->Matches->save($match) !== false);

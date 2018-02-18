@@ -99,7 +99,7 @@ class DisputesTable extends Table
      */
     public function close(Dispute $dispute)
     {
-        if ($dispute->errors()) {
+        if ($dispute->getErrors()) {
             return false;
         }
 

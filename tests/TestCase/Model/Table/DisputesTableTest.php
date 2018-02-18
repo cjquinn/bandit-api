@@ -141,7 +141,8 @@ class DisputesTableTest extends TestCase
             'contain' => [
                 'PlayerAs.Users',
                 'PlayerBs.Users'
-            ]
+            ],
+            'ignoreBeforeFind' => true
         ]);
 
         $this->assertNotNull($match->deleted);
@@ -172,7 +173,8 @@ class DisputesTableTest extends TestCase
             'contain' => [
                 'PlayerAs.Users',
                 'PlayerBs.Users'
-            ]
+            ],
+            'ignoreBeforeFind' => true
         ]);
 
         $this->assertNotNull($match->deleted);

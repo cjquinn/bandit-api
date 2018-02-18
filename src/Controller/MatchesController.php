@@ -4,6 +4,17 @@ namespace App\Controller;
 
 class MatchesController extends AppController
 {
+    public $paginate = [
+        'limit' => 10,
+        'order' => ['Matches.created' => 'DESC']
+    ];
+
+    public function initialize()
+    {
+        parent::initialize();
+
+        $this->loadComponent('Paginator');
+    }
 
     /**
      * @return bool
@@ -43,26 +54,18 @@ class MatchesController extends AppController
     {
         $match = $this->Matches->newEntity();
 
-        $match->set('club_id', $this->request->getParam('club_id'));
-        $match->set(
-            'player_a_id',
+        $this->Matches->patchEntityAdd(
+            $match,
+            $this->request->getData(),
+            $this->request->getParam('club_id'),
             $this->Matches->Clubs->getPlayerId(
                 $this->request->getParam('club_id'),
                 $this->Auth->user('id')
             )
         );
 
-        // TODO: refactor into patchEntityAdd and require club_id and user_id
-        $this->Matches->patchEntity($match, $this->request->getData());
-
         if (!$this->Matches->save($match)) {
             $this->response->statusCode(400);
-        } else {
-            // TODO: move into after save
-            $this->Matches->loadInto($match, [
-                'PlayerAs.Users',
-                'PlayerBs.Users'
-            ]);
         }
 
         $this->set([
@@ -77,15 +80,8 @@ class MatchesController extends AppController
      */
     public function delete($id)
     {
-        $match = $this->Matches->get($id, [
-            'conditions' => [
-                'club_id' => $this->request->getParam('club_id'),
-                // TODO: make use of beforeFind
-                'Matches.deleted IS' => null
-            ]
-        ]);
+        $match = $this->Matches->get($id);
 
-        // TODO: remove soft delete
         $this->Matches->softDelete($match);
 
         // Get updated matches
@@ -101,17 +97,7 @@ class MatchesController extends AppController
      */
     public function index()
     {
-        // TODO: integrate pagination
-        $matches = $this->Matches
-            ->find('populated')
-            ->where([
-                'Matches.club_id' => $this->request->getParam('club_id'),
-                // TODO: make use of beforeFind
-                'Matches.deleted IS' => null
-            ])
-            // TODO: make use of beforeFind
-            ->order(['Matches.created' => 'DESC'])
-            ->limit(20);
+        $matches = $this->paginate($this->Matches->find('populated'));
 
         $this->set('matches', $matches);
     }
@@ -122,15 +108,7 @@ class MatchesController extends AppController
      */
     public function view($id)
     {
-        // TODO: populate
-        $match = $this->Matches->get($id, [
-            'conditions' => [
-                'Matches.club_id' => $this->request->getParam('club_id'),
-                // TODO: make use of beforeFind
-                'Matches.deleted IS' => null
-            ],
-            'finder' => 'populated'
-        ]);
+        $match = $this->Matches->get($id, ['finder' => 'populated']);
 
         $this->set('match', $match);
     }

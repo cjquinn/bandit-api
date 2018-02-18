@@ -4,6 +4,8 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Match;
 
+use ArrayObject;
+
 use Cake\Database\Schema\Table as Schema;
 use Cake\Event\Event;
 use Cake\I18n\Time;
@@ -45,9 +47,8 @@ class MatchesTable extends Table
     /**
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
+    public function validationAdd(Validator $validator)
     {
-        // TODO: add test cases
         $validator
             ->requirePresence('player_b_id', 'create')
             ->notEmpty('player_b_id');
@@ -80,24 +81,39 @@ class MatchesTable extends Table
     /**
      * @return void
      */
-    public function beforeSave(Event $event, Match $match)
+    public function patchEntityAdd(Match $match, array $data, $clubId, $playerId)
     {
+        $match->set('club_id', $clubId);
+        $match->set('player_a_id', $playerId);
+
+        $this->patchEntity($match, $data, ['validate' => 'add']);
+
+        if ($match->getErrors()) {
+            return;
+        }
+
         if ($match->player_a_id === $match->player_b_id) {
-            $match->errors('player_b_id', [
+            $match->setError('player_b_id', [
                 'invalid' => 'You cannot add matches against yourself'
             ]);
 
-            return false;
+            return;
         }
 
         if (!$this->Clubs->hasMember($match->club_id, $match->player_b_id, 'id')) {
-            $match->errors('player_b_id', [
+            $match->setError('player_b_id', [
                 'invalid' => 'You can only add matches against members of this club'
             ]);
 
-            return false;
+            return;
         }
+    }
 
+    /**
+     * @return void
+     */
+    public function beforeSave(Event $event, Match $match)
+    {
         if (!$match->deleted) {
             $snapshots = $this->Clubs->Players->snapshots($match);
 
@@ -107,114 +123,13 @@ class MatchesTable extends Table
     }
 
     /**
-     * @return \Cake\ORM\Query
-     */
-    public function findPopulated(Query $query, array $options)
-    {
-        $query->contain([
-            'PlayerAs.Users',
-            'PlayerBs.Users'
-        ]);
-
-        return $query;
-    }
-
-    /**
-     * @return \Cake\ORM\Query
-     */
-    public function findTree(Query $query, array $options)
-    {
-        $query
-            ->where([
-                'Matches.id IN' => $this->idTree($options['match'])
-            ])
-            ->order([
-                'Matches.created' => 'ASC'
-            ]);
-
-        return $query;
-    }
-
-    /**
-     * @return array
-     */
-    public function idTree(Match $match = null)
-    {
-        if (!$match) {
-            return [];
-        }
-
-        $playerIds = [
-            $match->player_a_id,
-            $match->player_b_id
-        ];
-
-        $where = [
-            'id !=' => $match->id,
-            'club_id' => $match->club_id,
-            'deleted IS' => null,
-            'created >=' => $match->created
-        ];
-
-        $left = $this
-            ->find()
-            ->where($where + ['player_a_id IN' => $playerIds])
-            ->first();
-
-        $right = $this
-            ->find()
-            ->where($where + ['player_b_id IN' => $playerIds])
-            ->first();
-
-        return [$match->id => $match->id] + $this->idTree($left) + $this->idTree($right);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAgainst($id, $userId)
-    {
-        return !$this
-            ->findById($id)
-            ->innerJoinWith('PlayerBs', function ($q) use ($userId) {
-                $q->where(['PlayerBs.user_id' => $userId]);
-
-                return $q;
-            })
-            ->isEmpty();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDisputed($id)
-    {
-        return $this->Disputes->exists([
-            'match_id' => $id
-        ]);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isOwnedBy($id, $clubId)
-    {
-        return $this->exists([
-            'id' => $id,
-            'club_id' => $clubId
-        ]);
-    }
-
-    /**
      * @return void
      */
     public function saveTree(Match $match)
     {
         $this->connection()->transactional(function () use ($match) {
             // Find tree of affected matches
-            $matches = $this->find('tree', [
-                'match' => $match
-            ]);
+            $matches = $this->find('tree', ['match' => $match]);
 
             // Revert all players in match tree and resave matches
             $revertedPlayers = [];
@@ -241,10 +156,123 @@ class MatchesTable extends Table
     {
         $this->connection()->transactional(function () use ($match) {
             $match->set('deleted', new Time());
-
             $this->save($match);
+
             $this->saveTree($match);
         });
+    }
+
+    /**
+     * @return void
+     */
+    public function beforeFind(Event $event, Query $query, ArrayObject $options, $primary)
+    {
+        if (!isset($options['ignoreBeforeFind'])) {
+            $query->where([$this->aliasField('deleted') . ' IS' => null]);
+        }
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findPopulated(Query $query, array $options)
+    {
+        $query->contain([
+            'PlayerAs.Users',
+            'PlayerBs.Users'
+        ]);
+
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findTree(Query $query, array $options)
+    {
+        $query
+            // Ignore deleted as we are feeding specific tree of matches
+            ->find('all', ['ignoreBeforeFind' => true])
+            ->where([$this->aliasField('id') . ' IN' => $this->idTree($options['match'])])
+            ->orderAsc($this->aliasField('created'));
+
+        return $query;
+    }
+
+    /**
+     * Find a tree of match ids starting with the passed
+     * match. When used for softDelete the first match
+     * passed is deleted but the rest will not be. This is
+     * why it is safe to ignore beforeFind in the findTree method.
+     *
+     * @return array
+     */
+    public function idTree(Match $match = null)
+    {
+        if (!$match) {
+            return [];
+        }
+
+        $playerIds = [
+            $match->player_a_id,
+            $match->player_b_id
+        ];
+
+        $where = [
+            'id !=' => $match->id,
+            'club_id' => $match->club_id,
+            'created >=' => $match->created
+        ];
+
+        $left = $this
+            ->find()
+            ->where($where + ['player_a_id IN' => $playerIds])
+            ->first();
+
+        $right = $this
+            ->find()
+            ->where($where + ['player_b_id IN' => $playerIds])
+            ->first();
+
+        return [$match->id => $match->id] + $this->idTree($left) + $this->idTree($right);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAgainst($id, $userId)
+    {
+        return (bool)count(
+            $this
+                ->findById($id)
+                ->innerJoinWith('PlayerBs', function ($q) use ($userId) {
+                    $q->where(['PlayerBs.user_id' => $userId]);
+
+                    return $q;
+                })
+                ->limit(1)
+                ->enableHydration(false)
+                ->toArray()
+        );
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDisputed($id)
+    {
+        return $this->Disputes->exists(['match_id' => $id]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOwnedBy($id, $clubId)
+    {
+        return $this->exists([
+            'id' => $id,
+            'club_id' => $clubId
+        ]);
     }
 
     /**
@@ -252,14 +280,18 @@ class MatchesTable extends Table
      */
     public function wasCreatedBy($id, $userId)
     {
-        return !$this
-            ->findById($id)
-            ->innerJoinWith('PlayerAs', function ($q) use ($userId) {
-                $q->where(['PlayerAs.user_id' => $userId]);
+        return (bool)count(
+            $this
+                ->findById($id)
+                ->innerJoinWith('PlayerAs', function ($q) use ($userId) {
+                    $q->where(['PlayerAs.user_id' => $userId]);
 
-                return $q;
-            })
-            ->isEmpty();
+                    return $q;
+                })
+                ->limit(1)
+                ->enableHydration(false)
+                ->toArray()
+        );
     }
 
     /**

@@ -136,8 +136,6 @@ class ClubsTable extends Table
                     ['player_a_id' => $playerId],
                     ['player_b_id' => $playerId]
                 ],
-                // TODO: make use of beforeFind
-                'deleted IS' => null,
                 'created <' => $date
             ])
             ->order(['created' => 'DESC'])

@@ -46,36 +46,23 @@ class ClubsController extends AppController
         $club = $this->Clubs->newEntity();
         $user = $this->Auth->identify();
 
-        // TODO: Refactor into one patchEntityAdd
-        $patchEntity = 'patchEntityNewUser';
+        $this->Clubs->patchEntityAdd($club, $this->request->getData(), $user);
 
-        if ($user) {
-            $this->request = $this->request->withData(
-                'founder_id',
-                $user['id']
-            );
-
-            $patchEntity = 'patchEntityExistingUser';
-        }
-
-        $this->Clubs->{$patchEntity}($club, $this->request->getData());
-
-        // TODO: remove else clause
-        if ($this->Clubs->save($club)) {
-            if (!$user) {
-                $this->set(
-                    'jwt',
-                    $this->Clubs->Founders->generateJwt($club->founder_id)
-                );
-            }
-        } else {
-            $this->response->statusCode(400);
-        }
+        $success = $this->Clubs->save($club);
 
         $this->set([
             'club' => $club,
             'errors' => $club->errors()
         ]);
+
+        if (!$success) {
+            $this->response->statusCode(400);
+            return;
+        }
+
+        if (!$user) {
+            $this->set('jwt', $this->Clubs->Founders->generateJwt($club->founder_id));
+        }
     }
 
     /**
@@ -86,7 +73,7 @@ class ClubsController extends AppController
     {
         $club = $this->Clubs->get($id);
 
-        $this->Clubs->patchEntity($club, $this->request->getData());
+        $this->Clubs->patchEntityEdit($club, $this->request->getData());
 
         if (!$this->Clubs->save($club)) {
             $this->response->statusCode(400);
@@ -103,18 +90,9 @@ class ClubsController extends AppController
      */
     public function index()
     {
-        // TODO: make custom finder method
-        $clubs = $this->Clubs
-            ->find()
-            ->innerJoinWith('Players', function ($q) {
-                $q->where([
-                    'Players.user_id' => $this->Auth->user('id'),
-                    'Players.is_active' => true
-                ]);
-
-                return $q;
-            })
-            ->order('Clubs.name');
+        $clubs = $this->Clubs->find('byUserId', [
+            'id' => $this->Auth->user('id')
+        ]);
 
         $this->set('clubs', $clubs);
     }

@@ -42,7 +42,6 @@ class UsersController extends AppController
 
             if (!$success) {
                 $this->response->statusCode(400);
-
                 return;
             }
 

@@ -4,8 +4,11 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Club;
 
+use ArrayObject;
+
 use Cake\Core\Configure;
 use Cake\Event\Event;
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -32,59 +35,24 @@ class ClubsTable extends Table
     }
 
     /**
-     * @return void
-     */
-    public function patchEntityExistingUser(Club $club, array $data)
-    {
-        $this->patchEntity($club, $data, [
-            'fieldList' => [
-                'name',
-                'founder_id'
-            ],
-            'validate' => 'existingUser'
-        ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function patchEntityNewUser(Club $club, array $data)
-    {
-        $this->patchEntity($club, $data, [
-            'associated' => [
-                'Founders' => [
-                    'validate' => 'add'
-                ]
-            ],
-            'fieldList' => [
-                'name',
-                'founder'
-            ],
-            'validate' => 'newUser'
-        ]);
-    }
-
-    /**
      * @return \Cake\Validation\Validator
      */
-    public function validationDefault(Validator $validator)
+    public function validationAdd(Validator $validator)
     {
         $validator
-            ->requirePresence('name', 'create')
+            ->requirePresence('name')
             ->notEmpty('name');
 
-        return $validator;
-    }
-
-    /**
-     * @return \Cake\Validation\Validator
-     */
-    public function validationExistingUser(Validator $validator)
-    {
-        $validator = $this->validationDefault($validator);
+        $validator
+            ->requirePresence('founder', function ($context) {
+                return !isset($context['data']['founder_id']);
+            })
+            ->notEmpty('founder');
 
         $validator
-            ->requirePresence('founder_id')
+            ->requirePresence('founder_id', function ($context) {
+                return !isset($context['data']['founder']);
+            })
             ->notEmpty('founder_id');
 
         return $validator;
@@ -93,13 +61,11 @@ class ClubsTable extends Table
     /**
      * @return \Cake\Validation\Validator
      */
-    public function validationNewUser(Validator $validator)
+    public function validationEdit(Validator $validator)
     {
-        $validator = $this->validationDefault($validator);
-
         $validator
-            ->requirePresence('founder')
-            ->notEmpty('founder');
+            ->requirePresence('name')
+            ->notEmpty('name');
 
         return $validator;
     }
@@ -112,6 +78,32 @@ class ClubsTable extends Table
         $rules->add($rules->existsIn(['founder_id'], 'Founders'));
 
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function patchEntityAdd(Club $club, array $data, $user)
+    {
+        if (is_array($user)) {
+            $data['founder_id'] = $user['id'];
+        }
+
+        $this->patchEntity($club, $data, [
+            'fieldList' => [
+                'name',
+                $user ? 'founder_id' : 'founder'
+            ],
+            'validate' => 'add'
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    public function patchEntityEdit(Club $club, array $data)
+    {
+        $this->patchEntity($club, $data, ['validate' => 'edit']);
     }
 
     /**
@@ -178,6 +170,35 @@ class ClubsTable extends Table
             ])
             ->hydrate(false)
             ->firstOrFail()['id'];
+    }
+
+    /**
+     * @return void
+     */
+    public function beforeFind(Event $event, Query $query, ArrayObject $options, $primary)
+    {
+        $query->orderAsc($this->aliasField('name'));
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findByUserId(Query $query, array $options)
+    {
+        if (!isset($options['id'])) {
+            throw Exception('Missing id key in options');
+        }
+
+        $query->innerJoinWith('Players', function ($q) use ($options) {
+            $q->where([
+                'Players.user_id' => $options['id'],
+                'Players.is_active' => true
+            ]);
+
+            return $q;
+        });
+
+        return $query;
     }
 
     /**

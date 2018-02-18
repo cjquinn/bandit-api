@@ -40,61 +40,121 @@ class ClubsTableTest extends TestCase
     /**
      * @return void
      */
-    public function testPatchEntityNewUser()
+    public function testPatchEntityAdd()
     {
+        // Required
         $club = $this->Clubs->newEntity();
+        $data = [];
+        $user = ['id' => 1];
 
-        $this->Clubs->patchEntityNewUser($club, []);
+        $this->Clubs->patchEntityAdd($club, $data, $user);
 
         $expected = [
             'name' => [
                 '_required' => 'This field is required'
             ],
             'founder' => [
-                '_required' => 'This field is required'
-            ]
-        ];
-        $this->assertEquals($expected, $club->errors());
-
-        $this->Clubs->patchEntityNewUser($club, [
-            'name' => 'Ping Pong Game On',
-            'founder' => [
-                'name' => 'Alex Farthing',
-                'email' => 'alex@gmail.com',
-                'password' => 'password'
-            ]
-        ]);
-
-        $this->assertEmpty($club->errors());
-        $this->assertNotNull($club->founder);
-    }
-
-    /**
-     * @return void
-     */
-    public function testPatchEntityExistingUser()
-    {
-        $club = $this->Clubs->newEntity();
-
-        $this->Clubs->patchEntityExistingUser($club, []);
-
-        $expected = [
-            'name' => [
                 '_required' => 'This field is required'
             ],
             'founder_id' => [
                 '_required' => 'This field is required'
             ]
         ];
-        $this->assertEquals($expected, $club->errors());
 
-        $this->Clubs->patchEntityExistingUser($club, [
-            'name' => 'Ping Pong Game On',
-            'founder_id' => 1
-        ]);
+        // Empty
+        $club = $this->Clubs->newEntity();
+        $data = [
+            'name' => '',
+            'founder' => '',
+        ];
+        $user = ['id' => ''];
 
-        $this->assertEmpty($club->errors());
-        $this->assertNotNull($club->founder_id);
+        $this->Clubs->patchEntityAdd($club, $data, $user);
+
+        $expected = [
+            'name' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'founder' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'founder_id' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        // Valid new user
+        $club = $this->Clubs->newEntity();
+        $data = [
+            'name' => 'Bandit',
+            'founder' => [
+                'name' => 'Alex Farthing',
+                'email' => 'alex@gmail.com',
+                'password' => 'password'
+            ]
+        ];
+        $user = null;
+
+        $this->Clubs->patchEntityAdd($club, $data, $user);
+
+        $this->assertEmpty($club->getErrors());
+        $this->assertNotNull($club->founder);
+
+        // Valid existing user
+        $club = $this->Clubs->newEntity();
+        $data = ['name' => 'Bandit'];
+        $user = ['id' => 1];
+
+        $this->Clubs->patchEntityAdd($club, $data, $user);
+
+        $this->assertEmpty($club->getErrors());
+        $this->assertEquals($club->founder_id, $user['id']);
+    }
+
+    /**
+     * @return void
+     */
+    public function testPatchEntityEdit()
+    {
+        // Required
+        $club = $this->Clubs->get(1);
+        $data = [];
+
+        $this->Clubs->patchEntityEdit($club, $data);
+
+        $expected = [
+            'name' => [
+                '_required' => 'This field is required'
+            ]
+        ];
+
+        $this->assertEquals($expected, $club->getErrors());
+
+        // Empty
+        $club = $this->Clubs->get(1);
+        $data = [
+            'name' => ''
+        ];
+
+        $this->Clubs->patchEntityEdit($club, $data);
+
+        $expected = [
+            'name' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        $this->assertEquals($expected, $club->getErrors());
+
+        // Valid
+        $club = $this->Clubs->get(1);
+        $data = [
+            'name' => 'Bandit'
+        ];
+
+        $this->Clubs->patchEntityEdit($club, $data);
+
+        $this->assertEmpty($club->getErrors());
     }
 
     /**
@@ -103,15 +163,16 @@ class ClubsTableTest extends TestCase
     public function testAfterSave()
     {
         $club = $this->Clubs->newEntity();
-
-        $this->Clubs->patchEntityNewUser($club, [
+        $data = [
             'name' => 'Ping Pong Game On',
             'founder' => [
                 'name' => 'Alex Farthing',
                 'email' => 'alex@gmail.com',
                 'password' => 'password'
             ]
-        ]);
+        ];
+
+        $this->Clubs->patchEntityAdd($club, $data, null);
 
         $this->Clubs->save($club);
 

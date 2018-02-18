@@ -16,10 +16,20 @@ class UsersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testUnauthorised()
+    {
+        $this->_testUnauthorised([
+            'get' => '/users/current.json',
+            'put' => '/users/update-settings.json'
+        ]);
+    }
+
+    /**
+     * @return void
+     */
     public function testActivateAccountNoToken()
     {
         $this->_setAjaxRequest();
-
         $this->get('/users/activate-account.json');
 
         $this->assertResponseCode(404);
@@ -30,23 +40,15 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testActivateAccountExpiredToken()
     {
-        $users = TableRegistry::get('Users');
-        $user = $users->get(1);
-
-        $user->set([
-            'password' => null,
-            'token' => 123,
-            'token_sent' => new Time('2 hours ago')
-        ], [
-            'guard' => false
+        $token = $this->_getToken([
+            'isExpired' => true,
+            'isActivated' => false
         ]);
-        $users->save($user);
 
         $this->_setAjaxRequest();
+        $this->get('/users/activate-account.json?token=' . $token);
 
-        $this->get('/users/activate-account.json?token=123');
-
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -54,21 +56,15 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testActivateAccountActiveAccount()
     {
-        $users = TableRegistry::get('Users');
-        $user = $users->get(1);
-
-        $user->set([
-            'password' => 'password',
-            'token' => 123,
-            'token_sent' => Time::now()
-        ], [
-            'guard' => false
+        $token = $this->_getToken([
+            'isExpired' => false,
+            'isActivated' => true
         ]);
-        $users->save($user);
 
-        $this->get('/users/activate-account.json?token=123');
+        $this->_setAjaxRequest();
+        $this->get('/users/activate-account.json?token=' . $token);
 
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -76,21 +72,13 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testActivateAccountGet()
     {
-        $users = TableRegistry::get('Users');
-        $user = $users->get(1);
-
-        $user->set([
-            'password' => null,
-            'token' => 123,
-            'token_sent' => Time::now()
-        ], [
-            'guard' => false
+        $token = $this->_getToken([
+            'isExpired' => false,
+            'isActivated' => false
         ]);
-        $users->save($user);
 
-        $users->save($user);
-
-        $this->get('/users/activate-account.json?token=123');
+        $this->_setAjaxRequest();
+        $this->get('/users/activate-account.json?token=' . $token);
 
         $this->assertResponseCode(200);
     }
@@ -100,21 +88,13 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testActivateAccountBadData()
     {
-        $users = TableRegistry::get('Users');
-        $user = $users->get(1);
-
-        $user->set([
-            'password' => null,
-            'token' => 123,
-            'token_sent' => Time::now()
-        ], [
-            'guard' => false
+        $token = $this->_getToken([
+            'isExpired' => false,
+            'isActivated' => false
         ]);
-        $users->save($user);
 
         $this->_setAjaxRequest();
-
-        $this->patch('/users/activate-account.json?token=123', [
+        $this->patch('/users/activate-account.json?token=' . $token, [
             'password' => ''
         ]);
 
@@ -126,23 +106,53 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testActivateAccountPatch()
     {
-        $users = TableRegistry::get('Users');
-        $user = $users->get(1);
-
-        $user->set([
-            'password' => null,
-            'token' => 123,
-            'token_sent' => Time::now()
-        ], [
-            'guard' => false
+        $token = $this->_getToken([
+            'isExpired' => false,
+            'isActivated' => false
         ]);
-        $users->save($user);
 
         $this->_setAjaxRequest();
-
-        $this->patch('/users/activate-account.json?token=123', [
+        $this->patch('/users/activate-account.json?token=' . $token, [
             'name' => 'Christy Quinn',
             'password' => 'password'
+        ]);
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCurrentGet()
+    {
+        $this->_setAuthSession(1);
+        $this->_setAjaxRequest();
+        $this->get('/users/current.json');
+
+        $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditBadData()
+    {
+        $this->_setAuthSession(1);
+        $this->_setAjaxRequest();
+        $this->put('/users/update-settings.json');
+
+        $this->assertResponseCode(400);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditPatch()
+    {
+        $this->_setAuthSession(1);
+        $this->_setAjaxRequest();
+        $this->put('/users/update-settings.json', [
+            'email' => 'christy@banditmatch.com'
         ]);
 
         $this->assertResponseCode(200);
@@ -154,11 +164,9 @@ class UsersControllerTest extends IntegrationTestCase
     public function testLoginBadData()
     {
         $this->_setAjaxRequest();
-
         $this->post('/users/login.json', [
-            'email' => 'christy@bandit.play',
-            'password' => 'incorrect password',
-            'remember_me' => false
+            'email' => 'christy@banditmatch.com',
+            'password' => 'incorrect password'
         ]);
 
         $this->assertResponseCode(400);
@@ -170,11 +178,9 @@ class UsersControllerTest extends IntegrationTestCase
     public function testLoginPost()
     {
         $this->_setAjaxRequest();
-
         $this->post('/users/login.json', [
-            'email' => 'christy@bandit.play',
-            'password' => 'password',
-            'remember_me' => false
+            'email' => 'christy@banditmatch.com',
+            'password' => 'password'
         ]);
 
         $this->assertResponseCode(200);
@@ -183,15 +189,14 @@ class UsersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testRequestPasswordResetInvalidEmail()
+    public function testRequestPasswordResetBadData()
     {
         $this->_setAjaxRequest();
-
-        $this->put('/users/request-password-reset.json', [
-            'email' => 'incorrect@bandit.localhost'
+        $this->patch('/users/request-password-reset.json', [
+            'email' => 'incorrect@banditmatch.com'
         ]);
 
-        $this->assertResponseCode(404);
+        $this->assertResponseCode(400);
     }
 
     /**
@@ -200,9 +205,8 @@ class UsersControllerTest extends IntegrationTestCase
     public function testRequestPasswordResetPatch()
     {
         $this->_setAjaxRequest();
-
         $this->patch('/users/request-password-reset.json', [
-            'email' => 'christy@bandit.play'
+            'email' => 'christy@banditmatch.com'
         ]);
 
         $this->assertResponseCode(200);
@@ -214,8 +218,23 @@ class UsersControllerTest extends IntegrationTestCase
     public function testResetPasswordNoToken()
     {
         $this->_setAjaxRequest();
-
         $this->get('/users/reset-password.json');
+
+        $this->assertResponseCode(404);
+    }
+
+    /**
+     * @return void
+     */
+    public function testResetPasswordUnactivated()
+    {
+        $token = $this->_getToken([
+            'isExpired' => false,
+            'isActivated' => false
+        ]);
+
+        $this->_setAjaxRequest();
+        $this->get('/users/reset-password.json?token=' . $token);
 
         $this->assertResponseCode(404);
     }
@@ -225,23 +244,15 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testResetPasswordExpiredToken()
     {
-        $users = TableRegistry::get('Users');
-        $user = $users->get(1);
-
-        $user->set([
-            'password' => null,
-            'token' => 123,
-            'token_sent' => new Time('2 hours ago')
-        ], [
-            'guard' => false
+        $token = $this->_getToken([
+            'isExpired' => true,
+            'isActivated' => true
         ]);
-        $users->save($user);
 
         $this->_setAjaxRequest();
+        $this->get('/users/reset-password.json?token=' . $token);
 
-        $this->get('/users/reset-password.json?token=123');
-
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -249,20 +260,13 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testResetPasswordBadData()
     {
-        $users = TableRegistry::get('Users');
-        $user = $users->get(1);
-
-        $user->set([
-            'token' => 123,
-            'token_sent' => Time::now()
-        ], [
-            'guard' => false
+        $token = $this->_getToken([
+            'isExpired' => false,
+            'isActivated' => true
         ]);
-        $users->save($user);
 
         $this->_setAjaxRequest();
-
-        $this->patch('/users/reset-password.json?token=123', [
+        $this->patch('/users/reset-password.json?token=' . $token, [
             'password' => ''
         ]);
 
@@ -272,25 +276,43 @@ class UsersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testResetPasswordPut()
+    public function testResetPasswordPatch()
     {
-        $users = TableRegistry::get('Users');
-        $user = $users->get(1);
-
-        $user->set([
-            'token' => 123,
-            'token_sent' => Time::now()
-        ], [
-            'guard' => false
+        $token = $this->_getToken([
+            'isExpired' => false,
+            'isActivated' => true
         ]);
-        $users->save($user);
 
         $this->_setAjaxRequest();
-
-        $this->patch('/users/reset-password.json?token=123', [
+        $this->patch('/users/reset-password.json?token=' . $token, [
             'password' => 'password'
         ]);
 
         $this->assertResponseCode(200);
+    }
+
+    /**
+     * @return void
+     */
+    public function _getToken($options)
+    {
+        extract($options);
+
+        $table = $this->_table('Users');
+
+        $user = $table->get(1);
+        $table->patchEntitySetToken($user);
+
+        if (isset($isExpired) && $isExpired) {
+            $user->token_sent->modify('-3 hours');
+        }
+
+        if (isset($isActivated) && !$isActivated) {
+            $user->set('password', null);
+        }
+
+        $table->save($user);
+
+        return $user->token;
     }
 }

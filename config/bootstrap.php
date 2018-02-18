@@ -218,6 +218,10 @@ Plugin::load('Migrations');
  * Bandit config
  */
 Configure::write('Bandit', [
+    'emails' => [
+        'support' => 'support@banditplay.com',
+        'welcome' => 'welcome@banditplay.com'
+    ],
     'initialRating' => 1200,
     'levels' => [
         [
@@ -284,12 +288,4 @@ Configure::write('Bandit', [
             'from' => 2100
         ]
     ]
-]);
-
-/**
- * Email addresses
- */
-Configure::write('EmailAddresses', [
-    'support' => 'support@banditplay.com',
-    'welcome' => 'welcome@banditplay.com',
 ]);

@@ -83,7 +83,7 @@ Router::scope('/', function ($routes) {
     $routes->resources('Users', [
         'only' => [
             'activate-account',
-            'current-user',
+            'current',
             'login',
             'request-password-reset',
             'reset-password',
@@ -95,8 +95,8 @@ Router::scope('/', function ($routes) {
                 'action' => 'activateAccount',
                 'method' => ['GET', 'PATCH']
             ],
-            'current-user' => [
-                'action' => 'currentUser',
+            'current' => [
+                'action' => 'current',
                 'method' => 'GET'
             ],
             'login' => [

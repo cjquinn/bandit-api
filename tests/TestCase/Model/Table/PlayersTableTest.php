@@ -77,7 +77,7 @@ class PlayersTableTest extends TestCase
 
         $this->Players->patchEntityAdd($player, [
             'user' => [
-                'email' => 'gareth@bandit.play'
+                'email' => 'gareth@banditmatch.com'
             ]
         ]);
 
@@ -91,7 +91,7 @@ class PlayersTableTest extends TestCase
 
         $this->Players->patchEntityAdd($player, [
             'user' => [
-                'email' => 'christy@bandit.play'
+                'email' => 'christy@banditmatch.com'
             ]
         ]);
 

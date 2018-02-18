@@ -19,7 +19,7 @@ class UsersFixture extends TestFixture
                 'id' => 1,
                 'name' => 'Christy',
                 'reputation' => 3,
-                'email' => 'christy@bandit.play',
+                'email' => 'christy@banditmatch.com',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
@@ -28,7 +28,7 @@ class UsersFixture extends TestFixture
                 'id' => 2,
                 'name' => 'Russell',
                 'reputation' => 4,
-                'email' => 'russell@bandit.play',
+                'email' => 'russell@banditmatch.com',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
@@ -37,7 +37,7 @@ class UsersFixture extends TestFixture
                 'id' => 3,
                 'name' => 'Nathan',
                 'reputation' => 1,
-                'email' => 'nathan@bandit.play',
+                'email' => 'nathan@banditmatch.com',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
@@ -46,7 +46,7 @@ class UsersFixture extends TestFixture
                 'id' => 4,
                 'name' => 'Tom',
                 'reputation' => 2,
-                'email' => 'tom@bandit.play',
+                'email' => 'tom@banditmatch.com',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
@@ -55,7 +55,7 @@ class UsersFixture extends TestFixture
                 'id' => 5,
                 'name' => 'Alex',
                 'reputation' => 1,
-                'email' => 'alex@bandit.play',
+                'email' => 'alex@banditmatch.com',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
@@ -64,7 +64,7 @@ class UsersFixture extends TestFixture
                 'id' => 6,
                 'name' => 'Sam',
                 'reputation' => 2,
-                'email' => 'sam@bandit.play',
+                'email' => 'sam@banditmatch.com',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
@@ -73,7 +73,7 @@ class UsersFixture extends TestFixture
                 'id' => 7,
                 'name' => 'Dom',
                 'reputation' => 2,
-                'email' => 'dom@bandit.play',
+                'email' => 'dom@banditmatch.com',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
@@ -82,7 +82,7 @@ class UsersFixture extends TestFixture
                 'id' => 8,
                 'name' => 'Gareth',
                 'reputation' => 0,
-                'email' => 'gareth@bandit.play',
+                'email' => 'gareth@banditmatch.com',
                 'password' => (new DefaultPasswordHasher)->hash('password'),
                 'created' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')

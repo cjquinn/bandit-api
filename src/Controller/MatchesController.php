@@ -99,7 +99,10 @@ class MatchesController extends AppController
     {
         $matches = $this->paginate($this->Matches->find('populated'));
 
-        $this->set('matches', $matches);
+        $this->set([
+            'matches' => $matches,
+            'total' => $this->request->paging['Matches']['count']
+        ]);
     }
 
     /**

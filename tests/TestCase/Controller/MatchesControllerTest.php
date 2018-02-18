@@ -5,7 +5,6 @@ namespace App\Test\TestCase\Controller;
 use App\Test\TestCase\Controller\ControllerTestTrait;
 
 use Cake\I18n\Time;
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
 class MatchesControllerTest extends IntegrationTestCase
@@ -18,24 +17,30 @@ class MatchesControllerTest extends IntegrationTestCase
      */
     public function testUnauthorised()
     {
-        $this->_setAjaxRequest();
-
-        $this->post('/clubs/1/matches.json', []);
-
-        $this->assertResponseCode(403);
+        $this->_testUnauthorised([
+            'post' => '/clubs/1/matches.json',
+            'get' => '/clubs/1/matches.json',
+            'get' => '/clubs/1/matches.json',
+            'delete' => '/clubs/1/matches/1.json'
+        ]);
     }
 
     /**
      * @return void
      */
-    public function testUnassigned()
+    public function testAuthorised()
     {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(8);
+        // For invalid match
+        $this->_table('Matches')->updateAll(['club_id' => 2], ['id' => 1]);
 
-        $this->get('/clubs/1/matches.json');
-
-        $this->assertResponseCode(403);
+        $this->_testAuthorised([
+            // Unassigned
+            'post' => '/clubs/2/matches.json',
+            'get' => '/clubs/2/matches.json',
+            'get' => '/clubs/2/matches.json',
+            // Invalid match
+            'delete' => '/clubs/1/matches/1.json'
+        ]);
     }
 
     /**
@@ -104,12 +109,10 @@ class MatchesControllerTest extends IntegrationTestCase
     public function testDeleteExistingDispute()
     {
         // Make sure match delete time isn't expired
-        $matches = TableRegistry::get('Matches');
-
-        $match = $matches->get(3);
+        $match = $this->_table('Matches')->get(3);
         $match->set('created', new Time('today'));
 
-        $matches->save($match);
+        $this->_table('Matches')->save($match);
 
         $this->_setAuthSession(3);
         $this->_setAjaxRequest();

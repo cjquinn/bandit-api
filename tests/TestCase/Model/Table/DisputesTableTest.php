@@ -183,4 +183,31 @@ class DisputesTableTest extends TestCase
         $this->assertEquals(-8, $match->player_a->user->reputation);
         $this->assertEquals(3, $match->player_b->user->reputation);
     }
+
+    /**
+     * @return void
+     */
+    public function testFindByUserId()
+    {
+        // user_id = 1 - Disputes - 1, 2
+        $query = $this->Disputes->find('byUserId', ['userId' => 1]);
+
+        $expected = [1, 2];
+
+        $this->assertEquals($expected, $query->extract('id')->toArray());
+
+        // user_id = 2 - Disputes - 1
+        $query = $this->Disputes->find('byUserId', ['userId' => 2]);
+
+        $expected = [1];
+
+        $this->assertEquals($expected, $query->extract('id')->toArray());
+
+        // user_id = 5 - Disputes - 2
+        $query = $this->Disputes->find('byUserId', ['userId' => 5]);
+
+        $expected = [2];
+
+        $this->assertEquals($expected, $query->extract('id')->toArray());
+    }
 }

@@ -11,7 +11,8 @@ class DisputesController extends AppController
     public function isAuthorized(array $user)
     {
         // Invalid match id
-        if (!$this->Disputes->Matches
+        if ($this->request->getParam('match_id') &&
+            !$this->Disputes->Matches
                 ->isOwnedBy(
                     $this->request->getParam('match_id'),
                     $this->request->getParam('club_id')
@@ -33,7 +34,7 @@ class DisputesController extends AppController
         }
 
         // Invalid player a
-        if ($this->request->getParam('action') === 'edit' &&
+        if ($this->request->getParam('action') === 'close' &&
             !$this->Disputes->Matches->wasCreatedBy($this->request->getParam('match_id'), $this->Auth->user('id'))
         ) {
             return false;
@@ -47,7 +48,7 @@ class DisputesController extends AppController
         }
 
         if ($this->request->getParam('action') === 'delete' ||
-            $this->request->getParam('action') === 'edit'
+            $this->request->getParam('action') === 'close'
         ) {
             // Closed
             if ($this->Disputes->isClosed($this->request->getParam('id'))) {

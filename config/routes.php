@@ -20,6 +20,11 @@ Router::scope('/', function ($routes) {
         ]
     ], function ($routes) {
         /**
+         * Disputes
+         */
+        $routes->resources('Disputes', ['only' => 'index']);
+
+        /**
          * Leaderboards
          */
         $routes->resources('Leaderboards', [
@@ -51,7 +56,6 @@ Router::scope('/', function ($routes) {
                 'only' => [
                     'create',
                     'delete',
-                    'index',
                     ':id/close'
                 ],
                 'map' => [

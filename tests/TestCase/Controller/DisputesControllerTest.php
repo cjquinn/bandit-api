@@ -16,11 +16,44 @@ class DisputesControllerTest extends IntegrationTestCase
      */
     public function testUnauthorised()
     {
-        $this->_setAjaxRequest();
+        $this->_testUnauthorised([
+            'post' => '/clubs/1/matches/1/disputes.json',
+            'delete' => '/clubs/1/matches/6/disputes/3.json',
+            'patch' => '/clubs/1/matches/6/disputes/3/close.json',
+            'get' => '/clubs/1/disputes.json'
+        ]);
+    }
 
-        $this->post('/clubs/1/matches/7/disputes.json', []);
+    /**
+     * @return void
+     */
+    public function testAuthorised()
+    {
+        // Unassigned
+        $this->_table('Matches')->updateAll(['club_id' => 2], ['id IN' => [1, 6]]);
 
-        $this->assertResponseCode(403);
+        $this->_testAuthorised([
+            'post' => '/clubs/2/matches/1/disputes.json',
+            'delete' => '/clubs/2/matches/6/disputes/3.json',
+            'patch' => '/clubs/2/matches/6/disputes/3/close.json',
+            'get' => '/clubs/1/disputes.json'
+        ]);
+
+        // Invalid match id
+        $this->_testAuthorised([
+            'post' => '/clubs/1/matches/1/disputes.json',
+            'delete' => '/clubs/1/matches/6/disputes/3.json',
+            'patch' => '/clubs/1/matches/6/disputes/3/close.json'
+        ]);
+
+        // Invalid dispute id
+        $this->_table('Disputes')->updateAll(['match_id' => 1], ['id' => 3]);
+        $this->_table('Matches')->updateAll(['club_id' => 1], ['id' => 6]);
+
+        $this->_testAuthorised([
+            'delete' => '/clubs/1/matches/6/disputes/3.json',
+            'patch' => '/clubs/1/matches/6/disputes/3/close.json'
+        ]);
     }
 
     /**
@@ -117,6 +150,74 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->assertResponseCode(200);
     }
 
+
+    /**
+     * @return void
+     */
+    public function testCloseInvalidPlayerA()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(7);
+
+        $this->patch('/clubs/1/matches/6/disputes/3/close.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCloseClosedDispute()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(5);
+
+        $this->patch('/clubs/1/matches/5/disputes/2/close.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCloseTimeExpired()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(1);
+
+        $this->patch('/clubs/1/matches/2/disputes/1/close.json', []);
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testCloseBadData()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(6);
+
+        $this->patch('/clubs/1/matches/6/disputes/3/close.json', []);
+
+        $this->assertResponseCode(400);
+    }
+
+    /**
+     * @return void
+     */
+    public function testClosePut()
+    {
+        $this->_setAjaxRequest();
+        $this->_setAuthSession(6);
+
+        $this->patch('/clubs/1/matches/6/disputes/3/close.json', [
+            'is_resolved' => true
+        ]);
+
+        $this->assertResponseCode(200);
+    }
+
     /**
      * @return void
      */
@@ -172,66 +273,12 @@ class DisputesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testEditInvalidPlayerA()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(7);
-
-        $this->patch('/clubs/1/matches/6/disputes/3.json', []);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditClosedDispute()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(5);
-
-        $this->patch('/clubs/1/matches/5/disputes/2.json', []);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditTimeExpired()
+    public function testIndex()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->patch('/clubs/1/matches/2/disputes/1.json', []);
-
-        $this->assertResponseCode(403);
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditBadData()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(6);
-
-        $this->patch('/clubs/1/matches/6/disputes/3.json', []);
-
-        $this->assertResponseCode(400);
-    }
-
-    /**
-     * @return void
-     */
-    public function testEditPut()
-    {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(6);
-
-        $this->patch('/clubs/1/matches/6/disputes/3.json', [
-            'is_resolved' => true
-        ]);
+        $this->get('/clubs/1/disputes.json');
 
         $this->assertResponseCode(200);
     }

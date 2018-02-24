@@ -4,6 +4,7 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Dispute;
 
+use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
@@ -139,6 +140,39 @@ class DisputesTable extends Table
         });
 
         return true;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findByUserId(Query $query, array $options)
+    {
+        if (!isset($options['userId'])) {
+            throw Exception('Missing userId key in options');
+        }
+
+        $query->join([
+            'Matches' => [
+                'table' => 'matches',
+                'type' => 'INNER',
+                'conditions' => [
+                    'Disputes.match_id = Matches.id'
+                ]
+            ],
+            'Players' => [
+                'table' => 'players',
+                'type' => 'INNER',
+                'conditions' => [
+                    'OR' => [
+                        ['Matches.player_a_id = Players.id'],
+                        ['Matches.player_b_id = Players.id']
+                    ],
+                    'Players.user_id' => $options['userId']
+                ]
+            ]
+        ]);
+
+        return $query;
     }
 
     /**

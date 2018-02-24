@@ -216,10 +216,12 @@ class ClubsTable extends Table
                         'table' => 'matches',
                         'type' => 'INNER',
                         'conditions' => [
-                            // Just the player who added the match
-                            'Players.id = Matches.player_a_id',
-                            // TODO: make use of beforeFind
-                            'Matches.deleted IS' => null
+                            // Just the player who added the match...
+                            // Because you shouldn't be stopped adding more
+                            // matches if you are the one that created
+                            // the dispute and only the player that
+                            // didn't add the match can open a dispute...
+                            'Players.id = Matches.player_a_id'
                         ]
                     ],
                     'Disputes' => [

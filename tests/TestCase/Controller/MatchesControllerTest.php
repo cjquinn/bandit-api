@@ -21,7 +21,8 @@ class MatchesControllerTest extends IntegrationTestCase
             'post' => '/clubs/1/matches.json',
             'get' => '/clubs/1/matches.json',
             'get' => '/clubs/1/matches.json',
-            'delete' => '/clubs/1/matches/1.json'
+            'delete' => '/clubs/1/matches/1.json',
+            'get' => '/clubs/1/matches/1.json'
         ]);
     }
 
@@ -39,7 +40,8 @@ class MatchesControllerTest extends IntegrationTestCase
             'get' => '/clubs/2/matches.json',
             'get' => '/clubs/2/matches.json',
             // Invalid match
-            'delete' => '/clubs/1/matches/1.json'
+            'delete' => '/clubs/1/matches/1.json',
+            'get' => '/clubs/1/matches/1.json'
         ]);
     }
 

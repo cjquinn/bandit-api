@@ -4,6 +4,7 @@ namespace App\Model\Table;
 
 use App\Model\Entity\Dispute;
 
+use Cake\I18n\Time;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -170,6 +171,18 @@ class DisputesTable extends Table
                     'Players.user_id' => $options['userId']
                 ]
             ]
+        ]);
+
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findWithinLastWeek(Query $query, array $options)
+    {
+        $query->where([
+            $this->aliasField('created') . ' >=' => new Time('-1 week')
         ]);
 
         return $query;

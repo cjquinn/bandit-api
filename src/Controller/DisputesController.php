@@ -136,7 +136,9 @@ class DisputesController extends AppController
      */
     public function index()
     {
-        $disputes = $this->Disputes->find('byUserId', ['userId' => $this->Auth->user('id')]);
+        $disputes = $this->Disputes
+            ->find('byUserId', ['userId' => $this->Auth->user('id')])
+            ->find('withinLastWeek');
 
         $this->set('disputes', $disputes);
     }

@@ -50,7 +50,8 @@ class PlayersController extends AppController
     {
         $players = $this->Players
             ->findByClubId($this->request->getParam('club_id'))
-            ->find('populated');
+            ->find('populated')
+            ->orderAsc('Users.name');
 
         $this->set([
             'players' => $players,

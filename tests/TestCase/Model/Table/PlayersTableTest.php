@@ -323,4 +323,210 @@ class PlayersTableTest extends TestCase
         $this->assertEquals(3, $userA->reputation);
         $this->assertEquals(3, $userB->reputation);
     }
+
+    /**
+     * @return void
+     * @group testing
+     */
+    public function testFindAllTimeLeaderboard()
+    {
+        $query = $this->Players
+            ->findByClubId(1)
+            ->find('allTimeLeaderboard');
+
+        $expected = [
+            4, // Tom - 1238
+            6, // Sam - 1238
+            5, // Alex - 1222
+            1, // Christy - 1215
+            3, // Nathan - 1178
+            2, // Russell - 1166
+            7  // Dom - 1162
+        ];
+
+        $this->assertEquals($expected, $query->extract('id')->toArray());
+    }
+
+    /**
+     * @return void
+     * @group testing
+     */
+    public function testFindWeeklyLeaderboard()
+    {
+        $clubId = 1;
+
+        // Reset fixtures
+        $matchesTable = TableRegistry::get('Matches');
+
+        TableRegistry::get('Disputes')->deleteAll(['id IS NOT' => null]);
+        $matchesTable->deleteAll(['id IS NOT' => null]);
+        $this->Players->updateAll(['rating' => 1200], ['club_id' => $clubId]);
+
+        $playMatches = function ($players) use ($clubId, $matchesTable) {
+            foreach ($players as $player) {
+                foreach ($player['opponents'] as $opponent) {
+                    $match = $matchesTable->newEntity();
+
+                    $matchesTable->patchEntityAdd($match, [
+                        'player_b_id' => $opponent,
+                        'player_a_score' => 1,
+                        'player_b_score' => 0
+                    ], $clubId, $player['id']);
+
+                    $matchesTable->save($match);
+                }
+            }
+        };
+
+        // Play some matches week 1
+        $players = [
+            [
+                // Wins 3
+                'id' => 1,
+                'opponents' => [2, 3, 4]
+            ],
+            [
+                // Wins 2, Loses 1
+                'id' => 2,
+                'opponents' => [3, 4]
+            ],
+            [
+                // Wins 1, Loses 2
+                'id' => 3,
+                'opponents' => [4]
+            ],
+            [
+                // Wins 0, Loses 2
+                'id' => 4,
+                'opponents' => []
+            ]
+        ];
+
+        $playMatches($players);
+
+        // Set matches to 2 weeks ago
+        $matchesTable->updateAll([
+            'created' => new Time('-15 days'),
+            'modified' =>  new Time('-15 days')
+        ], ['club_id' => $clubId]);
+
+        // Ratings
+        // 1 - 1260
+        // 2 - 1220
+        // 3 - 1180
+        // 4 - 1140
+        // 5 - 1200
+        // 6 - 1200
+        // 8 - 1200
+
+        // Week 2 matches
+        $players = [
+            [
+                // Wins 1 Loses 2
+                'id' => 1,
+                'opponents' => [4]
+            ],
+            [
+                // Wins 1, Loses 2
+                'id' => 2,
+                'opponents' => [1]
+            ],
+            [
+                // Wins 2, Loses 1
+                'id' => 3,
+                'opponents' => [1, 2]
+            ],
+            [
+                // Wins 2, Loses 1
+                'id' => 4,
+                'opponents' => [2, 3]
+            ]
+        ];
+
+        $playMatches($players);
+
+        // Set matches to 1 weeks ago
+        $matchesTable->updateAll([
+            'created' => new Time('-8 days'),
+            'modified' =>  new Time('-8 days')
+        ], [
+            'club_id' => $clubId,
+            // Just created
+            'created >' => new Time('-1 day')
+        ]);
+
+        // Ratings
+        // 1 - 1234
+        // 2 - 1202
+        // 3 - 1202
+        // 4 - 1162
+        // 5 - 1200
+        // 6 - 1200
+        // 7 - 1200
+
+        // This weeks matches
+        $players = [
+            [
+                // Wins 0, Loses 0
+                'id' => 1,
+                'opponents' => []
+            ],
+            [
+                // Wins 2, Loses 2
+                'id' => 2,
+                'opponents' => [3, 5]
+            ],
+            [
+                // Wins 2, Loses 0
+                'id' => 3,
+                'opponents' => [2, 7]
+            ],
+            [
+                // Wins 3, Loses 3
+                'id' => 4,
+                'opponents' => [5, 6, 7]
+            ],
+            [
+                // Wins 1, Loses 2
+                'id' => 5,
+                'opponents' => [4]
+            ],
+            [
+                // Wins 2, Loses 1
+                'id' => 6,
+                'opponents' => [4, 3]
+            ],
+            [
+                // Wins 2, Loses 2
+                'id' => 7,
+                'opponents' => [4, 3]
+            ]
+        ];
+
+        $playMatches($players);
+
+        // Ratings
+        // 1 - 1234 - 0
+        // 2 - 1216 - 14
+        // 3 - 1186 - -16
+        // 4 - 1186 - 24
+        // 5 - 1174 - -26
+        // 6 - 1212 - 12
+        // 7 - 1192 - -8
+
+        $query = $this->Players
+            ->findByClubId($clubId)
+            ->find('weeklyLeaderboard');
+
+        $expected = [
+            4,
+            2,
+            6,
+            7,
+            3,
+            5
+        ];
+
+        $this->assertEquals($expected, $query->extract('id')->toArray());
+    }
 }

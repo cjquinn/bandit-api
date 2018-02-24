@@ -4,12 +4,18 @@ namespace App\Controller;
 
 class LeaderboardsController extends AppController
 {
+    public $modelClass = 'Players';
+
     /**
      * @return void
      */
     public function allTime()
     {
-        // TODO: implement
+        $players = $this->Players
+            ->findByClubId($this->request->getParam('club_id'))
+            ->find('allTimeLeaderboard');
+
+        $this->set('players', $players);
     }
 
     /**
@@ -17,6 +23,10 @@ class LeaderboardsController extends AppController
      */
     public function weekly()
     {
-        // TODO: implement
+        $players = $this->Players
+            ->findByClubId($this->request->getParam('club_id'))
+            ->find('weeklyLeaderboard');
+
+        $this->set('players', $players);
     }
 }

@@ -263,6 +263,16 @@ class PlayersTable extends Table
     /**
      * @return \Cake\ORM\Query
      */
+    public function findAllTimeLeaderboard(Query $query, array $options)
+    {
+        $query->orderDesc($this->aliasField('rating'));
+
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
     public function findPopulated(Query $query, array $options)
     {
         $query
@@ -272,6 +282,46 @@ class PlayersTable extends Table
 
                 return $q;
             });
+
+        return $query;
+    }
+
+    /**
+     * @return void
+     */
+    public function findWeeklyLeaderboard(Query $query, array $options)
+    {
+        $playerIds = $this
+            ->find()
+            ->select(['id'])
+            ->join([
+                'Matches' => [
+                    'table' => 'matches',
+                    'type' => 'INNER',
+                    'conditions' => [
+                        // Find players that played matches this week
+                        'Matches.created >=' => new Time('-1 week')
+                    ]
+                ]
+            ]);
+
+        $query
+            ->join([
+                'PlayerAMatches' => [
+                    'table' => 'matches',
+                    'type' => 'LEFT',
+                    'conditions' => [
+                        'Players.id = PlayerAMatches.player_a_id'
+                    ]
+                ],
+                'PlayerBMatches' => [
+                    'table' => 'matches',
+                    'type' => 'LEFT',
+                    'conditions' => [
+                        'Players.id = PlayerBMatches.player_b_id'
+                    ]
+                ]
+            ]);
 
         return $query;
     }

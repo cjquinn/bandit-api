@@ -148,12 +148,4 @@ class UsersController extends AppController
             ]);
         }
     }
-
-    /**
-     * @return void
-     */
-    public function updateAvatar()
-    {
-        // TODO: implement
-    }
 }

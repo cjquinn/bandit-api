@@ -119,10 +119,6 @@ Router::scope('/', function ($routes) {
                 'action' => 'resetPassword',
                 'method' => ['GET', 'PATCH']
             ],
-            'update-avatar' => [
-                'action' => 'uploadAvatar',
-                'method' => 'PATCH'
-            ],
             'update-settings' => [
                 'action' => 'edit',
                 'method' => 'PUT'

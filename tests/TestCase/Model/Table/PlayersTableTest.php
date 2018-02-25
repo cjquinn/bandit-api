@@ -14,6 +14,7 @@ class PlayersTableTest extends TestCase
         'app.clubs',
         'app.players',
         'app.matches',
+        'app.snapshots',
         'app.users'
     ];
 
@@ -232,7 +233,7 @@ class PlayersTableTest extends TestCase
      */
     public function testRevert()
     {
-        $match = $this->Players->Clubs->Matches->get(1);
+        $match = $this->Players->Clubs->Matches->get(1, ['finder' => 'populated']);
 
         $this->assertTrue($this->Players->revert($match, 'player_a'));
 
@@ -265,11 +266,11 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
-    public function testSnapshot()
+    public function testSnapshotPlayer()
     {
         $player = $this->Players->get(1);
 
-        $snapshot = $this->Players->snapshot($player, 0.5, 4, 2);
+        $snapshot = $this->Players->snapshotPlayer($player, 0.5, 4, 2);
 
         $this->assertEquals(1255, $player->rating);
         $this->assertEquals(6, $player->wins);
@@ -287,7 +288,7 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
-    public function testSnapshots()
+    public function testSnapshotPlayers()
     {
         $match = $this->Players->Clubs->Matches->newEntity([
             'player_b_id' => 7,
@@ -298,16 +299,16 @@ class PlayersTableTest extends TestCase
         $match->set('club_id', 1);
         $match->set('player_a_id', 6);
 
-        $snapshots = $this->Players->snapshots($match);
+        $snapshots = $this->Players->snapshotPlayers($match);
 
         $expected = [
-            'a' => [
+            'player_a_snapshot' => [
                 'rating' => 1256,
                 'difference' => 18,
                 'wins' => 3,
                 'losses' => 0
             ],
-            'b' => [
+            'player_b_snapshot' => [
                 'rating' => 1144,
                 'difference' => -18,
                 'wins' => 0,
@@ -326,7 +327,6 @@ class PlayersTableTest extends TestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testFindAllTimeLeaderboard()
     {
@@ -349,7 +349,6 @@ class PlayersTableTest extends TestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testFindWeeklyLeaderboard()
     {
@@ -358,7 +357,8 @@ class PlayersTableTest extends TestCase
         // Reset fixtures
         $matchesTable = TableRegistry::get('Matches');
 
-        TableRegistry::get('Disputes')->deleteAll(['id IS NOT' => null]);
+        TableRegistry::get('Disputes')->deleteAll(['match_id IS NOT' => null]);
+        TableRegistry::get('Snapshots')->deleteAll(['match_id IS NOT' => null]);
         $matchesTable->deleteAll(['id IS NOT' => null]);
         $this->Players->updateAll(['rating' => 1200], ['club_id' => $clubId]);
 

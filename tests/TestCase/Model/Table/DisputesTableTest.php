@@ -13,6 +13,7 @@ class DisputesTableTest extends TestCase
         'app.disputes',
         'app.players',
         'app.matches',
+        'app.snapshots',
         'app.users'
     ];
 
@@ -41,8 +42,10 @@ class DisputesTableTest extends TestCase
      */
     public function testCloseResolved()
     {
+        $matchId = 6;
+
         // Resolved dispute
-        $dispute = $this->Disputes->get(3);
+        $dispute = $this->Disputes->get($matchId);
 
         $this->Disputes->patchEntityEdit($dispute, [
             'is_resolved' => true
@@ -50,22 +53,24 @@ class DisputesTableTest extends TestCase
 
         $this->Disputes->close($dispute);
 
-        $this->assertTrue($this->Disputes->exists(['id' => 3, 'is_resolved' => true]));
+        $this->assertTrue($this->Disputes->exists(['match_id' => $matchId, 'is_resolved' => true]));
 
         // Scores on match should be updated
-        $match = $this->Disputes->Matches->get($dispute->match_id);
+        $match = $this->Disputes->Matches->get($dispute->match_id, [
+            'finder' => 'populated'
+        ]);
 
         $this->assertEquals(3, $match->player_a_score);
         $this->assertEquals(1, $match->player_b_score);
 
         $expected = [
-            'a' => [
+            'player_a_snapshot' => [
                 'rating' => 1240,
                 'difference' => 40,
                 'wins' => 3,
                 'losses' => 1
             ],
-            'b' => [
+            'player_b_snapshot' => [
                 'rating' => 1160,
                 'difference' => -40,
                 'wins' => 1,
@@ -73,20 +78,22 @@ class DisputesTableTest extends TestCase
             ]
         ];
 
-        $this->assertEquals($expected['a'], $match->player_a_snapshot);
-        $this->assertEquals($expected['b'], $match->player_b_snapshot);
+        $this->assertEquals($expected['player_a_snapshot'], $match->player_a_snapshot->stats);
+        $this->assertEquals($expected['player_b_snapshot'], $match->player_b_snapshot->stats);
 
         // One match up the tree!
-        $match = $this->Disputes->Matches->get(8);
+        $match = $this->Disputes->Matches->get(8, [
+            'finder' => 'populated'
+        ]);
 
         $expected = [
-            'a' => [
+            'player_a_snapshot' => [
                 'rating' => 1255,
                 'difference' => 15,
                 'wins' => 4,
                 'losses' => 1
             ],
-            'b' => [
+            'player_b_snapshot' => [
                 'rating' => 1145,
                 'difference' => -15,
                 'wins' => 1,
@@ -94,8 +101,8 @@ class DisputesTableTest extends TestCase
             ]
         ];
 
-        $this->assertEquals($expected['a'], $match->player_a_snapshot);
-        $this->assertEquals($expected['b'], $match->player_b_snapshot);
+        $this->assertEquals($expected['player_a_snapshot'], $match->player_a_snapshot->stats);
+        $this->assertEquals($expected['player_b_snapshot'], $match->player_b_snapshot->stats);
 
         // Players updated
         $expected = [
@@ -125,8 +132,10 @@ class DisputesTableTest extends TestCase
      */
     public function testCloseNotResolved()
     {
+        $matchId = 6;
+
         // Resolved dispute
-        $dispute = $this->Disputes->get(3);
+        $dispute = $this->Disputes->get($matchId);
 
         $this->Disputes->patchEntityEdit($dispute, [
             'is_resolved' => false
@@ -134,7 +143,7 @@ class DisputesTableTest extends TestCase
 
         $this->Disputes->close($dispute);
 
-        $this->assertTrue($this->Disputes->exists(['id' => 3, 'is_resolved' => false]));
+        $this->assertTrue($this->Disputes->exists(['match_id' => $matchId, 'is_resolved' => false]));
 
         // Matches should be deleted
         $match = $this->Disputes->Matches->get($dispute->match_id, [
@@ -157,8 +166,10 @@ class DisputesTableTest extends TestCase
      */
     public function testCloseTimeExpired()
     {
+        $matchId = 2;
+
         // Resolved dispute
-        $dispute = $this->Disputes->get(1);
+        $dispute = $this->Disputes->get($matchId);
 
         $this->Disputes->patchEntityEdit($dispute, [
             'is_resolved' => true // Doesn't matter the value!
@@ -166,7 +177,7 @@ class DisputesTableTest extends TestCase
 
         $this->Disputes->close($dispute);
 
-        $this->assertTrue($this->Disputes->exists(['id' => 1, 'is_resolved' => false]));
+        $this->assertTrue($this->Disputes->exists(['match_id' => $matchId, 'is_resolved' => false]));
 
         // Matches should be deleted
         $match = $this->Disputes->Matches->get($dispute->match_id, [
@@ -189,25 +200,25 @@ class DisputesTableTest extends TestCase
      */
     public function testFindByUserId()
     {
-        // user_id = 1 - Disputes - 1, 2
+        // user_id = 1 - Disputes - 2, 5
         $query = $this->Disputes->find('byUserId', ['userId' => 1]);
 
-        $expected = [1, 2];
+        $expected = [2, 5];
 
-        $this->assertEquals($expected, $query->extract('id')->toArray());
+        $this->assertEquals($expected, $query->extract('match_id')->toArray());
 
-        // user_id = 2 - Disputes - 1
+        // user_id = 2 - Disputes - 2
         $query = $this->Disputes->find('byUserId', ['userId' => 2]);
-
-        $expected = [1];
-
-        $this->assertEquals($expected, $query->extract('id')->toArray());
-
-        // user_id = 5 - Disputes - 2
-        $query = $this->Disputes->find('byUserId', ['userId' => 5]);
 
         $expected = [2];
 
-        $this->assertEquals($expected, $query->extract('id')->toArray());
+        $this->assertEquals($expected, $query->extract('match_id')->toArray());
+
+        // user_id = 5 - Disputes - 5
+        $query = $this->Disputes->find('byUserId', ['userId' => 5]);
+
+        $expected = [5];
+
+        $this->assertEquals($expected, $query->extract('match_id')->toArray());
     }
 }

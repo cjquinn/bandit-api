@@ -51,7 +51,7 @@ class DisputesController extends AppController
             $this->request->getParam('action') === 'close'
         ) {
             // Closed
-            if ($this->Disputes->isClosed($this->request->getParam('id'))) {
+            if ($this->Disputes->isClosed($this->request->getParam('match_id'))) {
                 return false;
             }
 
@@ -91,9 +91,9 @@ class DisputesController extends AppController
      * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
-    public function close($id)
+    public function close()
     {
-        $dispute = $this->Disputes->get($id);
+        $dispute = $this->Disputes->get($this->request->getParam('match_id'));
 
         $this->Disputes->patchEntityEdit($dispute, $this->request->getData());
 
@@ -122,9 +122,9 @@ class DisputesController extends AppController
      * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
-    public function delete($id)
+    public function delete()
     {
-        $dispute = $this->Disputes->get($id);
+        $dispute = $this->Disputes->get($this->request->getParam('match_id'));
 
         $this->Disputes->delete($dispute);
 

@@ -6,12 +6,12 @@ use App\Model\Entity\Match;
 
 use ArrayObject;
 
-use Cake\Database\Schema\Table as Schema;
 use Cake\Event\Event;
 use Cake\I18n\Time;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
+use Cake\ORM\TableRegistry;
 use Cake\Validation\Validator;
 
 class MatchesTable extends Table
@@ -25,19 +25,21 @@ class MatchesTable extends Table
         $this->addAssociations([
             'belongsTo' => [
                 'Clubs',
-                'PlayerAs' => [
-                    'className' => 'Players',
-                    'foreignKey' => 'player_a_id',
-                    'propertyName' => 'player_a'
-                ],
-                'PlayerBs' => [
-                    'className' => 'Players',
-                    'foreignKey' => 'player_b_id',
-                    'propertyName' => 'player_b'
-                ]
+                'PlayerAs' => ['className' => 'Players'],
+                'PlayerBs' => ['className' => 'Players']
             ],
             'hasOne' => [
-                'Disputes'
+                'Disputes',
+                'PlayerASnapshots' => [
+                    'className' => 'Snapshots',
+                    'bindingKey' => ['id', 'player_a_id'],
+                    'foreignKey' => ['match_id', 'player_id']
+                ],
+                'PlayerBSnapshots' => [
+                    'className' => 'Snapshots',
+                    'bindingKey' => ['id', 'player_b_id'],
+                    'foreignKey' => ['match_id', 'player_id']
+                ]
             ]
         ]);
 
@@ -115,10 +117,11 @@ class MatchesTable extends Table
     public function beforeSave(Event $event, Match $match)
     {
         if (!$match->deleted) {
-            $snapshots = $this->Clubs->Players->snapshots($match);
+            $snapshots = $this->Clubs->Players->snapshotPlayers($match);
 
-            $match->set('player_a_snapshot', $snapshots['a']);
-            $match->set('player_b_snapshot', $snapshots['b']);
+            $this->patchEntity($match, $snapshots, [
+                'fieldList' => ['player_a_snapshot', 'player_b_snapshot']
+            ]);
         }
     }
 
@@ -129,7 +132,9 @@ class MatchesTable extends Table
     {
         $this->connection()->transactional(function () use ($match) {
             // Find tree of affected matches
-            $matches = $this->find('tree', ['match' => $match]);
+            $matches = $this
+                ->find('tree', ['match' => $match])
+                ->find('populated');
 
             // Revert all players in match tree and resave matches
             $revertedPlayers = [];
@@ -142,7 +147,7 @@ class MatchesTable extends Table
                     }
                 }
 
-                $match->dirty('modified', true);
+                $match->setDirty('modified', true);
 
                 $this->save($match);
             }
@@ -159,6 +164,10 @@ class MatchesTable extends Table
             $this->save($match);
 
             $this->saveTree($match);
+
+            TableRegistry::get('Snapshots')->deleteAll([
+                'match_id' => $match->id
+            ]);
         });
     }
 
@@ -179,7 +188,9 @@ class MatchesTable extends Table
     {
         $query->contain([
             'PlayerAs.Users',
-            'PlayerBs.Users'
+            'PlayerASnapshots',
+            'PlayerBs.Users',
+            'PlayerBSnapshots'
         ]);
 
         return $query;
@@ -303,16 +314,5 @@ class MatchesTable extends Table
             'id' => $id,
             'created >=' => new Time('-' . $period)
         ]);
-    }
-
-    /**
-     * @return \Cake\Database\Schema\Table
-     */
-    protected function _initializeSchema(Schema $schema)
-    {
-        $schema->setColumnType('player_a_snapshot', 'json');
-        $schema->setColumnType('player_b_snapshot', 'json');
-
-        return $schema;
     }
 }

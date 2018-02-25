@@ -12,7 +12,6 @@ class LeaderboardControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testUnauthorised()
     {
@@ -24,7 +23,6 @@ class LeaderboardControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testAuthorised()
     {
@@ -36,7 +34,6 @@ class LeaderboardControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testAllTime()
     {
@@ -50,7 +47,6 @@ class LeaderboardControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testWeekly()
     {

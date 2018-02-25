@@ -16,6 +16,7 @@ class CloseDisputesShellTest extends TestCase
         'app.disputes',
         'app.players',
         'app.matches',
+        'app.snapshots',
         'app.users'
     ];
 
@@ -49,7 +50,7 @@ class CloseDisputesShellTest extends TestCase
     {
         $this->CloseDisputes->main();
 
-        $dispute = $this->Disputes->get(1);
+        $dispute = $this->Disputes->get(2);
 
         $this->assertFalse($dispute->is_resolved);
     }

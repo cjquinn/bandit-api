@@ -12,6 +12,7 @@ trait ControllerTestTrait
         'app.disputes',
         'app.players',
         'app.matches',
+        'app.snapshots',
         'app.users'
     ];
 

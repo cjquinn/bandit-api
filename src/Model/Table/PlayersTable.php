@@ -25,7 +25,8 @@ class PlayersTable extends Table
             'belongsTo' => [
                 'Clubs',
                 'Users'
-            ]
+            ],
+            'hasMany' => ['Snapshots']
         ]);
 
         $this->addBehavior('Timestamp');
@@ -148,7 +149,7 @@ class PlayersTable extends Table
     public function revert(Match $match, $player)
     {
         $this->connection()->transactional(function () use ($match, $player) {
-            $snapshot = $match->{$player . '_snapshot'};
+            $snapshot = $match->{$player . '_snapshot'}->stats;
             $wins = $match->{$player . '_score'};
             $losses = $player === 'player_a'
                 ? $match->player_b_score
@@ -176,7 +177,7 @@ class PlayersTable extends Table
     /**
      * @return array
      */
-    public function snapshot(Player $player, $expectedScore, $wins, $losses)
+    public function snapshotPlayer(Player $player, $expectedScore, $wins, $losses)
     {
         $winsRatingChange = $this->ratingChange($expectedScore, 1, $player->k_factor) * $wins;
         $lossesRatingChange = $this->ratingChange($expectedScore, 0, $player->k_factor) * $losses;
@@ -202,7 +203,7 @@ class PlayersTable extends Table
     /**
      * @return array
      */
-    public function snapshots(Match $match)
+    public function snapshotPlayers(Match $match)
     {
         $playerASnapShot = [];
         $playerBSnapShot = [];
@@ -216,13 +217,11 @@ class PlayersTable extends Table
                 : Time::now()->i18nFormat('Y-M-d');
 
             // Get daily player rating
-            $playerADailySnapshot = $this->Clubs->dailySnapshot(
-                $match->club_id,
+            $playerADailySnapshot = $this->Snapshots->getDailySnapshot(
                 $playerA->id,
                 $date
             );
-            $playerBDailySnapshot = $this->Clubs->dailySnapshot(
-                $match->club_id,
+            $playerBDailySnapshot = $this->Snapshots->getDailySnapshot(
                 $playerB->id,
                 $date
             );
@@ -234,13 +233,13 @@ class PlayersTable extends Table
             );
 
             // Update player stats
-            $playerASnapShot = $this->snapshot(
+            $playerASnapShot = $this->snapshotPlayer(
                 $playerA,
                 $expectedScores['a'],
                 $match->player_a_score,
                 $match->player_b_score
             );
-            $playerBSnapShot = $this->snapshot(
+            $playerBSnapShot = $this->snapshotPlayer(
                 $playerB,
                 $expectedScores['b'],
                 $match->player_b_score,
@@ -255,8 +254,8 @@ class PlayersTable extends Table
         });
 
         return [
-            'a' => $playerASnapShot,
-            'b' => $playerBSnapShot
+            'player_a_snapshot' => $playerASnapShot,
+            'player_b_snapshot' => $playerBSnapShot
         ];
     }
 
@@ -291,38 +290,6 @@ class PlayersTable extends Table
      */
     public function findWeeklyLeaderboard(Query $query, array $options)
     {
-        $playerIds = $this
-            ->find()
-            ->select(['id'])
-            ->join([
-                'Matches' => [
-                    'table' => 'matches',
-                    'type' => 'INNER',
-                    'conditions' => [
-                        // Find players that played matches this week
-                        'Matches.created >=' => new Time('-1 week')
-                    ]
-                ]
-            ]);
-
-        $query
-            ->join([
-                'PlayerAMatches' => [
-                    'table' => 'matches',
-                    'type' => 'LEFT',
-                    'conditions' => [
-                        'Players.id = PlayerAMatches.player_a_id'
-                    ]
-                ],
-                'PlayerBMatches' => [
-                    'table' => 'matches',
-                    'type' => 'LEFT',
-                    'conditions' => [
-                        'Players.id = PlayerBMatches.player_b_id'
-                    ]
-                ]
-            ]);
-
         return $query;
     }
 

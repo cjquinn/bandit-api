@@ -11,8 +11,6 @@ use Cake\ORM\Entity;
  * @property int $player_b_id
  * @property int $player_a_score
  * @property int $player_b_score
- * @property json $player_a_snapshot
- * @property json $player_b_snapshot
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $deleted
  * @property \Cake\I18n\Time $modified

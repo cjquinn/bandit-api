@@ -5,7 +5,6 @@ namespace App\Model\Entity;
 use Cake\ORM\Entity;
 
 /**
- * @property int $id
  * @property int $match_id
  * @property int $player_a_score
  * @property int $player_b_score

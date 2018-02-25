@@ -9,7 +9,10 @@ class CreateDisputes extends AbstractMigration
      */
     public function change()
     {
-        $table = $this->table('disputes');
+        $table = $this->table('disputes', [
+            'id' => false,
+            'primary_key' => 'match_id'
+        ]);
 
         $table->addColumn('match_id', 'integer', [
             'default' => null,

@@ -53,16 +53,6 @@ class CreateMatches extends AbstractMigration
             'null' => false
         ]);
 
-        $table->addColumn('player_a_snapshot', 'text', [
-            'default' => null,
-            'null' => false
-        ]);
-
-        $table->addColumn('player_b_snapshot', 'text', [
-            'default' => null,
-            'null' => false
-        ]);
-
         $table->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false

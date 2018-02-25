@@ -13,6 +13,7 @@ class MatchesTableTest extends TestCase
         'app.clubs',
         'app.players',
         'app.matches',
+        'app.snapshots',
         'app.users'
     ];
 
@@ -162,8 +163,8 @@ class MatchesTableTest extends TestCase
 
         // Snapshots should be set
         $this->assertTrue($this->Matches->save($match) !== false);
-        $this->assertTrue(is_array($match->player_a_snapshot));
-        $this->assertTrue(is_array($match->player_b_snapshot));
+        $this->assertNotNull($match->player_a_snapshot);
+        $this->assertNotNull($match->player_b_snapshot);
     }
 
     /**
@@ -285,10 +286,10 @@ class MatchesTableTest extends TestCase
         ];
 
         foreach ($expected as $matchId => $snapShots) {
-            $match = $this->Matches->get($matchId);
+            $match = $this->Matches->get($matchId, ['finder' => 'populated']);
 
-            $this->assertEquals($snapShots['a'], $match->player_a_snapshot);
-            $this->assertEquals($snapShots['b'], $match->player_b_snapshot);
+            $this->assertEquals($snapShots['a'], $match->player_a_snapshot->stats);
+            $this->assertEquals($snapShots['b'], $match->player_b_snapshot->stats);
         }
 
         // Players stats have been amended

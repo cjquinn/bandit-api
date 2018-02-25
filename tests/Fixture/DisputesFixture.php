@@ -16,7 +16,6 @@ class DisputesFixture extends TestFixture
     {
         $this->records = [
             [
-                'id' => 1,
                 'match_id' => 2,
                 'player_a_score' => 2,
                 'player_b_score' => 1,
@@ -25,7 +24,6 @@ class DisputesFixture extends TestFixture
                 'modified' => new Time('3 day ago')
             ],
             [
-                'id' => 2,
                 'match_id' => 5,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
@@ -34,7 +32,6 @@ class DisputesFixture extends TestFixture
                 'modified' => new Time('1 day ago')
             ],
             [
-                'id' => 3,
                 'match_id' => 6,
                 'player_a_score' => 3,
                 'player_b_score' => 1,

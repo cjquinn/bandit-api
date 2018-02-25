@@ -56,12 +56,18 @@ Router::scope('/', function ($routes) {
                 'only' => [
                     'create',
                     'delete',
-                    ':id/close'
+                    'close'
                 ],
                 'map' => [
-                    ':id/close' => [
+                    'close' => [
                         'action' => 'close',
-                        'method' => 'PATCH'
+                        'method' => 'PATCH',
+                        'path' => ''
+                    ],
+                    'delete' => [
+                        'action' => 'delete',
+                        'method' => 'DELETE',
+                        'path' => ''
                     ]
                 ]
             ]);

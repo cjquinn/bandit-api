@@ -6,7 +6,6 @@ use App\Model\Entity\Club;
 
 use ArrayObject;
 
-use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
@@ -122,37 +121,6 @@ class ClubsTable extends Table
 
             $this->Players->save($player);
         }
-    }
-
-    /**
-     * @return array
-     */
-    public function dailySnapshot($id, $playerId, $date)
-    {
-        $match = $this->Matches
-            ->findByClubId($id)
-            ->where([
-                'OR' => [
-                    ['player_a_id' => $playerId],
-                    ['player_b_id' => $playerId]
-                ],
-                'created <' => $date
-            ])
-            ->order(['created' => 'DESC'])
-            ->first();
-
-        if ($match) {
-            return $match->player_a_id === $playerId
-                ? $match->player_a_snapshot
-                : $match->player_b_snapshot;
-        }
-
-        return [
-            'rating' => Configure::read('Bandit.initialRating'),
-            'difference' => 0,
-            'losses' => 0,
-            'wins' => 0
-        ];
     }
 
     /**

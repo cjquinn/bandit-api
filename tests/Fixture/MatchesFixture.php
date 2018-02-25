@@ -7,7 +7,6 @@ use Cake\TestSuite\Fixture\TestFixture;
 
 class MatchesFixture extends TestFixture
 {
-
     public $import = [
         'table' => 'matches'
     ];
@@ -23,18 +22,6 @@ class MatchesFixture extends TestFixture
                 'player_b_id' => 2,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
-                'player_a_snapshot' => json_encode([
-                    'rating' => 1220,
-                    'difference' => 20,
-                    'wins' => 1,
-                    'losses' => 0
-                ]),
-                'player_b_snapshot' => json_encode([
-                    'rating' => 1180,
-                    'difference' => -20,
-                    'wins' => 0,
-                    'losses' => 1
-                ]),
                 'created' => new Time('4 days ago'),
                 'modified' => new Time('4 days ago')
             ],
@@ -46,18 +33,6 @@ class MatchesFixture extends TestFixture
                 'player_b_id' => 2,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
-                'player_a_snapshot' => json_encode([
-                    'rating' => 1238,
-                    'difference' => 18,
-                    'wins' => 2,
-                    'losses' => 0
-                ]),
-                'player_b_snapshot' => json_encode([
-                    'rating' => 1162,
-                    'difference' => -18,
-                    'wins' => 0,
-                    'losses' => 2
-                ]),
                 'created' => new Time('3 days ago'),
                 'modified' => new Time('3 days ago')
             ],
@@ -69,18 +44,6 @@ class MatchesFixture extends TestFixture
                 'player_b_id' => 3,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
-                'player_a_snapshot' => json_encode([
-                    'rating' => 1184,
-                    'difference' => 22,
-                    'wins' => 1,
-                    'losses' => 2
-                ]),
-                'player_b_snapshot' => json_encode([
-                    'rating' => 1178,
-                    'difference' => -22,
-                    'wins' => 0,
-                    'losses' => 1
-                ]),
                 'created' => new Time('2 days ago'),
                 'modified' => new Time('2 days ago')
             ],
@@ -91,18 +54,6 @@ class MatchesFixture extends TestFixture
                 'player_b_id' => 5,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
-                'player_a_snapshot' => json_encode([
-                    'rating' => 1220,
-                    'difference' => 20,
-                    'wins' => 1,
-                    'losses' => 0
-                ]),
-                'player_b_snapshot' => json_encode([
-                    'rating' => 1180,
-                    'difference' => -20,
-                    'wins' => 0,
-                    'losses' => 1
-                ]),
                 'created' => new Time('2 days ago'),
                 'modified' => new Time('2 days ago')
             ],
@@ -114,18 +65,6 @@ class MatchesFixture extends TestFixture
                 'player_b_id' => 1,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
-                'player_a_snapshot' => json_encode([
-                    'rating' => 1203,
-                    'difference' => 23,
-                    'wins' => 1,
-                    'losses' => 1
-                ]),
-                'player_b_snapshot' => json_encode([
-                    'rating' => 1215,
-                    'difference' => -23,
-                    'wins' => 2,
-                    'losses' => 1
-                ]),
                 'created' => new Time('1 day ago'),
                 'modified' => new Time('1 day ago')
             ],
@@ -136,18 +75,6 @@ class MatchesFixture extends TestFixture
                 'player_b_id' => 7,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
-                'player_a_snapshot' => json_encode([
-                    'rating' => 1220,
-                    'difference' => 20,
-                    'wins' => 1,
-                    'losses' => 0
-                ]),
-                'player_b_snapshot' => json_encode([
-                    'rating' => 1180,
-                    'difference' => -20,
-                    'wins' => 0,
-                    'losses' => 1
-                ]),
                 'created' => new Time('1 day ago'),
                 'modified' => new Time('1 day ago')
             ],
@@ -159,18 +86,6 @@ class MatchesFixture extends TestFixture
                 'player_b_id' => 2,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
-                'player_a_snapshot' => json_encode([
-                    'rating' => 1238,
-                    'difference' => 18,
-                    'wins' => 2,
-                    'losses' => 0
-                ]),
-                'player_b_snapshot' => json_encode([
-                    'rating' => 1166,
-                    'difference' => -18,
-                    'wins' => 1,
-                    'losses' => 3
-                ]),
                 'created' => new Time('today'),
                 'modified' => new Time('today')
             ],
@@ -181,18 +96,6 @@ class MatchesFixture extends TestFixture
                 'player_b_id' => 7,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
-                'player_a_snapshot' => json_encode([
-                    'rating' => 1238,
-                    'difference' => 18,
-                    'wins' => 2,
-                    'losses' => 0
-                ]),
-                'player_b_snapshot' => json_encode([
-                    'rating' => 1162,
-                    'difference' => -18,
-                    'wins' => 0,
-                    'losses' => 2
-                ]),
                 'created' => new Time('today'),
                 'modified' => new Time('today')
             ]

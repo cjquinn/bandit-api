@@ -24,6 +24,8 @@ class DisputesTable extends Table
             ]
         ]);
 
+        $this->primaryKey('match_id');
+
         $this->addBehavior('Timestamp');
     }
 
@@ -109,10 +111,7 @@ class DisputesTable extends Table
 
         $this->connection()->transactional(function () use ($dispute) {
             $match = $this->Matches->get($dispute->match_id, [
-                'contain' => [
-                    'PlayerAs',
-                    'PlayerBs'
-                ]
+                'finder' => 'populated'
             ]);
 
             if (!$match->created->wasWithinLast('48 hours')) {
@@ -191,10 +190,10 @@ class DisputesTable extends Table
     /**
      * @return bool
      */
-    public function isClosed($id)
+    public function isClosed($matchId)
     {
         return $this->exists([
-            'id' => $id,
+            'match_id' => $matchId,
             'is_resolved IS NOT' => null
         ]);
     }

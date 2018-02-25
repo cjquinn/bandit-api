@@ -290,6 +290,47 @@ class PlayersTable extends Table
      */
     public function findWeeklyLeaderboard(Query $query, array $options)
     {
+        $startOfWeek = new Time('last sunday + 1 day');
+
+        $playerIds = $this->Snapshots
+            ->find()
+            ->select('player_id')
+            ->where(['created >=' => $startOfWeek]);
+
+        $matchId = $this->Snapshots
+            ->find()
+            ->select('match_id')
+            ->where([
+                'player_id = Players.id',
+                'created <' => $startOfWeek
+            ])
+            ->orderDesc('created')
+            ->limit(1);
+
+        $query
+            ->select([
+                'rating_change' => $this->find()->newExpr(
+                    sprintf(
+                        '%s - COALESCE(Snapshots.rating, %s)',
+                        $this->aliasField('rating'),
+                        Configure::read('Bandit.initialRating')
+                    )
+                )
+            ])
+            ->enableAutoFields(true)
+            ->join([
+                'Snapshots' => [
+                    'table' => 'snapshots',
+                    'type' => 'LEFT',
+                    'conditions' => [
+                        'Snapshots.player_id = Players.id',
+                        'Snapshots.match_id' => $matchId
+                    ]
+                ]
+            ])
+            ->where([$this->aliasField('id') . ' IN' => $playerIds])
+            ->orderDesc('rating_change');
+
         return $query;
     }
 

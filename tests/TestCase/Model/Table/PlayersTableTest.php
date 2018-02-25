@@ -12,6 +12,7 @@ class PlayersTableTest extends TestCase
 
     public $fixtures = [
         'app.clubs',
+        'app.disputes',
         'app.players',
         'app.matches',
         'app.snapshots',
@@ -349,6 +350,7 @@ class PlayersTableTest extends TestCase
 
     /**
      * @return void
+     * @group testing
      */
     public function testFindWeeklyLeaderboard()
     {
@@ -356,13 +358,16 @@ class PlayersTableTest extends TestCase
 
         // Reset fixtures
         $matchesTable = TableRegistry::get('Matches');
+        $snapshotsTable = TableRegistry::get('Snapshots');
 
         TableRegistry::get('Disputes')->deleteAll(['match_id IS NOT' => null]);
-        TableRegistry::get('Snapshots')->deleteAll(['match_id IS NOT' => null]);
+        $snapshotsTable->deleteAll(['match_id IS NOT' => null]);
         $matchesTable->deleteAll(['id IS NOT' => null]);
-        $this->Players->updateAll(['rating' => 1200], ['club_id' => $clubId]);
+        $this->Players->updateAll(['rating' => 1200], ['id IS NOT' => null]);
 
         $playMatches = function ($players) use ($clubId, $matchesTable) {
+            $ids = [];
+
             foreach ($players as $player) {
                 foreach ($player['opponents'] as $opponent) {
                     $match = $matchesTable->newEntity();
@@ -374,8 +379,12 @@ class PlayersTableTest extends TestCase
                     ], $clubId, $player['id']);
 
                     $matchesTable->save($match);
+
+                    array_push($ids, $match->id);
                 }
             }
+
+            return $ids;
         };
 
         // Play some matches week 1
@@ -402,13 +411,18 @@ class PlayersTableTest extends TestCase
             ]
         ];
 
-        $playMatches($players);
+        $ids = $playMatches($players);
 
         // Set matches to 2 weeks ago
         $matchesTable->updateAll([
-            'created' => new Time('-15 days'),
-            'modified' =>  new Time('-15 days')
-        ], ['club_id' => $clubId]);
+            'created' => new Time('last sunday - 8 days'),
+            'modified' =>  new Time('last sunday - 8 days')
+        ], ['id IN' => $ids]);
+
+        $snapshotsTable->updateAll([
+            'created' => new Time('last sunday - 8 days'),
+            'modified' =>  new Time('last sunday - 8 days')
+        ], ['match_id IN' => $ids]);
 
         // Ratings
         // 1 - 1260
@@ -443,17 +457,18 @@ class PlayersTableTest extends TestCase
             ]
         ];
 
-        $playMatches($players);
+        $ids = $playMatches($players);
 
         // Set matches to 1 weeks ago
         $matchesTable->updateAll([
-            'created' => new Time('-8 days'),
-            'modified' =>  new Time('-8 days')
-        ], [
-            'club_id' => $clubId,
-            // Just created
-            'created >' => new Time('-1 day')
-        ]);
+            'created' => new Time('last sunday - 1 day'),
+            'modified' =>  new Time('last sunday - 1 day')
+        ], ['id IN' => $ids]);
+
+        $snapshotsTable->updateAll([
+            'created' => new Time('last sunday - 1 day'),
+            'modified' =>  new Time('last sunday - 1 day')
+        ], ['match_id IN' => $ids]);
 
         // Ratings
         // 1 - 1234
@@ -506,25 +521,25 @@ class PlayersTableTest extends TestCase
         $playMatches($players);
 
         // Ratings
-        // 1 - 1234 - 0
-        // 2 - 1216 - 14
-        // 3 - 1186 - -16
-        // 4 - 1186 - 24
-        // 5 - 1174 - -26
-        // 6 - 1212 - 12
-        // 7 - 1192 - -8
+        // 1 - 1234 - 1234 = 0
+        // 2 - 1221 - 1202 = 19
+        // 3 - 1179 - 1202 = -23
+        // 4 - 1180 - 1162 = 18
+        // 5 - 1175 - 1200 = -25
+        // 6 - 1215 - 1200 = 15
+        // 7 - 1196 - 1200 = -4
 
         $query = $this->Players
             ->findByClubId($clubId)
             ->find('weeklyLeaderboard');
 
         $expected = [
-            4,
-            2,
-            6,
-            7,
-            3,
-            5
+            2, // 1221 - 1202 = 19
+            4, // 1180 - 1162 = 18
+            6, // 1215 - 1200 = 15
+            7, // 1196 - 1200 = -4
+            3, // 1179 - 1202 = -23
+            5  // 1175 - 1200 = -25
         ];
 
         $this->assertEquals($expected, $query->extract('id')->toArray());

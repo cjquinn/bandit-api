@@ -97,7 +97,11 @@ class MatchesController extends AppController
      */
     public function index()
     {
-        $matches = $this->paginate($this->Matches->find('populated'));
+        $matches = $this->paginate(
+            $this->Matches
+                ->find('byPlayerId', $this->request->getQueryParams())
+                ->find('populated')
+        );
 
         $this->set([
             'matches' => $matches,

@@ -350,7 +350,6 @@ class PlayersTableTest extends TestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testFindWeeklyLeaderboard()
     {

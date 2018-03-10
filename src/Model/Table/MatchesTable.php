@@ -184,6 +184,23 @@ class MatchesTable extends Table
     /**
      * @return \Cake\ORM\Query
      */
+    public function findByPlayerId(Query $query, array $options)
+    {
+        if (isset($options['player_id'])) {
+            $query->where([
+                'OR' => [
+                    $this->aliasField('player_a_id') => $options['player_id'],
+                    $this->aliasField('player_b_id') => $options['player_id']
+                ]
+            ]);
+        }
+
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
     public function findPopulated(Query $query, array $options)
     {
         $query->contain([

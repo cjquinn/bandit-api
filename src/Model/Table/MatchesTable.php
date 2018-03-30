@@ -186,7 +186,9 @@ class MatchesTable extends Table
      */
     public function findByPlayerId(Query $query, array $options)
     {
-        if (isset($options['player_id'])) {
+        if (isset($options['player_id']) &&
+            $options['player_id'] !== 'all'
+        ) {
             $query->where([
                 'OR' => [
                     $this->aliasField('player_a_id') => $options['player_id'],

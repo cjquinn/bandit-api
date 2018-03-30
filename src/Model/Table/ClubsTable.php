@@ -141,14 +141,6 @@ class ClubsTable extends Table
     }
 
     /**
-     * @return void
-     */
-    public function beforeFind(Event $event, Query $query, ArrayObject $options, $primary)
-    {
-        $query->orderAsc($this->aliasField('name'));
-    }
-
-    /**
      * @return \Cake\ORM\Query
      * @throws \Exception
      */

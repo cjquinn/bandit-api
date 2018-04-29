@@ -13,6 +13,7 @@ class LeaderboardsController extends AppController
     {
         $players = $this->Players
             ->findByClubId($this->request->getParam('club_id'))
+            ->find('populated')
             ->find('allTimeLeaderboard');
 
         $this->set('players', $players);
@@ -25,6 +26,7 @@ class LeaderboardsController extends AppController
     {
         $players = $this->Players
             ->findByClubId($this->request->getParam('club_id'))
+            ->find('populated')
             ->find('weeklyLeaderboard');
 
         $this->set('players', $players);

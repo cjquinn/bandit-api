@@ -9,7 +9,6 @@ use Cake\TestSuite\TestCase;
 
 class ClubsTableTest extends TestCase
 {
-
     public $fixtures = [
         'app.clubs',
         'app.players',
@@ -99,6 +98,7 @@ class ClubsTableTest extends TestCase
 
         $this->assertEmpty($club->getErrors());
         $this->assertNotNull($club->founder);
+        $this->assertNotNull($club->founder->password);
 
         // Valid existing user
         $club = $this->Clubs->newEntity();

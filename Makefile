@@ -1,6 +1,6 @@
 .PHONY: cake composer down install migrate seed test up update
 
-PROJECT=banditapi
+PROJECT=bandit-api
 
 CMD=""
 

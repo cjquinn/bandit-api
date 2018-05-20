@@ -219,8 +219,8 @@ Plugin::load('Migrations');
  */
 Configure::write('Bandit', [
     'emails' => [
-        'support' => 'support@banditplay.com',
-        'welcome' => 'welcome@banditplay.com'
+        'support' => 'support@banditmatch.com',
+        'welcome' => 'welcome@banditmatch.com'
     ],
     'initialRating' => 1200,
     'levels' => [

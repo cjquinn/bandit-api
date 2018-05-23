@@ -20,7 +20,7 @@ class UserMailer extends Mailer
             ->from(Configure::read('Bandit.emails.referee'))
             ->set([
                 'url' => sprintf(
-                    'https://banditplay.com/activate-account?token=%s',
+                    'https://banditmatch.com/activate-account?token=%s',
                     $user->token
                 )
             ])
@@ -40,7 +40,7 @@ class UserMailer extends Mailer
             ->set([
                 'name' => $user->name,
                 'url' => sprintf(
-                    'https://banditplay.com/reset-password?token=%s',
+                    'https://banditmatch.com/reset-password?token=%s',
                     $user->token
                 )
             ])

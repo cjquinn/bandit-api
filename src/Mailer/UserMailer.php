@@ -35,7 +35,7 @@ class UserMailer extends Mailer
     {
         $this
             ->to($user->email)
-            ->subject('Reset Password')
+            ->subject('Timeout is over, get back in the match!')
             ->from(Configure::read('Bandit.emails.referee'))
             ->set([
                 'name' => $user->name,

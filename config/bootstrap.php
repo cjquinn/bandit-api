@@ -219,8 +219,7 @@ Plugin::load('Migrations');
  */
 Configure::write('Bandit', [
     'emails' => [
-        'support' => 'support@banditmatch.com',
-        'welcome' => 'welcome@banditmatch.com'
+        'referee' => ['referee@banditmatch.com' => 'Referee (Bandit Match)']
     ],
     'initialRating' => 1200,
     'levels' => [

@@ -458,7 +458,7 @@ class PlayersTableTest extends TestCase
 
         $ids = $playMatches($players);
 
-        // Set matches to 1 weeks ago
+        // Set matches to 1 week ago
         $matchesTable->updateAll([
             'created' => new Time('last sunday - 1 day'),
             'modified' =>  new Time('last sunday - 1 day')
@@ -533,8 +533,8 @@ class PlayersTableTest extends TestCase
             ->find('weeklyLeaderboard');
 
         $expected = [
-            4,
             2,
+            4,
             6,
             7,
             3,

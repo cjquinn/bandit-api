@@ -56,7 +56,7 @@ class UsersController extends AppController
     {
         $user = $this->Users->get($this->Auth->user('id'), ['contain' => 'Players']);
 
-        $this->set('user', $this->Auth->user());
+        $this->set('user', $user);
     }
 
     /**

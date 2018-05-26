@@ -159,6 +159,7 @@ class ClubsTableTest extends TestCase
 
     /**
      * @return void
+     * @group testing
      */
     public function testAfterSave()
     {
@@ -181,9 +182,10 @@ class ClubsTableTest extends TestCase
             'user_id' => $club->founder_id
         ]));
 
-        $this->assertNotEmpty($club->players);
-        $this->assertEquals(1, count($club->players));
-        $this->assertEquals($club->founder_id, $club->players[0]->user_id);
+        $this->assertNotNull($club->founder);
+        $this->assertNotEmpty($club->founder->players);
+        $this->assertEquals(1, count($club->founder->players));
+        $this->assertEquals($club->founder_id, $club->founder->players[0]->user_id);
 
         $club = $this->Clubs->newEntity();
         $data = ['name' => 'Ping Pong Game On'];
@@ -197,8 +199,10 @@ class ClubsTableTest extends TestCase
             'user_id' => $club->founder_id
         ]));
 
-        $this->assertNotEmpty($club->players);
-        $this->assertEquals(1, count($club->players));
-        $this->assertEquals($club->founder_id, $club->players[0]->user_id);
+        $this->assertNotNull($club->founder);
+        $this->assertNotEmpty($club->founder->players);
+        $this->assertEquals(2, count($club->founder->players));
+        $this->assertEquals($club->founder_id, $club->founder->players[0]->user_id);
+        $this->assertEquals($club->founder_id, $club->founder->players[1]->user_id);
     }
 }

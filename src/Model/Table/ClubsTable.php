@@ -121,7 +121,7 @@ class ClubsTable extends Table
 
             $this->Players->save($player);
 
-            $club->set('players', [$player]);
+            $club->set('founder', $this->Founders->get($club->founder_id, ['contain' => ['Players']]));
         }
     }
 

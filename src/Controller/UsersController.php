@@ -54,6 +54,8 @@ class UsersController extends AppController
      */
     public function current()
     {
+        $user = $this->Users->get($this->Auth->user('id'), ['contain' => 'Players']);
+
         $this->set('user', $this->Auth->user());
     }
 

@@ -13,7 +13,6 @@ use Cake\ORM\Entity;
  */
 class Club extends Entity
 {
-
     protected $_accessible = [
         'name' => true,
         '*' => false

@@ -97,8 +97,10 @@ class UsersController extends AppController
             return;
         }
 
+        $user = $this->Users->get($user['id'], ['contain' => 'Players']);
+
         $this->set([
-            'jwt' => $this->Users->generateJwt($user['id']),
+            'jwt' => $this->Users->generateJwt($user->id),
             'user' => $user
         ]);
     }

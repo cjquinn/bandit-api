@@ -180,5 +180,25 @@ class ClubsTableTest extends TestCase
             'club_id' => $club->id,
             'user_id' => $club->founder_id
         ]));
+
+        $this->assertNotEmpty($club->players);
+        $this->assertEquals(1, count($club->players));
+        $this->assertEquals($club->founder_id, $club->players[0]->user_id);
+
+        $club = $this->Clubs->newEntity();
+        $data = ['name' => 'Ping Pong Game On'];
+
+        $this->Clubs->patchEntityAdd($club, $data, ['id' => 1]);
+
+        $this->Clubs->save($club);
+
+        $this->assertTrue($this->Clubs->Players->exists([
+            'club_id' => $club->id,
+            'user_id' => $club->founder_id
+        ]));
+
+        $this->assertNotEmpty($club->players);
+        $this->assertEquals(1, count($club->players));
+        $this->assertEquals($club->founder_id, $club->players[0]->user_id);
     }
 }

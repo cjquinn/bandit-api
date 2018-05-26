@@ -22,6 +22,10 @@ class Player extends Entity
         '*' => false
     ];
 
+    protected $_virtual = [
+        'level'
+    ];
+
     /**
      * @return int
      * @see https://en.wikipedia.org/wiki/Elo_rating_system#Mathematical_details

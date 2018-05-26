@@ -120,6 +120,8 @@ class ClubsTable extends Table
             $player->set('user_id', $club->founder_id);
 
             $this->Players->save($player);
+
+            $club->set('players', [$player]);
         }
     }
 

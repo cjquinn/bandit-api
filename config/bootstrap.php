@@ -225,66 +225,81 @@ Configure::write('Bandit', [
     'levels' => [
         [
             'name' => 'Junior',
+            'slug' => 'junior',
+            'from' => -INF,
             'to' => 849
         ],
         [
             'name' => 'Rookie',
+            'slug' => 'rookie',
             'from' => 850,
             'to' => 1099
         ],
         [
             'name' => 'Intermediate',
+            'slug' => 'intermediate',
             'from' => 1100,
             'to' => 1199
         ],
         [
             'name' => 'Scout',
+            'slug' => 'scout',
             'from' => 1200,
             'to' => 1299
         ],
         [
             'name' => 'Knight',
+            'slug' => 'knight',
             'from' => 1300,
             'to' => 1399
         ],
         [
             'name' => 'Assassin',
+            'slug' => 'assassin',
             'from' => 1400,
             'to' => 1499
         ],
         [
             'name' => 'Ninja',
+            'slug' => 'ninja',
             'from' => 1500,
             'to' => 1599
         ],
         [
             'name' => 'Warrior',
+            'slug' => 'warrior',
             'from' => 1600,
             'to' => 1699
         ],
         [
             'name' => 'Mega',
+            'slug' => 'mega',
             'from' => 1700,
             'to' => 1799
         ],
         [
             'name' => 'Monster',
+            'slug' => 'monster',
             'from' => 1800,
             'to' => 1899
         ],
         [
             'name' => 'Legendary',
+            'slug' => 'legendary',
             'from' => 1900,
             'to' => 1999
         ],
         [
             'name' => 'Lord',
+            'slug' => 'lord',
             'from' => 2000,
             'to' => 2099
         ],
         [
             'name' => 'God',
-            'from' => 2100
+            'slug' => 'god',
+            'from' => 2100,
+            'to' => INF
         ]
     ]
 ]);

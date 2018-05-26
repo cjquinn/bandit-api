@@ -45,4 +45,46 @@ class PlayerTest extends TestCase
 
         $expected = 10;
     }
+
+    /**
+     * @return void
+     */
+    public function testLevel()
+    {
+        $player = new Player(['rating' => 1200]);
+
+        $expected = [
+            'name' => 'Scout',
+            'slug' => 'scout'
+        ];
+
+        $this->assertEquals($expected, $player->level);
+
+        $player = new Player(['rating' => 1856]);
+
+        $expected = [
+            'name' => 'Monster',
+            'slug' => 'monster'
+        ];
+
+        $this->assertEquals($expected, $player->level);
+
+        $player = new Player(['rating' => 1856213123]);
+
+        $expected = [
+            'name' => 'God',
+            'slug' => 'god'
+        ];
+
+        $this->assertEquals($expected, $player->level);
+
+        $player = new Player(['rating' => -1856213123]);
+
+        $expected = [
+            'name' => 'Junior',
+            'slug' => 'junior'
+        ];
+
+        $this->assertEquals($expected, $player->level);
+    }
 }

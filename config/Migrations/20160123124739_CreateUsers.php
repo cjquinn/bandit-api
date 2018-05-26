@@ -42,6 +42,11 @@ class CreateUsers extends AbstractMigration
             'null' => true
         ]);
 
+        $table->addColumn('token_sent', 'datetime', [
+            'default' => null,
+            'null' => true
+        ]);
+
         $table->addColumn('created', 'datetime', [
             'default' => null,
             'null' => false
@@ -50,11 +55,6 @@ class CreateUsers extends AbstractMigration
         $table->addColumn('modified', 'datetime', [
             'default' => null,
             'null' => false
-        ]);
-
-        $table->addColumn('token_sent', 'datetime', [
-            'default' => null,
-            'null' => true
         ]);
 
         $table->create();

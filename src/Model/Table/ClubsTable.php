@@ -157,7 +157,9 @@ class ClubsTable extends Table
             ->orderDesc('modified')
             ->limit(1);
 
-        $query->select(['bandit_id' => $banditId]);
+        $query
+            ->select(['bandit_id' => $banditId])
+            ->enableAutoFields(true);
 
         return $query;
     }

@@ -235,4 +235,18 @@ class ClubsTableTest extends TestCase
             })->toArray()
         );
     }
+
+    /**
+     * @return void
+     */
+    public function testFindBanditId()
+    {
+        $club = $this->Clubs->get(1, ['finder' => 'banditId']);
+
+        $this->assertEquals(6, $club->bandit_id);
+
+        $club = $this->Clubs->get(2, ['finder' => 'banditId']);
+
+        $this->assertEquals(8, $club->bandit_id);
+    }
 }

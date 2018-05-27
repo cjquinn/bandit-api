@@ -144,6 +144,26 @@ class ClubsTable extends Table
 
     /**
      * @return \Cake\ORM\Query
+     */
+    public function findBanditId(Query $query, array $options)
+    {
+        $banditId = $this->Players
+            ->find()
+            ->select('id')
+            ->where(['club_id = Clubs.id'])
+            ->orderDesc('rating')
+            ->orderDesc('wins')
+            ->orderAsc('losses')
+            ->orderDesc('modified')
+            ->limit(1);
+
+        $query->select(['bandit_id' => $banditId]);
+
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
      * @throws \Exception
      */
     public function findByUserId(Query $query, array $options)

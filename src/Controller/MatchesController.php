@@ -64,14 +64,20 @@ class MatchesController extends AppController
             )
         );
 
-        if (!$this->Matches->save($match)) {
-            $this->response->statusCode(400);
-        }
+        $success = $this->Matches->save($match);
 
         $this->set([
             'match' => $match,
             'errors' => $match->errors()
         ]);
+
+        if (!$success) {
+            $this->response->statusCode(400);
+        }
+
+        $club = $this->Matches->Clubs->get($this->request->getParam('club_id'), ['finder' => 'banditId']);
+
+        $this->set('club', $club);
     }
 
     /**
@@ -85,11 +91,15 @@ class MatchesController extends AppController
         $this->Matches->softDelete($match);
 
         // Get updated matches
+        $club = $this->Matches->Clubs->get($this->request->getParam('club_id'), ['finder' => 'banditId']);
         $matches = $this->Matches
             ->find('tree', ['match' => $match])
             ->find('populated');
 
-        $this->set(['matches' => $matches]);
+        $this->set([
+            'club' => $club,
+            'matches' => $matches
+        ]);
     }
 
     /**

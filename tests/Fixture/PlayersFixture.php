@@ -2,6 +2,7 @@
 
 namespace App\Test\Fixture;
 
+use Cake\I18n\Time;
 use Cake\TestSuite\Fixture\TestFixture;
 
 class PlayersFixture extends TestFixture
@@ -52,7 +53,7 @@ class PlayersFixture extends TestFixture
                 'wins' => 2,
                 'losses' => 0,
                 'created' => date('Y-m-d H:i:s'),
-                'modified' => date('Y-m-d H:i:s')
+                'modified' => new Time('yesterday')
             ],
             [
                 'id' => 5,

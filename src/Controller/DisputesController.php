@@ -109,13 +109,17 @@ class DisputesController extends AppController
             return;
         }
 
-        // Get updated matches
+        // Get updated club and matches
+        $club = $this->Disputes->Matches->Clubs->get($this->request->getParam('club_id'), ['finder' => 'banditId']);
         $match = $this->Disputes->Matches->get($dispute->match_id);
         $matches = $this->Disputes->Matches
             ->find('tree', ['match' => $match])
             ->find('populated');
 
-        $this->set('matches', $matches);
+        $this->set([
+            'club' => $club,
+            'matches' => $matches
+        ]);
     }
 
     /**

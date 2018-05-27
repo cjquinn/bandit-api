@@ -101,7 +101,7 @@ class ClubsController extends AppController
      */
     public function view($id)
     {
-        $club = $this->Clubs->get($id);
+        $club = $this->Clubs->get($id, ['finder' => 'banditId']);
 
         $this->set('club', $club);
     }

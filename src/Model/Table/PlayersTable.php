@@ -26,7 +26,9 @@ class PlayersTable extends Table
                 'Clubs',
                 'Users'
             ],
-            'hasMany' => ['Snapshots']
+            'hasMany' => [
+                'Snapshots'
+            ]
         ]);
 
         $this->addBehavior('Timestamp');

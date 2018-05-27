@@ -11,8 +11,8 @@ use Cake\ORM\Entity;
  * @property int $player_b_id
  * @property int $player_a_score
  * @property int $player_b_score
- * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $deleted
+ * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
  */
 class Match extends Entity

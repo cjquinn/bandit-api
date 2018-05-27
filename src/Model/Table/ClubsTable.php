@@ -152,11 +152,32 @@ class ClubsTable extends Table
             throw Exception('Missing userId key in options');
         }
 
-        $query->innerJoinWith('Players', function ($q) use ($options) {
-            $q->where(['Players.user_id' => $options['userId']]);
+        $lastPlayed = $this->Players->Snapshots
+            ->find()
+            ->select('created')
+            ->where(['player_id = Players.id'])
+            ->orderDesc('created')
+            ->limit(1);
 
-            return $q;
-        });
+        $query
+            ->select([
+                'player_count' => $query->func()->count('ClubPlayers.id'),
+                'last_played' => $lastPlayed
+            ])
+            ->join([
+                'ClubPlayers' => [
+                    'table' => 'players',
+                    'type' => 'LEFT',
+                    'conditions' => 'ClubPlayers.club_id = Clubs.id'
+                ]
+            ])
+            ->innerJoinWith('Players', function ($q) use ($options) {
+                $q->where(['Players.user_id' => $options['userId']]);
+
+                return $q;
+            })
+            ->group(['Clubs.id', 'last_played'])
+            ->enableAutoFields(true);
 
         return $query;
     }

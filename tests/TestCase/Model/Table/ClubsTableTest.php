@@ -13,6 +13,7 @@ class ClubsTableTest extends TestCase
         'app.clubs',
         'app.players',
         'app.matches',
+        'app.snapshots',
         'app.users'
     ];
 
@@ -159,7 +160,6 @@ class ClubsTableTest extends TestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testAfterSave()
     {
@@ -204,5 +204,35 @@ class ClubsTableTest extends TestCase
         $this->assertEquals(2, count($club->founder->players));
         $this->assertEquals($club->founder_id, $club->founder->players[0]->user_id);
         $this->assertEquals($club->founder_id, $club->founder->players[1]->user_id);
+    }
+
+    /**
+     * @return void
+     */
+    public function testFindByUserId()
+    {
+        // Add player_id one to club 2
+        $player = $this->Clubs->Players->newEntity();
+
+        $player->set('club_id', 2);
+        $player->set('user_id', 1);
+
+        $this->Clubs->Players->save($player);
+
+        // Tests
+        $clubs = $this->Clubs->find('byUserId', ['userId' => 1]);
+
+        $this->assertEquals(2, $clubs->count());
+        $this->assertEquals([7, 2], $clubs->extract('player_count')->toArray());
+        $this->assertEquals(
+            [date('Y-m-d H:i', strtotime('1 day ago')), null],
+            $clubs->extract('last_played')->map(function ($lastPlayed) {
+                if (!$lastPlayed) {
+                    return $lastPlayed;
+                }
+
+                return date('Y-m-d H:i', strtotime($lastPlayed));
+            })->toArray()
+        );
     }
 }

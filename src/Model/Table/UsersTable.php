@@ -116,6 +116,19 @@ class UsersTable extends Table
     /**
      * @return \Cake\Validation\Validator
      */
+    public function validationRequestPasswordReset(Validator $validator)
+    {
+        $validator
+            ->requirePresence('email')
+            ->notEmpty('email')
+            ->email('email');
+
+        return $validator;
+    }
+
+    /**
+     * @return \Cake\Validation\Validator
+     */
     public function validationResetPassword(Validator $validator)
     {
         $validator

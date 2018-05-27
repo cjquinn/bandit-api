@@ -110,19 +110,21 @@ class UsersController extends AppController
      */
     public function requestPasswordReset()
     {
+        $errors = $this->Users->validator('requestPasswordReset')->errors($this->request->getData());
+
+        if (!empty($errors)) {
+            $this->set('errors', $errors);
+
+            $this->response = $this->response->withStatus(400);
+
+            return;
+        }
+
         $user = $this->Users
             ->findByEmail($this->request->getData('email'))
             ->first();
 
         if (!$user) {
-            $this->set('errors', [
-                'email' => [
-                    'invalid' => 'Invalid email, please try again'
-                ]
-            ]);
-
-            $this->response = $this->response->withStatus(400);
-
             return;
         }
 

@@ -192,11 +192,22 @@ class UsersControllerTest extends IntegrationTestCase
     public function testRequestPasswordResetBadData()
     {
         $this->_setAjaxRequest();
+        $this->patch('/users/request-password-reset.json');
+
+        $this->assertResponseCode(400);
+    }
+
+    /**
+     * @return void
+     */
+    public function testRequestPasswordResetInvalidEmail()
+    {
+        $this->_setAjaxRequest();
         $this->patch('/users/request-password-reset.json', [
             'email' => 'incorrect@banditmatch.com'
         ]);
 
-        $this->assertResponseCode(400);
+        $this->assertResponseCode(200);
     }
 
     /**

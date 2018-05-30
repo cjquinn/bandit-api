@@ -43,6 +43,7 @@ class LeaderboardControllerTest extends IntegrationTestCase
         $this->get('/clubs/1/leaderboards/all-time');
 
         $this->assertResponseCode(200);
+        $this->assertEquals(7, $this->viewVariable('players')->count());
     }
 
     /**

@@ -161,6 +161,7 @@ class MatchesControllerTest extends IntegrationTestCase
         $this->get('/clubs/1/matches.json');
 
         $this->assertResponseCode(200);
+        $this->assertEquals(8, $this->viewVariable('matches')->count());
     }
 
     /**

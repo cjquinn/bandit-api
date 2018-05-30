@@ -246,5 +246,6 @@ class DisputesControllerTest extends IntegrationTestCase
         $this->get('/clubs/1/disputes.json');
 
         $this->assertResponseCode(200);
+        $this->assertEquals(2, $this->viewVariable('disputes')->count());
     }
 }

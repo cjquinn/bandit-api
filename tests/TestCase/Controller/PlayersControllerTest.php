@@ -72,7 +72,7 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testIndex()
+    public function testIndexGet()
     {
         $this->_setAjaxRequest();
         $this->_setAuthSession(1);
@@ -80,6 +80,7 @@ class PlayersControllerTest extends IntegrationTestCase
         $this->get('/clubs/1/players.json');
 
         $this->assertResponseCode(200);
+        $this->assertEquals(7, $this->viewVariable('players')->count());
     }
 
     /**

@@ -145,12 +145,22 @@ class DisputesTable extends Table
     /**
      * @return \Cake\ORM\Query
      */
+    public function findByClubId(Query $query, array $options)
+    {
+        $query->innerJoinWith('Matches', function ($q) use ($options) {
+            $q->where(['Matches.club_id' => $options['clubId']]);
+
+            return $q;
+        });
+
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
     public function findByUserId(Query $query, array $options)
     {
-        if (!isset($options['userId'])) {
-            throw Exception('Missing userId key in options');
-        }
-
         $query->join([
             'Matches' => [
                 'table' => 'matches',

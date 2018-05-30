@@ -292,7 +292,7 @@ class PlayersTable extends Table
      */
     public function findWeeklyLeaderboard(Query $query, array $options)
     {
-        $startOfWeek = new Time('last sunday + 1 day');
+        $startOfWeek = new Time('monday this week');
 
         $playerIds = $this->Snapshots
             ->find()

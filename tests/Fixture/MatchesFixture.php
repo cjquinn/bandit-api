@@ -98,6 +98,16 @@ class MatchesFixture extends TestFixture
                 'player_b_score' => 0,
                 'created' => new Time('today'),
                 'modified' => new Time('today')
+            ],
+            [
+                'id' => 9,
+                'club_id' => 2,
+                'player_a_id' => 8,
+                'player_b_id' => 1,
+                'player_a_score' => 1,
+                'player_b_score' => 0,
+                'created' => new Time('today'),
+                'modified' => new Time('today')
             ]
         ];
 

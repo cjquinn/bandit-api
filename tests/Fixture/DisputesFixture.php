@@ -38,6 +38,14 @@ class DisputesFixture extends TestFixture
                 'is_resolved' => null,
                 'created' => new Time('1 day ago'),
                 'modified' => new Time('1 day ago')
+            ],
+            [
+                'match_id' => 9,
+                'player_a_score' => 3,
+                'player_b_score' => 1,
+                'is_resolved' => null,
+                'created' => new Time('1 day ago'),
+                'modified' => new Time('1 day ago')
             ]
         ];
 

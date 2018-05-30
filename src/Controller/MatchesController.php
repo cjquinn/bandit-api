@@ -109,6 +109,7 @@ class MatchesController extends AppController
     {
         $matches = $this->paginate(
             $this->Matches
+                ->findByClubId($this->request->getParam('club_id'))
                 ->find('byPlayerId', $this->request->getQueryParams())
                 ->find('populated')
         );

@@ -349,7 +349,6 @@ class PlayersTableTest extends TestCase
     }
 
     /**
-     * TODO: SORT THIS OUT!
      * @return void
      */
     public function testFindWeeklyLeaderboard()
@@ -360,10 +359,10 @@ class PlayersTableTest extends TestCase
         $matchesTable = TableRegistry::get('Matches');
         $snapshotsTable = TableRegistry::get('Snapshots');
 
-        TableRegistry::get('Disputes')->deleteAll(['match_id IS NOT' => null]);
-        $snapshotsTable->deleteAll(['match_id IS NOT' => null]);
-        $matchesTable->deleteAll(['id IS NOT' => null]);
-        $this->Players->updateAll(['rating' => 1200], ['id IS NOT' => null]);
+        TableRegistry::get('Disputes')->deleteAll(['1 = 1']);
+        $snapshotsTable->deleteAll(['1 = 1']);
+        $matchesTable->deleteAll(['1 = 1']);
+        $this->Players->updateAll(['rating' => 1200], ['1 = 1']);
 
         $playMatches = function ($players) use ($clubId, $matchesTable) {
             $ids = [];
@@ -386,6 +385,17 @@ class PlayersTableTest extends TestCase
 
             return $ids;
         };
+
+        // Ratings
+        // 1 - 1200
+        // 2 - 1200
+        // 3 - 1200
+        // 4 - 1200
+        // 5 - 1200
+        // 6 - 1200
+        // 7 - 1200
+
+        $this->printPlayerRatings($clubId, 'Start');
 
         // Play some matches week 1
         $players = [
@@ -414,24 +424,27 @@ class PlayersTableTest extends TestCase
         $ids = $playMatches($players);
 
         // Set matches to 2 weeks ago
+        $twoWeeksAgo = new Time('2 weeks ago');
         $matchesTable->updateAll([
-            'created' => new Time('last sunday - 8 days'),
-            'modified' =>  new Time('last sunday - 8 days')
+            'created' => $twoWeeksAgo,
+            'modified' =>  $twoWeeksAgo
         ], ['id IN' => $ids]);
 
         $snapshotsTable->updateAll([
-            'created' => new Time('last sunday - 8 days'),
-            'modified' =>  new Time('last sunday - 8 days')
+            'created' => $twoWeeksAgo,
+            'modified' =>  $twoWeeksAgo
         ], ['match_id IN' => $ids]);
 
         // Ratings
         // 1 - 1260
         // 2 - 1220
-        // 3 - 1180
-        // 4 - 1140
         // 5 - 1200
         // 6 - 1200
-        // 8 - 1200
+        // 7 - 1200
+        // 3 - 1180
+        // 4 - 1140
+
+        $this->printPlayerRatings($clubId, $twoWeeksAgo);
 
         // Week 2 matches
         $players = [
@@ -460,24 +473,27 @@ class PlayersTableTest extends TestCase
         $ids = $playMatches($players);
 
         // Set matches to 1 week ago
+        $oneWeekAgo = new Time('1 week ago');
         $matchesTable->updateAll([
-            'created' => new Time('last sunday - 1 day'),
-            'modified' =>  new Time('last sunday - 1 day')
+            'created' => $oneWeekAgo,
+            'modified' =>  $oneWeekAgo
         ], ['id IN' => $ids]);
 
         $snapshotsTable->updateAll([
-            'created' => new Time('last sunday - 1 day'),
-            'modified' =>  new Time('last sunday - 1 day')
+            'created' => $oneWeekAgo,
+            'modified' =>  $oneWeekAgo
         ], ['match_id IN' => $ids]);
 
         // Ratings
         // 1 - 1234
         // 2 - 1202
         // 3 - 1202
-        // 4 - 1162
         // 5 - 1200
         // 6 - 1200
         // 7 - 1200
+        // 4 - 1162
+
+        $this->printPlayerRatings($clubId, $oneWeekAgo);
 
         // This weeks matches
         $players = [
@@ -522,12 +538,14 @@ class PlayersTableTest extends TestCase
 
         // Ratings
         // 1 - 1234 - 1234 = 0
-        // 2 - 1216 - 1202 = 14
-        // 3 - 1186 - 1202 = -16
-        // 4 - 1186 - 1162 = 24
-        // 5 - 1174 - 1200 = -26
-        // 6 - 1212 - 1200 = 12
-        // 7 - 1192 - 1200 = -8
+        // 2 - 1222 - 1202 = 20
+        // 6 - 1216 - 1200 = 16
+        // 4 - 1174 - 1162 = 12
+        // 7 - 1196 - 1200 = -4
+        // 3 - 1182 - 1202 = -20
+        // 5 - 1176 - 1200 = -24
+
+        $this->printPlayerRatings($clubId, 'This week');
 
         $query = $this->Players
             ->findByClubId($clubId)
@@ -535,13 +553,45 @@ class PlayersTableTest extends TestCase
 
         $expected = [
             2,
-            4,
             6,
+            4,
             7,
             3,
             5
         ];
 
         $this->assertEquals($expected, $query->extract('id')->toArray());
+    }
+
+    /**
+     * @return void
+     */
+    public function printPlayerRatings($clubId, $date = null)
+    {
+        return;
+
+        $players = $this->Players
+            ->findByClubId($clubId)
+            ->orderDesc('rating');
+
+        echo "\n";
+        echo '======================================';
+        echo "\n";
+
+        if ($date) {
+            echo $date;
+            echo "\n";
+            echo '======================================';
+            echo "\n";
+        }
+
+        foreach ($players as $player) {
+            echo sprintf(
+                'Player %d: %d',
+                $player->id,
+                $player->rating
+            );
+            echo "\n";
+        }
     }
 }

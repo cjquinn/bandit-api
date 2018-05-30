@@ -125,6 +125,7 @@ class ClubsControllerTest extends IntegrationTestCase
         $this->get('/clubs.json');
 
         $this->assertResponseCode(200);
+        $this->assertEquals(1, $this->viewVariable('clubs')->count());
     }
 
     /**

@@ -183,6 +183,7 @@ class ClubsTable extends Table
 
         $query
             ->select([
+                // TODO: update so that it doesn't include unactivated players
                 'player_count' => $query->func()->count('ClubPlayers.id'),
                 'last_played' => $lastPlayed
             ])

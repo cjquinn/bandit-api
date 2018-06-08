@@ -35,6 +35,8 @@ class UsersController extends AppController
 
             $success = $this->Users->save($user);
 
+            $user->setHidden(['password', 'token', 'token_sent']);
+
             $this->set([
                 'user' => $user,
                 'errors' => $user->getErrors()
@@ -56,6 +58,8 @@ class UsersController extends AppController
     {
         $user = $this->Users->get($this->Auth->user('id'), ['contain' => 'Players']);
 
+        $user->setHidden(['password', 'token', 'token_sent']);
+
         $this->set('user', $user);
     }
 
@@ -71,6 +75,8 @@ class UsersController extends AppController
         if (!$this->Users->save($user)) {
             $this->response = $this->response->withStatus(400);
         }
+
+        $user->setHidden(['password', 'token', 'token_sent']);
 
         $this->set([
             'user' => $user,
@@ -98,6 +104,8 @@ class UsersController extends AppController
         }
 
         $user = $this->Users->get($user['id'], ['contain' => 'Players']);
+
+        $user->setHidden(['password', 'token', 'token_sent']);
 
         $this->set([
             'jwt' => $this->Users->generateJwt($user->id),
@@ -147,6 +155,8 @@ class UsersController extends AppController
             if (!$this->Users->save($user)) {
                 $this->response = $this->response->withStatus(400);
             }
+
+            $user->setHidden(['password', 'token', 'token_sent']);
 
             $this->set([
                 'user' => $user,

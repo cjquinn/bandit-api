@@ -150,7 +150,12 @@ class ClubsTable extends Table
         $banditId = $this->Players
             ->find('allTimeLeaderboard')
             ->select('id')
-            ->where(['club_id = Clubs.id'])
+            ->innerJoinWith('Users', function ($q) {
+                $q->find('auth');
+
+                return $q;
+            })
+            ->where(['Players.club_id = Clubs.id'])
             ->limit(1);
 
         $query

@@ -234,6 +234,26 @@ class ClubsTableTest extends TestCase
                 return date('Y-m-d H:i', strtotime($lastPlayed));
             })->toArray()
         );
+
+        // Deactivate some users
+        $user = $this->Clubs->Players->Users->get(2);
+        $user->set('password', null);
+        $this->Clubs->Players->Users->save($user);
+
+        $clubs = $this->Clubs->find('byUserId', ['userId' => 1]);
+
+        $this->assertEquals(2, $clubs->count());
+        $this->assertEquals([6, 2], $clubs->extract('player_count')->toArray());
+        $this->assertEquals(
+            [date('Y-m-d H:i', strtotime('1 day ago')), null],
+            $clubs->extract('last_played')->map(function ($lastPlayed) {
+                if (!$lastPlayed) {
+                    return $lastPlayed;
+                }
+
+                return date('Y-m-d H:i', strtotime($lastPlayed));
+            })->toArray()
+        );
     }
 
     /**

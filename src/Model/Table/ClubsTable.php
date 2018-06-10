@@ -179,8 +179,7 @@ class ClubsTable extends Table
 
         $query
             ->select([
-                // TODO: update so that it doesn't include unactivated players
-                'player_count' => $query->func()->count('ClubPlayers.id'),
+                'player_count' => $query->func()->count('Players.id'),
                 'last_played' => $lastPlayed
             ])
             ->join([
@@ -188,6 +187,14 @@ class ClubsTable extends Table
                     'table' => 'players',
                     'type' => 'LEFT',
                     'conditions' => 'ClubPlayers.club_id = Clubs.id'
+                ],
+                'Users' => [
+                    'table' => 'users',
+                    'type' => 'INNER',
+                    'conditions' => [
+                        'Users.id = ClubPlayers.user_id',
+                        'Users.password IS NOT' => null
+                    ]
                 ]
             ])
             ->innerJoinWith('Players', function ($q) use ($options) {

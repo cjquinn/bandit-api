@@ -280,7 +280,7 @@ class PlayersTable extends Table
      */
     public function findPopulated(Query $query, array $options)
     {
-        $queryp
+        $query
             ->contain(['Users'])
             ->innerJoinWith('Users', function ($q) {
                 $q->find('auth');

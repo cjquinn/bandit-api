@@ -336,8 +336,8 @@ class PlayersTableTest extends TestCase
             ->find('allTimeLeaderboard');
 
         $expected = [
-            4, // Tom - 1238
             6, // Sam - 1238
+            4, // Tom - 1238
             5, // Alex - 1222
             1, // Christy - 1215
             3, // Nathan - 1178
@@ -362,7 +362,11 @@ class PlayersTableTest extends TestCase
         TableRegistry::get('Disputes')->deleteAll(['1 = 1']);
         $snapshotsTable->deleteAll(['1 = 1']);
         $matchesTable->deleteAll(['1 = 1']);
-        $this->Players->updateAll(['rating' => 1200], ['1 = 1']);
+        $this->Players->updateAll([
+            'rating' => 1200,
+            'wins' => 0,
+            'losses' => 0
+        ], ['1 = 1']);
 
         $playMatches = function ($players) use ($clubId, $matchesTable) {
             $ids = [];
@@ -415,7 +419,7 @@ class PlayersTableTest extends TestCase
                 'opponents' => [4]
             ],
             [
-                // Wins 0, Loses 2
+                // Wins 0, Loses 3
                 'id' => 4,
                 'opponents' => []
             ]
@@ -485,13 +489,13 @@ class PlayersTableTest extends TestCase
         ], ['match_id IN' => $ids]);
 
         // Ratings
-        // 1 - 1234
-        // 2 - 1202
-        // 3 - 1202
+        // 1 - 1226
+        // 3 - 1205
         // 5 - 1200
         // 6 - 1200
         // 7 - 1200
-        // 4 - 1162
+        // 2 - 1195
+        // 4 - 1174
 
         $this->printPlayerRatings($clubId, $oneWeekAgo);
 
@@ -503,12 +507,12 @@ class PlayersTableTest extends TestCase
                 'opponents' => []
             ],
             [
-                // Wins 2, Loses 2
+                // Wins 2, Loses 1
                 'id' => 2,
                 'opponents' => [3, 5]
             ],
             [
-                // Wins 2, Loses 0
+                // Wins 2, Loses 3
                 'id' => 3,
                 'opponents' => [2, 7]
             ],
@@ -537,13 +541,13 @@ class PlayersTableTest extends TestCase
         $playMatches($players);
 
         // Ratings
-        // 1 - 1234 - 1234 = 0
-        // 2 - 1222 - 1202 = 20
-        // 6 - 1216 - 1200 = 16
-        // 4 - 1174 - 1162 = 12
-        // 7 - 1196 - 1200 = -4
-        // 3 - 1182 - 1202 = -20
-        // 5 - 1176 - 1200 = -24
+        // 2 - 1217 - 1195 = 22
+        // 6 - 1218 - 1200 = 18
+        // 4 - 1180 - 1174 = 6
+        // 7 - 1198 - 1200 = -2
+        // 3 - 1183 - 1205 = -22
+        // 5 - 1178 - 1200 = -22
+        // 1 - 1226 - 1226 = 0 <- didn't play
 
         $this->printPlayerRatings($clubId, 'This week');
 
@@ -587,9 +591,11 @@ class PlayersTableTest extends TestCase
 
         foreach ($players as $player) {
             echo sprintf(
-                'Player %d: %d',
+                'Player %d: rating %d, wins %d, losses %d',
                 $player->id,
-                $player->rating
+                $player->rating,
+                $player->wins,
+                $player->losses
             );
             echo "\n";
         }

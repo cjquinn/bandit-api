@@ -148,13 +148,9 @@ class ClubsTable extends Table
     public function findBanditId(Query $query, array $options)
     {
         $banditId = $this->Players
-            ->find()
+            ->find('allTimeLeaderboard')
             ->select('id')
             ->where(['club_id = Clubs.id'])
-            ->orderDesc('rating')
-            ->orderDesc('wins')
-            ->orderAsc('losses')
-            ->orderDesc('modified')
             ->limit(1);
 
         $query

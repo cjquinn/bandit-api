@@ -266,7 +266,11 @@ class PlayersTable extends Table
      */
     public function findAllTimeLeaderboard(Query $query, array $options)
     {
-        $query->orderDesc($this->aliasField('rating'));
+        $query
+            ->orderDesc($this->aliasField('rating'))
+            ->orderDesc($this->aliasField('wins'))
+            ->orderAsc($this->aliasField('losses'))
+            ->orderDesc($this->aliasField('modified'));
 
         return $query;
     }
@@ -276,7 +280,7 @@ class PlayersTable extends Table
      */
     public function findPopulated(Query $query, array $options)
     {
-        $query
+        $queryp
             ->contain(['Users'])
             ->innerJoinWith('Users', function ($q) {
                 $q->find('auth');
@@ -311,11 +315,26 @@ class PlayersTable extends Table
 
         $query
             ->select([
+                'Snapshots.rating',
                 'rating_change' => $this->find()->newExpr(
                     sprintf(
                         '%s - COALESCE(Snapshots.rating, %s)',
                         $this->aliasField('rating'),
                         Configure::read('Bandit.initialRating')
+                    )
+                ),
+                'wins_change' => $this->find()->newExpr(
+                    sprintf(
+                        '%s - COALESCE(Snapshots.wins, %s)',
+                        $this->aliasField('wins'),
+                        0
+                    )
+                ),
+                'losses_change' => $this->find()->newExpr(
+                    sprintf(
+                        '%s - COALESCE(Snapshots.losses, %s)',
+                        $this->aliasField('losses'),
+                        0
                     )
                 )
             ])
@@ -331,7 +350,9 @@ class PlayersTable extends Table
                 ]
             ])
             ->where([$this->aliasField('id') . ' IN' => $playerIds])
-            ->orderDesc('rating_change');
+            ->orderDesc('rating_change')
+            ->orderDesc('wins_change')
+            ->orderAsc('losses_change');
 
         return $query;
     }

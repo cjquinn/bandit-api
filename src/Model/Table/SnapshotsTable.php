@@ -49,7 +49,10 @@ class SnapshotsTable extends Table
                 return $q;
             })
             ->where([$this->aliasField('created') . ' <' => $date])
-            ->orderDesc($this->aliasField('created'))
+            ->order([
+                $this->aliasField('created') => 'DESC',
+                $this->aliasField('match_id') => 'DESC'
+            ])
             ->first();
 
         return $snapshot

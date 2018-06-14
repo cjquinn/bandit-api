@@ -83,6 +83,8 @@ class PlayersTable extends Table
         }
 
         if ($this->Clubs->hasMember($player->club_id, $user->id)) {
+            // TODO: resend activation email if player hasn't activated.
+
             $player->user->setError('email', [
                 'duplicate' => 'A member of this club already exists with that email'
             ]);

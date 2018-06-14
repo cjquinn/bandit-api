@@ -18,7 +18,23 @@
 <head>
     <title><?= $this->fetch('title') ?></title>
 </head>
-<body>
-    <?= $this->fetch('content') ?>
+
+<body style="margin: 0; padding: 0;">
+    <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" bgcolor="#000207" style="padding: 100px 0;">
+        <tr>
+            <td align="center" valign="top" cellpadding="0" style="padding: 0;">
+                <!--[if (gte mso 9)|(IE)]><table width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+                    <div style="max-width: 440px; margin:0 auto;">
+     
+                        <table border="0" cellpadding="20" cellspacing="0" width="100%" bgcolor="#1D253E">
+
+                            <?= $this->fetch('content') ?>
+
+                        </table>
+
+                    </div>
+                <!--[if (gte mso 9)|(IE)]></td></tr></table><![endif]-->
+            </td>
+        </tr>
+    </table>
 </body>
-</html>

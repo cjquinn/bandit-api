@@ -224,81 +224,165 @@ Configure::write('Bandit', [
     'initialRating' => 1200,
     'levels' => [
         [
-            'name' => 'Junior',
-            'slug' => 'junior',
+            'name' => 'Beginner',
+            'slug' => 'beginner',
             'from' => -INF,
-            'to' => 849
+            'to' => 49
+        ],
+        [
+            'name' => 'Starter',
+            'slug' => 'starter',
+            'from' => 50,
+            'to' => 149
+        ],
+        [
+            'name' => 'Amateur',
+            'slug' => 'amateur',
+            'from' => 150,
+            'to' => 249
         ],
         [
             'name' => 'Rookie',
             'slug' => 'rookie',
-            'from' => 850,
-            'to' => 1099
+            'from' => 250,
+            'to' => 349
         ],
         [
-            'name' => 'Intermediate',
-            'slug' => 'intermediate',
-            'from' => 1100,
-            'to' => 1199
+            'name' => 'Learner',
+            'slug' => 'learner',
+            'from' => 350,
+            'to' => 449
+        ],
+        [
+            'name' => 'Novice',
+            'slug' => 'novice',
+            'from' => 450,
+            'to' => 549
+        ],
+        [
+            'name' => 'Student',
+            'slug' => 'student',
+            'from' => 550,
+            'to' => 649
+        ],
+        [
+            'name' => 'Apprentice',
+            'slug' => 'apprentice',
+            'from' => 650,
+            'to' => 749
+        ],
+        [
+            'name' => 'Trainee',
+            'slug' => 'trainee',
+            'from' => 750,
+            'to' => 849
+        ],
+        [
+            'name' => 'Recruit',
+            'slug' => 'recruit',
+            'from' => 850,
+            'to' => 949
+        ],
+        [
+            'name' => 'Junior',
+            'slug' => 'junior',
+            'from' => 950,
+            'to' => 1049
         ],
         [
             'name' => 'Scout',
             'slug' => 'scout',
-            'from' => 1200,
-            'to' => 1299
+            'from' => 1050,
+            'to' => 1149
         ],
         [
-            'name' => 'Knight',
-            'slug' => 'knight',
-            'from' => 1300,
-            'to' => 1399
+            'name' => 'Fighter',
+            'slug' => 'fighter',
+            'from' => 1150,
+            'to' => 1249
         ],
         [
-            'name' => 'Assassin',
-            'slug' => 'assassin',
-            'from' => 1400,
-            'to' => 1499
-        ],
-        [
-            'name' => 'Ninja',
-            'slug' => 'ninja',
-            'from' => 1500,
-            'to' => 1599
+            'name' => 'Gladiator',
+            'slug' => 'gladiator',
+            'from' => 1250,
+            'to' => 1349
         ],
         [
             'name' => 'Warrior',
             'slug' => 'warrior',
-            'from' => 1600,
-            'to' => 1699
+            'from' => 1350,
+            'to' => 1449
         ],
         [
-            'name' => 'Mega',
-            'slug' => 'mega',
-            'from' => 1700,
-            'to' => 1799
+            'name' => 'Assassin',
+            'slug' => 'assassin',
+            'from' => 1450,
+            'to' => 1549
+        ],
+        [
+            'name' => 'Samurai',
+            'slug' => 'samurai',
+            'from' => 1550,
+            'to' => 1649
+        ],
+        [
+            'name' => 'Ninja',
+            'slug' => 'ninja',
+            'from' => 1650,
+            'to' => 1749
         ],
         [
             'name' => 'Monster',
             'slug' => 'monster',
-            'from' => 1800,
-            'to' => 1899
+            'from' => 1750,
+            'to' => 1849
+        ],
+        [
+            'name' => 'Mammoth',
+            'slug' => 'mammoth',
+            'from' => 1850,
+            'to' => 1949
+        ],
+        [
+            'name' => 'Beast',
+            'slug' => 'beast',
+            'from' => 1950,
+            'to' => 2049
+        ],
+        [
+            'name' => 'Oracle',
+            'slug' => 'oracle',
+            'from' => 2050,
+            'to' => 2149
+        ],
+        [
+            'name' => 'Ultra',
+            'slug' => 'ultra',
+            'from' => 2150,
+            'to' => 2249
+        ],
+        [
+            'name' => 'Mega',
+            'slug' => 'mega',
+            'from' => 2250,
+            'to' => 2349
+        ],
+        [
+            'name' => 'Mythical',
+            'slug' => 'mythical',
+            'from' => 2350,
+            'to' => 2449
         ],
         [
             'name' => 'Legendary',
             'slug' => 'legendary',
-            'from' => 1900,
-            'to' => 1999
-        ],
-        [
-            'name' => 'Lord',
-            'slug' => 'lord',
-            'from' => 2000,
-            'to' => 2099
+            'from' => 2450,
+            'to' => 2549
         ],
         [
             'name' => 'God',
             'slug' => 'god',
-            'from' => 2100,
+            'from' => 2550,
             'to' => INF
         ]
     ]

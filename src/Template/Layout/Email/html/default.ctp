@@ -19,6 +19,11 @@
     <title><?= $this->fetch('title') ?></title>
 </head>
 
+<?php
+    $h1Styles = "font-family: 'Helvetica Neue', 'Helvetica', sans-serif; font-weight: 500; font-size: 25px; color: #FFFFFF; line-height: 37px;";
+    $pStyles = "font-family: 'Helvetica Neue', 'Helvetica', sans-serif; font-size: 17px; color: #ADC8FA; line-height: 25px;";
+?>
+
 <body style="margin: 0; padding: 0;">
     <table border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" bgcolor="#000207" style="padding: 100px 0;">
         <tr>

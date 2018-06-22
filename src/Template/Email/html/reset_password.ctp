@@ -12,7 +12,7 @@
 
                     <p style="font-family: 'Helvetica Neue', 'Helvetica', sans-serif; font-size: 17px; color: #ADC8FA; line-height: 25px;">Make sure to pick a good one – or perhaps it’s time to try out a <a href="http://lastpass.com/" style="color: #3CB1FF;">Password Manager like LastPass</a> to remember for you?</p>
 
-                    <p>Make haste! This link will self-destruct in one hour&hellip;</p>
+                    <p style="font-family: 'Helvetica Neue', 'Helvetica', sans-serif; font-size: 17px; color: #ADC8FA; line-height: 25px;">Don't sit on the bench! This link will self-destruct in one hour&hellip;</p>
                 </td>
             </tr>
 

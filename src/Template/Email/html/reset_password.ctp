@@ -18,7 +18,7 @@
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 24px 35px;">
-                    <a href="http://" style="background-color:#1D2438; text-decoration: none; border:2px solid #F98646;border-radius:3px;display:block; height: 48px; width:100%;">
+                    <a href="<?= $this->Url->build($url) ?>" style="background-color:#1D2438; text-decoration: none; border:2px solid #F98646;border-radius:3px;display:block; height: 48px; width:100%;">
                         <span style="display: block; width: 100%; border-top: 2px solid #626F94; line-height:42px; text-align:center; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', sans-serif; font-weight: 500;font-size:18px;color:#fff;">Set a new password</span>
                     </a>
                 </td>

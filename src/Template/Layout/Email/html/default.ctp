@@ -25,8 +25,14 @@
             <td align="center" valign="top" cellpadding="0" style="padding: 0;">
                 <!--[if (gte mso 9)|(IE)]><table width="600" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
                     <div style="max-width: 440px; margin:0 auto;">
-     
+
                         <table border="0" cellpadding="20" cellspacing="0" width="100%" bgcolor="#1D253E">
+
+                            <tr>
+                                <td align="center" valign="top" style="padding: 35px 0;">
+                                    <img src="https://i.imgur.com/9z8x0GP.png" alt="Bandit Match" width="162" />
+                                </td>
+                            </tr>
 
                             <?= $this->fetch('content') ?>
 

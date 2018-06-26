@@ -21,7 +21,14 @@
 
 <?php
     $h1Styles = "font-family: 'Helvetica Neue', 'Helvetica', sans-serif; font-weight: 500; font-size: 25px; color: #FFFFFF; line-height: 37px;";
+
+    $h2Styles = "font-family: 'Helvetica Neue', 'Helvetica', sans-serif; font-weight: 500; font-size: 21px; color: #FFFFFF; line-height: 37px;";
+
     $pStyles = "font-family: 'Helvetica Neue', 'Helvetica', sans-serif; font-size: 17px; color: #ADC8FA; line-height: 25px;";
+
+    $buttonAnchorStyles = "background-color:#1D2438; text-decoration: none; border:2px solid #F98646;border-radius:3px;display:block; height: 48px; width:100%;";
+
+    $buttonTextSpanStyles = "display: block; width: 100%; border-top: 2px solid #626F94; line-height:42px; text-align:center; text-decoration: none; font-family: 'Helvetica Neue', 'Helvetica', sans-serif; font-weight: 500;font-size:18px;color:#fff;";
 ?>
 
 <body style="margin: 0; padding: 0;">

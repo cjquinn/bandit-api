@@ -4,16 +4,16 @@
         <table align="center" border="0" cellpadding="0" cellspacing="0" padding="0" width="100%" bgcolor="#1D253E" style="max-width: 400px; padding: 0 30px;">
             <tr>
                 <td cellpadding="0" style="padding: 0;">
-                    <h1 style="<?=$h1Styles?>">Play better matches at Bandit Match</h1>
+                    <h1 style="<?=$h1Styles?>">Amy has added new match results with you</h1>
 
-                    <p style="<?=$pStyles?>">Your friend Chris Jenkins has invited you to join the club at Britannia Squash.</p>
+                    <p style="<?=$pStyles?>">Well done for facing off with a tough opponent!</p>
                 </td>
             </tr>
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 24px 35px;">
                     <a href="#" style="<?=$buttonAnchorStyles?>">
-                        <span style="<?=$buttonTextSpanStyles?>">Join the club</span>
+                        <span style="<?=$buttonTextSpanStyles?>">Go to match</span>
                     </a>
                 </td>
             </tr>
@@ -21,5 +21,3 @@
 
     </td>
 </tr>
-
-<!-- <p>To activate your account, please click <?= $this->Html->link('here', $url) ?>.</p> -->

@@ -23,7 +23,7 @@ class Player extends Entity
     ];
 
     protected $_virtual = [
-        'highest_rating',
+        'highest_level',
         'level'
     ];
 

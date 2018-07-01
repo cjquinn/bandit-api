@@ -64,7 +64,11 @@ class PlayersController extends AppController
      */
     public function view($id)
     {
-        $player = $this->Players->get($id, ['finder' => 'populated']);
+        $player = $this->Players
+            ->findById($id)
+            ->find('populated')
+            ->find('withHighestRating')
+            ->firstOrFail();
 
         $this->set('player', $player);
     }

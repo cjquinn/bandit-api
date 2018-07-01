@@ -22,21 +22,14 @@ class Player extends Entity
         '*' => false
     ];
 
-    protected $_virtual = [
-        'highest_level',
-        'level'
-    ];
+    protected $_virtual = ['level'];
 
     /**
      * @return array|void
      */
     protected function _getHighestLevel()
     {
-        if ($this->highest_rating) {
-            return $this->getLevelByRating($this->highest_rating);
-        }
-
-        $this->virtualProperties(['level']);
+        return $this->getLevelByRating($this->highest_rating);
     }
 
     /**

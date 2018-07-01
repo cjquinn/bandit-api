@@ -581,6 +581,19 @@ class PlayersTableTest extends TestCase
         $expected = ['1238', '1200', '1200', '1238', '1203', '1238', '1200', '1200'];
 
         $this->assertEquals($expected, $players->extract('highest_rating')->toArray());
+
+        $expected = [
+            ['name' => 'Fighter', 'slug' => 'fighter'],
+            ['name' => 'Fighter', 'slug' => 'fighter'],
+            ['name' => 'Fighter', 'slug' => 'fighter'],
+            ['name' => 'Fighter', 'slug' => 'fighter'],
+            ['name' => 'Fighter', 'slug' => 'fighter'],
+            ['name' => 'Fighter', 'slug' => 'fighter'],
+            ['name' => 'Fighter', 'slug' => 'fighter'],
+            ['name' => 'Fighter', 'slug' => 'fighter']
+        ];
+
+        $this->assertEquals($expected, $players->extract('highest_level')->toArray());
     }
 
     /**

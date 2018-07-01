@@ -393,7 +393,13 @@ class PlayersTable extends Table
                 ]
             ]);
 
-        return $query;
+        return $query->formatResults(function ($results) {
+            return $results->map(function ($player) {
+                $player->highest_level = $player->highest_level;
+
+                return $player;
+            });
+        });
     }
 
     /**

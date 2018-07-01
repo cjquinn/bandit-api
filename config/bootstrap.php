@@ -385,5 +385,12 @@ Configure::write('Bandit', [
             'from' => 2550,
             'to' => INF
         ]
+    ],
+    'emailStyles' => [
+        'h1' => 'font-family: \'Helvetica Neue\', \'Helvetica\', sans-serif; font-weight: 500; font-size: 25px; color: #FFFFFF; line-height: 37px;',
+        'h2' => 'font-family: \'Helvetica Neue\', \'Helvetica\', sans-serif; font-weight: 500; font-size: 21px; color: #FFFFFF; line-height: 37px;',
+        'p' => 'font-family: \'Helvetica Neue\', \'Helvetica\', sans-serif; font-size: 17px; color: #ADC8FA; line-height: 25px;',
+        'button' => 'background-color:#1D2438; text-decoration: none; border:2px solid #F98646;border-radius:3px;display:block; height: 48px; width:100%;',
+        'buttonText' => 'display: block; width: 100%; border-top: 2px solid #626F94; line-height:42px; text-align:center; text-decoration: none; font-family: \'Helvetica Neue\', \'Helvetica\', sans-serif; font-weight: 500;font-size:18px;color:#fff;'
     ]
 ]);

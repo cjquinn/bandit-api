@@ -54,8 +54,8 @@ class PlayerTest extends TestCase
         $player = new Player(['rating' => 1200]);
 
         $expected = [
-            'name' => 'Scout',
-            'slug' => 'scout'
+            'name' => 'Fighter',
+            'slug' => 'fighter'
         ];
 
         $this->assertEquals($expected, $player->level);
@@ -63,8 +63,8 @@ class PlayerTest extends TestCase
         $player = new Player(['rating' => 1856]);
 
         $expected = [
-            'name' => 'Monster',
-            'slug' => 'monster'
+            'name' => 'Mammoth',
+            'slug' => 'mammoth'
         ];
 
         $this->assertEquals($expected, $player->level);
@@ -81,8 +81,8 @@ class PlayerTest extends TestCase
         $player = new Player(['rating' => -1856213123]);
 
         $expected = [
-            'name' => 'Junior',
-            'slug' => 'junior'
+            'name' => 'Beginner',
+            'slug' => 'beginner'
         ];
 
         $this->assertEquals($expected, $player->level);

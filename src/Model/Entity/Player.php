@@ -23,8 +23,21 @@ class Player extends Entity
     ];
 
     protected $_virtual = [
+        'highest_rating',
         'level'
     ];
+
+    /**
+     * @return array|null
+     */
+    protected function _getHighestLevel()
+    {
+        if ($this->highest_rating) {
+            return $this->getLevelByRating($this->highest_rating);
+        }
+
+        return null;
+    }
 
     /**
      * @return int
@@ -48,6 +61,14 @@ class Player extends Entity
      */
     protected function _getLevel()
     {
+        return $this->getLevelByRating($this->rating);
+    }
+
+    /**
+     * @return array
+     */
+    private function getLevelByRating($rating)
+    {
         $levels = Configure::read('Bandit.levels');
         $low = 0;
         $high = count($levels) - 1;
@@ -56,8 +77,8 @@ class Player extends Entity
             $mid = floor(($low + $high) / 2);
             $level = $levels[$mid];
 
-            if ($this->rating >= $level['from'] &&
-                $this->rating <= $level['to']
+            if ($rating >= $level['from'] &&
+                $rating <= $level['to']
             ) {
                 return [
                     'name' => $level['name'],
@@ -65,7 +86,7 @@ class Player extends Entity
                 ];
             }
 
-            if ($this->rating < $level['from']) {
+            if ($rating < $level['from']) {
                 $high = $mid - 1;
             } else {
                 $low = $mid + 1;

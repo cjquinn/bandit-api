@@ -317,7 +317,7 @@ class PlayersTable extends Table
 
         $query
             ->select([
-                'Snapshots.rating',
+                // 'Snapshots.rating',
                 'rating_change' => $this->find()->newExpr(
                     sprintf(
                         '%s - COALESCE(Snapshots.rating, %s)',
@@ -355,6 +355,43 @@ class PlayersTable extends Table
             ->orderDesc('rating_change')
             ->orderDesc('wins_change')
             ->orderAsc('losses_change');
+
+        return $query;
+    }
+
+    /**
+     * @return void
+     */
+    public function findWithHighestRating(Query $query, array $options)
+    {
+        $matchId = $this->Snapshots
+            ->find()
+            ->select('match_id')
+            ->where(['player_id = Players.id'])
+            ->orderDesc('rating')
+            ->limit(1);
+
+        $query
+            ->select([
+                'highest_rating' => $this->find()->newExpr(
+                    sprintf(
+                        'GREATEST(%s, COALESCE(Snapshots.rating, %s))',
+                        Configure::read('Bandit.initialRating'),
+                        Configure::read('Bandit.initialRating')
+                    )
+                )
+            ])
+            ->enableAutoFields(true)
+            ->join([
+                'Snapshots' => [
+                    'table' => 'snapshots',
+                    'type' => 'LEFT',
+                    'conditions' => [
+                        'Snapshots.player_id = Players.id',
+                        'Snapshots.match_id' => $matchId
+                    ]
+                ]
+            ]);
 
         return $query;
     }

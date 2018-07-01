@@ -570,6 +570,22 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testFindWithHighestRating()
+    {
+        $players = $this->Players->find('withHighestRating');
+
+        $expected = [1, 2, 3, 4, 5, 6, 7, 8];
+
+        $this->assertEquals($expected, $players->extract('id')->toArray());
+
+        $expected = ['1238', '1200', '1200', '1238', '1203', '1238', '1200', '1200'];
+
+        $this->assertEquals($expected, $players->extract('highest_rating')->toArray());
+    }
+
+    /**
+     * @return void
+     */
     public function printPlayerRatings($clubId, $date = null)
     {
         return;

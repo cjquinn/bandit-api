@@ -28,7 +28,7 @@ class Player extends Entity
     ];
 
     /**
-     * @return array|null
+     * @return array|void
      */
     protected function _getHighestLevel()
     {
@@ -36,7 +36,7 @@ class Player extends Entity
             return $this->getLevelByRating($this->highest_rating);
         }
 
-        return null;
+        $this->virtualProperties(['level']);
     }
 
     /**

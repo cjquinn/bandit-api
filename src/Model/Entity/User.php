@@ -61,7 +61,7 @@ class User extends Entity
     protected function _getDisplayName()
     {
         return sprintf(
-            '%s .%s',
+            '%s %s.',
             $this->first_name,
             substr($this->last_name, 0, 1)
         );

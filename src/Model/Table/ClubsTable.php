@@ -91,6 +91,9 @@ class ClubsTable extends Table
         }
 
         $this->patchEntity($club, $data, [
+            'associated' => [
+                'Founders' => ['validate' => 'add']
+            ],
             'fieldList' => [
                 'name',
                 $user ? 'founder_id' : 'founder'

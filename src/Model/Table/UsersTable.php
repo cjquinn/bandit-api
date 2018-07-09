@@ -44,8 +44,12 @@ class UsersTable extends Table
     public function validationActivate(Validator $validator)
     {
         $validator
-            ->requirePresence('name')
-            ->notEmpty('name');
+            ->requirePresence('first_name')
+            ->notEmpty('first_name');
+
+        $validator
+            ->requirePresence('last_name')
+            ->notEmpty('last_name');
 
         $validator
             ->requirePresence('password')
@@ -60,8 +64,12 @@ class UsersTable extends Table
     public function validationAdd(Validator $validator)
     {
         $validator
-            ->requirePresence('name')
-            ->notEmpty('name');
+            ->requirePresence('first_name')
+            ->notEmpty('first_name');
+
+        $validator
+            ->requirePresence('last_name')
+            ->notEmpty('last_name');
 
         $validator
             ->requirePresence('email')
@@ -81,7 +89,12 @@ class UsersTable extends Table
     public function validationEdit(Validator $validator)
     {
         $validator
-            ->requirePresence('email')
+            ->notEmpty('first_name');
+
+        $validator
+            ->notEmpty('last_name');
+
+        $validator
             ->notEmpty('email')
             ->email('email');
 

@@ -88,7 +88,8 @@ class ClubsTableTest extends TestCase
         $data = [
             'name' => 'Bandit',
             'founder' => [
-                'name' => 'Alex Farthing',
+                'first_name' => 'Alex',
+                'last_name' => 'Farthing',
                 'email' => 'alex@gmail.com',
                 'password' => 'password'
             ]
@@ -167,7 +168,8 @@ class ClubsTableTest extends TestCase
         $data = [
             'name' => 'Ping Pong Game On',
             'founder' => [
-                'name' => 'Alex Farthing',
+                'first_name' => 'Alex',
+                'last_name' => 'Farthing',
                 'email' => 'alex@gmail.com',
                 'password' => 'password'
             ]

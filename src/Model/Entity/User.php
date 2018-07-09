@@ -7,7 +7,8 @@ use Cake\ORM\Entity;
 
 /**
  * @property int $id
- * @property string $name
+ * @property string $first_name
+ * @property string $last_name
  * @property int $reputation
  * @property string $email
  * @property string $password
@@ -33,6 +34,8 @@ class User extends Entity
         'token_sent'
     ];
 
+    protected $_virtual = ['display_name'];
+
     /**
      * @return string
      */
@@ -49,5 +52,17 @@ class User extends Entity
     protected function _getIsActivated()
     {
         return !is_null($this->password);
+    }
+
+    /**
+     * @return string
+     */
+    protected function _getDisplayName()
+    {
+        return sprintf(
+            '%s .%s',
+            $this->first_name,
+            substr($this->last_name, 0, 1)
+        );
     }
 }

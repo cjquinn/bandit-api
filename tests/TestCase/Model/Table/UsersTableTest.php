@@ -51,7 +51,10 @@ class UsersTableTest extends TestCase
         $errors = $this->Users->getValidator('add')->errors($data);
 
         $expected = [
-            'name' => [
+            'first_name' => [
+                '_required' => 'This field is required'
+            ],
+            'last_name' => [
                 '_required' => 'This field is required'
             ],
             'email' => [
@@ -66,14 +69,18 @@ class UsersTableTest extends TestCase
 
         // Empty
         $data = [
-            'name' => '',
+            'first_name' => '',
+            'last_name' => '',
             'email' => '',
             'password' => ''
         ];
         $errors = $this->Users->getValidator('add')->errors($data);
 
         $expected = [
-            'name' => [
+            'first_name' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'last_name' => [
                 '_empty' => 'This field cannot be left empty'
             ],
             'email' => [
@@ -88,7 +95,8 @@ class UsersTableTest extends TestCase
 
         // Valid
         $data = [
-            'name' => 'Christy Quinn',
+            'first_name' => 'Christy',
+            'last_name' => 'Quinn',
             'email' => 'christy@banditmatch.com',
             'password' => 'password'
         ];
@@ -150,7 +158,10 @@ class UsersTableTest extends TestCase
         $this->Users->patchEntityActivate($user, $data);
 
         $expected = [
-            'name' => [
+            'first_name' => [
+                '_required' => 'This field is required'
+            ],
+            'last_name' => [
                 '_required' => 'This field is required'
             ],
             'password' => [
@@ -165,7 +176,8 @@ class UsersTableTest extends TestCase
         // Empty
         $user = $this->Users->get(1);
         $data = [
-            'name' => '',
+            'first_name' => '',
+            'last_name' => '',
             'password' => ''
         ];
 
@@ -173,7 +185,10 @@ class UsersTableTest extends TestCase
         $this->Users->patchEntityActivate($user, $data);
 
         $expected = [
-            'name' => [
+            'first_name' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'last_name' => [
                 '_empty' => 'This field cannot be left empty'
             ],
             'password' => [
@@ -188,7 +203,8 @@ class UsersTableTest extends TestCase
         // Valid
         $user = $this->Users->get(1);
         $data = [
-            'name' => 'Christy Quinn',
+            'first_name' => 'Christy',
+            'last_name' => 'Quinn',
             'password' => 'password'
         ];
 
@@ -229,24 +245,31 @@ class UsersTableTest extends TestCase
 
         $this->Users->patchEntityEdit($user, $data);
 
-        $expected = [
-            'email' => [
-                '_required' => 'This field is required'
-            ]
-        ];
+        $expected = [];
 
         $this->assertEquals($expected, $user->getErrors());
 
         // Missing new_password
         $user = $this->Users->get(1);
         $data = [
-            'email' => 'christy@banditmatch.com',
+            'first_name' => '',
+            'last_name' => '',
+            'email' => '',
             'current_password' => 'password'
         ];
 
         $this->Users->patchEntityEdit($user, $data);
 
         $expected = [
+            'first_name' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'last_name' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'email' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
             'new_password' => [
                 '_required' => 'This field is required'
             ]
@@ -257,7 +280,6 @@ class UsersTableTest extends TestCase
         // Empty new password
         $user = $this->Users->get(1);
         $data = [
-            'email' => 'christy@banditmatch.com',
             'current_password' => 'password',
             'new_password' => ''
         ];
@@ -275,7 +297,6 @@ class UsersTableTest extends TestCase
         // Missing current_password
         $user = $this->Users->get(1);
         $data = [
-            'email' => 'christy@banditmatch.com',
             'new_password' => 'newpassword'
         ];
 
@@ -292,7 +313,6 @@ class UsersTableTest extends TestCase
         // Empty current_password
         $user = $this->Users->get(1);
         $data = [
-            'email' => 'christy@banditmatch.com',
             'current_password' => '',
             'new_password' => 'newpassword'
         ];
@@ -307,19 +327,9 @@ class UsersTableTest extends TestCase
 
         $this->assertEquals($expected, $user->getErrors());
 
-        // Empty both passwords
+        // Invalid password
         $user = $this->Users->get(1);
         $data = [
-            'email' => 'christy@banditmatch.com'
-        ];
-
-        $this->Users->patchEntityEdit($user, $data);
-
-        $this->assertEmpty($user->getErrors());
-
-        $user = $this->Users->get(1);
-        $data = [
-            'email' => 'christy@banditmatch.com',
             'current_password' => 'notmypassword',
             'new_password' => 'newpassword'
         ];
@@ -335,9 +345,9 @@ class UsersTableTest extends TestCase
         $this->assertEquals($expected, $user->getErrors());
         $this->assertFalse($user->isDirty('password'));
 
+        // Valid
         $user = $this->Users->get(1);
         $data = [
-            'email' => 'christy@banditmatch.com',
             'current_password' => 'password',
             'new_password' => 'newpassword'
         ];

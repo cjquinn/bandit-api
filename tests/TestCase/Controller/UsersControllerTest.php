@@ -113,7 +113,8 @@ class UsersControllerTest extends IntegrationTestCase
 
         $this->_setAjaxRequest();
         $this->patch('/users/activate-account.json?token=' . $token, [
-            'name' => 'Christy Quinn',
+            'first_name' => 'Christy',
+            'last_name' => 'Quinn',
             'password' => 'password'
         ]);
 
@@ -139,7 +140,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAuthSession(1);
         $this->_setAjaxRequest();
-        $this->put('/users/update-settings.json');
+        $this->put('/users/update-settings.json', ['email' => '']);
 
         $this->assertResponseCode(400);
     }

@@ -62,7 +62,8 @@ class ClubsControllerTest extends IntegrationTestCase
         $this->post('/clubs.json', [
             'name' => 'Ping Pong Game On',
             'founder' => [
-                'name' => 'Alex Farthing',
+                'first_name' => 'Alex',
+                'last_name' => 'Farthing',
                 'email' => 'alex@gmail.com',
                 'password' => 'password'
             ]

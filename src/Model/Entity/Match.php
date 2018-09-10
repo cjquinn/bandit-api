@@ -26,8 +26,8 @@ class Match extends Entity
     ];
 
     protected $_virtual = [
-        'was_within_last_24_hours',
-        'was_within_last_48_hours'
+        'was_within_24_hours',
+        'was_within_48_hours'
     ];
 
     /**

@@ -24,4 +24,25 @@ class Match extends Entity
         'player_b_score' => true,
         '*' => false
     ];
+
+    protected $_virtual = [
+        'was_within_last_24_hours',
+        'was_within_last_48_hours'
+    ];
+
+    /**
+     * @return bool
+     */
+    protected function _getWasWithin24Hours()
+    {
+        return $this->created->wasWithinLast('24 hours');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _getWasWithin48Hours()
+    {
+        return $this->created->wasWithinLast('48 hours');
+    }
 }

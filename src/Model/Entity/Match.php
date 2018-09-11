@@ -26,8 +26,8 @@ class Match extends Entity
     ];
 
     protected $_virtual = [
-        'was_within_24_hours',
-        'was_within_48_hours'
+        'was_within24_hours',
+        'was_within48_hours'
     ];
 
     /**
@@ -35,7 +35,7 @@ class Match extends Entity
      */
     protected function _getWasWithin24Hours()
     {
-        return $this->created->wasWithinLast('24 hours');
+        return $this->created && $this->created->wasWithinLast('24 hours');
     }
 
     /**
@@ -43,6 +43,6 @@ class Match extends Entity
      */
     protected function _getWasWithin48Hours()
     {
-        return $this->created->wasWithinLast('48 hours');
+        return $this->created && $this->created->wasWithinLast('48 hours');
     }
 }

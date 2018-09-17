@@ -89,6 +89,8 @@ class PlayersTableTest extends TestCase
 
         $this->assertNotNull($player->user);
         $this->assertEquals('some@new.player', $player->user->email);
+        $this->assertNotNull($player->user->token);
+        $this->assertNotNull($player->user->token_sent);
         $this->assertEquals($clubId, $player->club_id);
 
         // Existing user non member

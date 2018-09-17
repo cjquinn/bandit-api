@@ -47,6 +47,8 @@ class UsersController extends AppController
                 return;
             }
 
+            $this->Users->loadInto($user, ['Players']);
+
             $this->set('jwt', $this->Users->generateJwt($user->id));
         }
     }

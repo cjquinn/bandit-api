@@ -78,13 +78,17 @@ class PlayersTable extends Table
             ->findByEmail($player->user->email)
             ->first();
 
-        if (!$user) {
+        if ($user) {
+            $player->set('user', $user);
+        }
+
+        if (!$player->user->is_activated) {
+            $this->Users->patchEntitySetToken($player->user);
+
             return;
         }
 
-        if ($this->Clubs->hasMember($player->club_id, $user->id)) {
-            // TODO: resend activation email if player hasn't activated.
-
+        if ($this->Clubs->hasMember($player->club_id, $player->user->id)) {
             $player->user->setError('email', [
                 'duplicate' => 'A member of this club already exists with that email'
             ]);
@@ -92,7 +96,7 @@ class PlayersTable extends Table
             return;
         }
 
-        $player->set('user_id', $user->id);
+        $player->set('user_id', $player->user->id);
         $player->unsetProperty('user');
     }
 

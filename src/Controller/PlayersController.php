@@ -9,12 +9,6 @@ class PlayersController extends AppController
      */
     public function isAuthorized(array $user)
     {
-        if ($this->request->getParam('action') === 'add' &&
-            !$this->Players->Clubs->isOwnedBy($this->request->getParam('club_id'), $this->Auth->user('id'))
-        ) {
-            return false;
-        }
-
         if ($this->request->getParam('id') &&
             !$this->Players->isOwnedBy($this->request->getParam('id'), $this->request->getParam('club_id'))
         ) {

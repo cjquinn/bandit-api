@@ -58,6 +58,7 @@ class PlayersTable extends Table
     {
         $rules->add($rules->existsIn(['club_id'], 'Clubs'));
         $rules->add($rules->existsIn(['user_id'], 'Users'));
+        $rules->add($rules->isUnique(['club_id', 'user_id']));
 
         return $rules;
     }

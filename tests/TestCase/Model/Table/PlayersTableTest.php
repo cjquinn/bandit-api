@@ -140,7 +140,7 @@ class PlayersTableTest extends TestCase
     {
         $player = $this->Players->newEntity();
 
-        $player->set('club_id', 1);
+        $player->set('club_id', 2);
         $player->set('user_id', 1);
 
         $this->Players->save($player);

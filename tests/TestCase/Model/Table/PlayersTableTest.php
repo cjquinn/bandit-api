@@ -136,6 +136,30 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testPatchEntityAddExistingMemberNonActivated()
+    {
+        // Existing member non activated user
+        $this->Players->Users->updateAll(['password' => null], ['id' => 1]);
+
+        $player = $this->Players->newEntity();
+        $data = [
+            'user' => [
+                'email' => 'christy@banditmatch.com'
+            ]
+        ];
+        $playerId = $this->Players->findByUserId(1)->first()->id;
+        $clubId = 1;
+        $userId = 1;
+
+        $this->Players->patchEntityAdd($player, $data, $clubId);
+
+        $this->assertEquals($playerId, $player->id);
+        $this->assertTrue($this->Players->save($player) !== false);
+    }
+
+    /**
+     * @return void
+     */
     public function testBeforeSave()
     {
         $player = $this->Players->newEntity();

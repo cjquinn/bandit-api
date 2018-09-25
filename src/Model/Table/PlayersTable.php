@@ -89,7 +89,20 @@ class PlayersTable extends Table
 
         $player->user->set('clubId', $clubId);
 
+
         if (!$player->user->is_activated) {
+            $existingPlayer = $this
+                ->find()
+                ->where([
+                    'club_id' => $player->club_id,
+                    'user_id' => $player->user->id
+                ])
+                ->first();
+
+            if ($existingPlayer) {
+                $player->set('id', $existingPlayer->id);
+            }
+
             $this->Users->patchEntitySetToken($player->user);
 
             return;
@@ -138,7 +151,8 @@ class PlayersTable extends Table
     public function afterSave(Event $event, Player $player, ArrayObject $options)
     {
         if ($player->isNew() &&
-           (!$player->user || $player->user->isNew())
+           (!$player->user || $player->user->isNew()) &&
+           (!isset($options['sendEmail']) || $options['sendEmail'])
         ) {
             $this->getMailer('Player')->send(
                 'addedToClub',

@@ -16,7 +16,7 @@ class UserMailer extends Mailer
     public function activateAccount(User $user)
     {
         $clubName = $user->clubId
-            ? TableRegistry::get('Clubs')->get($user->clubId)
+            ? TableRegistry::get('Clubs')->get($user->clubId)->name
             : 'Bandit Match';
 
         $this

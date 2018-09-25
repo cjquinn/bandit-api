@@ -29,7 +29,6 @@ class User extends Entity
     ];
 
     protected $_hidden = [
-        'email',
         'password',
         'token',
         'token_sent'

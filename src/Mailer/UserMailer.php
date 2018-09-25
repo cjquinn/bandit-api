@@ -21,7 +21,7 @@ class UserMailer extends Mailer
 
         $this
             ->to($user->email)
-            ->subject('You\'ve been invited to join Bandit Match')
+            ->subject('You\'ve been invited to join ' . $clubName . ' on Bandit Match')
             ->from(Configure::read('Bandit.emails.referee'))
             ->set([
                 'clubName' => $clubName,

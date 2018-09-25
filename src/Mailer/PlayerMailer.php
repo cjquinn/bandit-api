@@ -19,7 +19,7 @@ class PlayerMailer extends Mailer
 
         $this
             ->to($player->user->email)
-            ->subject('You\'ve been added to a new club')
+            ->subject('You\'ve been added to ' . $player->club->name)
             ->from(Configure::read('Bandit.emails.referee'))
             ->set(['player' => $player])
             ->template('addedToClub')

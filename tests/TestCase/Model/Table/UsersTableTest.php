@@ -427,7 +427,7 @@ class UsersTableTest extends TestCase
     /**
      * @return void
      */
-    public function testBeforeSaveActivated()
+    public function testAfterSaveActivated()
     {
         $user = $this->Users->get(1);
 
@@ -463,7 +463,7 @@ class UsersTableTest extends TestCase
     /**
      * @return void
      */
-    public function testBeforeSaveUnactivated()
+    public function testAfterSaveUnactivated()
     {
         $user = $this->Users->get(1);
 

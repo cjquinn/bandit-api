@@ -243,7 +243,7 @@ class UsersTable extends Table
     /**
      * @return void
      */
-    public function beforeSave(Event $event, User $user, ArrayObject $options)
+    public function afterSave(Event $event, User $user, ArrayObject $options)
     {
         if ($user->token &&
             $user->isDirty('token')

@@ -5,9 +5,12 @@ namespace App\Model\Table;
 use App\Model\Entity\Player;
 use App\Model\Entity\Match;
 
+use ArrayObject;
+
 use Cake\Core\Configure;
 use Cake\Event\Event;
 use Cake\I18n\Time;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -15,6 +18,7 @@ use Cake\Validation\Validator;
 
 class PlayersTable extends Table
 {
+    use MailerAwareTrait;
 
     /**
      * @return void
@@ -82,6 +86,8 @@ class PlayersTable extends Table
             $player->set('user', $user);
         }
 
+        $player->user->set('clubId', $clubId);
+
         if (!$player->user->is_activated) {
             $this->Users->patchEntitySetToken($player->user);
 
@@ -122,6 +128,21 @@ class PlayersTable extends Table
     {
         if ($player->isNew()) {
             $player->set('rating', Configure::read('Bandit.initialRating'));
+        }
+    }
+
+    /**
+     * @return void
+     */
+    public function afterSave(Event $event, Player $player, ArrayObject $options)
+    {
+        if ($player->isNew() &&
+           (!$player->user || $player->user->isNew())
+        ) {
+            $this->getMailer('Player')->send(
+                'addedToClub',
+                [$player]
+            );
         }
     }
 

@@ -151,6 +151,78 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testAfterSaveExistingUser()
+    {
+        $player = $this->Players->newEntity();
+
+        $this->Players->patchEntityAdd($player, ['user' => ['email' => 'christy@banditmatch.com']], 2);
+
+        $playersTableMock = $this->getMockForModel(
+            'App\Model\Table\PlayersTable',
+            ['getMailer'],
+            ['alias' => 'PlayersTable', 'table' => 'players']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\PlayerMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['addedToClub'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->once())
+            ->method('addedToClub');
+
+        $playersTableMock
+            ->expects($this->once())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        $playersTableMock->save($player);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterSaveNewUser()
+    {
+        $player = $this->Players->newEntity();
+
+        $this->Players->patchEntityAdd($player, ['user' => ['email' => 'christy+new@banditmatch.com']], 2);
+
+        $playersTableMock = $this->getMockForModel(
+            'App\Model\Table\PlayersTable',
+            ['getMailer'],
+            ['alias' => 'PlayersTable', 'table' => 'players']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\PlayerMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['addedToClub'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->never())
+            ->method('addedToClub');
+
+        $playersTableMock
+            ->expects($this->never())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        $playersTableMock->save($player);
+    }
+
+    /**
+     * @return void
+     */
     public function testExpectedScores()
     {
         $expectedScores = $this->Players->expectedScores(1200, 1200);

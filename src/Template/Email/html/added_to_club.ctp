@@ -12,10 +12,10 @@ use Cake\Core\Configure;
                     </h1>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        The Bandit Match network is pleased to announce it’s newest talent Darren Bills.
+                        <?= $player->club->name ?> is pleased to announce it’s newest talent&hellip;<?= $player->user->first_name ?> <?= $player->user->last_name ?>.
                     </p>
 
-                    <h2 style="<?=$h2Styles?>">Start your career</h2>
+                    <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">Start your career</h2>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
                         Play matches with your club-mates.
@@ -33,7 +33,7 @@ use Cake\Core\Configure;
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 24px 35px;">
-                    <a href="#" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                    <a href="https://banditmatch.com/clubs" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Go to your club
                         </span>

@@ -25,6 +25,7 @@ class UsersController extends AppController
     /**
      * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     * @throws \Cake\Network\Exception\UnauthorizedException
      */
     public function activateAccount()
     {
@@ -146,6 +147,7 @@ class UsersController extends AppController
     /**
      * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     * @throws \Cake\Network\Exception\UnauthorizedException
      */
     public function resetPassword()
     {

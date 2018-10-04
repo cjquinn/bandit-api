@@ -8,6 +8,7 @@ use ArrayObject;
 
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Network\Exception\UnauthorizedException;
 use Cake\Event\Event;
 use Cake\I18n\Time;
 use Cake\Mailer\MailerAwareTrait;
@@ -271,6 +272,7 @@ class UsersTable extends Table
      * @param string|null $token
      * @return bool|\App\Model\Entity\User
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     * @throws \Cake\Network\Exception\UnauthorizedException
      */
     public function getByToken($token, $isActivated)
     {
@@ -289,7 +291,7 @@ class UsersTable extends Table
 
         $this->save($user);
 
-        throw new RecordNotFoundException('Expired token');
+        throw new UnauthorizedException('This link has expired. Check your email for your new link.');
     }
 
     /**

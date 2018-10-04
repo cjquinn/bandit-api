@@ -4,7 +4,7 @@ namespace App\Test\TestCase\Model\Table;
 
 use App\Model\Table\UsersTable;
 
-use Cake\Datasource\Exception\RecordNotFoundException;
+use Cake\Network\Exception\UnauthorizedException;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
@@ -573,7 +573,7 @@ class UsersTableTest extends TestCase
             ->method('getMailer')
             ->will($this->returnValue($mailerMock));
 
-        $this->expectException(RecordNotFoundException::class);
+        $this->expectException(UnauthorizedException::class);
 
         $usersTableMock->getByToken($user->token, true);
     }

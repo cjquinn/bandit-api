@@ -48,7 +48,7 @@ class UsersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->get('/users/activate-account.json?token=' . $token);
 
-        $this->assertResponseCode(404);
+        $this->assertResponseCode(401);
     }
 
     /**
@@ -264,7 +264,7 @@ class UsersControllerTest extends IntegrationTestCase
         $this->_setAjaxRequest();
         $this->get('/users/reset-password.json?token=' . $token);
 
-        $this->assertResponseCode(404);
+        $this->assertResponseCode(401);
     }
 
     /**

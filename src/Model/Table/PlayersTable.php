@@ -309,6 +309,12 @@ class PlayersTable extends Table
     public function findAllTimeLeaderboard(Query $query, array $options)
     {
         $query
+            ->where([
+                'OR' => [
+                    $this->aliasField('wins') . ' >' => 0,
+                    $this->aliasField('losses') . ' >' => 0
+                ]
+            ])
             ->orderDesc($this->aliasField('rating'))
             ->orderDesc($this->aliasField('wins'))
             ->orderAsc($this->aliasField('losses'))
@@ -329,6 +335,19 @@ class PlayersTable extends Table
 
                 return $q;
             });
+
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findUnrankedLeaderboard(Query $query, array $options)
+    {
+        $query->where([
+            $this->aliasField('wins') => 0,
+            $this->aliasField('losses') => 0
+        ]);
 
         return $query;
     }

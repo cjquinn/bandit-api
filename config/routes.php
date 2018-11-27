@@ -30,10 +30,12 @@ Router::scope('/', function ($routes) {
         $routes->resources('Leaderboards', [
             'only' => [
                 'all-time',
+                'unranked',
                 'weekly'
             ],
             'map' => [
                 'all-time' => ['action' => 'allTime'],
+                'unranked' => ['action' => 'unranked'],
                 'weekly' => ['action' => 'weekly']
             ]
         ]);

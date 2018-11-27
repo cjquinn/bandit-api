@@ -55,7 +55,7 @@ class Player extends Entity
     protected function _getLevel()
     {
         return $this->wins === 0 && $this->losses === 0
-            ? ['name' => 'Unranked', 'slug' => 'unranked']
+            ? ['name' => 'Unrated', 'slug' => 'unrated']
             : $this->getLevelByRating($this->rating);
     }
 

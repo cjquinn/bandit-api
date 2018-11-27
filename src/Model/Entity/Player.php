@@ -32,7 +32,7 @@ class Player extends Entity
      */
     protected function _getGames()
     {
-        return $this->wins === 0 && $this->losses === 0;
+        return $this->wins + $this->losses;
     }
 
     /**

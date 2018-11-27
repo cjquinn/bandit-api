@@ -22,7 +22,18 @@ class Player extends Entity
         '*' => false
     ];
 
-    protected $_virtual = ['level'];
+    protected $_virtual = [
+        'games',
+        'level'
+    ];
+
+    /**
+     * @return int
+     */
+    protected function _getGames()
+    {
+        return $this->wins === 0 && $this->losses === 0;
+    }
 
     /**
      * @return array|void
@@ -54,7 +65,7 @@ class Player extends Entity
      */
     protected function _getLevel()
     {
-        return $this->wins === 0 && $this->losses === 0
+        return $this->games === 0
             ? ['name' => 'Unrated', 'slug' => 'unrated']
             : $this->getLevelByRating($this->rating);
     }

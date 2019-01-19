@@ -32,7 +32,7 @@ use Cake\Core\Configure;
             </tr>
 
             <tr>
-                <td cellpadding="0" style="padding: 48px 24px 35px;">
+                <td cellpadding="0" style="padding: 48px 0px 35px;">
                     <a href="https://banditmatch.com/clubs" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Go to your club

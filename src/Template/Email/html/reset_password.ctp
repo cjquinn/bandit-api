@@ -31,7 +31,7 @@ use Cake\Core\Configure;
             </tr>
 
             <tr>
-                <td cellpadding="0" style="padding: 48px 24px 35px;">
+                <td cellpadding="0" style="padding: 48px 0px 35px;">
                     <a href="https://banditmatch.com/reset-password?token=<?= $user->token ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Set a new password

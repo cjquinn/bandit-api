@@ -22,6 +22,19 @@ class LeaderboardsController extends AppController
     /**
      * @return void
      */
+    public function unranked()
+    {
+        $players = $this->Players
+            ->findByClubId($this->request->getParam('club_id'))
+            ->find('populated')
+            ->find('unrankedLeaderboard');
+
+        $this->set('players', $players);
+    }
+
+    /**
+     * @return void
+     */
     public function weekly()
     {
         $players = $this->Players

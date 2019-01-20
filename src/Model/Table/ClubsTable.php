@@ -122,7 +122,7 @@ class ClubsTable extends Table
             $player->set('club_id', $club->id);
             $player->set('user_id', $club->founder_id);
 
-            $this->Players->save($player);
+            $this->Players->save($player, ['sendEmail' => false]);
 
             $club->set('founder', $this->Founders->get($club->founder_id, ['contain' => ['Players']]));
         }

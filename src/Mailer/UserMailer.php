@@ -5,6 +5,7 @@ namespace App\Mailer;
 use App\Model\Entity\User;
 
 use Cake\Core\Configure;
+use Cake\ORM\TableRegistry;
 use Cake\Mailer\Mailer;
 
 class UserMailer extends Mailer
@@ -14,15 +15,17 @@ class UserMailer extends Mailer
      */
     public function activateAccount(User $user)
     {
+        $clubName = $user->clubId
+            ? TableRegistry::get('Clubs')->get($user->clubId)->name
+            : 'Bandit Match';
+
         $this
             ->to($user->email)
-            ->subject('Activate Account')
+            ->subject('You\'ve been invited to join ' . $clubName . ' on Bandit Match')
             ->from(Configure::read('Bandit.emails.referee'))
             ->set([
-                'url' => sprintf(
-                    'https://banditmatch.com/activate-account?token=%s',
-                    $user->token
-                )
+                'clubName' => $clubName,
+                'user' => $user
             ])
             ->template('activateAccount')
             ->emailFormat('both');
@@ -35,15 +38,9 @@ class UserMailer extends Mailer
     {
         $this
             ->to($user->email)
-            ->subject('Timeout is over, get back in the match!')
+            ->subject('Your old password needs to be substituted')
             ->from(Configure::read('Bandit.emails.referee'))
-            ->set([
-                'name' => $user->name,
-                'url' => sprintf(
-                    'https://banditmatch.com/reset-password?token=%s',
-                    $user->token
-                )
-            ])
+            ->set(['user' => $user])
             ->template('resetPassword')
             ->emailFormat('both');
     }

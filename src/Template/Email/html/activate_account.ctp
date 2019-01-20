@@ -12,14 +12,28 @@ use Cake\Core\Configure;
                     </h1>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        Your friend Chris Jenkins has invited you to join the club at Britannia Squash.
+                        <?= $clubName ?> is pleased to announce it’s newest talent&hellip;<?= $user->first_name ?> <?= $user->last_name ?>.
+                    </p>
+
+                    <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">Start your career</h2>
+
+                    <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
+                        Play matches with your club-mates.
+                    </p>
+
+                    <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
+                        Build your rating by facing off against new opponents.
+                    </p>
+
+                    <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
+                        Compete on the Leaderboards to promote yourself to a higher rank.
                     </p>
                 </td>
             </tr>
 
             <tr>
-                <td cellpadding="0" style="padding: 48px 24px 35px;">
-                    <a href="#" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                <td cellpadding="0" style="padding: 48px 0px 35px;">
+                    <a href="https://banditmatch.com/activate-account?token=<?= $user->token ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Join the club
                         </span>
@@ -29,5 +43,3 @@ use Cake\Core\Configure;
         </table>
     </td>
 </tr>
-
-<!-- <p>To activate your account, please click <?= $this->Html->link('here', $url) ?>.</p> -->

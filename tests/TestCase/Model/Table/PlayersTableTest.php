@@ -136,16 +136,112 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testPatchEntityAddExistingMemberNonActivated()
+    {
+        // Existing member non activated user
+        $this->Players->Users->updateAll(['password' => null], ['id' => 1]);
+
+        $player = $this->Players->newEntity();
+        $data = [
+            'user' => [
+                'email' => 'christy@banditmatch.com'
+            ]
+        ];
+        $playerId = $this->Players->findByUserId(1)->first()->id;
+        $clubId = 1;
+        $userId = 1;
+
+        $this->Players->patchEntityAdd($player, $data, $clubId);
+
+        $this->assertEquals($playerId, $player->id);
+        $this->assertTrue($this->Players->save($player) !== false);
+    }
+
+    /**
+     * @return void
+     */
     public function testBeforeSave()
     {
         $player = $this->Players->newEntity();
 
-        $player->set('club_id', 1);
+        $player->set('club_id', 2);
         $player->set('user_id', 1);
 
         $this->Players->save($player);
 
         $this->assertEquals($player->rating, Configure::read('Bandit.initialRating'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterSaveExistingUser()
+    {
+        $player = $this->Players->newEntity();
+
+        $this->Players->patchEntityAdd($player, ['user' => ['email' => 'christy@banditmatch.com']], 2);
+
+        $playersTableMock = $this->getMockForModel(
+            'App\Model\Table\PlayersTable',
+            ['getMailer'],
+            ['alias' => 'PlayersTable', 'table' => 'players']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\PlayerMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['addedToClub'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->once())
+            ->method('addedToClub');
+
+        $playersTableMock
+            ->expects($this->once())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        $playersTableMock->save($player);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterSaveNewUser()
+    {
+        $player = $this->Players->newEntity();
+
+        $this->Players->patchEntityAdd($player, ['user' => ['email' => 'christy+new@banditmatch.com']], 2);
+
+        $playersTableMock = $this->getMockForModel(
+            'App\Model\Table\PlayersTable',
+            ['getMailer'],
+            ['alias' => 'PlayersTable', 'table' => 'players']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\PlayerMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['addedToClub'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->never())
+            ->method('addedToClub');
+
+        $playersTableMock
+            ->expects($this->never())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        $playersTableMock->save($player);
     }
 
     /**

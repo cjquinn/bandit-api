@@ -1,9 +1,19 @@
-Whats’up <?= $name ?>?
+Your old password needs to be substituted, <?= $user->first_name ?>
 
-Remember how you done goofed your password? Well you can get a new one here - <?= $url ?> - but please pick a good one - also do it quickly cause this play is only valid for the next hour.
+One too many head-on tackles and you’ve forgotten your password. Not to worry.
 
-If you suspect foul play, please ignore this email or drop me a line and I'll get the match back on track.
+Use our reset link below and write yourself a new one.
 
+Make sure to pick a good one – or perhaps it’s time to try out a Password Manager like LastPass (http://lastpass.com) to remember for you?
 
-Your CLOSE FRIEND,
-The Bandit Referee
+Don't sit on the bench! This link will self-destruct in one hour...
+
+------------------------------------------
+
+Set a new password (https://banditmatch.com/reset-password?token=<?= $user->token ?>)
+
+------------------------------------------
+
+Didn’t send a request?
+
+If you suspect foul play, please reply to me (referee@banditmatch.com?subject=Suspected Foul Play) and I’ll look into it for you.

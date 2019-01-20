@@ -11,7 +11,7 @@
             </tr>
 
             <tr>
-                <td cellpadding="0" style="padding: 48px 24px 35px;">
+                <td cellpadding="0" style="padding: 48px 0px 35px;">
                     <a href="#" style="<?=$buttonAnchorStyles?>">
                         <span style="<?=$buttonTextSpanStyles?>">Go to match</span>
                     </a>

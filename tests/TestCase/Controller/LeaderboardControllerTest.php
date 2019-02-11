@@ -13,31 +13,30 @@ class LeaderboardControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testUnauthorised()
+    public function testAllTimeUnauthenticated()
     {
-        $this->_testUnauthorised([
-            'get' => '/clubs/1/leaderboards/all-time',
-            'get' => '/clubs/1/leaderboards/weekly'
-        ]);
+        $this->get('/clubs/1/leaderboards/all-time');
+
+        $this->assertResponseCode(403);
     }
 
     /**
      * @return void
      */
-    public function testAuthorised()
+    public function testAllTimeInvalidClubId()
     {
-        $this->_testAuthorised([
-            'get' => '/clubs/2/leaderboards/all-time',
-            'get' => '/clubs/2/leaderboards/weekly'
-        ]);
+        $this->_setAuthSession(8);
+
+        $this->get('/clubs/1/leaderboards/all-time');
+
+        $this->assertResponseCode(403);
     }
 
     /**
      * @return void
      */
-    public function testAllTime()
+    public function testAllTimeGet()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
         $this->get('/clubs/1/leaderboards/all-time');
@@ -49,9 +48,30 @@ class LeaderboardControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testWeekly()
+    public function testWeeklyUnauthenticated()
     {
-        $this->_setAjaxRequest();
+        $this->get('/clubs/1/leaderboards/weekly');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testWeeklyInvalidClubId()
+    {
+        $this->_setAuthSession(8);
+
+        $this->get('/clubs/1/leaderboards/weekly');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testWeeklyGet()
+    {
         $this->_setAuthSession(1);
 
         $this->get('/clubs/1/leaderboards/weekly');

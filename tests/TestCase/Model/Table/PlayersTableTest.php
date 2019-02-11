@@ -698,6 +698,43 @@ class PlayersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testGetKfactor()
+    {
+        // A new player (< 30 games)
+        $snapshot = [
+            'rating' => 1200,
+            'losses' => 0,
+            'wins' => 0
+        ];
+
+        $expected = 40;
+
+        $this->assertEquals($expected, $this->Players->getKFactor($snapshot));
+
+        $snapshot['losses'] = 29;
+
+        $this->assertEquals($expected, $this->Players->getKFactor($snapshot));
+
+        // Rating <2400 and >=30 games
+        $snapshot['losses'] = 30;
+
+        $expected = 20;
+
+        $this->assertEquals($expected, $this->Players->getKFactor($snapshot));
+
+        $snapshot['rating'] = 2399;
+
+        $this->assertEquals($expected, $this->Players->getKFactor($snapshot));
+
+        // Rating >=2400 and >=30 games
+        $snapshot['rating'] = 2400;
+
+        $expected = 10;
+    }
+
+    /**
+     * @return void
+     */
     public function printPlayerRatings($clubId, $date = null)
     {
         return;

@@ -8,44 +8,6 @@ use Cake\TestSuite\TestCase;
 
 class PlayerTest extends TestCase
 {
-
-    /**
-     * @return void
-     */
-    public function testKfactor()
-    {
-        // A new player (< 30 games)
-        $player = new Player([
-            'rating' => 1200,
-            'losses' => 0,
-            'wins' => 0
-        ]);
-
-        $expected = 40;
-
-        $this->assertEquals($expected, $player->k_factor);
-
-        $player->losses = 29;
-
-        $this->assertEquals($expected, $player->k_factor);
-
-        // Rating <2400 and >=30 games
-        $player->losses = 30;
-
-        $expected = 20;
-
-        $this->assertEquals($expected, $player->k_factor);
-
-        $player->rating = 2399;
-
-        $this->assertEquals($expected, $player->k_factor);
-
-        // Rating >=2400 and >=30 games
-        $player->rating = 2400;
-
-        $expected = 10;
-    }
-
     /**
      * @return void
      */

@@ -21,6 +21,16 @@ class MatchesController extends AppController
      */
     public function isAuthorized(array $user)
     {
+        // Invalid match id
+        if ($this->request->getParam('id') &&
+            !$this->Matches->isOwnedBy(
+                $this->request->getParam('id'),
+                $this->request->getParam('club_id')
+            )
+        ) {
+            return false;
+        }
+
         if ($this->request->getParam('action') === 'add' &&
             $this->Matches->Clubs->hasDisputingMember($this->request->getParam('club_id'), $this->Auth->user('id'))
         ) {

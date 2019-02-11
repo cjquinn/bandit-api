@@ -165,7 +165,7 @@ class PlayersTableTest extends TestCase
         $player = $this->Players->newEntity();
 
         $player->set('club_id', 2);
-        $player->set('user_id', 1);
+        $player->set('user_id', 2);
 
         $this->Players->save($player);
 
@@ -179,7 +179,7 @@ class PlayersTableTest extends TestCase
     {
         $player = $this->Players->newEntity();
 
-        $this->Players->patchEntityAdd($player, ['user' => ['email' => 'christy@banditmatch.com']], 2);
+        $this->Players->patchEntityAdd($player, ['user' => ['email' => 'alex@banditmatch.com']], 2);
 
         $playersTableMock = $this->getMockForModel(
             'App\Model\Table\PlayersTable',
@@ -672,15 +672,16 @@ class PlayersTableTest extends TestCase
     {
         $players = $this->Players->find('withHighestRating');
 
-        $expected = [1, 2, 3, 4, 5, 6, 7, 8];
+        $expected = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         $this->assertEquals($expected, $players->extract('id')->toArray());
 
-        $expected = ['1238', '1200', '1200', '1238', '1203', '1238', '1200', '1200'];
+        $expected = ['1238', '1200', '1200', '1238', '1203', '1238', '1200', '1220', '1200'];
 
         $this->assertEquals($expected, $players->extract('highest_rating')->toArray());
 
         $expected = [
+            ['name' => 'Fighter', 'slug' => 'fighter'],
             ['name' => 'Fighter', 'slug' => 'fighter'],
             ['name' => 'Fighter', 'slug' => 'fighter'],
             ['name' => 'Fighter', 'slug' => 'fighter'],

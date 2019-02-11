@@ -77,6 +77,7 @@ class ClubsControllerTest extends IntegrationTestCase
     public function testEditUnauthorised()
     {
         $this->_setAuthSession(1);
+
         $this->put('/clubs/2.json');
 
         $this->assertResponseCode(403);
@@ -123,7 +124,7 @@ class ClubsControllerTest extends IntegrationTestCase
      */
     public function testIndexGet()
     {
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(2);
         $this->get('/clubs.json');
 
         $this->assertResponseCode(200);
@@ -145,8 +146,8 @@ class ClubsControllerTest extends IntegrationTestCase
      */
     public function testViewUnauthorised()
     {
-        $this->_setAuthSession(1);
-        $this->get('/clubs/2.json');
+        $this->_setAuthSession(8);
+        $this->get('/clubs/1.json');
 
         $this->assertResponseCode(403);
     }

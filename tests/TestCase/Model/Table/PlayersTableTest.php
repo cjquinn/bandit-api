@@ -369,7 +369,7 @@ class PlayersTableTest extends TestCase
     {
         $player = $this->Players->get(1);
 
-        $snapshot = $this->Players->snapshotPlayer($player, 0.5, 4, 2);
+        $snapshot = $this->Players->snapshotPlayer($player, 0.5, 40, 4, 2);
 
         $this->assertEquals(1255, $player->rating);
         $this->assertEquals(6, $player->wins);

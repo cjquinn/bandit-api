@@ -221,10 +221,10 @@ class PlayersTable extends Table
     /**
      * @return array
      */
-    public function snapshotPlayer(Player $player, $expectedScore, $wins, $losses)
+    public function snapshotPlayer(Player $player, $expectedScore, $kFactor, $wins, $losses)
     {
-        $winsRatingChange = $this->ratingChange($expectedScore, 1, $player->k_factor) * $wins;
-        $lossesRatingChange = $this->ratingChange($expectedScore, 0, $player->k_factor) * $losses;
+        $winsRatingChange = $this->ratingChange($expectedScore, 1, $kFactor) * $wins;
+        $lossesRatingChange = $this->ratingChange($expectedScore, 0, $kFactor) * $losses;
 
         $this->patchEntityStats($player, [
             'rating' => $player->rating + $winsRatingChange + $lossesRatingChange,
@@ -280,12 +280,14 @@ class PlayersTable extends Table
             $playerASnapShot = $this->snapshotPlayer(
                 $playerA,
                 $expectedScores['a'],
+                $this->getKFactor($playerADailySnapshot),
                 $match->player_a_score,
                 $match->player_b_score
             );
             $playerBSnapShot = $this->snapshotPlayer(
                 $playerB,
                 $expectedScores['b'],
+                $this->getKFactor($playerBDailySnapshot),
                 $match->player_b_score,
                 $match->player_a_score
             );
@@ -459,6 +461,23 @@ class PlayersTable extends Table
                 return $player;
             });
         });
+    }
+
+    /**
+     * @return int
+     * @see https://en.wikipedia.org/wiki/Elo_rating_system#Mathematical_details
+     */
+    public function getKFactor($snapshot)
+    {
+        if ($snapshot['losses'] + $snapshot['wins'] < 30) {
+            return 40;
+        }
+
+        if ($snapshot['rating'] < 2400) {
+            return 20;
+        }
+
+        return 10;
     }
 
     /**

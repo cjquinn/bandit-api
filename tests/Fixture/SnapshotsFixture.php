@@ -174,6 +174,46 @@ class SnapshotsFixture extends TestFixture
                 'created' => new Time('today'),
                 'modified' => new Time('today')
             ],
+            [
+                'match_id' => 9,
+                'player_id' => 8,
+                'rating' => 1220,
+                'difference' => 20,
+                'wins' => 1,
+                'losses' => 0,
+                'created' => new Time('today'),
+                'modified' => new Time('today')
+            ],
+            [
+                'match_id' => 9,
+                'player_id' => 9,
+                'rating' => 1180,
+                'difference' => -20,
+                'wins' => 0,
+                'losses' => 1,
+                'created' => new Time('today'),
+                'modified' => new Time('today')
+            ],
+            [
+                'match_id' => 10,
+                'player_id' => 8,
+                'rating' => 1200,
+                'difference' => -20,
+                'wins' => 1,
+                'losses' => 1,
+                'created' => new Time('today'),
+                'modified' => new Time('today')
+            ],
+            [
+                'match_id' => 10,
+                'player_id' => 9,
+                'rating' => 1200,
+                'difference' => 20,
+                'wins' => 1,
+                'losses' => 1,
+                'created' => new Time('today'),
+                'modified' => new Time('today')
+            ],
         ];
 
         parent::init();

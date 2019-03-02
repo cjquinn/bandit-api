@@ -10,26 +10,13 @@ use Cake\TestSuite\IntegrationTestCase;
 
 class UsersControllerTest extends IntegrationTestCase
 {
-
     use ControllerTestTrait;
-
-    /**
-     * @return void
-     */
-    public function testUnauthorised()
-    {
-        $this->_testUnauthorised([
-            'get' => '/users/current.json',
-            'put' => '/users/update-settings.json'
-        ]);
-    }
 
     /**
      * @return void
      */
     public function testActivateAccountNoToken()
     {
-        $this->_setAjaxRequest();
         $this->get('/users/activate-account.json');
 
         $this->assertResponseCode(404);
@@ -45,7 +32,7 @@ class UsersControllerTest extends IntegrationTestCase
             'isActivated' => false
         ]);
 
-        $this->_setAjaxRequest();
+
         $this->get('/users/activate-account.json?token=' . $token);
 
         $this->assertResponseCode(401);
@@ -61,7 +48,7 @@ class UsersControllerTest extends IntegrationTestCase
             'isActivated' => true
         ]);
 
-        $this->_setAjaxRequest();
+
         $this->get('/users/activate-account.json?token=' . $token);
 
         $this->assertResponseCode(404);
@@ -77,7 +64,7 @@ class UsersControllerTest extends IntegrationTestCase
             'isActivated' => false
         ]);
 
-        $this->_setAjaxRequest();
+
         $this->get('/users/activate-account.json?token=' . $token);
 
         $this->assertResponseCode(200);
@@ -93,7 +80,7 @@ class UsersControllerTest extends IntegrationTestCase
             'isActivated' => false
         ]);
 
-        $this->_setAjaxRequest();
+
         $this->patch('/users/activate-account.json?token=' . $token, [
             'password' => ''
         ]);
@@ -111,7 +98,7 @@ class UsersControllerTest extends IntegrationTestCase
             'isActivated' => false
         ]);
 
-        $this->_setAjaxRequest();
+
         $this->patch('/users/activate-account.json?token=' . $token, [
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
@@ -124,10 +111,20 @@ class UsersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testCurrentUnauthenticated()
+    {
+        $this->get('/users/current.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testCurrentGet()
     {
         $this->_setAuthSession(1);
-        $this->_setAjaxRequest();
+
         $this->get('/users/current.json');
 
         $this->assertResponseCode(200);
@@ -136,10 +133,20 @@ class UsersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testEditUnauthenticated()
+    {
+        $this->put('/users/update-settings.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testEditBadData()
     {
         $this->_setAuthSession(1);
-        $this->_setAjaxRequest();
+
         $this->put('/users/update-settings.json', ['email' => '']);
 
         $this->assertResponseCode(400);
@@ -151,7 +158,7 @@ class UsersControllerTest extends IntegrationTestCase
     public function testEditPatch()
     {
         $this->_setAuthSession(1);
-        $this->_setAjaxRequest();
+
         $this->put('/users/update-settings.json', [
             'email' => 'christy@banditmatch.com'
         ]);
@@ -164,7 +171,7 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testLoginBadData()
     {
-        $this->_setAjaxRequest();
+
         $this->post('/users/login.json', [
             'email' => 'christy@banditmatch.com',
             'password' => 'incorrect password'
@@ -178,7 +185,7 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testLoginPost()
     {
-        $this->_setAjaxRequest();
+
         $this->post('/users/login.json', [
             'email' => 'christy@banditmatch.com',
             'password' => 'password'
@@ -192,7 +199,7 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testRequestPasswordResetBadData()
     {
-        $this->_setAjaxRequest();
+
         $this->patch('/users/request-password-reset.json');
 
         $this->assertResponseCode(400);
@@ -203,7 +210,7 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testRequestPasswordResetInvalidEmail()
     {
-        $this->_setAjaxRequest();
+
         $this->patch('/users/request-password-reset.json', [
             'email' => 'incorrect@banditmatch.com'
         ]);
@@ -216,7 +223,7 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testRequestPasswordResetPatch()
     {
-        $this->_setAjaxRequest();
+
         $this->patch('/users/request-password-reset.json', [
             'email' => 'christy@banditmatch.com'
         ]);
@@ -229,7 +236,7 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testResetPasswordNoToken()
     {
-        $this->_setAjaxRequest();
+
         $this->get('/users/reset-password.json');
 
         $this->assertResponseCode(404);
@@ -245,7 +252,7 @@ class UsersControllerTest extends IntegrationTestCase
             'isActivated' => false
         ]);
 
-        $this->_setAjaxRequest();
+
         $this->get('/users/reset-password.json?token=' . $token);
 
         $this->assertResponseCode(404);
@@ -261,7 +268,7 @@ class UsersControllerTest extends IntegrationTestCase
             'isActivated' => true
         ]);
 
-        $this->_setAjaxRequest();
+
         $this->get('/users/reset-password.json?token=' . $token);
 
         $this->assertResponseCode(401);
@@ -277,7 +284,7 @@ class UsersControllerTest extends IntegrationTestCase
             'isActivated' => true
         ]);
 
-        $this->_setAjaxRequest();
+
         $this->patch('/users/reset-password.json?token=' . $token, [
             'password' => ''
         ]);
@@ -295,7 +302,7 @@ class UsersControllerTest extends IntegrationTestCase
             'isActivated' => true
         ]);
 
-        $this->_setAjaxRequest();
+
         $this->patch('/users/reset-password.json?token=' . $token, [
             'password' => 'password'
         ]);

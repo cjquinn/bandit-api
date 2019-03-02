@@ -103,12 +103,23 @@ class MatchesFixture extends TestFixture
                 'id' => 9,
                 'club_id' => 2,
                 'player_a_id' => 8,
-                'player_b_id' => 1,
+                'player_b_id' => 9,
+                'player_a_score' => 1,
+                'player_b_score' => 0,
+                'created' => new Time('today'),
+                'modified' => new Time('today')
+            ],
+            [
+                'id' => 10,
+                'club_id' => 2,
+                'player_a_id' => 9,
+                'player_b_id' => 8,
                 'player_a_score' => 1,
                 'player_b_score' => 0,
                 'created' => new Time('today'),
                 'modified' => new Time('today')
             ]
+
         ];
 
         parent::init();

@@ -44,23 +44,6 @@ class Player extends Entity
     }
 
     /**
-     * @return int
-     * @see https://en.wikipedia.org/wiki/Elo_rating_system#Mathematical_details
-     */
-    protected function _getKFactor()
-    {
-        if ($this->losses + $this->wins < 30) {
-            return 40;
-        }
-
-        if ($this->rating < 2400) {
-            return 20;
-        }
-
-        return 10;
-    }
-
-    /**
      * @return array
      */
     protected function _getLevel()

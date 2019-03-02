@@ -9,38 +9,13 @@ use Cake\TestSuite\IntegrationTestCase;
 
 class ClubsControllerTest extends IntegrationTestCase
 {
-
     use ControllerTestTrait;
-
-    /**
-     * @return void
-     */
-    public function testUnauthorised()
-    {
-        $this->_testUnauthorised([
-            'get' => '/clubs.json',
-            'put' => '/clubs/1.json',
-            'get' => '/clubs/1.json'
-        ]);
-    }
-
-    /**
-     * @return void
-     */
-    public function testAuthorised()
-    {
-        $this->_testAuthorised([
-            'put' => '/clubs/2.json',
-            'get' => '/clubs/2.json'
-        ]);
-    }
 
     /**
      * @return void
      */
     public function testAddBadData()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
         $this->post('/clubs.json', [
@@ -56,9 +31,8 @@ class ClubsControllerTest extends IntegrationTestCase
      *
      * @return void
      */
-    public function testAddUnauthorised()
+    public function testAddUnauthenticated()
     {
-        $this->_setAjaxRequest();
         $this->post('/clubs.json', [
             'name' => 'Ping Pong Game On',
             'founder' => [
@@ -77,9 +51,8 @@ class ClubsControllerTest extends IntegrationTestCase
      *
      * @return void
      */
-    public function testAddAuthorised()
+    public function testAddAuthenticated()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
         $this->post('/clubs.json', [
             'name' => 'Ping Pong Game On'
@@ -91,9 +64,30 @@ class ClubsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testEditUnauthenticated()
+    {
+        $this->put('/clubs/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testEditUnauthorised()
+    {
+        $this->_setAuthSession(1);
+
+        $this->put('/clubs/2.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testEditBadData()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
         $this->put('/clubs/1.json', [
             'name' => ''
@@ -107,7 +101,6 @@ class ClubsControllerTest extends IntegrationTestCase
      */
     public function testEditPut()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
         $this->put('/clubs/1.json', [
             'name' => 'Squelch Bandit'
@@ -119,10 +112,19 @@ class ClubsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testIndexUnauthenticated()
+    {
+        $this->get('/clubs.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testIndexGet()
     {
-        $this->_setAjaxRequest();
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(2);
         $this->get('/clubs.json');
 
         $this->assertResponseCode(200);
@@ -132,9 +134,29 @@ class ClubsControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testViewUnauthenticated()
+    {
+        $this->get('/clubs/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewUnauthorised()
+    {
+        $this->_setAuthSession(8);
+        $this->get('/clubs/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testViewGet()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
         $this->get('/clubs/1.json');
 

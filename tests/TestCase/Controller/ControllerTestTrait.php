@@ -6,7 +6,6 @@ use Cake\ORM\TableRegistry;
 
 trait ControllerTestTrait
 {
-
     public $fixtures = [
         'app.clubs',
         'app.disputes',
@@ -19,30 +18,27 @@ trait ControllerTestTrait
     /**
      * @return void
      */
-    private function _testUnauthorised($routes)
+    public function setUp()
     {
-        $this->_setAjaxRequest();
+        parent::setUp();
 
-        foreach ($routes as $method => $path) {
-            $this->{$method}($path);
+        $_ENV['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
 
-            $this->assertResponseCode(403);
+        if (!isset($this->_request['headers'])) {
+            $this->_request['headers'] = [];
         }
+
+        $this->_request['headers']['Accept'] = 'application/json';
     }
 
     /**
      * @return void
      */
-    private function _testAuthorised($routes)
+    public function tearDown()
     {
-        $this->_setAuthSession(1);
-        $this->_setAjaxRequest();
+        parent::tearDown();
 
-        foreach ($routes as $method => $path) {
-            $this->{$method}($path);
-
-            $this->assertResponseCode(403);
-        }
+        unset($_ENV['HTTP_X_REQUESTED_WITH']);
     }
 
     /**
@@ -60,20 +56,6 @@ trait ControllerTestTrait
         }
 
         $this->_request['headers']['Authorization'] = 'Bearer ' . $token;
-    }
-
-    /**
-     * @return void
-     */
-    private function _setAjaxRequest()
-    {
-        $_ENV['HTTP_X_REQUESTED_WITH'] = 'XMLHttpRequest';
-
-        if (!isset($this->_request['headers'])) {
-            $this->_request['headers'] = [];
-        }
-
-        $this->_request['headers']['Accept'] = 'application/json';
     }
 
     /**

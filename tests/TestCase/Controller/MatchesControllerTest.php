@@ -9,40 +9,28 @@ use Cake\TestSuite\IntegrationTestCase;
 
 class MatchesControllerTest extends IntegrationTestCase
 {
-
     use ControllerTestTrait;
 
     /**
      * @return void
      */
-    public function testUnauthorised()
+    public function testAddUnauthenticated()
     {
-        $this->_testUnauthorised([
-            'post' => '/clubs/1/matches.json',
-            'get' => '/clubs/1/matches.json',
-            'get' => '/clubs/1/matches.json',
-            'delete' => '/clubs/1/matches/1.json',
-            'get' => '/clubs/1/matches/1.json'
-        ]);
+        $this->post('/clubs/1/matches.json');
+
+        $this->assertResponseCode(403);
     }
 
     /**
      * @return void
      */
-    public function testAuthorised()
+    public function testAddInvalidClubId()
     {
-        // For invalid match
-        $this->_table('Matches')->updateAll(['club_id' => 2], ['id' => 1]);
+        $this->_setAuthSession(8);
 
-        $this->_testAuthorised([
-            // Unassigned
-            'post' => '/clubs/2/matches.json',
-            'get' => '/clubs/2/matches.json',
-            'get' => '/clubs/2/matches.json',
-            // Invalid match
-            'delete' => '/clubs/1/matches/1.json',
-            'get' => '/clubs/1/matches/1.json'
-        ]);
+        $this->post('/clubs/1/matches.json');
+
+        $this->assertResponseCode(403);
     }
 
     /**
@@ -50,7 +38,6 @@ class MatchesControllerTest extends IntegrationTestCase
      */
     public function testAddExistingDisputes()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
         $this->post('/clubs/1/matches.json', [
@@ -67,7 +54,6 @@ class MatchesControllerTest extends IntegrationTestCase
      */
     public function testAddBadData()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
         $this->post('/clubs/1/matches.json', []);
@@ -80,7 +66,6 @@ class MatchesControllerTest extends IntegrationTestCase
      */
     public function testAddPost()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(2);
 
         $this->post('/clubs/1/matches.json', [
@@ -95,10 +80,45 @@ class MatchesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testDeleteUnauthenticated()
+    {
+        $this->delete('/clubs/1/matches/7.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteInvalidClubId()
+    {
+        $this->_setAuthSession(8);
+
+        $this->delete('/clubs/1/matches/7.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testDeleteInvalidMatchId()
+    {
+        $this->_table('Disputes')->deleteAll(['match_id' => 10]);
+
+        $this->_setAuthSession(1);
+
+        $this->delete('/clubs/1/matches/10.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testDeleteInvalidPlayer()
     {
         $this->_setAuthSession(1);
-        $this->_setAjaxRequest();
 
         $this->delete('/clubs/1/matches/3.json');
 
@@ -117,7 +137,6 @@ class MatchesControllerTest extends IntegrationTestCase
         $this->_table('Matches')->save($match);
 
         $this->_setAuthSession(3);
-        $this->_setAjaxRequest();
 
         $this->delete('/clubs/1/matches/3.json');
 
@@ -130,7 +149,6 @@ class MatchesControllerTest extends IntegrationTestCase
     public function testDeleteTimeExpired()
     {
         $this->_setAuthSession(1);
-        $this->_setAjaxRequest();
 
         $this->delete('/clubs/1/matches/1.json');
 
@@ -143,7 +161,6 @@ class MatchesControllerTest extends IntegrationTestCase
     public function testDeleteDelete()
     {
         $this->_setAuthSession(4);
-        $this->_setAjaxRequest();
 
         $this->delete('/clubs/1/matches/7.json');
 
@@ -153,9 +170,30 @@ class MatchesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testIndexUnauthenticated()
+    {
+        $this->get('/clubs/1/matches.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testIndexInvalidClubId()
+    {
+        $this->_setAuthSession(8);
+
+        $this->get('/clubs/1/matches.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testIndexGet()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
         $this->get('/clubs/1/matches.json');
@@ -167,9 +205,42 @@ class MatchesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testViewUnauthenticated()
+    {
+        $this->get('/clubs/1/matches/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewInvalidClubId()
+    {
+        $this->_setAuthSession(8);
+
+        $this->get('/clubs/1/matches/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewInvalidMatchId()
+    {
+        $this->_setAuthSession(1);
+
+        $this->get('/clubs/1/matches/9.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testViewGet()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
         $this->get('/clubs/1/matches/1.json');

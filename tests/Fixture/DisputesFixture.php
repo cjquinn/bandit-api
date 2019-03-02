@@ -40,7 +40,7 @@ class DisputesFixture extends TestFixture
                 'modified' => new Time('1 day ago')
             ],
             [
-                'match_id' => 9,
+                'match_id' => 10,
                 'player_a_score' => 3,
                 'player_b_score' => 1,
                 'is_resolved' => null,

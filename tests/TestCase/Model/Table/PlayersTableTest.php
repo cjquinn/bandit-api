@@ -165,7 +165,7 @@ class PlayersTableTest extends TestCase
         $player = $this->Players->newEntity();
 
         $player->set('club_id', 2);
-        $player->set('user_id', 1);
+        $player->set('user_id', 2);
 
         $this->Players->save($player);
 
@@ -179,7 +179,7 @@ class PlayersTableTest extends TestCase
     {
         $player = $this->Players->newEntity();
 
-        $this->Players->patchEntityAdd($player, ['user' => ['email' => 'christy@banditmatch.com']], 2);
+        $this->Players->patchEntityAdd($player, ['user' => ['email' => 'alex@banditmatch.com']], 2);
 
         $playersTableMock = $this->getMockForModel(
             'App\Model\Table\PlayersTable',
@@ -369,7 +369,7 @@ class PlayersTableTest extends TestCase
     {
         $player = $this->Players->get(1);
 
-        $snapshot = $this->Players->snapshotPlayer($player, 0.5, 4, 2);
+        $snapshot = $this->Players->snapshotPlayer($player, 0.5, 40, 4, 2);
 
         $this->assertEquals(1255, $player->rating);
         $this->assertEquals(6, $player->wins);
@@ -672,11 +672,11 @@ class PlayersTableTest extends TestCase
     {
         $players = $this->Players->find('withHighestRating');
 
-        $expected = [1, 2, 3, 4, 5, 6, 7, 8];
+        $expected = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
         $this->assertEquals($expected, $players->extract('id')->toArray());
 
-        $expected = ['1238', '1200', '1200', '1238', '1203', '1238', '1200', '1200'];
+        $expected = ['1238', '1200', '1200', '1238', '1203', '1238', '1200', '1220', '1200'];
 
         $this->assertEquals($expected, $players->extract('highest_rating')->toArray());
 
@@ -688,10 +688,48 @@ class PlayersTableTest extends TestCase
             ['name' => 'Fighter', 'slug' => 'fighter'],
             ['name' => 'Fighter', 'slug' => 'fighter'],
             ['name' => 'Fighter', 'slug' => 'fighter'],
+            ['name' => 'Fighter', 'slug' => 'fighter'],
             ['name' => 'Fighter', 'slug' => 'fighter']
         ];
 
         $this->assertEquals($expected, $players->extract('highest_level')->toArray());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetKfactor()
+    {
+        // A new player (< 30 games)
+        $snapshot = [
+            'rating' => 1200,
+            'losses' => 0,
+            'wins' => 0
+        ];
+
+        $expected = 40;
+
+        $this->assertEquals($expected, $this->Players->getKFactor($snapshot));
+
+        $snapshot['losses'] = 29;
+
+        $this->assertEquals($expected, $this->Players->getKFactor($snapshot));
+
+        // Rating <2400 and >=30 games
+        $snapshot['losses'] = 30;
+
+        $expected = 20;
+
+        $this->assertEquals($expected, $this->Players->getKFactor($snapshot));
+
+        $snapshot['rating'] = 2399;
+
+        $this->assertEquals($expected, $this->Players->getKFactor($snapshot));
+
+        // Rating >=2400 and >=30 games
+        $snapshot['rating'] = 2400;
+
+        $expected = 10;
     }
 
     /**

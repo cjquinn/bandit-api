@@ -9,34 +9,28 @@ use Cake\TestSuite\IntegrationTestCase;
 
 class PlayersControllerTest extends IntegrationTestCase
 {
-
     use ControllerTestTrait;
 
     /**
      * @return void
      */
-    public function testUnauthorised()
+    public function testAddUnauthenticated()
     {
-        $this->_testUnauthorised([
-            'post' => '/clubs/1/players.json',
-            'get' => '/clubs/1/players.json',
-            'get' => '/clubs/1/players/1.json'
-        ]);
+        $this->post('/clubs/1/players.json');
+
+        $this->assertResponseCode(403);
     }
 
     /**
      * @return void
      */
-    public function testAuthorised()
+    public function testAddInvalidClubId()
     {
-        $this->_testAuthorised([
-            // Unassigned
-            'get' => '/clubs/2/players.json',
-            // Non founder
-            'post' => '/clubs/2/players.json',
-            // Invalid player
-            'get' => '/clubs/1/players/8.json'
-        ]);
+        $this->_setAuthSession(8);
+
+        $this->post('/clubs/1/players.json');
+
+        $this->assertResponseCode(403);
     }
 
     /**
@@ -44,10 +38,9 @@ class PlayersControllerTest extends IntegrationTestCase
      */
     public function testAddBadData()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
-        $this->post('/clubs/1/players.json', []);
+        $this->post('/clubs/1/players.json');
 
         $this->assertResponseCode(400);
     }
@@ -57,7 +50,6 @@ class PlayersControllerTest extends IntegrationTestCase
      */
     public function testAddPost()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
         $this->post('/clubs/1/players.json', [
@@ -72,9 +64,30 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testIndexUnauthenticated()
+    {
+        $this->get('/clubs/1/players.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testIndexInvalidClubId()
+    {
+        $this->_setAuthSession(8);
+
+        $this->get('/clubs/1/players.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testIndexGet()
     {
-        $this->_setAjaxRequest();
         $this->_setAuthSession(1);
 
         $this->get('/clubs/1/players.json');
@@ -86,9 +99,42 @@ class PlayersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testView()
+    public function testViewUnauthenticated()
     {
-        $this->_setAjaxRequest();
+        $this->get('/clubs/1/players/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewInvalidClubId()
+    {
+        $this->_setAuthSession(8);
+
+        $this->get('/clubs/1/players/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewInvalidMatchId()
+    {
+        $this->_setAuthSession(1);
+
+        $this->get('/clubs/2/players/1.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testViewGet()
+    {
         $this->_setAuthSession(1);
 
         $this->get('/clubs/1/players/1.json');

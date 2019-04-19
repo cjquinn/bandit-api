@@ -13,27 +13,6 @@ class UserMailer extends Mailer
     /**
      * @return void
      */
-    public function activateAccount(User $user)
-    {
-        $clubName = $user->clubId
-            ? TableRegistry::get('Clubs')->get($user->clubId)->name
-            : 'Bandit Match';
-
-        $this
-            ->to($user->email)
-            ->subject('You\'ve been invited to join ' . $clubName . ' on Bandit Match')
-            ->from(Configure::read('Bandit.emails.referee'))
-            ->set([
-                'clubName' => $clubName,
-                'user' => $user
-            ])
-            ->template('activateAccount')
-            ->emailFormat('both');
-    }
-
-    /**
-     * @return void
-     */
     public function resetPassword(User $user)
     {
         $this

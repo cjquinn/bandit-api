@@ -12,17 +12,17 @@ use Cake\Core\Configure;
                     </h1>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        <?= $clubName ?> is pleased to announce it’s newest talent&hellip;<?= $user->first_name ?> <?= $user->last_name ?>.
+                        <?= $player->club->name ?> have invited you to join their club.
                     </p>
 
                     <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">Start your career</h2>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        Play matches with your club-mates.
+                        Play a range of club mates to find your rating.
                     </p>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        Build your rating by facing off against new opponents.
+                        Challenge players nearest your rating to have the best matches.
                     </p>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
@@ -33,7 +33,7 @@ use Cake\Core\Configure;
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 0px 35px;">
-                    <a href="https://banditmatch.com/activate-account?token=<?= $user->token ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                    <a href="https://banditmatch.com/sign-up?email=<?= urlencode($player->user->email) ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Join the club
                         </span>

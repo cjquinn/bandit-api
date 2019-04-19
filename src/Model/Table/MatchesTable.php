@@ -90,7 +90,7 @@ class MatchesTable extends Table
 
         $this->patchEntity($match, $data, ['validate' => 'add']);
 
-        if ($match->getErrors()) {
+        if (!empty($match->getErrors())) {
             return;
         }
 

@@ -1,6 +1,6 @@
-A new player has entered the arena
+Play better matches at Bandit Match
 
-<?= $player->club->name ?> is pleased to announce it’s newest talent...<?= $player->user->first_name ?> <?= $player->user->last_name ?>.
+<?= $player->club->name ?> have invited you to join their club.
 
 Start your career
 
@@ -12,4 +12,4 @@ Compete on the Leaderboards to promote yourself to a higher rank.
 
 ------------------------------------------
 
-Go to your club (https://banditmatch.com/clubs)
+Join the club (https://banditmatch.com/sign-up?email=<?= urlencode($player->user->email) ?>)

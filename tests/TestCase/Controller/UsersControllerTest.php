@@ -15,74 +15,25 @@ class UsersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testActivateAccountNoToken()
+    public function testAddBadData()
     {
-        $this->get('/users/activate-account.json');
+        $this->post('/users.json');
 
-        $this->assertResponseCode(404);
+        $this->assertResponseCode(400);
     }
 
     /**
      * @return void
      */
-    public function testActivateAccountExpiredToken()
+    public function testAddActivatedInvitaion()
     {
-        $token = $this->_getToken([
-            'isExpired' => true,
-            'isActivated' => false
-        ]);
+        $user = $this->_table('Users')->get(1);
 
-
-        $this->get('/users/activate-account.json?token=' . $token);
-
-        $this->assertResponseCode(401);
-    }
-
-    /**
-     * @return void
-     */
-    public function testActivateAccountActiveAccount()
-    {
-        $token = $this->_getToken([
-            'isExpired' => false,
-            'isActivated' => true
-        ]);
-
-
-        $this->get('/users/activate-account.json?token=' . $token);
-
-        $this->assertResponseCode(404);
-    }
-
-    /**
-     * @return void
-     */
-    public function testActivateAccountGet()
-    {
-        $token = $this->_getToken([
-            'isExpired' => false,
-            'isActivated' => false
-        ]);
-
-
-        $this->get('/users/activate-account.json?token=' . $token);
-
-        $this->assertResponseCode(200);
-    }
-
-    /**
-     * @return void
-     */
-    public function testActivateAccountBadData()
-    {
-        $token = $this->_getToken([
-            'isExpired' => false,
-            'isActivated' => false
-        ]);
-
-
-        $this->patch('/users/activate-account.json?token=' . $token, [
-            'password' => ''
+        $this->post('/users.json', [
+            'first_name' => 'Christy',
+            'last_name' => 'Quinn',
+            'email' => $user->email,
+            'password' => 'password'
         ]);
 
         $this->assertResponseCode(400);
@@ -91,17 +42,39 @@ class UsersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
-    public function testActivateAccountPatch()
+    public function testAddPost()
     {
-        $token = $this->_getToken([
-            'isExpired' => false,
-            'isActivated' => false
+        $this->post('/users.json', [
+            'first_name' => 'Alex',
+            'last_name' => 'Farthing',
+            'email' => 'alex@gmail.com',
+            'password' => 'password'
         ]);
 
+        $this->assertResponseCode(200);
+    }
 
-        $this->patch('/users/activate-account.json?token=' . $token, [
+    /**
+     * @return void
+     */
+    public function testAddInvitation()
+    {
+        $table = $this->_table('Users');
+
+        $user = $table->get(1);
+
+        $user->set([
+            'first_name' => null,
+            'last_name' => null,
+            'password' => null
+        ], ['guard' => false]);
+
+        $table->save($user);
+
+        $this->post('/users.json', [
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
+            'email' => $user->email,
             'password' => 'password'
         ]);
 
@@ -135,7 +108,7 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testEditUnauthenticated()
     {
-        $this->put('/users/update-settings.json');
+        $this->put('/users.json');
 
         $this->assertResponseCode(403);
     }
@@ -147,7 +120,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAuthSession(1);
 
-        $this->put('/users/update-settings.json', ['email' => '']);
+        $this->put('/users.json', ['email' => '']);
 
         $this->assertResponseCode(400);
     }
@@ -159,7 +132,7 @@ class UsersControllerTest extends IntegrationTestCase
     {
         $this->_setAuthSession(1);
 
-        $this->put('/users/update-settings.json', [
+        $this->put('/users.json', [
             'email' => 'christy@banditmatch.com'
         ]);
 
@@ -171,7 +144,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testLoginBadData()
     {
-
         $this->post('/users/login.json', [
             'email' => 'christy@banditmatch.com',
             'password' => 'incorrect password'
@@ -185,7 +157,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testLoginPost()
     {
-
         $this->post('/users/login.json', [
             'email' => 'christy@banditmatch.com',
             'password' => 'password'
@@ -199,7 +170,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testRequestPasswordResetBadData()
     {
-
         $this->patch('/users/request-password-reset.json');
 
         $this->assertResponseCode(400);
@@ -210,7 +180,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testRequestPasswordResetInvalidEmail()
     {
-
         $this->patch('/users/request-password-reset.json', [
             'email' => 'incorrect@banditmatch.com'
         ]);
@@ -223,7 +192,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testRequestPasswordResetPatch()
     {
-
         $this->patch('/users/request-password-reset.json', [
             'email' => 'christy@banditmatch.com'
         ]);
@@ -236,7 +204,6 @@ class UsersControllerTest extends IntegrationTestCase
      */
     public function testResetPasswordNoToken()
     {
-
         $this->get('/users/reset-password.json');
 
         $this->assertResponseCode(404);
@@ -251,10 +218,7 @@ class UsersControllerTest extends IntegrationTestCase
             'isExpired' => false,
             'isActivated' => false
         ]);
-
-
         $this->get('/users/reset-password.json?token=' . $token);
-
         $this->assertResponseCode(404);
     }
 
@@ -267,7 +231,6 @@ class UsersControllerTest extends IntegrationTestCase
             'isExpired' => true,
             'isActivated' => true
         ]);
-
 
         $this->get('/users/reset-password.json?token=' . $token);
 
@@ -283,7 +246,6 @@ class UsersControllerTest extends IntegrationTestCase
             'isExpired' => false,
             'isActivated' => true
         ]);
-
 
         $this->patch('/users/reset-password.json?token=' . $token, [
             'password' => ''
@@ -301,7 +263,6 @@ class UsersControllerTest extends IntegrationTestCase
             'isExpired' => false,
             'isActivated' => true
         ]);
-
 
         $this->patch('/users/reset-password.json?token=' . $token, [
             'password' => 'password'

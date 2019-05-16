@@ -2,7 +2,6 @@
 
 namespace App\Model\Entity;
 
-use Cake\Core\Configure;
 use Cake\ORM\Entity;
 
 /**
@@ -17,6 +16,7 @@ use Cake\ORM\Entity;
  */
 class Player extends Entity
 {
+    use LevelTrait;
 
     protected $_accessible = [
         '*' => false
@@ -41,50 +41,5 @@ class Player extends Entity
     protected function _getHighestLevel()
     {
         return $this->getLevelByRating($this->highest_rating);
-    }
-
-    /**
-     * @return array
-     */
-    protected function _getLevel()
-    {
-        return $this->games === 0
-            ? ['name' => 'Unrated', 'slug' => 'unrated']
-            : $this->getLevelByRating($this->rating);
-    }
-
-    /**
-     * @return array
-     */
-    private function getLevelByRating($rating)
-    {
-        $levels = Configure::read('Bandit.levels');
-        $low = 0;
-        $high = count($levels) - 1;
-
-        while ($low <= $high) {
-            $mid = floor(($low + $high) / 2);
-            $level = $levels[$mid];
-
-            if ($rating >= $level['from'] &&
-                $rating <= $level['to']
-            ) {
-                return [
-                    'name' => $level['name'],
-                    'slug' => $level['slug']
-                ];
-            }
-
-            if ($rating < $level['from']) {
-                $high = $mid - 1;
-            } else {
-                $low = $mid + 1;
-            }
-        }
-
-        return [
-            'name' => 'Unknown',
-            'slug' => 'unknown'
-        ];
     }
 }

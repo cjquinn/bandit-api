@@ -92,19 +92,14 @@ Router::scope('/', function ($routes) {
      */
     $routes->resources('Users', [
         'only' => [
-            'activate-account',
             'current',
+            'create',
             'login',
             'request-password-reset',
             'reset-password',
-            'update-avatar',
-            'update-settings'
+            'update'
         ],
         'map' => [
-            'activate-account' => [
-                'action' => 'activateAccount',
-                'method' => ['GET', 'PATCH']
-            ],
             'current' => [
                 'action' => 'current',
                 'method' => 'GET'
@@ -121,9 +116,10 @@ Router::scope('/', function ($routes) {
                 'action' => 'resetPassword',
                 'method' => ['GET', 'PATCH']
             ],
-            'update-settings' => [
+            'update' => [
                 'action' => 'edit',
-                'method' => 'PUT'
+                'method' => 'PUT',
+                'path' => ''
             ]
         ]
     ]);

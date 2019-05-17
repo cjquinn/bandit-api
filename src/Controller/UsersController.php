@@ -15,7 +15,7 @@ class UsersController extends AppController
         parent::beforeFilter($event);
 
         $this->Auth->allow([
-            'activateAccount',
+            'add',
             'login',
             'requestPasswordReset',
             'resetPassword'
@@ -24,34 +24,29 @@ class UsersController extends AppController
 
     /**
      * @return void
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException
-     * @throws \Cake\Network\Exception\UnauthorizedException
      */
-    public function activateAccount()
+    public function add()
     {
-        $user = $this->Users->getByToken($this->request->getQuery('token'), false);
+        $user = $this->Users->newEntity();
 
-        if ($this->request->is('patch')) {
-            $this->Users->patchEntityActivate($user, $this->request->data);
+        $this->Users->patchEntityAdd($user, $this->request->getData());
 
-            $success = $this->Users->save($user);
+        $success = $this->Users->save($user);
 
-            $user->setHidden(['password', 'token', 'token_sent']);
+        $this->set([
+            'user' => $user,
+            'errors' => $user->getErrors()
+        ]);
 
-            $this->set([
-                'user' => $user,
-                'errors' => $user->getErrors()
-            ]);
+        if (!$success) {
+            $this->response = $this->response->withStatus(400);
 
-            if (!$success) {
-                $this->response->statusCode(400);
-                return;
-            }
-
-            $this->Users->loadInto($user, ['Players']);
-
-            $this->set('jwt', $this->Users->generateJwt($user->id));
+            return;
         }
+
+        $this->Users->loadInto($user, ['Players']);
+
+        $this->set('jwt', $this->Users->generateJwt($user->id));
     }
 
     /**
@@ -60,8 +55,6 @@ class UsersController extends AppController
     public function current()
     {
         $user = $this->Users->get($this->Auth->user('id'), ['contain' => 'Players']);
-
-        $user->setHidden(['password', 'token', 'token_sent']);
 
         $this->set('user', $user);
     }
@@ -78,8 +71,6 @@ class UsersController extends AppController
         if (!$this->Users->save($user)) {
             $this->response = $this->response->withStatus(400);
         }
-
-        $user->setHidden(['password', 'token', 'token_sent']);
 
         $this->set([
             'user' => $user,
@@ -107,8 +98,6 @@ class UsersController extends AppController
         }
 
         $user = $this->Users->get($user['id'], ['contain' => 'Players']);
-
-        $user->setHidden(['password', 'token', 'token_sent']);
 
         $this->set([
             'jwt' => $this->Users->generateJwt($user->id),
@@ -151,7 +140,7 @@ class UsersController extends AppController
      */
     public function resetPassword()
     {
-        $user = $this->Users->getByToken($this->request->getQuery('token'), true);
+        $user = $this->Users->getByToken($this->request->getQuery('token'));
 
         if ($this->request->is('patch')) {
             $this->Users->patchEntityResetPassword($user, $this->request->getData());
@@ -159,8 +148,6 @@ class UsersController extends AppController
             if (!$this->Users->save($user)) {
                 $this->response = $this->response->withStatus(400);
             }
-
-            $user->setHidden(['password', 'token', 'token_sent']);
 
             $this->set([
                 'user' => $user,

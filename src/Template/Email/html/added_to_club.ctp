@@ -18,11 +18,11 @@ use Cake\Core\Configure;
                     <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">Start your career</h2>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        Play matches with your club-mates.
+                        Play a range of club mates to find your rating.
                     </p>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        Build your rating by facing off against new opponents.
+                        Challenge players nearest your rating to have the best matches.
                     </p>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">

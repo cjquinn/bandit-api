@@ -89,8 +89,6 @@ class PlayersTableTest extends TestCase
 
         $this->assertNotNull($player->user);
         $this->assertEquals('some@new.player', $player->user->email);
-        $this->assertNotNull($player->user->token);
-        $this->assertNotNull($player->user->token_sent);
         $this->assertEquals($clubId, $player->club_id);
 
         // Existing user non member
@@ -151,7 +149,31 @@ class PlayersTableTest extends TestCase
         $clubId = 1;
         $userId = 1;
 
-        $this->Players->patchEntityAdd($player, $data, $clubId);
+        $playersTableMock = $this->getMockForModel(
+            'App\Model\Table\PlayersTable',
+            ['getMailer'],
+            ['alias' => 'PlayersTable', 'table' => 'players']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\PlayerMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['invitedToClub'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->once())
+            ->method('invitedToClub');
+
+        $playersTableMock
+            ->expects($this->once())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        $playersTableMock->patchEntityAdd($player, $data, $clubId);
 
         $this->assertEquals($playerId, $player->id);
         $this->assertTrue($this->Players->save($player) !== false);
@@ -229,15 +251,15 @@ class PlayersTableTest extends TestCase
 
         $mailerMock = $this->getMockBuilder('App\Mailer\PlayerMailer')
             ->setConstructorArgs([$emailMock])
-            ->setMethods(['addedToClub'])
+            ->setMethods(['invitedToClub'])
             ->getMock();
 
         $mailerMock
-            ->expects($this->never())
-            ->method('addedToClub');
+            ->expects($this->once())
+            ->method('invitedToClub');
 
         $playersTableMock
-            ->expects($this->never())
+            ->expects($this->once())
             ->method('getMailer')
             ->will($this->returnValue($mailerMock));
 

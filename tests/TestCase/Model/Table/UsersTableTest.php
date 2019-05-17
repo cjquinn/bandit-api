@@ -148,14 +148,13 @@ class UsersTableTest extends TestCase
     /**
      * @return void
      */
-    public function testPatchEntityActivate()
+    public function testPatchEntityAdd()
     {
         // Required
-        $user = $this->Users->get(1);
+        $user = $this->Users->newEntity();
         $data = [];
 
-        $this->Users->patchEntitySetToken($user);
-        $this->Users->patchEntityActivate($user, $data);
+        $this->Users->patchEntityAdd($user, $data);
 
         $expected = [
             'first_name' => [
@@ -164,25 +163,25 @@ class UsersTableTest extends TestCase
             'last_name' => [
                 '_required' => 'This field is required'
             ],
+            'email' => [
+                '_required' => 'This field is required'
+            ],
             'password' => [
                 '_required' => 'This field is required'
             ]
         ];
 
         $this->assertEquals($expected, $user->getErrors());
-        $this->assertNotNull($user->token);
-        $this->assertNotNull($user->token_sent);
 
         // Empty
-        $user = $this->Users->get(1);
+        $user = $this->Users->newEntity();
         $data = [
             'first_name' => '',
             'last_name' => '',
+            'email' => '',
             'password' => ''
         ];
-
-        $this->Users->patchEntitySetToken($user);
-        $this->Users->patchEntityActivate($user, $data);
+        $this->Users->patchEntityAdd($user, $data);
 
         $expected = [
             'first_name' => [
@@ -191,29 +190,56 @@ class UsersTableTest extends TestCase
             'last_name' => [
                 '_empty' => 'This field cannot be left empty'
             ],
+            'email' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
             'password' => [
                 '_empty' => 'This field cannot be left empty'
             ]
         ];
 
         $this->assertEquals($expected, $user->getErrors());
-        $this->assertNotNull($user->token);
-        $this->assertNotNull($user->token_sent);
 
-        // Valid
-        $user = $this->Users->get(1);
+        // Valid new
+        $user = $this->Users->newEntity();
+        $data = [
+            'first_name' => 'Bob',
+            'last_name' => 'Geldof',
+            'email' => 'bob@banditmatch.com',
+            'password' => 'password'
+        ];
+        $this->Users->patchEntityAdd($user, $data);
+
+        $this->assertEmpty($user->getErrors());
+        $this->assertNull($user->id);
+
+        // Valid existing activated
+        $user = $this->Users->newEntity();
         $data = [
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
+            'email' => 'christy@banditmatch.com',
             'password' => 'password'
         ];
-
-        $this->Users->patchEntitySetToken($user);
-        $this->Users->patchEntityActivate($user, $data);
+        $this->Users->patchEntityAdd($user, $data);
 
         $this->assertEmpty($user->getErrors());
-        $this->assertNull($user->token);
-        $this->assertNull($user->token_sent);
+        $this->assertNull($user->id);
+
+        // Valid existing unactivated
+        $this->Users->updateAll(['password' => null], ['email' => 'christy@banditmatch.com']);
+
+        $user = $this->Users->newEntity();
+        $data = [
+            'first_name' => 'Christy',
+            'last_name' => 'Quinn',
+            'email' => 'christy@banditmatch.com',
+            'password' => 'password'
+        ];
+        $this->Users->patchEntityAdd($user, $data);
+
+        $this->assertEmpty($user->getErrors());
+        $this->assertEquals(1, $user->id);
     }
 
     /**
@@ -427,7 +453,7 @@ class UsersTableTest extends TestCase
     /**
      * @return void
      */
-    public function testAfterSaveActivated()
+    public function testAfterSave()
     {
         $user = $this->Users->get(1);
 
@@ -451,44 +477,6 @@ class UsersTableTest extends TestCase
         $mailerMock
             ->expects($this->once())
             ->method('resetPassword');
-
-        $usersTableMock
-            ->expects($this->once())
-            ->method('getMailer')
-            ->will($this->returnValue($mailerMock));
-
-        $usersTableMock->save($user);
-    }
-
-    /**
-     * @return void
-     */
-    public function testAfterSaveUnactivated()
-    {
-        $user = $this->Users->get(1);
-
-        $user->set('password', null);
-
-        $this->Users->patchEntitySetToken($user);
-
-        $usersTableMock = $this->getMockForModel(
-            'App\Model\Table\UsersTable',
-            ['getMailer'],
-            ['alias' => 'UsersTable', 'table' => 'users']
-        );
-
-        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
-            ->setMethods(['send'])
-            ->getMock();
-
-        $mailerMock = $this->getMockBuilder('App\Mailer\UserMailer')
-            ->setConstructorArgs([$emailMock])
-            ->setMethods(['activateAccount'])
-            ->getMock();
-
-        $mailerMock
-            ->expects($this->once())
-            ->method('activateAccount');
 
         $usersTableMock
             ->expects($this->once())
@@ -536,7 +524,7 @@ class UsersTableTest extends TestCase
 
         $this->Users->save($user);
 
-        $userByToken = $this->Users->getByToken($user->token, true);
+        $userByToken = $this->Users->getByToken($user->token);
 
         $this->assertEquals($userByToken->id, $user->id);
 
@@ -575,6 +563,6 @@ class UsersTableTest extends TestCase
 
         $this->expectException(UnauthorizedException::class);
 
-        $usersTableMock->getByToken($user->token, true);
+        $usersTableMock->getByToken($user->token);
     }
 }

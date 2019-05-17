@@ -267,10 +267,10 @@ class PlayersTable extends Table
      */
     public function snapshotPlayers(Match $match)
     {
-        $playerASnapShot = [];
-        $playerBSnapShot = [];
+        $playerASnapshot = [];
+        $playerBSnapshot = [];
 
-        $this->connection()->transactional(function () use ($match, &$playerASnapShot, &$playerBSnapShot) {
+        $this->connection()->transactional(function () use ($match, &$playerASnapshot, &$playerBSnapshot) {
             $playerA = $this->get($match->player_a_id);
             $playerB = $this->get($match->player_b_id);
 
@@ -295,14 +295,14 @@ class PlayersTable extends Table
             );
 
             // Update player stats
-            $playerASnapShot = $this->snapshotPlayer(
+            $playerASnapshot = $this->snapshotPlayer(
                 $playerA,
                 $expectedScores['a'],
                 $this->getKFactor($playerADailySnapshot),
                 $match->player_a_score,
                 $match->player_b_score
             );
-            $playerBSnapShot = $this->snapshotPlayer(
+            $playerBSnapshot = $this->snapshotPlayer(
                 $playerB,
                 $expectedScores['b'],
                 $this->getKFactor($playerBDailySnapshot),
@@ -318,8 +318,8 @@ class PlayersTable extends Table
         });
 
         return [
-            'player_a_snapshot' => $playerASnapShot,
-            'player_b_snapshot' => $playerBSnapShot
+            'player_a_snapshot' => $playerASnapshot,
+            'player_b_snapshot' => $playerBSnapshot
         ];
     }
 

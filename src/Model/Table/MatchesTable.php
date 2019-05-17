@@ -230,6 +230,47 @@ class MatchesTable extends Table
     }
 
     /**
+     * @return \Cake\ORM\Query
+     */
+    public function findWithBreakdowns(Query $query, array $options)
+    {
+        $playersTable = TableRegistry::get('Players');
+
+        return $query->formatResults(function ($matches) use ($playersTable) {
+            return $matches->map(function ($match) use ($playersTable) {
+                // Get daily snapshots first
+                $playerADailySnapshot = $playersTable->Snapshots->getDailySnapshot(
+                    $match->player_a_id,
+                    $match->created->i18nFormat('Y-M-d')
+                );
+                $playerBDailySnapshot = $playersTable->Snapshots->getDailySnapshot(
+                    $match->player_b_id,
+                    $match->created->i18nFormat('Y-M-d')
+                );
+
+                $expectedScores = $playersTable->expectedScores(
+                    $playerADailySnapshot['rating'],
+                    $playerBDailySnapshot['rating']
+                );
+
+                $playerAKFactor = $playersTable->getKFactor($playerADailySnapshot);
+                $match->player_a_breakdown = [
+                    'win' => $playersTable->ratingChange($expectedScores['a'], 1, $playerAKFactor),
+                    'loss' => $playersTable->ratingChange($expectedScores['a'], 0, $playerAKFactor)
+                ];
+
+                $playerBKFactor = $playersTable->getKFactor($playerBDailySnapshot);
+                $match->player_b_breakdown = [
+                    'win' => $playersTable->ratingChange($expectedScores['b'], 1, $playerBKFactor),
+                    'loss' => $playersTable->ratingChange($expectedScores['b'], 0, $playerBKFactor)
+                ];
+
+                return $match;
+            });
+        });
+    }
+
+    /**
      * Find a tree of match ids starting with the passed
      * match. When used for softDelete the first match
      * passed is deleted but the rest will not be. This is

@@ -13,6 +13,25 @@ class UserMailer extends Mailer
     /**
      * @return void
      */
+    public function invitationUpdate(User $user)
+    {
+        $player = $user->players[0];
+
+        $this
+            ->to($user->email)
+            ->subject('You\'ve been invited to join ' . $players->club->name . ' on Bandit Match')
+            ->from(Configure::read('Bandit.emails.referee'))
+            ->set([
+                'email' => $email,
+                'player' => $player
+            ])
+            ->template('invitationUpdate')
+            ->emailFormat('both');
+    }
+
+    /**
+     * @return void
+     */
     public function resetPassword(User $user)
     {
         $this

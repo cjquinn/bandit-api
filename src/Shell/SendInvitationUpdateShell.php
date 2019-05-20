@@ -19,7 +19,7 @@ class SendInvitationUpdateShell extends Shell
         $users = $this->Users
             ->find()
             ->where(['password IS' => null])
-            ->contain('Players.Clubs')
+            ->contain('Players.Clubs.Matches')
             ->innerJoinWith('Players.Clubs')
             ->group('Users.id');
 
@@ -37,7 +37,7 @@ class SendInvitationUpdateShell extends Shell
         $users = $this->Users
             ->find()
             ->where(['password IS' => null])
-            ->contain('Players.Clubs')
+            ->contain('Players.Clubs.Matches')
             ->innerJoinWith('Players.Clubs')
             ->group('Users.id');
 

@@ -19,10 +19,10 @@ class UserMailer extends Mailer
 
         $this
             ->to($user->email)
-            ->subject('You\'ve been invited to join ' . $players->club->name . ' on Bandit Match')
+            ->subject('You\'ve been invited to join ' . $player->club->name . ' on Bandit Match')
             ->from(Configure::read('Bandit.emails.referee'))
             ->set([
-                'email' => $email,
+                'email' => $user->email,
                 'player' => $player
             ])
             ->template('invitationUpdate')

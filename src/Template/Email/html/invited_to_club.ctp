@@ -14,7 +14,21 @@ use Cake\Core\Configure;
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
                         <?= $player->club->name ?> have invited you to join their club.
                     </p>
+                </td>
+            </tr>
 
+            <tr>
+                <td cellpadding="0" style="padding: 48px 0px 35px;">
+                    <a href="https://banditmatch.com/sign-up?email=<?= urlencode($player->user->email) ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                        <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
+                            Join the club
+                        </span>
+                    </a>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
                     <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">Start your career</h2>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
@@ -28,16 +42,6 @@ use Cake\Core\Configure;
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
                         Compete on the Leaderboards to promote yourself to a higher rank.
                     </p>
-                </td>
-            </tr>
-
-            <tr>
-                <td cellpadding="0" style="padding: 48px 0px 35px;">
-                    <a href="https://banditmatch.com/sign-up?email=<?= urlencode($player->user->email) ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
-                        <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
-                            Join the club
-                        </span>
-                    </a>
                 </td>
             </tr>
         </table>

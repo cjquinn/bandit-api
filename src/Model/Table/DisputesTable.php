@@ -105,7 +105,7 @@ class DisputesTable extends Table
      */
     public function close(Dispute $dispute)
     {
-        if ($dispute->getErrors()) {
+        if (!empty($dispute->getErrors())) {
             return false;
         }
 

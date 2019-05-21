@@ -136,13 +136,12 @@ class MatchesController extends AppController
      */
     public function view($id)
     {
-        $match = $this->Matches->get($id, [
-            'finder' => 'populated',
-            'contain' => 'Disputes',
-            // Players can view deleted matches on their own
-            // when navigating from a dispute
-            'ignoreBeforeFind' => true
-        ]);
+        $match = $this->Matches
+            ->findById($id, ['ignoreBeforeFind' => true])
+            ->find('populated')
+            ->find('withBreakdowns')
+            ->contain(['Disputes'])
+            ->firstOrFail();
 
         $this->set('match', $match);
     }

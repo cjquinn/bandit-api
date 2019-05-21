@@ -75,40 +75,29 @@ class PlayersTable extends Table
             'validate' => 'add'
         ]);
 
-        if ($player->getErrors()) {
+        if (!empty($player->getErrors())) {
             return;
         }
 
+        // New user
         $user = $this->Users
             ->findByEmail($player->user->email)
             ->first();
 
-        if ($user) {
-            $player->set('user', $user);
-        }
-
-        $player->user->set('clubId', $clubId);
-
-
-        if (!$player->user->is_activated) {
-            $existingPlayer = $this
-                ->find()
-                ->where([
-                    'club_id' => $player->club_id,
-                    'user_id' => $player->user->id
-                ])
-                ->first();
-
-            if ($existingPlayer) {
-                $player->set('id', $existingPlayer->id);
-            }
-
-            $this->Users->patchEntitySetToken($player->user);
-
+        if (!$user) {
             return;
         }
 
-        if ($this->Clubs->hasMember($player->club_id, $player->user->id)) {
+        $existingPlayer = $this
+            ->find()
+            ->where([
+                'club_id' => $player->club_id,
+                'user_id' => $user->id
+            ])
+            ->first();
+
+        // Existing player user activated
+        if ($existingPlayer && $user->is_activated) {
             $player->user->setError('email', [
                 'duplicate' => 'A member of this club already exists with that email'
             ]);
@@ -116,8 +105,23 @@ class PlayersTable extends Table
             return;
         }
 
-        $player->set('user_id', $player->user->id);
+        // New player existing user
+        if (!$existingPlayer) {
+            $player->set('user_id', $user->id);
+            $player->unsetProperty('user');
+            return;
+        }
+
+
+        // Existing player user unactivated
+        $player->set('id', $existingPlayer->id);
+        $player->set('user_id', $user->id);
         $player->unsetProperty('user');
+
+        $this->getMailer('Player')->send(
+            'invitedToClub',
+            [$player]
+        );
     }
 
     /**
@@ -150,15 +154,29 @@ class PlayersTable extends Table
      */
     public function afterSave(Event $event, Player $player, ArrayObject $options)
     {
-        if ($player->isNew() &&
-           (!$player->user || $player->user->isNew()) &&
-           (!isset($options['sendEmail']) || $options['sendEmail'])
-        ) {
+        if (isset($options['sendEmail']) && !$options['sendEmail']) {
+            return;
+        }
+
+        if (!$player->isNew()) {
+            return;
+        }
+
+        if ($player->user) {
+            // New user
             $this->getMailer('Player')->send(
-                'addedToClub',
+                'invitedToClub',
                 [$player]
             );
+
+            return;
         }
+
+        // Existing user
+        $this->getMailer('Player')->send(
+            'addedToClub',
+            [$player]
+        );
     }
 
     /**
@@ -249,10 +267,10 @@ class PlayersTable extends Table
      */
     public function snapshotPlayers(Match $match)
     {
-        $playerASnapShot = [];
-        $playerBSnapShot = [];
+        $playerASnapshot = [];
+        $playerBSnapshot = [];
 
-        $this->connection()->transactional(function () use ($match, &$playerASnapShot, &$playerBSnapShot) {
+        $this->connection()->transactional(function () use ($match, &$playerASnapshot, &$playerBSnapshot) {
             $playerA = $this->get($match->player_a_id);
             $playerB = $this->get($match->player_b_id);
 
@@ -277,14 +295,14 @@ class PlayersTable extends Table
             );
 
             // Update player stats
-            $playerASnapShot = $this->snapshotPlayer(
+            $playerASnapshot = $this->snapshotPlayer(
                 $playerA,
                 $expectedScores['a'],
                 $this->getKFactor($playerADailySnapshot),
                 $match->player_a_score,
                 $match->player_b_score
             );
-            $playerBSnapShot = $this->snapshotPlayer(
+            $playerBSnapshot = $this->snapshotPlayer(
                 $playerB,
                 $expectedScores['b'],
                 $this->getKFactor($playerBDailySnapshot),
@@ -300,8 +318,8 @@ class PlayersTable extends Table
         });
 
         return [
-            'player_a_snapshot' => $playerASnapShot,
-            'player_b_snapshot' => $playerBSnapShot
+            'player_a_snapshot' => $playerASnapshot,
+            'player_b_snapshot' => $playerBSnapshot
         ];
     }
 

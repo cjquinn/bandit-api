@@ -13,21 +13,19 @@ class UserMailer extends Mailer
     /**
      * @return void
      */
-    public function activateAccount(User $user)
+    public function invitationUpdate(User $user)
     {
-        $clubName = $user->clubId
-            ? TableRegistry::get('Clubs')->get($user->clubId)->name
-            : 'Bandit Match';
+        $player = $user->players[0];
 
         $this
             ->to($user->email)
-            ->subject('You\'ve been invited to join ' . $clubName . ' on Bandit Match')
+            ->subject('You\'ve been invited to join ' . $player->club->name . ' on Bandit Match')
             ->from(Configure::read('Bandit.emails.referee'))
             ->set([
-                'clubName' => $clubName,
-                'user' => $user
+                'email' => $user->email,
+                'player' => $player
             ])
-            ->template('activateAccount')
+            ->template('invitationUpdate')
             ->emailFormat('both');
     }
 

@@ -90,7 +90,7 @@ class MatchesTable extends Table
 
         $this->patchEntity($match, $data, ['validate' => 'add']);
 
-        if ($match->getErrors()) {
+        if (!empty($match->getErrors())) {
             return;
         }
 
@@ -227,6 +227,47 @@ class MatchesTable extends Table
             ->orderAsc($this->aliasField('created'));
 
         return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findWithBreakdowns(Query $query, array $options)
+    {
+        $playersTable = TableRegistry::get('Players');
+
+        return $query->formatResults(function ($matches) use ($playersTable) {
+            return $matches->map(function ($match) use ($playersTable) {
+                // Get daily snapshots first
+                $playerADailySnapshot = $playersTable->Snapshots->getDailySnapshot(
+                    $match->player_a_id,
+                    $match->created->i18nFormat('Y-M-d')
+                );
+                $playerBDailySnapshot = $playersTable->Snapshots->getDailySnapshot(
+                    $match->player_b_id,
+                    $match->created->i18nFormat('Y-M-d')
+                );
+
+                $expectedScores = $playersTable->expectedScores(
+                    $playerADailySnapshot['rating'],
+                    $playerBDailySnapshot['rating']
+                );
+
+                $playerAKFactor = $playersTable->getKFactor($playerADailySnapshot);
+                $match->player_a_breakdown = [
+                    'win' => $playersTable->ratingChange($expectedScores['a'], 1, $playerAKFactor),
+                    'loss' => $playersTable->ratingChange($expectedScores['a'], 0, $playerAKFactor)
+                ];
+
+                $playerBKFactor = $playersTable->getKFactor($playerBDailySnapshot);
+                $match->player_b_breakdown = [
+                    'win' => $playersTable->ratingChange($expectedScores['b'], 1, $playerBKFactor),
+                    'loss' => $playersTable->ratingChange($expectedScores['b'], 0, $playerBKFactor)
+                ];
+
+                return $match;
+            });
+        });
     }
 
     /**

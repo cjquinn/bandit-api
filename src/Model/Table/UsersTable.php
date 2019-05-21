@@ -42,26 +42,6 @@ class UsersTable extends Table
     /**
      * @return \Cake\Validation\Validator
      */
-    public function validationActivate(Validator $validator)
-    {
-        $validator
-            ->requirePresence('first_name')
-            ->notEmpty('first_name');
-
-        $validator
-            ->requirePresence('last_name')
-            ->notEmpty('last_name');
-
-        $validator
-            ->requirePresence('password')
-            ->notEmpty('password');
-
-        return $validator;
-    }
-
-    /**
-     * @return \Cake\Validation\Validator
-     */
     public function validationAdd(Validator $validator)
     {
         $validator
@@ -166,26 +146,36 @@ class UsersTable extends Table
     /**
      * @return void
      */
-    public function patchEntityActivate(User $user, array $data)
-    {
-        $user->setAccess('password', true);
-
-        $this->patchEntity($user, $data, ['validate' => 'activate']);
-
-        if (!$user->getErrors()) {
-            $this->patchEntityClearToken($user);
-        }
-    }
-
-    /**
-     * @return void
-     */
     public function patchEntityClearToken(User $user)
     {
         $user->set([
             'token' => null,
             'token_sent' => null
         ], ['guard' => false]);
+    }
+
+    /**
+     * @return void
+     */
+    public function patchEntityAdd(User $user, array $data)
+    {
+        $this->patchEntity($user, $data, ['validate' => 'add']);
+
+        if (!empty($user->getErrors())) {
+            return;
+        }
+
+        $existingUser = $this
+            ->findByEmail($user->email)
+            ->first();
+
+        if (!$existingUser ||
+            $existingUser->is_activated
+        ) {
+            return;
+        }
+
+        $user->set('id', $existingUser->id);
     }
 
     /**
@@ -225,7 +215,7 @@ class UsersTable extends Table
 
         $this->patchEntity($user, $data, ['validate' => 'resetPassword']);
 
-        if (!$user->getErrors()) {
+        if (empty($user->getErrors())) {
             $this->patchEntityClearToken($user);
         }
     }
@@ -250,7 +240,7 @@ class UsersTable extends Table
             $user->isDirty('token')
         ) {
             $this->getMailer('User')->send(
-                $user->is_activated ? 'resetPassword' : 'activateAccount',
+                'resetPassword',
                 [$user]
             );
         }
@@ -274,13 +264,11 @@ class UsersTable extends Table
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
      * @throws \Cake\Network\Exception\UnauthorizedException
      */
-    public function getByToken($token, $isActivated)
+    public function getByToken($token)
     {
         $user = $this
-            ->findByToken($token)
-            ->where([
-                sprintf('password IS%s', $isActivated ? ' NOT' : '') => null
-            ])
+            ->find('auth')
+            ->where(['token' => $token])
             ->firstOrFail();
 
         if ($user->token_sent >= Time::createFromTimestamp(strtotime('1 hour ago'))) {

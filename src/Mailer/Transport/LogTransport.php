@@ -11,7 +11,7 @@ class LogTransport extends DebugTransport
     {
         $return = parent::send($email);
 
-        Log::write('debug', $return, ['scope' => ['email']]);
+        Log::debug($return);
 
         return $return;
     }

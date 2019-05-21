@@ -187,6 +187,30 @@ class MatchesTableTest extends TestCase
     /**
      * @return void
      */
+    public function testFindWithBreakdowns()
+    {
+        $match = $this->Matches
+            ->findById(7)
+            ->find('withBreakdowns')
+            ->first();
+
+        $playerABreakdown = [
+            'win' => 18,
+            'loss' => -22
+        ];
+
+        $playerBBreakdown = [
+            'win' => 22,
+            'loss' => -18
+        ];
+
+        $this->assertEquals($playerABreakdown, $match->player_a_breakdown);
+        $this->assertEquals($playerBBreakdown, $match->player_b_breakdown);
+    }
+
+    /**
+     * @return void
+     */
     public function testFindTree()
     {
         $match = $this->Matches->get(2);

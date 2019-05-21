@@ -41,7 +41,7 @@ use Cake\Core\Configure;
             </tr>
 
             <tr>
-                <td cellpadding="0" style="padding: 0;">
+                <td cellpadding="0" style="padding: 0px 0px 25px;">
                     <h1 style="<?= Configure::read('Bandit.emailStyles.h1') ?>">
                         Didn’t send a request?
                     </h1>

@@ -1,6 +1,10 @@
+<?php
+$matchesCount = count($player->club->matches);
+?>
+
 Play better matches at Bandit Match
 
-<?= $player->club->name ?> leaderboards are calling you!
+<?= $player->club->name ?> are waiting for you to join them!
 
 <?php if ($matchesCount > 0) : ?>
 Your (soon to be) club mates have already played <?= $matchesCount ?> match<?= $matchesCount !== 1 ? 'es' : '' ?>.

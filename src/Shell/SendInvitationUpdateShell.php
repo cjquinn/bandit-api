@@ -27,6 +27,10 @@ class SendInvitationUpdateShell extends Shell
             $this->out('Email: ' . $user->email);
             $this->out('Club: ' . $user->players[0]->club->name);
         }
+
+        $this->out('=======================');
+        $this->out('Count: ' . $users->count());
+        $this->out('=======================');
     }
 
     /**

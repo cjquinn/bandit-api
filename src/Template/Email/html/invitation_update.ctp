@@ -14,12 +14,12 @@ $matchesCount = count($player->club->matches);
                     </h1>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        <?= $player->club->name ?> leaderboards are calling you!
+                        <?= $player->club->name ?> are waiting for you to join them!
                     </p>
 
                     <?php if ($matchesCount > 0) : ?>
                         <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                            Your (soon to be) club mates have already played <?= $matchesCount ?> match<?= $matchesCount !== 1 ? 'es' : '' ?>.
+                            Your (soon to be) club mates have already played <strong><?= $matchesCount ?></strong> match<?= $matchesCount !== 1 ? 'es' : '' ?>.
                         </p>
                     <?php endif; ?>
                 </td>
@@ -36,7 +36,7 @@ $matchesCount = count($player->club->matches);
             </tr>
 
             <tr>
-                <td>
+                <td cellpadding="0" style="padding: 0px 0px 25px;">
                     <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">Start your career</h2>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">

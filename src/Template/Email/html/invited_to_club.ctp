@@ -28,7 +28,7 @@ use Cake\Core\Configure;
             </tr>
 
             <tr>
-                <td>
+                <td cellpadding="0" style="padding: 0px 0px 25px;">
                     <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">Start your career</h2>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">

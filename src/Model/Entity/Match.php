@@ -17,7 +17,9 @@ use Cake\ORM\Entity;
  */
 class Match extends Entity
 {
-
+    /**
+     * @var array
+     */
     protected $_accessible = [
         'player_b_id' => true,
         'player_a_score' => true,
@@ -25,6 +27,9 @@ class Match extends Entity
         '*' => false
     ];
 
+    /**
+     * @var array
+     */
     protected $_virtual = [
         'was_within24_hours',
         'was_within48_hours'

@@ -6,18 +6,22 @@ use Cake\ORM\Entity;
 
 /**
  * @property int $id
- * @property int $founder_id
- * @property string $name
+ * @property int $club_id
+ * @property int $match_id
+ * @property int $player_a_id
+ * @property int $player_b_id
+ * @property string $location
+ * @property \Cake\I18n\Time $match_datetime
  * @property \Cake\I18n\Time $created
+ * @property \Cake\I18n\Time $deleted
  * @property \Cake\I18n\Time $modified
  */
-class Club extends Entity
+class Challenge extends Entity
 {
     /**
      * @var array
      */
     protected $_accessible = [
-        'name' => true,
         '*' => false
     ];
 }

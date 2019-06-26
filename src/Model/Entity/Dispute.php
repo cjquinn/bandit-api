@@ -15,6 +15,9 @@ use Cake\ORM\Entity;
  */
 class Dispute extends Entity
 {
+    /**
+     * @var array
+     */
     protected $_accessible = [
         '*' => false
     ];

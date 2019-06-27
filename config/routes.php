@@ -20,6 +20,32 @@ Router::scope('/', function ($routes) {
         ]
     ], function ($routes) {
         /**
+         * Challenges
+         */
+        $routes->resources('Challenges', [
+            'only' => [
+                'accept',
+                'create',
+                'delete',
+                'index',
+                'view',
+                'withdraw'
+            ],
+            'map' => [
+                'accept' => [
+                    'action' => 'accept',
+                    'method' => 'PATCH',
+                    'path' => ':id/accept'
+                ],
+                'withdraw' => [
+                    'action' => 'withdraw',
+                    'method' => 'PATCH',
+                    'path' => ':id/withdraw'
+                ]
+            ]
+        ]);
+
+        /**
          * Disputes
          */
         $routes->resources('Disputes', ['only' => 'index']);

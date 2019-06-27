@@ -78,11 +78,12 @@ class MatchesController extends AppController
 
         $this->set([
             'match' => $match,
-            'errors' => $match->errors()
+            'errors' => $match->getErrors()
         ]);
 
         if (!$success) {
             $this->response->statusCode(400);
+            return;
         }
 
         $club = $this->Matches->Clubs->get($this->request->getParam('club_id'), ['finder' => 'banditId']);

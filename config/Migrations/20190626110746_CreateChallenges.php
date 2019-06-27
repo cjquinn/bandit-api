@@ -69,7 +69,7 @@ class CreateChallenges extends AbstractMigration
 
         $table->addColumn('deleted', 'datetime', [
             'default' => null,
-            'null' => false
+            'null' => true
         ]);
 
         $table->addColumn('modified', 'datetime', [

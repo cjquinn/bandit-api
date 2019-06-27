@@ -1,6 +1,9 @@
 <?php
 namespace App\Model\Table;
 
+use ArrayObject;
+
+use Cake\Event\Event;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -60,5 +63,64 @@ class ChallengesTable extends Table
         $rules->add($rules->existsIn(['player_b_id'], 'PlayerBs'));
 
         return $rules;
+    }
+
+    /**
+     * @return void
+     */
+    public function beforeFind(Event $event, Query $query, ArrayObject $options, $primary)
+    {
+        if (!isset($options['ignoreBeforeFind'])) {
+            $query->where([$this->aliasField('deleted') . ' IS' => null]);
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOwnedBy($id, $clubId)
+    {
+        return $this->exists([
+            'id' => $id,
+            'club_id' => $clubId
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function wasAcceptedBy($id, $userId)
+    {
+        return (bool)count(
+            $this
+                ->findById($id)
+                ->innerJoinWith('PlayerBs', function ($q) use ($userId) {
+                    $q->where(['PlayerBs.user_id' => $userId]);
+
+                    return $q;
+                })
+                ->limit(1)
+                ->enableHydration(false)
+                ->toArray()
+        );
+    }
+
+    /**
+     * @return bool
+     */
+    public function wasCreatedBy($id, $userId)
+    {
+        return (bool)count(
+            $this
+                ->findById($id)
+                ->innerJoinWith('PlayerAs', function ($q) use ($userId) {
+                    $q->where(['PlayerAs.user_id' => $userId]);
+
+                    return $q;
+                })
+                ->limit(1)
+                ->enableHydration(false)
+                ->toArray()
+        );
     }
 }

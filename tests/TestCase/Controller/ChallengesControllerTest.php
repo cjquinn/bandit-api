@@ -12,96 +12,88 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testAcceptUnauthenticated()
     {
-        $this->patch('/clubs/1/challenges/1.json');
+        $this->patch('/clubs/1/challenges/1/accept.json');
 
         $this->assertResponseCode(403);
     }
 
     /**
      * @return void
-     * @group testing
      */
     public function testAcceptInvalidClubId()
     {
         $this->_setAuthSession(8);
 
-        $this->patch('/clubs/1/challenges/1.json');
+        $this->patch('/clubs/1/challenges/1/accept.json');
 
         $this->assertResponseCode(403);
     }
 
     /**
      * @return void
-     * @group testing
      */
     public function testAcceptInvalidChallengeId()
     {
         $this->_setAuthSession(1);
 
-        $this->patch('/clubs/1/challenges/2.json');
+        $this->patch('/clubs/1/challenges/2/accept.json');
 
         $this->assertResponseCode(403);
     }
 
     /**
      * @return void
-     * @group testing
      */
     public function testAcceptExistingPlayerBId()
     {
         $this->_setAuthSession(1);
 
-        $this->patch('/clubs/1/challenges/3.json');
+        $this->patch('/clubs/1/challenges/3/accept.json');
 
         $this->assertResponseCode(403);
     }
 
     /**
      * @return void
-     * @group testing
      */
     public function testAcceptInvalidPlayer()
     {
         $this->_setAuthSession(1);
 
-        $this->patch('/clubs/1/challenges/1.json');
+        $this->patch('/clubs/1/challenges/1/accept.json');
 
         $this->assertResponseCode(403);
     }
 
     /**
      * @return void
-     * @group testing
      */
     public function testAcceptDeleted()
     {
         $this->_setAuthSession(1);
 
-        $this->patch('/clubs/1/challenges/6.json');
+        $this->patch('/clubs/1/challenges/6/accept.json');
 
         $this->assertResponseCode(404);
     }
 
     /**
      * @return void
-     * @group testing
      */
     public function testAcceptPatch()
     {
         $this->_setAuthSession(2);
 
-        $this->patch('/clubs/1/challenges/1.json');
+        $this->patch('/clubs/1/challenges/1/accept.json');
 
         $this->assertResponseCode(200);
     }
 
     /**
      * @return void
-     * @group testing
      */
     public function testAddUnauthenticated()
     {
@@ -112,7 +104,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testAddInvalidClubId()
     {
@@ -125,7 +116,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testAddBadData()
     {
@@ -141,7 +131,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testAddPost()
     {
@@ -157,7 +146,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testDeleteUnauthenticated()
     {
@@ -168,7 +156,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testDeleteInvalidClubId()
     {
@@ -181,7 +168,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testDeleteInvalidChallengeId()
     {
@@ -194,7 +180,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testDeleteInvalidPlayer()
     {
@@ -207,7 +192,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testDeleteMatchPlayed()
     {
@@ -220,7 +204,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testDeleteDelete()
     {
@@ -233,7 +216,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testIndexUnauthenticated()
     {
@@ -244,7 +226,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testIndexInvalidClubId()
     {
@@ -257,7 +238,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testIndexGet()
     {
@@ -270,7 +250,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testViewUnauthenticated()
     {
@@ -281,7 +260,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testViewInvalidClubId()
     {
@@ -294,7 +272,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testViewInvalidChallengeId()
     {
@@ -307,7 +284,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testViewDeleted()
     {
@@ -320,7 +296,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testViewGet()
     {
@@ -333,7 +308,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testWithdrawUnauthenticated()
     {
@@ -344,7 +318,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testWithdrawInvalidClubId()
     {
@@ -357,7 +330,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testWithdrawInvalidChallengeId()
     {
@@ -370,7 +342,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testWithdrawInvalidPlayer()
     {
@@ -383,7 +354,6 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testWithdrawMatchPlayed()
     {
@@ -396,20 +366,18 @@ class ChallengesControllerTest extends IntegrationTestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testWithdrawDeleted()
     {
         $this->_setAuthSession(1);
 
-        $this->patch('/clubs/1/challenges/6/withdraw.json');
+        $this->patch('/clubs/1/challenges/8/withdraw.json');
 
         $this->assertResponseCode(404);
     }
 
     /**
      * @return void
-     * @group testing
      */
     public function testWithdrawPatch()
     {

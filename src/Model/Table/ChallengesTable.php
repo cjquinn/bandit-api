@@ -78,6 +78,28 @@ class ChallengesTable extends Table
     /**
      * @return bool
      */
+    public function hasMatch($id)
+    {
+        return $this->exists([
+            'id' => $id,
+            'match_id IS NOT' => null
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAccepted($id)
+    {
+        return $this->exists([
+            'id' => $id,
+            'player_b_id IS NOT' => null
+        ]);
+    }
+
+    /**
+     * @return bool
+     */
     public function isOwnedBy($id, $clubId)
     {
         return $this->exists([
@@ -93,12 +115,14 @@ class ChallengesTable extends Table
     {
         return (bool)count(
             $this
-                ->findById($id)
+                ->find('all', ['ignoreBeforeFind' => true])
+                ->select(['existing' => 1])
                 ->innerJoinWith('PlayerBs', function ($q) use ($userId) {
                     $q->where(['PlayerBs.user_id' => $userId]);
 
                     return $q;
                 })
+                ->where([$this->aliasField('id') => $id])
                 ->limit(1)
                 ->enableHydration(false)
                 ->toArray()
@@ -112,12 +136,30 @@ class ChallengesTable extends Table
     {
         return (bool)count(
             $this
-                ->findById($id)
+                ->find('all', ['ignoreBeforeFind' => true])
+                ->select(['existing' => 1])
                 ->innerJoinWith('PlayerAs', function ($q) use ($userId) {
                     $q->where(['PlayerAs.user_id' => $userId]);
 
                     return $q;
                 })
+                ->where([$this->aliasField('id') => $id])
+                ->limit(1)
+                ->enableHydration(false)
+                ->toArray()
+        );
+    }
+
+    /**
+     * @return bool
+     */
+    public function exists($conditions)
+    {
+        return (bool)count(
+            $this
+                ->find('all', ['ignoreBeforeFind' => true])
+                ->select(['existing' => 1])
+                ->where($conditions)
                 ->limit(1)
                 ->enableHydration(false)
                 ->toArray()

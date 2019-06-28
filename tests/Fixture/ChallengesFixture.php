@@ -78,13 +78,13 @@ class ChallengesFixture extends TestFixture
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
             ],
-            // 6 - deleted club 1, player_a_id, 2, player_b_id 1
+            // 6 - deleted club 1, player_a_id, 2
             [
                 'id' => 6,
                 'club_id' => 1,
                 'match_id' => null,
                 'player_a_id' => 2,
-                'player_b_id' => 1,
+                'player_b_id' => null,
                 'location' => 'Somewhere',
                 'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour')),
                 'created' => date('Y-m-d H:i:s'),
@@ -103,7 +103,20 @@ class ChallengesFixture extends TestFixture
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
-            ]
+            ],
+            // 8 - deleted club 1, player_a_id, 2, player_b_id 1
+            [
+                'id' => 8,
+                'club_id' => 1,
+                'match_id' => null,
+                'player_a_id' => 2,
+                'player_b_id' => 1,
+                'location' => 'Somewhere',
+                'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+                'created' => date('Y-m-d H:i:s'),
+                'deleted' => date('Y-m-d H:i:s'),
+                'modified' => date('Y-m-d H:i:s')
+            ],
         ];
 
         parent::init();

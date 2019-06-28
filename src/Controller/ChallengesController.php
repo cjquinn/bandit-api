@@ -27,7 +27,13 @@ class ChallengesController extends AppController
         }
 
         // Invalid Player a
-        if (in_array($this->request->getParam('action'), ['accept', 'delete']) &&
+        if ($this->request->getParam('action') === 'accept' &&
+            $this->Challenges->wasCreatedBy($this->request->getParam('id'), $this->Auth->user('id'))
+        ) {
+            return false;
+        }
+
+        if ($this->request->getParam('action') === 'delete' &&
             !$this->Challenges->wasCreatedBy($this->request->getParam('id'), $this->Auth->user('id'))
         ) {
             return false;

@@ -22,6 +22,8 @@ class Challenge extends Entity
      * @var array
      */
     protected $_accessible = [
+        'location' => true,
+        'match_datetime' => true,
         '*' => false
     ];
 }

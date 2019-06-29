@@ -21,40 +21,6 @@ class ChallengesController extends AppController
             return false;
         }
 
-        // Already accepted
-        if ($this->request->getParam('action') === 'accept' &&
-            $this->Challenges->isAccepted($this->request->getParam('id'))
-        ) {
-            return false;
-        }
-
-        // Invalid Player a
-        if ($this->request->getParam('action') === 'accept' &&
-            $this->Challenges->wasCreatedBy($this->request->getParam('id'), $this->Auth->user('id'))
-        ) {
-            return false;
-        }
-
-        if ($this->request->getParam('action') === 'delete' &&
-            !$this->Challenges->wasCreatedBy($this->request->getParam('id'), $this->Auth->user('id'))
-        ) {
-            return false;
-        }
-
-        // Invalid Player b
-        if ($this->request->getParam('action') === 'withdraw' &&
-            !$this->Challenges->wasAcceptedBy($this->request->getParam('id'), $this->Auth->user('id'))
-        ) {
-            return false;
-        }
-
-        // Match played
-        if (in_array($this->request->getParam('action'), ['delete', 'withdraw']) &&
-            $this->Challenges->hasMatch($this->request->getParam('id'), $this->Auth->user('id'))
-        ) {
-            return false;
-        }
-
         return parent::isAuthorized($user);
     }
 
@@ -66,13 +32,16 @@ class ChallengesController extends AppController
     {
         $challenge = $this->Challenges->get($id);
 
-        $this->Challenges->accept(
+        if (!$this->Challenges->accept(
             $challenge,
             $this->Challenges->Clubs->getPlayerId(
                 $this->request->getParam('club_id'),
                 $this->Auth->user('id')
             )
-        );
+        )) {
+            $this->response->statusCode(403);
+            return;
+        }
 
         $this->set('challenge', $challenge);
     }
@@ -112,7 +81,16 @@ class ChallengesController extends AppController
     {
         $challenge = $this->Challenges->get($id);
 
-        $this->Challenges->softDelete($challenge);
+        if (!$this->Challenges->softDelete(
+            $challenge,
+            $this->Challenges->Clubs->getPlayerId(
+                $this->request->getParam('club_id'),
+                $this->Auth->user('id')
+            )
+        )) {
+            $this->response->statusCode(403);
+            return;
+        }
 
         $this->set('challenge', $challenge);
     }
@@ -141,6 +119,28 @@ class ChallengesController extends AppController
      * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
      */
+    public function report($id)
+    {
+        $challenge = $this->Challenges->get($id);
+
+        if (!$this->Challenges->report(
+            $challenge,
+            $this->Challenges->Clubs->getPlayerId(
+                $this->request->getParam('club_id'),
+                $this->Auth->user('id')
+            )
+        )) {
+            $this->response->statusCode(403);
+            return;
+        }
+
+        $this->set('challenge', $challenge);
+    }
+
+    /**
+     * @return void
+     * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     */
     public function view($id)
     {
         $challenge = $this->Challenges->get($id, ['finder' => 'populated']);
@@ -156,7 +156,16 @@ class ChallengesController extends AppController
     {
         $challenge = $this->Challenges->get($id);
 
-        $this->Challenges->withdraw($challenge);
+        if ($this->Challenges->withdraw(
+            $challenge,
+            $this->Challenges->Clubs->getPlayerId(
+                $this->request->getParam('club_id'),
+                $this->Auth->user('id')
+            )
+        )) {
+            $this->response->statusCode(403);
+            return;
+        }
 
         $this->set('challenge', $challenge);
     }

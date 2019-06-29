@@ -87,14 +87,14 @@ class MatchesTable extends Table
      */
     public function patchEntityAdd(Match $match, array $data, $clubId, $playerId)
     {
-        $match->set('club_id', $clubId);
-        $match->set('player_a_id', $playerId);
-
         $this->patchEntity($match, $data, ['validate' => 'add']);
 
         if (!empty($match->getErrors())) {
             return;
         }
+
+        $match->set('club_id', $clubId);
+        $match->set('player_a_id', $playerId);
 
         if ($match->player_a_id === $match->player_b_id) {
             $match->setError('player_b_id', [

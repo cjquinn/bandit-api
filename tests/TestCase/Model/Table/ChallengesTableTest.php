@@ -47,8 +47,29 @@ class ChallengesTableTest extends TestCase
      */
     public function testAccept()
     {
+        // Existing player_b_id
+        $playerId = 2;
         $challenge = $this->Challenges->get(1);
+        $challenge->player_b_id = 4;
+
+        $this->assertFalse($this->Challenges->accept($challenge, $playerId));
+
+        // Existing player_a_id is playerID
         $playerId = 1;
+        $challenge = $this->Challenges->get(1);
+
+        $this->assertFalse($this->Challenges->accept($challenge, $playerId));
+
+        // In the past
+        $playerId = 2;
+        $challenge = $this->Challenges->get(1);
+        $challenge->match_datetime = date('Y-m-d H:i:s', strtotime('-5 hour'));
+
+        $this->assertFalse($this->Challenges->accept($challenge, $playerId));
+
+        // valid
+        $playerId = 2;
+        $challenge = $this->Challenges->get(1);
 
         $challengesTableMock = $this->getMockForModel(
             'App\Model\Table\ChallengesTable',
@@ -74,8 +95,7 @@ class ChallengesTableTest extends TestCase
             ->method('getMailer')
             ->will($this->returnValue($mailerMock));
 
-        $challengesTableMock->accept($challenge, $playerId);
-
+        $this->assertTrue($challengesTableMock->accept($challenge, $playerId));
         $this->assertTrue($this->Challenges->exists(['id' => $challenge->id, 'player_b_id' => $playerId]));
     }
 
@@ -171,11 +191,120 @@ class ChallengesTableTest extends TestCase
      */
     public function testSoftDelete()
     {
-        // Check deleted is set
+        // Invalid player a id
+        $challenge = $this->Challenges->get(3);
+        $playerId = 1;
+
+        $this->assertFalse($this->Challenges->softDelete($challenge, $playerId));
+
+        // Valid
+        $challenge = $this->Challenges->get(3);
+        $playerId = 2;
+
+        $challengesTableMock = $this->getMockForModel(
+            'App\Model\Table\ChallengesTable',
+            ['getMailer'],
+            ['alias' => 'ChallengesTable', 'table' => 'challenges']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\ChallengeMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['playerDeleted'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->once())
+            ->method('playerDeleted');
+
+        $challengesTableMock
+            ->expects($this->once())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
 
         // If match was accepted send email to player b
+        $this->assertTrue($challengesTableMock->softDelete($challenge, $playerId));
 
-            // If time is less than 24 hours negative rep to player a
+        // Check deleted is set
+        $this->assertTrue($this->Challenges->exists(['id' => $challenge->id, 'deleted IS NOT' => null]));
+
+        // If time is less than 24 hours -10 rep to player a
+        $playerA = $this->Challenges->PlayerAs->get($challenge->player_a_id, ['contain' => 'Users']);
+
+        $this->assertEquals(-6, $playerA->user->reputation);
+
+        // Check rep isn't decreased and no email is sent
+        $challenge = $this->Challenges->get(3);
+        $playerId = 2;
+
+        $challengesTableMock = $this->getMockForModel(
+            'App\Model\Table\ChallengesTable',
+            ['getMailer'],
+            ['alias' => 'ChallengesTable', 'table' => 'challenges']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\ChallengeMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['playerDeleted'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->never())
+            ->method('playerDeleted');
+
+        $challengesTableMock
+            ->expects($this->never())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        $this->assertTrue($challengesTableMock->softDelete($challenge, $playerId));
+
+        $playerA = $this->Challenges->PlayerAs->get($challenge->player_a_id, ['contain' => 'Users']);
+
+        $this->assertEquals(3, $playerA->user->reputation);
+
+        // Check rep isn't decreased when accepted and more than 24 hours
+        $challenge = $this->Challenges->get(7);
+        $playerId = 2;
+
+        $challengesTableMock = $this->getMockForModel(
+            'App\Model\Table\ChallengesTable',
+            ['getMailer'],
+            ['alias' => 'ChallengesTable', 'table' => 'challenges']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\ChallengeMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['playerDeleted'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->once())
+            ->method('playerDeleted');
+
+        $challengesTableMock
+            ->expects($this->once())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        // If match was accepted send email to player b
+        $this->assertTrue($challengesTableMock->softDelete($challenge, $playerId));
+
+        // If time is less than 24 hours -10 rep to player a
+        $playerA = $this->Challenges->PlayerAs->get($challenge->player_a_id, ['contain' => 'Users']);
+
+        $this->assertEquals(-6, $playerA->user->reputation);
     }
 
     /**
@@ -183,13 +312,27 @@ class ChallengesTableTest extends TestCase
      */
     public function testFindFiltered()
     {
-        // All shouldn't include ones where match_id is not null
+        // All shouldn't include ones where match_id is not null or deleted
 
         // Should include ones where match_datetime has passed
         // Find by all
+        $query = $this->Challenges->find('filtered', ['filter' => 'all']);
+
+        $this->assertEquals(7, $query->count());
+        $this->assertEquals([1, 2, 3, 4, 6, 7, 8], $query->extract('id')->toArray());
+
         // Shouldn't include ones where match_datetime has passed
         // Find by open
+        $query = $this->Challenges->find('filtered', ['filter' => 'open']);
+
+        $this->assertEquals(2, $query->count());
+        $this->assertEquals([1, 2], $query->extract('id')->toArray());
+
         // Find by accepted
+        $query = $this->Challenges->find('filtered', ['filter' => 'accepted']);
+
+        $this->assertEquals(1, $query->count());
+        $this->assertEquals([7], $query->extract('id')->toArray());
     }
 
     /**
@@ -197,8 +340,43 @@ class ChallengesTableTest extends TestCase
      */
     public function testFindByPlayerId()
     {
+        // All shouldn't include ones where match_id is not null or deleted
+
         // Where player_a_id OR player_b_id matches passed playerId
+        $query = $this->Challenges->find('byPlayerId', ['player_id' => 2]);
+
+        $this->assertEquals(2, $query->count());
+        $this->assertEquals([3, 7], $query->extract('id')->toArray());
+
         // Add all case
+        $query = $this->Challenges->find('byPlayerId', ['player_id' => 'all']);
+
+        $this->assertEquals(7, $query->count());
+        $this->assertEquals([1, 2, 3, 4, 6, 7, 8], $query->extract('id')->toArray());
+    }
+
+    /**
+     * @return void
+     */
+    public function testReport()
+    {
+        // Invalid player
+        $challenge = $this->Challenges->get(3);
+        $playerId = 1;
+
+        $this->assertFalse($this->Challenges->report($challenge, $playerId));
+
+        // Valid
+        $challenge = $this->Challenges->get(3);
+        $playerId = 2;
+
+        $this->assertTrue($this->Challenges->report($challenge, $playerId));
+
+        $this->assertTrue($this->Challenges->exists(['id' => $challenge->id, 'deleted IS NOT' => null]));
+
+        $playerB = $this->Challenges->PlayerAs->get($challenge->player_b_id, ['contain' => 'Users']);
+
+        $this->assertEquals(-9, $playerB->user->reputation);
     }
 
     /**
@@ -206,10 +384,59 @@ class ChallengesTableTest extends TestCase
      */
     public function testWithdraw()
     {
-        // Ensure player b is removed
+        // Invalid
+        $playerId = 2;
+        $challenge = $this->Challenges->get(3);
+
+        $this->assertFalse($this->Challenges->withdraw($challenge, $playerId));
+
+        // Valid
+        $playerId = 3;
+        $challenge = $this->Challenges->get(3);
 
         // Should send email to player a saying player b has withdrawn
+        $challengesTableMock = $this->getMockForModel(
+            'App\Model\Table\ChallengesTable',
+            ['getMailer'],
+            ['alias' => 'ChallengesTable', 'table' => 'challenges']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\ChallengeMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['playerWithdrew'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->once())
+            ->method('playerWithdrew');
+
+        $challengesTableMock
+            ->expects($this->once())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        $this->assertTrue($challengesTableMock->withdraw($challenge, $playerId));
+
+        // Ensure player b is removed
+        $this->assertTrue($this->Challenges->exists(['id' => $challenge->id, 'player_b_id IS' => null]));
 
         // If time is less than 24 hours negative rep to player b
+        $playerB = $this->Challenges->PlayerAs->get($challenge->player_b_id, ['contain' => 'Users']);
+
+        $this->assertEquals(-9, $playerB->user->reputation);
+
+        // If time is more than 24 hours no negative rep to player b
+        $playerId = 1;
+        $challenge = $this->Challenges->get(7);
+
+        $this->assertTrue($this->Challenges->withdraw($challenge, $playerId));
+
+        $playerB = $this->Challenges->PlayerAs->get($challenge->player_b_id, ['contain' => 'Users']);
+
+        $this->assertEquals(3, $playerB->user->reputation);
     }
 }

@@ -21,7 +21,7 @@ class ChallengesFixture extends TestFixture
                 'player_a_id' => 1,
                 'player_b_id' => null,
                 'location' => 'Somewhere',
-                'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+                'match_datetime' => date('Y-m-d H:i:s', strtotime('+5 hour')),
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
@@ -34,7 +34,7 @@ class ChallengesFixture extends TestFixture
                 'player_a_id' => 8,
                 'player_b_id' => null,
                 'location' => 'Somewhere',
-                'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+                'match_datetime' => date('Y-m-d H:i:s', strtotime('+4 hour')),
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
@@ -47,7 +47,7 @@ class ChallengesFixture extends TestFixture
                 'player_a_id' => 2,
                 'player_b_id' => 3,
                 'location' => 'Somewhere',
-                'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+                'match_datetime' => date('Y-m-d H:i:s', strtotime('-3 hour')),
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
@@ -60,7 +60,7 @@ class ChallengesFixture extends TestFixture
                 'player_a_id' => 9,
                 'player_b_id' => null,
                 'location' => 'Somewhere',
-                'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+                'match_datetime' => date('Y-m-d H:i:s', strtotime('-2 hour')),
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
@@ -99,7 +99,7 @@ class ChallengesFixture extends TestFixture
                 'player_a_id' => 2,
                 'player_b_id' => 1,
                 'location' => 'Somewhere',
-                'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+                'match_datetime' => date('Y-m-d H:i:s', strtotime('+48 hour')),
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')

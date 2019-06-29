@@ -6,6 +6,8 @@ use App\Model\Entity\Challenge;
 use ArrayObject;
 
 use Cake\Event\Event;
+use Cake\I18n\Time;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -13,6 +15,7 @@ use Cake\Validation\Validator;
 
 class ChallengesTable extends Table
 {
+    use MailerAwareTrait;
 
     /**
      * @return void
@@ -72,27 +75,134 @@ class ChallengesTable extends Table
      */
     public function patchEntityAdd(Challenge $challenge, array $data, $clubId, $playerId)
     {
+        $this->patchEntity($challenge, $data, ['validate' => 'add']);
+
+        if ($challenge->match_datetime < Time::now()) {
+            $challenge->setError('match_datetime', [
+                'invalid' => 'The match date & time must be in the future.'
+            ]);
+        }
+
+        if (!empty($challenge->getErrors())) {
+            return;
+        }
+
+        $challenge->set('club_id', $clubId);
+        $challenge->set('player_a_id', $playerId);
     }
 
     /**
-     * @return void
+     * @return bool
      */
     public function accept(Challenge $challenge, $playerId)
     {
+        if ($challenge->player_b_id ||
+            $challenge->player_a_id === $playerId
+        ) {
+            return false;
+        }
+
+        $challenge->set('player_b_id', $playerId);
+
+        $this->save($challenge);
+
+        $this->getMailer('Challenge')->send(
+            'playerAccepted',
+            [$challenge]
+        );
+
+        return true;
     }
 
     /**
-     * @return void
+     * @return bool
      */
-    public function softDelete(Challenge $challenge)
+    public function softDelete(Challenge $challenge, $playerId)
     {
+        if ($challenge->player_a_id !== $playerId) {
+            return false;
+        }
+
+        $this->loadInto($challenge, ['PlayerAs']);
+
+        $this->connection()->transactional(function () use ($challenge) {
+            if ($this->match_datetime < Time::now() ||
+                $this->match_datetime->isWithinNext('24 hours')
+            ) {
+                $this->PlayerAs->Users->updateReputation($challenge->player_a->user_id, -10);
+            }
+
+            $challenge->set('deleted', Time::now());
+
+            $this->save($challenge);
+        });
+
+        $this->getMailer('Challenge')->send(
+            'playerDeleted',
+            [$challenge]
+        );
+
+        return true;
     }
 
     /**
-     * @return void
+     * @return bool
      */
-    public function withdraw(Challenge $challenge)
+    public function report(Challenge $challenge, $playerId)
     {
+        if ($challenge->player_a_id !== $playerId && $challenge->player_b_id !== $playerId) {
+            return false;
+        }
+
+        $otherPlayer = $challenge->player_b_id === $playerId
+            ? ['table' => 'PlayerAs', 'property' => 'player_a']
+            : ['table' => 'PlayerBs', 'property' => 'player_b'];
+
+        $this->loadInto($challenge, [$otherPlayer['table']]);
+
+        $this->connection()->transactional(function () use ($challenge, $otherPlayer) {
+            $this->{$otherPlayer['table']}->Users->updateReputation(
+                $challenge->{$otherPlayer['property']}->user_id,
+                -10
+            );
+
+            $challenge->set('deleted', Time::now());
+
+            $this->save($challenge);
+        });
+
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function withdraw(Challenge $challenge, $playerId)
+    {
+        if ($challenge->player_b_id !== $playerId) {
+            return false;
+        }
+
+        $this->loadInto($challenge, ['PlayerBs']);
+
+        $this->connection()->transactional(function () use ($challenge) {
+            if ($this->match_datetime < Time::now() ||
+                $this->match_datetime->isWithinNext('24 hours')
+            ) {
+                $this->PlayerBs->Users->updateReputation($challenge->player_b->user_id, -10);
+            }
+
+            $challenge->set('player_b_id', null);
+
+            $this->save($challenge);
+        });
+
+        $this->getMailer('Challenge')->send(
+            'playerWithdrew',
+            [$challenge]
+        );
+
+        return true;
     }
 
     /**
@@ -101,7 +211,10 @@ class ChallengesTable extends Table
     public function beforeFind(Event $event, Query $query, ArrayObject $options, $primary)
     {
         if (!isset($options['ignoreBeforeFind'])) {
-            $query->where([$this->aliasField('deleted') . ' IS' => null]);
+            $query->where([
+                $this->aliasField('match_id') . ' IS' => null,
+                $this->aliasField('deleted') . ' IS' => null
+            ]);
         }
     }
 
@@ -132,76 +245,12 @@ class ChallengesTable extends Table
     /**
      * @return bool
      */
-    public function hasMatch($id)
-    {
-        return $this->exists([
-            'id' => $id,
-            'match_id IS NOT' => null
-        ]);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isAccepted($id)
-    {
-        return $this->exists([
-            'id' => $id,
-            'player_b_id IS NOT' => null
-        ]);
-    }
-
-    /**
-     * @return bool
-     */
     public function isOwnedBy($id, $clubId)
     {
         return $this->exists([
             'id' => $id,
             'club_id' => $clubId
         ]);
-    }
-
-    /**
-     * @return bool
-     */
-    public function wasAcceptedBy($id, $userId)
-    {
-        return (bool)count(
-            $this
-                ->find('all', ['ignoreBeforeFind' => true])
-                ->select(['existing' => 1])
-                ->innerJoinWith('PlayerBs', function ($q) use ($userId) {
-                    $q->where(['PlayerBs.user_id' => $userId]);
-
-                    return $q;
-                })
-                ->where([$this->aliasField('id') => $id])
-                ->limit(1)
-                ->enableHydration(false)
-                ->toArray()
-        );
-    }
-
-    /**
-     * @return bool
-     */
-    public function wasCreatedBy($id, $userId)
-    {
-        return (bool)count(
-            $this
-                ->find('all', ['ignoreBeforeFind' => true])
-                ->select(['existing' => 1])
-                ->innerJoinWith('PlayerAs', function ($q) use ($userId) {
-                    $q->where(['PlayerAs.user_id' => $userId]);
-
-                    return $q;
-                })
-                ->where([$this->aliasField('id') => $id])
-                ->limit(1)
-                ->enableHydration(false)
-                ->toArray()
-        );
     }
 
     /**

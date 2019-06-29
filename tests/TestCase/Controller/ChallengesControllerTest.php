@@ -71,6 +71,18 @@ class ChallengesControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testAcceptPastChallenge()
+    {
+        $this->_setAuthSession(8);
+
+        $this->patch('/clubs/2/challenges/4/accept.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
     public function testAcceptDeleted()
     {
         $this->_setAuthSession(1);
@@ -199,7 +211,7 @@ class ChallengesControllerTest extends IntegrationTestCase
 
         $this->delete('/clubs/1/challenges/5.json');
 
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -246,6 +258,128 @@ class ChallengesControllerTest extends IntegrationTestCase
         $this->get('/clubs/1/challenges.json?filter=open');
 
         $this->assertResponseCode(400);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReportUnauthenticated()
+    {
+        $this->patch('/clubs/1/challenges/3/report.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReportInvalidClubId()
+    {
+        $this->_table('Challenges')->updateAll(
+            ['player_a_id' => 8],
+            ['id' => 3]
+        );
+        $this->_setAuthSession(8);
+
+        $this->patch('/clubs/1/challenges/3/report.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReportInvalidChallengeId()
+    {
+        $this->_table('Challenges')->updateAll(
+            ['player_a_id' => 1],
+            ['id' => 3]
+        );
+        $this->_setAuthSession(1);
+
+        $this->patch('/clubs/2/challenges/3/report.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReportUnacceptedChallenge()
+    {
+        $this->_setAuthSession(1);
+
+        $this->patch('/clubs/2/challenges/4/report.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReportInvalidPlayer()
+    {
+        $this->_setAuthSession(1);
+
+        $this->patch('/clubs/1/challenges/3/report.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReportMatchPlayed()
+    {
+        $this->_table('Challenges')->updateAll(
+            ['match_datetime' => date('Y-m-d H:i:s', strtotime('-1 hour'))],
+            ['id' => 5]
+        );
+        $this->_setAuthSession(1);
+
+        $this->patch('/clubs/1/challenges/5/report.json');
+
+        $this->assertResponseCode(404);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReportDeleted()
+    {
+        $this->_table('Challenges')->updateAll(
+            ['match_datetime' => date('Y-m-d H:i:s', strtotime('-1 hour'))],
+            ['id' => 8]
+        );
+        $this->_setAuthSession(1);
+
+        $this->patch('/clubs/1/challenges/8/report.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReportFutureChallenge()
+    {
+        $this->_setAuthSession(1);
+
+        $this->patch('/clubs/1/challenges/5/report.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testReportPatch()
+    {
+        $this->_setAuthSession(2);
+
+        $this->patch('/clubs/1/challenges/3/report.json');
+
+        $this->assertResponseCode(200);
     }
 
     /**
@@ -361,7 +495,7 @@ class ChallengesControllerTest extends IntegrationTestCase
 
         $this->patch('/clubs/1/challenges/5/withdraw.json');
 
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(404);
     }
 
     /**

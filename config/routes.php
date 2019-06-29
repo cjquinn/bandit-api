@@ -28,6 +28,7 @@ Router::scope('/', function ($routes) {
                 'create',
                 'delete',
                 'index',
+                'report',
                 'view',
                 'withdraw'
             ],
@@ -36,6 +37,11 @@ Router::scope('/', function ($routes) {
                     'action' => 'accept',
                     'method' => 'PATCH',
                     'path' => ':id/accept'
+                ],
+                'report' => [
+                    'action' => 'report',
+                    'method' => 'PATCH',
+                    'path' => ':id/report'
                 ],
                 'withdraw' => [
                     'action' => 'withdraw',

@@ -50,11 +50,33 @@ class ChallengesTableTest extends TestCase
         $challenge = $this->Challenges->get(1);
         $playerId = 1;
 
-        $this->Challenges->accept($challenge, $playerId);
+        $challengesTableMock = $this->getMockForModel(
+            'App\Model\Table\ChallengesTable',
+            ['getMailer'],
+            ['alias' => 'ChallengesTable', 'table' => 'challenges']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\ChallengeMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['playerAccepted'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->once())
+            ->method('playerAccepted');
+
+        $challengesTableMock
+            ->expects($this->once())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        $challengesTableMock->accept($challenge, $playerId);
 
         $this->assertTrue($this->Challenges->exists(['id' => $challenge->id, 'player_b_id' => $playerId]));
-
-        // Should send email to player a saying that the challenge has been accepted
     }
 
     /**
@@ -64,12 +86,84 @@ class ChallengesTableTest extends TestCase
     {
         // Test validation
         // Required
+        $challenge = $this->Challenges->newEntity();
+        $data = [];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Challenges->patchEntityAdd($challenge, $data, $clubId, $playerId);
+
+        $expected = [
+            'location' => [
+                '_required' => 'This field is required'
+            ],
+            'match_datetime' => [
+                '_required' => 'This field is required'
+            ]
+        ];
+
+        $this->assertEquals($expected, $challenge->getErrors());
+
         // Empty
+        $challenge = $this->Challenges->newEntity();
+        $data = [
+            'location' => '',
+            'match_datetime' => ''
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Challenges->patchEntityAdd($challenge, $data, $clubId, $playerId);
+
+        $expected = [
+            'location' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'match_datetime' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        $this->assertEquals($expected, $challenge->getErrors());
+
         // Invalid match_datetime
+        $challenge = $this->Challenges->newEntity();
+        $data = [
+            'location' => 'Somewhere',
+            'match_datetime' => date('Y-m-d H:i:s', strtotime('-1 hour'))
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Challenges->patchEntityAdd($challenge, $data, $clubId, $playerId);
+
+        $expected = [
+            'match_datetime' => [
+                'invalid' => 'The match date & time must be in the future.'
+            ]
+        ];
+
+        $this->assertEquals($expected, $challenge->getErrors());
 
         // Test method
+        $challenge = $this->Challenges->newEntity();
+        $data = [
+            'location' => 'Somewhere',
+            'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour'))
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Challenges->patchEntityAdd($challenge, $data, $clubId, $playerId);
+
+        // No errors
+        $this->assertEmpty($challenge->getErrors());
+
         // club_id set
+        $this->assertEquals($clubId, $challenge->club_id);
+
         // player_a_id set
+        $this->assertEquals($playerId, $challenge->player_a_id);
     }
 
     /**
@@ -89,6 +183,10 @@ class ChallengesTableTest extends TestCase
      */
     public function testFindFiltered()
     {
+        // All shouldn't include ones where match_id is not null
+
+        // Should include ones where match_datetime has passed
+        // Find by all
         // Shouldn't include ones where match_datetime has passed
         // Find by open
         // Find by accepted
@@ -99,7 +197,6 @@ class ChallengesTableTest extends TestCase
      */
     public function testFindByPlayerId()
     {
-        // should include ones where match_datetime has passed
         // Where player_a_id OR player_b_id matches passed playerId
         // Add all case
     }

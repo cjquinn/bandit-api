@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Cake\Utility\Hash;
+
 class ChallengesController extends AppController
 {
     /**
@@ -120,7 +122,17 @@ class ChallengesController extends AppController
      */
     public function index()
     {
-        $challenges = $this->Challenges->find('filtered', $this->request->getQueryParams());
+        $challenges = $this->Challenges
+            ->findByClubId($this->request->getParam('club_id'))
+            ->find(
+                'filtered',
+                ['filter' => Hash::get($request->getQueryParams(), 'filter', null)]
+            )
+            ->find(
+                'byPlayerId',
+                ['player_id' => Hash::get($request->getQueryParams(), 'player_id', null)]
+            )
+            ->find('populated');
 
         $this->set('challenges', $challenges);
     }
@@ -131,7 +143,7 @@ class ChallengesController extends AppController
      */
     public function view($id)
     {
-        $challenge = $this->Challenges->get($id);
+        $challenge = $this->Challenges->get($id, ['finder' => 'populated']);
 
         $this->set('challenge', $challenge);
     }
@@ -144,13 +156,7 @@ class ChallengesController extends AppController
     {
         $challenge = $this->Challenges->get($id);
 
-        $this->Challenges->withdraw(
-            $challenge,
-            $this->Challenges->Clubs->getPlayerId(
-                $this->request->getParam('club_id'),
-                $this->Auth->user('id')
-            )
-        );
+        $this->Challenges->withdraw($challenge);
 
         $this->set('challenge', $challenge);
     }

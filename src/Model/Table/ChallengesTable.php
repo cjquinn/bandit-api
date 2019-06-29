@@ -1,6 +1,8 @@
 <?php
 namespace App\Model\Table;
 
+use App\Model\Entity\Challenge;
+
 use ArrayObject;
 
 use Cake\Event\Event;
@@ -68,11 +70,63 @@ class ChallengesTable extends Table
     /**
      * @return void
      */
+    public function patchEntityAdd(Challenge $challenge, array $data, $clubId, $playerId)
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function accept(Challenge $challenge, $playerId)
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function softDelete(Challenge $challenge)
+    {
+    }
+
+    /**
+     * @return void
+     */
+    public function withdraw(Challenge $challenge)
+    {
+    }
+
+    /**
+     * @return void
+     */
     public function beforeFind(Event $event, Query $query, ArrayObject $options, $primary)
     {
         if (!isset($options['ignoreBeforeFind'])) {
             $query->where([$this->aliasField('deleted') . ' IS' => null]);
         }
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findByPlayerId(Query $query, array $options)
+    {
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findFiltered(Query $query, array $options)
+    {
+        return $query;
+    }
+
+    /**
+     * @return \Cake\ORM\Query
+     */
+    public function findPopulated(Query $query, array $options)
+    {
+        return $query;
     }
 
     /**

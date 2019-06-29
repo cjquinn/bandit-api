@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Cake\Utility\Hash;
+
 class MatchesController extends AppController
 {
     public $paginate = [
@@ -121,7 +123,10 @@ class MatchesController extends AppController
         $matches = $this->paginate(
             $this->Matches
                 ->findByClubId($this->request->getParam('club_id'))
-                ->find('byPlayerId', $this->request->getQueryParams())
+                ->find(
+                    'byPlayerId',
+                    ['player_id' => Hash::get($request->getQueryParams(), 'player_id', null)]
+                )
                 ->find('populated')
         );
 

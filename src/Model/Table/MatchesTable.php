@@ -31,6 +31,7 @@ class MatchesTable extends Table
                 'PlayerBs' => ['className' => 'Players']
             ],
             'hasOne' => [
+                'Challenges',
                 'Disputes',
                 'PlayerASnapshots' => [
                     'className' => 'Snapshots',
@@ -54,18 +55,31 @@ class MatchesTable extends Table
     public function validationAdd(Validator $validator)
     {
         $validator
-            ->requirePresence('player_b_id', 'create')
+            ->requirePresence('player_b_id', function ($context) {
+                return !isset($context['data']['challenge']);
+            })
             ->notEmpty('player_b_id');
 
         $validator
-            ->requirePresence('player_a_score', 'create')
+            ->requirePresence('player_a_score')
             ->notEmpty('player_a_score')
             ->nonNegativeInteger('player_a_score');
 
         $validator
-            ->requirePresence('player_b_score', 'create')
+            ->requirePresence('player_b_score')
             ->notEmpty('player_b_score')
             ->nonNegativeInteger('player_b_score');
+
+        $challengeValidator = new Validator();
+        $challengeValidator
+            ->requirePresence('id')
+            ->notEmpty('id');
+
+        $validator
+            ->requirePresence('challenge', function ($context) {
+                return !isset($context['data']['player_b_id']);
+            })
+            ->addNested('challenge', $challengeValidator);
 
         return $validator;
     }
@@ -87,10 +101,57 @@ class MatchesTable extends Table
      */
     public function patchEntityAdd(Match $match, array $data, $clubId, $playerId)
     {
+        $match->setAccess('challenge', true);
+
         $this->patchEntity($match, $data, ['validate' => 'add']);
 
         if (!empty($match->getErrors())) {
             return;
+        }
+
+        if ($match->challenge) {
+            $challenge = $this->Challenges
+                ->findById($data['challenge']['id'])
+                ->first();
+
+            if (!$challenge) {
+                $match->setError('challenge', [
+                    'invalid' => 'This challenge is not valid'
+                ]);
+
+                return;
+            }
+
+            if ($challenge->club_id !== $clubId) {
+                $match->setError('challenge', [
+                    'invalid' => 'This challenge is from a different club'
+                ]);
+
+                return;
+            }
+
+            if ($challenge->player_a_id !== $playerId &&
+                $challenge->player_b_id !== $playerId
+            ) {
+                $match->setError('challenge', [
+                    'invalid' => 'This challenge is not yours'
+                ]);
+
+                return;
+            }
+
+            if (!$challenge->player_b_id) {
+                $match->setError('challenge', [
+                    'invalid' => 'This challenge hasn\'t been accepted'
+                ]);
+
+                return;
+            }
+
+            $match->set('challenge', $challenge);
+
+            $otherPlayerIdProperty = $challenge->player_b_id === $playerId ? 'player_a_id' : 'player_b_id';
+            $match->set('player_b_id', $challenge->{$otherPlayerIdProperty});
         }
 
         $match->set('club_id', $clubId);

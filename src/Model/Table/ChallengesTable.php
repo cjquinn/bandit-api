@@ -77,7 +77,7 @@ class ChallengesTable extends Table
             $challenge->match_datetime < Time::now()
         ) {
             $challenge->setError('match_datetime', [
-                'invalid' => 'The match date & time must be in the future.'
+                'invalid' => 'The match date & time must be in the future'
             ]);
         }
 

@@ -164,7 +164,7 @@ class ChallengesTableTest extends TestCase
 
         $expected = [
             'match_datetime' => [
-                'invalid' => 'The match date & time must be in the future.'
+                'invalid' => 'The match date & time must be in the future'
             ]
         ];
 

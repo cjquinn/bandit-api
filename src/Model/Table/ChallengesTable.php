@@ -42,16 +42,12 @@ class ChallengesTable extends Table
     public function validationAdd(Validator $validator)
     {
         $validator
-            ->requirePresence('player_b_id', 'create')
-            ->notEmpty('player_b_id');
-
-        $validator
-            ->requirePresence('location', 'create')
+            ->requirePresence('location')
             ->notEmpty('location');
 
         $validator
+            ->requirePresence('match_datetime')
             ->dateTime('match_datetime')
-            ->requirePresence('match_datetime', 'create')
             ->notEmpty('match_datetime');
 
         return $validator;
@@ -77,7 +73,9 @@ class ChallengesTable extends Table
     {
         $this->patchEntity($challenge, $data, ['validate' => 'add']);
 
-        if ($challenge->match_datetime < Time::now()) {
+        if ($challenge->match_datetime &&
+            $challenge->match_datetime < Time::now()
+        ) {
             $challenge->setError('match_datetime', [
                 'invalid' => 'The match date & time must be in the future.'
             ]);
@@ -97,7 +95,8 @@ class ChallengesTable extends Table
     public function accept(Challenge $challenge, $playerId)
     {
         if ($challenge->player_b_id ||
-            $challenge->player_a_id === $playerId
+            $challenge->player_a_id === $playerId ||
+            $challenge->match_datetime < Time::now()
         ) {
             return false;
         }
@@ -126,8 +125,8 @@ class ChallengesTable extends Table
         $this->loadInto($challenge, ['PlayerAs']);
 
         $this->connection()->transactional(function () use ($challenge) {
-            if ($this->match_datetime < Time::now() ||
-                $this->match_datetime->isWithinNext('24 hours')
+            if ($challenge->player_b_id &&
+               ($challenge->match_datetime < Time::now() || $challenge->match_datetime->isWithinNext('24 hours'))
             ) {
                 $this->PlayerAs->Users->updateReputation($challenge->player_a->user_id, -10);
             }
@@ -137,10 +136,12 @@ class ChallengesTable extends Table
             $this->save($challenge);
         });
 
-        $this->getMailer('Challenge')->send(
-            'playerDeleted',
-            [$challenge]
-        );
+        if ($challenge->player_b_id) {
+            $this->getMailer('Challenge')->send(
+                'playerDeleted',
+                [$challenge]
+            );
+        }
 
         return true;
     }
@@ -150,7 +151,10 @@ class ChallengesTable extends Table
      */
     public function report(Challenge $challenge, $playerId)
     {
-        if ($challenge->player_a_id !== $playerId && $challenge->player_b_id !== $playerId) {
+        if (!$challenge->player_b_id ||
+           ($challenge->player_a_id !== $playerId && $challenge->player_b_id !== $playerId) ||
+           $challenge->match_datetime > Time::now()
+        ) {
             return false;
         }
 
@@ -186,8 +190,8 @@ class ChallengesTable extends Table
         $this->loadInto($challenge, ['PlayerBs']);
 
         $this->connection()->transactional(function () use ($challenge) {
-            if ($this->match_datetime < Time::now() ||
-                $this->match_datetime->isWithinNext('24 hours')
+            if ($challenge->match_datetime < Time::now() ||
+                $challenge->match_datetime->isWithinNext('24 hours')
             ) {
                 $this->PlayerBs->Users->updateReputation($challenge->player_b->user_id, -10);
             }
@@ -223,6 +227,19 @@ class ChallengesTable extends Table
      */
     public function findByPlayerId(Query $query, array $options)
     {
+        if (!isset($options['player_id']) ||
+            $options['player_id'] === 'all'
+        ) {
+            return $query;
+        }
+
+        $query->where([
+            'OR' => [
+                $this->aliasField('player_a_id') => $options['player_id'],
+                $this->aliasField('player_b_id') => $options['player_id']
+            ]
+        ]);
+
         return $query;
     }
 
@@ -231,6 +248,17 @@ class ChallengesTable extends Table
      */
     public function findFiltered(Query $query, array $options)
     {
+        if (!isset($options['filter']) ||
+            !in_array($options['filter'], ['accepted', 'open'])
+        ) {
+            return $query;
+        }
+
+        $query->where([
+            $this->aliasField('match_datetime') . ' >' => Time::now(),
+            $this->aliasField('player_b_id') . ' IS' . ($options['filter'] === 'accepted' ? ' NOT' : '') => null
+        ]);
+
         return $query;
     }
 

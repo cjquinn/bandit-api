@@ -257,7 +257,7 @@ class ChallengesControllerTest extends IntegrationTestCase
 
         $this->get('/clubs/1/challenges.json?filter=open');
 
-        $this->assertResponseCode(400);
+        $this->assertResponseCode(200);
     }
 
     /**
@@ -355,7 +355,7 @@ class ChallengesControllerTest extends IntegrationTestCase
 
         $this->patch('/clubs/1/challenges/8/report.json');
 
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -363,6 +363,11 @@ class ChallengesControllerTest extends IntegrationTestCase
      */
     public function testReportFutureChallenge()
     {
+        $this->_table('Challenges')->updateAll(
+            ['match_id' => null],
+            ['id' => 5]
+        );
+
         $this->_setAuthSession(1);
 
         $this->patch('/clubs/1/challenges/5/report.json');

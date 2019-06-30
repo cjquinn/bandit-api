@@ -125,7 +125,7 @@ class MatchesController extends AppController
                 ->findByClubId($this->request->getParam('club_id'))
                 ->find(
                     'byPlayerId',
-                    ['player_id' => Hash::get($request->getQueryParams(), 'player_id', null)]
+                    ['player_id' => Hash::get($this->request->getQueryParams(), 'player_id', null)]
                 )
                 ->find('populated')
         );

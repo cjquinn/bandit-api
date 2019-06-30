@@ -4,6 +4,7 @@ namespace App\Test\TestCase\Model\Table;
 
 use App\Model\Table\ChallengesTable;
 
+use Cake\I18n\Time;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
@@ -19,7 +20,11 @@ class ChallengesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.challenges'
+        'app.challenges',
+        'app.clubs',
+        'app.matches',
+        'app.players',
+        'app.users'
     ];
 
     /**
@@ -63,7 +68,7 @@ class ChallengesTableTest extends TestCase
         // In the past
         $playerId = 2;
         $challenge = $this->Challenges->get(1);
-        $challenge->match_datetime = date('Y-m-d H:i:s', strtotime('-5 hour'));
+        $challenge->match_datetime = new Time(strtotime('-5 hour'));
 
         $this->assertFalse($this->Challenges->accept($challenge, $playerId));
 
@@ -237,8 +242,8 @@ class ChallengesTableTest extends TestCase
         $this->assertEquals(-6, $playerA->user->reputation);
 
         // Check rep isn't decreased and no email is sent
-        $challenge = $this->Challenges->get(3);
-        $playerId = 2;
+        $challenge = $this->Challenges->get(1);
+        $playerId = 1;
 
         $challengesTableMock = $this->getMockForModel(
             'App\Model\Table\ChallengesTable',
@@ -318,8 +323,8 @@ class ChallengesTableTest extends TestCase
         // Find by all
         $query = $this->Challenges->find('filtered', ['filter' => 'all']);
 
-        $this->assertEquals(7, $query->count());
-        $this->assertEquals([1, 2, 3, 4, 6, 7, 8], $query->extract('id')->toArray());
+        $this->assertEquals(5, $query->count());
+        $this->assertEquals([1, 2, 3, 4, 7], $query->extract('id')->toArray());
 
         // Shouldn't include ones where match_datetime has passed
         // Find by open
@@ -351,8 +356,8 @@ class ChallengesTableTest extends TestCase
         // Add all case
         $query = $this->Challenges->find('byPlayerId', ['player_id' => 'all']);
 
-        $this->assertEquals(7, $query->count());
-        $this->assertEquals([1, 2, 3, 4, 6, 7, 8], $query->extract('id')->toArray());
+        $this->assertEquals(5, $query->count());
+        $this->assertEquals([1, 2, 3, 4, 7], $query->extract('id')->toArray());
     }
 
     /**
@@ -425,7 +430,7 @@ class ChallengesTableTest extends TestCase
         $this->assertTrue($this->Challenges->exists(['id' => $challenge->id, 'player_b_id IS' => null]));
 
         // If time is less than 24 hours negative rep to player b
-        $playerB = $this->Challenges->PlayerAs->get($challenge->player_b_id, ['contain' => 'Users']);
+        $playerB = $this->Challenges->PlayerAs->get($playerId, ['contain' => 'Users']);
 
         $this->assertEquals(-9, $playerB->user->reputation);
 
@@ -435,7 +440,7 @@ class ChallengesTableTest extends TestCase
 
         $this->assertTrue($this->Challenges->withdraw($challenge, $playerId));
 
-        $playerB = $this->Challenges->PlayerAs->get($challenge->player_b_id, ['contain' => 'Users']);
+        $playerB = $this->Challenges->PlayerAs->get($playerId, ['contain' => 'Users']);
 
         $this->assertEquals(3, $playerB->user->reputation);
     }

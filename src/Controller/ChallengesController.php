@@ -63,7 +63,7 @@ class ChallengesController extends AppController
             )
         );
 
-        if ($this->Challenges->save($challenge)) {
+        if (!$this->Challenges->save($challenge)) {
             $this->response->statusCode(400);
         }
 
@@ -104,11 +104,11 @@ class ChallengesController extends AppController
             ->findByClubId($this->request->getParam('club_id'))
             ->find(
                 'filtered',
-                ['filter' => Hash::get($request->getQueryParams(), 'filter', null)]
+                ['filter' => Hash::get($this->request->getQueryParams(), 'filter', null)]
             )
             ->find(
                 'byPlayerId',
-                ['player_id' => Hash::get($request->getQueryParams(), 'player_id', null)]
+                ['player_id' => Hash::get($this->request->getQueryParams(), 'player_id', null)]
             )
             ->find('populated');
 
@@ -156,7 +156,7 @@ class ChallengesController extends AppController
     {
         $challenge = $this->Challenges->get($id);
 
-        if ($this->Challenges->withdraw(
+        if (!$this->Challenges->withdraw(
             $challenge,
             $this->Challenges->Clubs->getPlayerId(
                 $this->request->getParam('club_id'),

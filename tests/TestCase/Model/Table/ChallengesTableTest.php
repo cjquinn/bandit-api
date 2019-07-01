@@ -327,17 +327,11 @@ class ChallengesTableTest extends TestCase
         $this->assertEquals([1, 2, 3, 4, 7], $query->extract('id')->toArray());
 
         // Shouldn't include ones where match_datetime has passed
-        // Find by open
-        $query = $this->Challenges->find('filtered', ['filter' => 'open']);
+        // Find by upcoming
+        $query = $this->Challenges->find('filtered', ['filter' => 'upcoming']);
 
-        $this->assertEquals(2, $query->count());
-        $this->assertEquals([1, 2], $query->extract('id')->toArray());
-
-        // Find by accepted
-        $query = $this->Challenges->find('filtered', ['filter' => 'accepted']);
-
-        $this->assertEquals(1, $query->count());
-        $this->assertEquals([7], $query->extract('id')->toArray());
+        $this->assertEquals(3, $query->count());
+        $this->assertEquals([1, 2, 7], $query->extract('id')->toArray());
     }
 
     /**

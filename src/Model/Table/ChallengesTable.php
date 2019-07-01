@@ -249,15 +249,12 @@ class ChallengesTable extends Table
     public function findFiltered(Query $query, array $options)
     {
         if (!isset($options['filter']) ||
-            !in_array($options['filter'], ['accepted', 'open'])
+            $options['filter'] === 'all'
         ) {
             return $query;
         }
 
-        $query->where([
-            $this->aliasField('match_datetime') . ' >' => Time::now(),
-            $this->aliasField('player_b_id') . ' IS' . ($options['filter'] === 'accepted' ? ' NOT' : '') => null
-        ]);
+        $query->where([$this->aliasField('match_datetime') . ' >' => Time::now()]);
 
         return $query;
     }

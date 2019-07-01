@@ -248,7 +248,7 @@ class ChallengesTable extends Table
      */
     public function findFiltered(Query $query, array $options)
     {
-        if (!isset($options['filter']) ||
+        if (isset($options['filter']) &&
             $options['filter'] === 'all'
         ) {
             return $query;

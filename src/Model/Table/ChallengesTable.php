@@ -69,6 +69,21 @@ class ChallengesTable extends Table
     /**
      * @return void
      */
+    public function beforeMarshal(Event $event, ArrayObject $data, ArrayObject $options)
+    {
+        if (isset($data['match_datetime']) &&
+            is_string($data['match_datetime'])
+        ) {
+            $data['match_datetime'] = Time::parseDateTime(
+                $data['match_datetime'],
+                "yyyy-MM-dd'T'HH:mm" // ICU compatible format
+            );
+        }
+    }
+
+    /**
+     * @return void
+     */
     public function patchEntityAdd(Challenge $challenge, array $data, $clubId, $playerId)
     {
         $this->patchEntity($challenge, $data, ['validate' => 'add']);
@@ -77,7 +92,7 @@ class ChallengesTable extends Table
             $challenge->match_datetime < Time::now()
         ) {
             $challenge->setError('match_datetime', [
-                'invalid' => 'The match date and time must be in the future'
+                'invalid' => 'The date and time must be in the future'
             ]);
         }
 

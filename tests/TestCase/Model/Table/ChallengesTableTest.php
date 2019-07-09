@@ -319,25 +319,23 @@ class ChallengesTableTest extends TestCase
     {
         // All shouldn't include ones where match_id is not null or deleted
 
-        // Should include ones where match_datetime has passed
         // Find by all
         $query = $this->Challenges->find('filtered', ['filter' => 'all']);
 
         $this->assertEquals(5, $query->count());
         $this->assertEquals([1, 2, 3, 4, 7], $query->extract('id')->toArray());
 
-        // Shouldn't include ones where match_datetime has passed
         // Find by open
         $query = $this->Challenges->find('filtered', ['filter' => 'open']);
 
-        $this->assertEquals(2, $query->count());
-        $this->assertEquals([1, 2], $query->extract('id')->toArray());
+        $this->assertEquals(3, $query->count());
+        $this->assertEquals([1, 2, 4], $query->extract('id')->toArray());
 
         // Find by accepted
         $query = $this->Challenges->find('filtered', ['filter' => 'accepted']);
 
-        $this->assertEquals(1, $query->count());
-        $this->assertEquals([7], $query->extract('id')->toArray());
+        $this->assertEquals(2, $query->count());
+        $this->assertEquals([3, 7], $query->extract('id')->toArray());
     }
 
     /**

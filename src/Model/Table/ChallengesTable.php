@@ -230,10 +230,12 @@ class ChallengesTable extends Table
     public function beforeFind(Event $event, Query $query, ArrayObject $options, $primary)
     {
         if (!isset($options['ignoreBeforeFind'])) {
-            $query->where([
-                $this->aliasField('match_id') . ' IS' => null,
-                $this->aliasField('deleted') . ' IS' => null
-            ]);
+            $query
+                ->where([
+                    $this->aliasField('match_id') . ' IS' => null,
+                    $this->aliasField('deleted') . ' IS' => null
+                ])
+                ->orderAsc($this->aliasField('match_datetime'));
         }
     }
 
@@ -245,6 +247,10 @@ class ChallengesTable extends Table
         if (!isset($options['player_id']) ||
             $options['player_id'] === 'all'
         ) {
+            $query->where([
+                $this->aliasField('match_datetime') . ' >' => Time::now()
+            ]);
+
             return $query;
         }
 
@@ -271,7 +277,6 @@ class ChallengesTable extends Table
         }
 
         $query->where([
-            $this->aliasField('match_datetime') . ' >' => Time::now(),
             $this->aliasField('player_b_id') . ' IS' . ($options['filter'] === 'accepted' ? ' NOT' : '') => null
         ]);
 
@@ -283,6 +288,11 @@ class ChallengesTable extends Table
      */
     public function findPopulated(Query $query, array $options)
     {
+        $query->contain([
+            'PlayerAs.Users',
+            'PlayerBs.Users'
+        ]);
+
         return $query;
     }
 

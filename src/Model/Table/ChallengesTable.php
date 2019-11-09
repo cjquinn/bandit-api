@@ -204,6 +204,9 @@ class ChallengesTable extends Table
 
         $this->loadInto($challenge, ['PlayerBs']);
 
+        // Save playerB for later!
+        $playerB = $challenge->player_b;
+
         $this->connection()->transactional(function () use ($challenge) {
             if ($challenge->match_datetime < Time::now() ||
                 $challenge->match_datetime->isWithinNext('24 hours')
@@ -218,7 +221,7 @@ class ChallengesTable extends Table
 
         $this->getMailer('Challenge')->send(
             'playerWithdrew',
-            [$challenge]
+            [$challenge, $playerB]
         );
 
         return true;

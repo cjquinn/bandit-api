@@ -315,47 +315,43 @@ class ChallengesTableTest extends TestCase
     /**
      * @return void
      */
-    public function testFindFiltered()
-    {
-        // All shouldn't include ones where match_id is not null or deleted
-
-        // Find by all
-        $query = $this->Challenges->find('filtered', ['filter' => 'all']);
-
-        $this->assertEquals(5, $query->count());
-        $this->assertEquals([1, 2, 3, 4, 7], $query->extract('id')->toArray());
-
-        // Find by open
-        $query = $this->Challenges->find('filtered', ['filter' => 'open']);
-
-        $this->assertEquals(3, $query->count());
-        $this->assertEquals([1, 2, 4], $query->extract('id')->toArray());
-
-        // Find by accepted
-        $query = $this->Challenges->find('filtered', ['filter' => 'accepted']);
-
-        $this->assertEquals(2, $query->count());
-        $this->assertEquals([3, 7], $query->extract('id')->toArray());
-    }
-
-    /**
-     * @return void
-     */
     public function testFindByPlayerId()
     {
-        // All shouldn't include ones where match_id is not null or deleted
-
         // Where player_a_id OR player_b_id matches passed playerId
         $query = $this->Challenges->find('byPlayerId', ['player_id' => 2]);
 
         $this->assertEquals(2, $query->count());
         $this->assertEquals([3, 7], $query->extract('id')->toArray());
 
-        // Add all case
+        // All case
         $query = $this->Challenges->find('byPlayerId', ['player_id' => 'all']);
 
+        $this->assertEquals(3, $query->count());
+        $this->assertEquals([2, 1, 7], $query->extract('id')->toArray());
+    }
+
+    /**
+     * @return void
+     */
+    public function testFindFiltered()
+    {
+        // Find by all
+        $query = $this->Challenges->find('filtered', ['filter' => 'all']);
+
         $this->assertEquals(5, $query->count());
-        $this->assertEquals([1, 2, 3, 4, 7], $query->extract('id')->toArray());
+        $this->assertEquals([3, 4, 2, 1, 7], $query->extract('id')->toArray());
+
+        // Find by open
+        $query = $this->Challenges->find('filtered', ['filter' => 'open']);
+
+        $this->assertEquals(3, $query->count());
+        $this->assertEquals([4, 2, 1], $query->extract('id')->toArray());
+
+        // Find by accepted
+        $query = $this->Challenges->find('filtered', ['filter' => 'accepted']);
+
+        $this->assertEquals(2, $query->count());
+        $this->assertEquals([3, 7], $query->extract('id')->toArray());
     }
 
     /**

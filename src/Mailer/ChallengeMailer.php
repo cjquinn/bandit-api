@@ -3,6 +3,7 @@
 namespace App\Mailer;
 
 use App\Model\Entity\Challenge;
+use App\Model\Entity\Player;
 
 use Cake\Core\Configure;
 use Cake\Mailer\Mailer;
@@ -15,7 +16,7 @@ class ChallengeMailer extends Mailer
      */
     public function playerAccepted(Challenge $challenge)
     {
-        TableRegistry::get('Challenges')->loadInto($challenge, ['PlayerAs.Users']);
+        TableRegistry::get('Challenges')->loadInto($challenge, ['PlayerAs.Users', 'PlayerBs.Users']);
 
         $this
             ->to($challenge->player_a->user->email)
@@ -31,7 +32,7 @@ class ChallengeMailer extends Mailer
      */
     public function playerDeleted(Challenge $challenge)
     {
-        TableRegistry::get('Challenges')->loadInto($challenge, ['PlayerBs.Users']);
+        TableRegistry::get('Challenges')->loadInto($challenge, ['PlayerAs.Users', 'PlayerBs.Users']);
 
         $this
             ->to($challenge->player_b->user->email)
@@ -45,9 +46,12 @@ class ChallengeMailer extends Mailer
     /**
      * @return void
      */
-    public function playerWithdrew(Challenge $challenge)
+    public function playerWithdrew(Challenge $challenge, Player $playerB)
     {
         TableRegistry::get('Challenges')->loadInto($challenge, ['PlayerAs.Users']);
+        TableRegistry::get('Players')->loadInto($playerB, ['Users']);
+
+        $challenge->set('player_b', $playerB);
 
         $this
             ->to($challenge->player_a->user->email)

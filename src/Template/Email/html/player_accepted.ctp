@@ -8,18 +8,18 @@ use Cake\Core\Configure;
             <tr>
                 <td cellpadding="0" style="padding: 0;">
                     <h1 style="<?= Configure::read('Bandit.emailStyles.h1') ?>">
-                        Game on! Trudy Knight has accepted your challenge
+                        Game on! <?= $challenge->player_b->user->first_name ?> <?= $challenge->player_b->user->last_name ?> has accepted your challenge
                     </h1>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        You're set to play on Tuesday 26th February at 18:30. We look forward to seeing the match result!
+                        You're set to play on <?= $challenge->match_datetime->format('l jS F at H:i') ?>. We look forward to seeing the match result!
                     </p>
                 </td>
             </tr>
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 0px 35px;">
-                    <a href="https://banditmatch.com/clubs" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                    <a href="https://banditmatch.com/challenges/<?= $challenge->id ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Go to this challenge
                         </span>

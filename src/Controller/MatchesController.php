@@ -69,7 +69,7 @@ class MatchesController extends AppController
         $this->Matches->patchEntityAdd(
             $match,
             $this->request->getData(),
-            $this->request->getParam('club_id'),
+            +$this->request->getParam('club_id'),
             $this->Matches->Clubs->getPlayerId(
                 $this->request->getParam('club_id'),
                 $this->Auth->user('id')

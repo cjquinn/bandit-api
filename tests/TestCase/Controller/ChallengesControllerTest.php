@@ -77,7 +77,7 @@ class ChallengesControllerTest extends IntegrationTestCase
 
         $this->patch('/clubs/2/challenges/4/accept.json');
 
-        $this->assertResponseCode(403);
+        $this->assertResponseCode(404);
     }
 
     /**
@@ -307,9 +307,9 @@ class ChallengesControllerTest extends IntegrationTestCase
      */
     public function testReportUnacceptedChallenge()
     {
-        $this->_setAuthSession(1);
+        $this->_setAuthSession(2);
 
-        $this->patch('/clubs/2/challenges/4/report.json');
+        $this->patch('/clubs/1/challenges/1/report.json');
 
         $this->assertResponseCode(403);
     }

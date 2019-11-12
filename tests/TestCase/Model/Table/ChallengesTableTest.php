@@ -338,14 +338,14 @@ class ChallengesTableTest extends TestCase
         // Find by all
         $query = $this->Challenges->find('filtered', ['filter' => 'all']);
 
-        $this->assertEquals(5, $query->count());
-        $this->assertEquals([3, 4, 2, 1, 7], $query->extract('id')->toArray());
+        $this->assertEquals(4, $query->count());
+        $this->assertEquals([3, 2, 1, 7], $query->extract('id')->toArray());
 
         // Find by open
         $query = $this->Challenges->find('filtered', ['filter' => 'open']);
 
-        $this->assertEquals(3, $query->count());
-        $this->assertEquals([4, 2, 1], $query->extract('id')->toArray());
+        $this->assertEquals(2, $query->count());
+        $this->assertEquals([2, 1], $query->extract('id')->toArray());
 
         // Find by accepted
         $query = $this->Challenges->find('filtered', ['filter' => 'accepted']);

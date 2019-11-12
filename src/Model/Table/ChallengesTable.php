@@ -235,6 +235,10 @@ class ChallengesTable extends Table
         if (!isset($options['ignoreBeforeFind'])) {
             $query
                 ->where([
+                    'OR' => [
+                        $this->aliasField('player_b_id') . ' IS NOT' => null,
+                        $this->aliasField('match_datetime') . ' >' => Time::now()
+                    ],
                     $this->aliasField('match_id') . ' IS' => null,
                     $this->aliasField('deleted') . ' IS' => null
                 ])

@@ -20,10 +20,10 @@ class ChallengeMailer extends Mailer
 
         $this
             ->to($challenge->player_a->user->email)
-            ->subject('Player Accepted')
+            ->subject('Game on!' . $challenge->player_b->user->full_name . 'has accepted your challenge')
             ->from(Configure::read('Bandit.emails.referee'))
             ->set(['challenge' => $challenge])
-            ->template('playerAccepted')
+            ->template('Challenge/player_accepted')
             ->emailFormat('both');
     }
 
@@ -36,10 +36,10 @@ class ChallengeMailer extends Mailer
 
         $this
             ->to($challenge->player_b->user->email)
-            ->subject('Player Deleted')
+            ->subject('Cancellation! ' . $challenge->player_a->user->full_name . ' has cancelled their challenge')
             ->from(Configure::read('Bandit.emails.referee'))
             ->set(['challenge' => $challenge])
-            ->template('playerDeleted')
+            ->template('Challenge/player_deleted')
             ->emailFormat('both');
     }
 
@@ -55,10 +55,10 @@ class ChallengeMailer extends Mailer
 
         $this
             ->to($challenge->player_a->user->email)
-            ->subject('Player Withdrew')
+            ->subject('Cancellation! ' . $challenge->player_b->user->full_name . ' withdrew from your challenge')
             ->from(Configure::read('Bandit.emails.referee'))
             ->set(['challenge' => $challenge])
-            ->template('playerWithdrew')
+            ->template('Challenge/player_withdrew')
             ->emailFormat('both');
     }
 }

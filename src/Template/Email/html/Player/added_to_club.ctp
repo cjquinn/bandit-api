@@ -12,7 +12,7 @@ use Cake\Core\Configure;
                     </h1>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        <?= $player->club->name ?> is pleased to announce it’s newest talent&hellip;<?= $player->user->first_name ?> <?= $player->user->last_name ?>.
+                        <?= $player->club->name ?> is pleased to announce it’s newest talent&hellip;<?= $player->user->full_name ?>.
                     </p>
                 </td>
             </tr>

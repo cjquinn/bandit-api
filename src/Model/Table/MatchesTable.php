@@ -111,7 +111,8 @@ class MatchesTable extends Table
 
         if ($match->challenge) {
             $challenge = $this->Challenges
-                ->findById($data['challenge']['id'])
+                ->find()
+                ->where([$this->Challenges->aliasField('id') => $data['challenge']['id']])
                 ->first();
 
             if (!$challenge) {

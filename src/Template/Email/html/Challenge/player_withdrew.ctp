@@ -8,11 +8,11 @@ use Cake\Core\Configure;
             <tr>
                 <td cellpadding="0" style="padding: 0;">
                     <h1 style="<?= Configure::read('Bandit.emailStyles.h1') ?>">
-                        Game on! <?= $challenge->player_b->user->first_name ?> <?= $challenge->player_b->user->last_name ?> has accepted your challenge
+                        Cancellation! <?= $challenge->player_b->user->full_name ?> withdrew from your challenge
                     </h1>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        You're set to play on <?= $challenge->match_datetime->format('l jS F at H:i') ?>. We look forward to seeing the match result!
+                        Sorry to hear it, but <?= $challenge->player_b->user->first_name ?> has withdrawn from your challenge on <?= $challenge->match_datetime->format('l jS F \a\t H:i') ?>.
                     </p>
                 </td>
             </tr>
@@ -21,7 +21,7 @@ use Cake\Core\Configure;
                 <td cellpadding="0" style="padding: 48px 0px 35px;">
                     <a href="https://banditmatch.com/challenges/<?= $challenge->id ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
-                            Go to this challenge
+                            Check in on your challenge
                         </span>
                     </a>
                 </td>

@@ -228,13 +228,13 @@ class ClubsTableTest extends TestCase
         $this->assertEquals(2, $clubs->count());
         $this->assertEquals([7, 2], $clubs->extract('player_count')->toArray());
         $this->assertEquals(
-            [date('Y-m-d H:i', strtotime('1 day ago')), date('Y-m-d H:i', strtotime('today'))],
+            [date('Y-m-d H', strtotime('1 day ago')), date('Y-m-d H', strtotime('today'))],
             $clubs->extract('last_played')->map(function ($lastPlayed) {
                 if (!$lastPlayed) {
                     return $lastPlayed;
                 }
 
-                return date('Y-m-d H:i', strtotime($lastPlayed));
+                return date('Y-m-d H', strtotime($lastPlayed));
             })->toArray()
         );
 
@@ -248,13 +248,13 @@ class ClubsTableTest extends TestCase
         $this->assertEquals(2, $clubs->count());
         $this->assertEquals([6, 2], $clubs->extract('player_count')->toArray());
         $this->assertEquals(
-            [date('Y-m-d H:i', strtotime('1 day ago')), date('Y-m-d H:i', strtotime('today'))],
+            [date('Y-m-d H', strtotime('1 day ago')), date('Y-m-d H', strtotime('today'))],
             $clubs->extract('last_played')->map(function ($lastPlayed) {
                 if (!$lastPlayed) {
                     return $lastPlayed;
                 }
 
-                return date('Y-m-d H:i', strtotime($lastPlayed));
+                return date('Y-m-d H', strtotime($lastPlayed));
             })->toArray()
         );
     }

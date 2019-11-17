@@ -1,6 +1,6 @@
 A new player has entered the arena
 
-<?= $player->club->name ?> is pleased to announce it’s newest talent...<?= $player->user->first_name ?> <?= $player->user->last_name ?>.
+<?= $player->club->name ?> is pleased to announce it’s newest talent...<?= $player->user->full_name ?>.
 
 ------------------------------------------
 

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Cake\Utility\Hash;
+
 class MatchesController extends AppController
 {
     public $paginate = [
@@ -67,7 +69,7 @@ class MatchesController extends AppController
         $this->Matches->patchEntityAdd(
             $match,
             $this->request->getData(),
-            $this->request->getParam('club_id'),
+            +$this->request->getParam('club_id'),
             $this->Matches->Clubs->getPlayerId(
                 $this->request->getParam('club_id'),
                 $this->Auth->user('id')
@@ -78,11 +80,12 @@ class MatchesController extends AppController
 
         $this->set([
             'match' => $match,
-            'errors' => $match->errors()
+            'errors' => $match->getErrors()
         ]);
 
         if (!$success) {
             $this->response->statusCode(400);
+            return;
         }
 
         $club = $this->Matches->Clubs->get($this->request->getParam('club_id'), ['finder' => 'banditId']);
@@ -120,7 +123,10 @@ class MatchesController extends AppController
         $matches = $this->paginate(
             $this->Matches
                 ->findByClubId($this->request->getParam('club_id'))
-                ->find('byPlayerId', $this->request->getQueryParams())
+                ->find(
+                    'byPlayerId',
+                    ['player_id' => Hash::get($this->request->getQueryParams(), 'player_id', null)]
+                )
                 ->find('populated')
         );
 

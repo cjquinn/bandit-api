@@ -52,7 +52,7 @@ class ClubsController extends AppController
 
         $this->set([
             'club' => $club,
-            'errors' => $club->errors()
+            'errors' => $club->getErrors()
         ]);
 
         if (!$success) {
@@ -81,7 +81,7 @@ class ClubsController extends AppController
 
         $this->set([
             'club' => $club,
-            'errors' => $club->errors()
+            'errors' => $club->getErrors()
         ]);
     }
 

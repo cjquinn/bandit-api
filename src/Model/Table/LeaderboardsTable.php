@@ -15,6 +15,8 @@ class LeaderboardsTable extends Table
      */
     public function initialize(array $config)
     {
+        parent::initialize($config);
+
         $this->setTable('players');
     }
 }

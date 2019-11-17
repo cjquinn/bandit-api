@@ -22,6 +22,8 @@ class ClubsTable extends Table
      */
     public function initialize(array $config)
     {
+        parent::initialize($config);
+
         $this->addAssociations([
             'belongsTo' => [
                 'Founders' => ['className' => 'Users']

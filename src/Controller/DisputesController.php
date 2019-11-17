@@ -84,7 +84,7 @@ class DisputesController extends AppController
 
         $this->set([
             'dispute' => $dispute,
-            'errors' => $dispute->errors()
+            'errors' => $dispute->getErrors()
         ]);
     }
 
@@ -102,7 +102,7 @@ class DisputesController extends AppController
 
         $this->set([
             'dispute' => $dispute,
-            'errors' => $dispute->errors()
+            'errors' => $dispute->getErrors()
         ]);
 
         if (!$success) {

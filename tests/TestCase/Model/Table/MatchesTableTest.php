@@ -10,6 +10,7 @@ class MatchesTableTest extends TestCase
 {
 
     public $fixtures = [
+        'app.challenges',
         'app.clubs',
         'app.players',
         'app.matches',
@@ -58,6 +59,9 @@ class MatchesTableTest extends TestCase
                 '_required' => 'This field is required'
             ],
             'player_b_score' => [
+                '_required' => 'This field is required'
+            ],
+            'challenge' => [
                 '_required' => 'This field is required'
             ]
         ];
@@ -143,6 +147,202 @@ class MatchesTableTest extends TestCase
         $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
 
         $this->assertEmpty($match->getErrors());
+    }
+
+    /**
+     * @return void
+     */
+    public function testPatchEntityAddWithChallenge()
+    {
+        // Required
+        $challengeId = 3;
+
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_a_score' => 3,
+            'player_b_score' => 0
+        ];
+        $clubId = 1;
+        $playerId = 3; // player_b_id in challenge
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $expected = [
+            'player_b_id' => [
+                '_required' => 'This field is required'
+            ],
+            'challenge' => [
+                '_required' => 'This field is required'
+            ]
+        ];
+
+        $this->assertEquals($expected, $match->getErrors());
+
+        // Challenge must have an opponent
+        $challengeId = 1;
+
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_a_score' => 3,
+            'player_b_score' => 0,
+            'challenge' => ['id' => $challengeId]
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $expected = [
+            'challenge' => [
+                'invalid' => 'This challenge hasn\'t been accepted'
+            ]
+        ];
+
+        $this->assertEquals($expected, $match->getErrors());
+
+        // Challenge mustn't have a match
+        $challengeId = 5;
+
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_a_score' => 3,
+            'player_b_score' => 0,
+            'challenge' => ['id' => $challengeId]
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $expected = [
+            'challenge' => [
+                'invalid' => 'This challenge is not valid'
+            ]
+        ];
+
+        $this->assertEquals($expected, $match->getErrors());
+
+        // Challenge mustn't be deleted
+        $challengeId = 8;
+
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_a_score' => 3,
+            'player_b_score' => 0,
+            'challenge' => ['id' => $challengeId]
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $expected = [
+            'challenge' => [
+                'invalid' => 'This challenge is not valid'
+            ]
+        ];
+
+        $this->assertEquals($expected, $match->getErrors());
+
+        // Challenge must be from same club
+        $this->Matches->Challenges->updateAll(['player_b_id' => 8], ['id' => 4]);
+        $challengeId = 4;
+
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_a_score' => 3,
+            'player_b_score' => 0,
+            'challenge' => ['id' => $challengeId]
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $expected = [
+            'challenge' => [
+                'invalid' => 'This challenge is from a different club'
+            ]
+        ];
+
+        $this->assertEquals($expected, $match->getErrors());
+
+        // Challenge must include player
+        $challengeId = 3;
+
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_a_score' => 3,
+            'player_b_score' => 0,
+            'challenge' => ['id' => $challengeId]
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $expected = [
+            'challenge' => [
+                'invalid' => 'This challenge is not yours'
+            ]
+        ];
+
+        $this->assertEquals($expected, $match->getErrors());
+
+        // Valid
+        $challengeId = 3;
+
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_a_score' => 3,
+            'player_b_score' => 0,
+            'challenge' => ['id' => $challengeId]
+        ];
+        $clubId = 1;
+        $playerId = 3; // player_b_id in challenge
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $this->assertEmpty($match->getErrors());
+        $this->assertTrue($this->Matches->save($match) !== false);
+
+        $challenge = $this->Matches->Challenges
+            ->find('all', ['ignoreBeforeFind' => true])
+            ->where(['id' => $challengeId])
+            ->first();
+
+        $this->assertEquals($match->id, $challenge->match_id);
+        $this->assertEquals($match->player_b_id, $challenge->player_a_id);
+    }
+
+    /**
+     * @return void
+     */
+    public function testPatchEntityAddChallengePlayerA()
+    {
+        $challengeId = 3;
+
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_a_score' => 3,
+            'player_b_score' => 0,
+            'challenge' => ['id' => $challengeId]
+        ];
+        $clubId = 1;
+        $playerId = 2; // player_a_id in challenge
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $this->assertEmpty($match->getErrors());
+        $this->assertTrue($this->Matches->save($match) !== false);
+
+        $challenge = $this->Matches->Challenges
+            ->find('all', ['ignoreBeforeFind' => true])
+            ->where(['id' => $challengeId])
+            ->first();
+
+        $this->assertEquals($match->id, $challenge->match_id);
+        $this->assertEquals($match->player_b_id, $challenge->player_b_id);
     }
 
     /**

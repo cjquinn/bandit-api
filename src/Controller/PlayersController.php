@@ -33,7 +33,7 @@ class PlayersController extends AppController
 
         $this->set([
             'player' => $player,
-            'errors' => $player->errors()
+            'errors' => $player->getErrors()
         ]);
     }
 

@@ -18,10 +18,16 @@ class Player extends Entity
 {
     use LevelTrait;
 
+    /**
+     * @var array
+     */
     protected $_accessible = [
         '*' => false
     ];
 
+    /**
+     * @var array
+     */
     protected $_virtual = [
         'games',
         'level'

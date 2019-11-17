@@ -13,25 +13,6 @@ class UserMailer extends Mailer
     /**
      * @return void
      */
-    public function invitationUpdate(User $user)
-    {
-        $player = $user->players[0];
-
-        $this
-            ->to($user->email)
-            ->subject('You\'ve been invited to join ' . $player->club->name . ' on Bandit Match')
-            ->from(Configure::read('Bandit.emails.referee'))
-            ->set([
-                'email' => $user->email,
-                'player' => $player
-            ])
-            ->template('invitationUpdate')
-            ->emailFormat('both');
-    }
-
-    /**
-     * @return void
-     */
     public function resetPassword(User $user)
     {
         $this
@@ -39,7 +20,7 @@ class UserMailer extends Mailer
             ->subject('Your old password needs to be substituted')
             ->from(Configure::read('Bandit.emails.referee'))
             ->set(['user' => $user])
-            ->template('resetPassword')
+            ->template('User/reset_password')
             ->emailFormat('both');
     }
 }

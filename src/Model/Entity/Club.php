@@ -13,6 +13,9 @@ use Cake\ORM\Entity;
  */
 class Club extends Entity
 {
+    /**
+     * @var array
+     */
     protected $_accessible = [
         'name' => true,
         '*' => false

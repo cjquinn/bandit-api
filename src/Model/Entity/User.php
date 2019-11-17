@@ -19,7 +19,9 @@ use Cake\ORM\Entity;
  */
 class User extends Entity
 {
-
+    /**
+     * @var array
+     */
     protected $_accessible = [
         'first_name' => true,
         'last_name' => true,
@@ -28,13 +30,22 @@ class User extends Entity
         '*' => false
     ];
 
+    /**
+     * @var array
+     */
     protected $_hidden = [
         'password',
         'token',
         'token_sent'
     ];
 
-    protected $_virtual = ['display_name'];
+    /**
+     * @var array
+     */
+    protected $_virtual = [
+        'display_name',
+        'full_name'
+    ];
 
     /**
      * @return string
@@ -63,6 +74,18 @@ class User extends Entity
             '%s %s.',
             $this->first_name,
             substr($this->last_name, 0, 1)
+        );
+    }
+
+    /**
+     * @return string
+     */
+    protected function _getFullName()
+    {
+        return sprintf(
+            '%s %s.',
+            $this->first_name,
+            $this->last_name
         );
     }
 }

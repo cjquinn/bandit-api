@@ -24,6 +24,9 @@ class Snapshot extends Entity
         '*' => true
     ];
 
+    /**
+     * @var array
+     */
     protected $_virtual = [
         'level',
         'previous_level',

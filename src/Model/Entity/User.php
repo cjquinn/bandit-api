@@ -83,7 +83,7 @@ class User extends Entity
     protected function _getFullName()
     {
         return sprintf(
-            '%s %s.',
+            '%s %s',
             $this->first_name,
             $this->last_name
         );

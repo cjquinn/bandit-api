@@ -212,6 +212,11 @@ class UsersTableTest extends TestCase
 
         $this->assertEmpty($user->getErrors());
         $this->assertNull($user->id);
+        $this->assertEquals($user->email_preferences, [
+            'challenge_created' => true,
+            'match_added' => true,
+            'weekly_digest' => true
+        ]);
 
         // Valid existing activated
         $user = $this->Users->newEntity();
@@ -225,6 +230,11 @@ class UsersTableTest extends TestCase
 
         $this->assertEmpty($user->getErrors());
         $this->assertNull($user->id);
+        $this->assertEquals($user->email_preferences, [
+            'challenge_created' => true,
+            'match_added' => true,
+            'weekly_digest' => true
+        ]);
 
         // Valid existing unactivated
         $this->Users->updateAll(['password' => null], ['email' => 'christy@banditmatch.com']);
@@ -240,6 +250,11 @@ class UsersTableTest extends TestCase
 
         $this->assertEmpty($user->getErrors());
         $this->assertEquals(1, $user->id);
+        $this->assertEquals($user->email_preferences, [
+            'challenge_created' => true,
+            'match_added' => true,
+            'weekly_digest' => true
+        ]);
     }
 
     /**
@@ -281,6 +296,7 @@ class UsersTableTest extends TestCase
             'first_name' => '',
             'last_name' => '',
             'email' => '',
+            'email_preferences' => '',
             'current_password' => 'password'
         ];
 
@@ -294,6 +310,9 @@ class UsersTableTest extends TestCase
                 '_empty' => 'This field cannot be left empty'
             ],
             'email' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'email_preferences' => [
                 '_empty' => 'This field cannot be left empty'
             ],
             'new_password' => [
@@ -382,6 +401,67 @@ class UsersTableTest extends TestCase
 
         $this->assertEmpty($user->getErrors());
         $this->assertTrue($user->isDirty('password'));
+
+        // Email preferences required
+        $user = $this->Users->get(1);
+        $data = [
+            'email_preferences' => []
+        ];
+
+        $expected = [
+            'email_preferences' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        $this->Users->patchEntityEdit($user, $data);
+
+        $this->assertEquals($user->getErrors(), $expected);
+
+        // Email preferences bool
+        $user = $this->Users->get(1);
+        $data = [
+            'email_preferences' => [
+                'challenge_created' => 'true',
+                'match_added' => 'true',
+                'weekly_digest' => 'true'
+            ]
+        ];
+
+        $expected = [
+            'email_preferences' => [
+                'challenge_created' => [
+                    'boolean' => 'The provided value is invalid'
+                ],
+                'match_added' => [
+                    'boolean' => 'The provided value is invalid'
+                ],
+                'weekly_digest' => [
+                    'boolean' => 'The provided value is invalid'
+                ]
+            ]
+        ];
+
+        $this->Users->patchEntityEdit($user, $data);
+
+        $this->assertEquals($user->getErrors(), $expected);
+
+        // Email preferences valid
+        $user = $this->Users->get(1);
+        $data = [
+            'email_preferences' => [
+                'challenge_created' => false,
+                'match_added' => false,
+                'weekly_digest' => false
+            ]
+        ];
+
+        $this->Users->patchEntityEdit($user, $data);
+
+        $this->assertEmpty($user->getErrors());
+        $this->assertFalse($user->email_preferences['challenge_created']);
+        $this->assertFalse($user->email_preferences['match_added']);
+        $this->assertFalse($user->email_preferences['weekly_digest']);
     }
 
     /**

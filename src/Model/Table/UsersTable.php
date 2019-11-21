@@ -7,6 +7,7 @@ use App\Model\Entity\User;
 use ArrayObject;
 
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Network\Exception\UnauthorizedException;
 use Cake\Event\Event;
@@ -80,6 +81,26 @@ class UsersTable extends Table
         $validator
             ->notEmpty('email')
             ->email('email');
+
+        $emailPreferencesValidator = new Validator();
+        $emailPreferencesValidator
+            ->requirePresence('challenge_created')
+            ->notEmpty('challenge_created')
+            ->boolean('challenge_created');
+
+        $emailPreferencesValidator
+            ->requirePresence('match_added')
+            ->notEmpty('match_added')
+            ->boolean('match_added');
+
+        $emailPreferencesValidator
+            ->requirePresence('weekly_digest')
+            ->notEmpty('weekly_digest')
+            ->boolean('weekly_digest');
+
+        $validator
+            ->notEmpty('email_preferences')
+            ->addNested('email_preferences', $emailPreferencesValidator);
 
         $validator
             ->requirePresence('current_password', function ($context) {
@@ -166,6 +187,8 @@ class UsersTable extends Table
         if (!empty($user->getErrors())) {
             return;
         }
+
+        $user->set('email_preferences', Configure::read('Bandit.email_preferences'));
 
         $existingUser = $this
             ->findByEmail($user->email)

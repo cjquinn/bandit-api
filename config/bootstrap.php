@@ -221,6 +221,11 @@ Configure::write('Bandit', [
     'emails' => [
         'referee' => ['referee@banditmatch.com' => 'Referee (Bandit Match)']
     ],
+    'email_preferences' => [
+        'challenge_created' => true,
+        'match_added' => true,
+        'weekly_digest' => true
+    ],
     'initialRating' => 1200,
     'levels' => [
         [

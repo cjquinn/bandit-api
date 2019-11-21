@@ -11,6 +11,7 @@ use Cake\ORM\Entity;
  * @property string $last_name
  * @property int $reputation
  * @property string $email
+ * @property json $email_preferences
  * @property string $password
  * @property string $token
  * @property \Cake\I18n\Time $created
@@ -26,6 +27,7 @@ class User extends Entity
         'first_name' => true,
         'last_name' => true,
         'email' => true,
+        'email_preferences' => true,
         'password' => true,
         '*' => false
     ];

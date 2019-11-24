@@ -247,4 +247,21 @@ class MatchesControllerTest extends IntegrationTestCase
 
         $this->assertResponseCode(200);
     }
+
+    /**
+     * @return void
+     */
+    public function testViewDeleted()
+    {
+        $this->_table('Matches')->updateAll(
+            ['deleted' => date('Y-m-d H:i:s')],
+            ['id' => 1]
+        );
+
+        $this->_setAuthSession(1);
+
+        $this->get('/clubs/1/matches/1.json');
+
+        $this->assertResponseCode(200);
+    }
 }

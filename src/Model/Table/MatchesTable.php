@@ -375,6 +375,22 @@ class MatchesTable extends Table
     /**
      * @return bool
      */
+    public function exists($conditions)
+    {
+        return (bool)count(
+            $this
+                ->find('all', ['ignoreBeforeFind' => true])
+                ->select(['existing' => 1])
+                ->where($conditions)
+                ->limit(1)
+                ->enableHydration(false)
+                ->toArray()
+        );
+    }
+
+    /**
+     * @return bool
+     */
     public function isAgainst($id, $userId)
     {
         return (bool)count(

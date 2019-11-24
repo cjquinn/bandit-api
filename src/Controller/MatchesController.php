@@ -143,10 +143,11 @@ class MatchesController extends AppController
     public function view($id)
     {
         $match = $this->Matches
-            ->findById($id, ['ignoreBeforeFind' => true])
+            ->find('all', ['ignoreBeforeFind' => true])
             ->find('populated')
             ->find('withBreakdowns')
             ->contain(['Disputes'])
+            ->where([$this->Matches->aliasField('id') => $id])
             ->firstOrFail();
 
         $this->set('match', $match);

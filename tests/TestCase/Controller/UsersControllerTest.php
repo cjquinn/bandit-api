@@ -33,7 +33,8 @@ class UsersControllerTest extends IntegrationTestCase
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
             'email' => $user->email,
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ]);
 
         $this->assertResponseCode(400);
@@ -48,7 +49,8 @@ class UsersControllerTest extends IntegrationTestCase
             'first_name' => 'Alex',
             'last_name' => 'Farthing',
             'email' => 'alex@gmail.com',
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ]);
 
         $this->assertResponseCode(200);
@@ -75,7 +77,8 @@ class UsersControllerTest extends IntegrationTestCase
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
             'email' => $user->email,
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ]);
 
         $this->assertResponseCode(200);

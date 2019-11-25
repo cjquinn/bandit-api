@@ -39,7 +39,8 @@ class ClubsControllerTest extends IntegrationTestCase
                 'first_name' => 'Alex',
                 'last_name' => 'Farthing',
                 'email' => 'alex@gmail.com',
-                'password' => 'password'
+                'password' => 'password',
+                'has_accepted_terms' => true
             ]
         ]);
 

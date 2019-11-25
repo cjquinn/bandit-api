@@ -13,6 +13,7 @@ use Cake\ORM\Entity;
  * @property string $email
  * @property json $email_preferences
  * @property string $password
+ * @property boolean $has_accepted_terms
  * @property string $token
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $modified
@@ -29,6 +30,7 @@ class User extends Entity
         'email' => true,
         'email_preferences' => true,
         'password' => true,
+        'has_accepted_terms' => true,
         '*' => false
     ];
 

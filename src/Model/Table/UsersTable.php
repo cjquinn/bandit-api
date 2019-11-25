@@ -64,6 +64,16 @@ class UsersTable extends Table
             ->requirePresence('password')
             ->notEmpty('password');
 
+        $validator
+            ->requirePresence('has_accepted_terms')
+            ->notEmpty('has_accepted_terms')
+            ->add('has_accepted_terms', 'invalid', [
+                'rule' => function ($value) {
+                    return $value === true;
+                },
+                'message' => 'You must accept the terms of service'
+            ]);
+
         return $validator;
     }
 

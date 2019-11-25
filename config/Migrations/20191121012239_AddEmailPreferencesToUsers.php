@@ -18,14 +18,14 @@ class AddEmailPreferencesToUsers extends AbstractMigration
             'json',
             [
                 'after' => 'email',
-                'null' => false
+                'null' => true
             ]
         );
         $table->update();
 
         TableRegistry::get('Users')->updateAll(
             ['email_preferences' => Configure::read('Bandit.email_preferences')],
-            ['1=1']
+            ['password IS NOT' => null]
         );
     }
 

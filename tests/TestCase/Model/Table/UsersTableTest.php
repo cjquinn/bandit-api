@@ -62,6 +62,9 @@ class UsersTableTest extends TestCase
             ],
             'password' => [
                 '_required' => 'This field is required'
+            ],
+            'has_accepted_terms' => [
+                '_required' => 'This field is required'
             ]
         ];
 
@@ -72,7 +75,8 @@ class UsersTableTest extends TestCase
             'first_name' => '',
             'last_name' => '',
             'email' => '',
-            'password' => ''
+            'password' => '',
+            'has_accepted_terms' => ''
         ];
         $errors = $this->Users->getValidator('add')->errors($data);
 
@@ -88,6 +92,27 @@ class UsersTableTest extends TestCase
             ],
             'password' => [
                 '_empty' => 'This field cannot be left empty'
+            ],
+            'has_accepted_terms' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        // Not accepted terms
+        $data = [
+            'first_name' => 'Christy',
+            'last_name' => 'Quinn',
+            'email' => 'christy@banditmatch.com',
+            'password' => 'password',
+            'has_accepted_terms' => false
+        ];
+        $errors = $this->Users->getValidator('add')->errors($data);
+
+        $expected = [
+            'has_accepted_terms' => [
+                'invalid' => 'You must accept the terms of service'
             ]
         ];
 
@@ -98,7 +123,8 @@ class UsersTableTest extends TestCase
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
             'email' => 'christy@banditmatch.com',
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ];
         $errors = $this->Users->getValidator('add')->errors($data);
 
@@ -150,7 +176,7 @@ class UsersTableTest extends TestCase
      */
     public function testPatchEntityAdd()
     {
-        // Required
+        // Validation
         $user = $this->Users->newEntity();
         $data = [];
 
@@ -168,33 +194,9 @@ class UsersTableTest extends TestCase
             ],
             'password' => [
                 '_required' => 'This field is required'
-            ]
-        ];
-
-        $this->assertEquals($expected, $user->getErrors());
-
-        // Empty
-        $user = $this->Users->newEntity();
-        $data = [
-            'first_name' => '',
-            'last_name' => '',
-            'email' => '',
-            'password' => ''
-        ];
-        $this->Users->patchEntityAdd($user, $data);
-
-        $expected = [
-            'first_name' => [
-                '_empty' => 'This field cannot be left empty'
             ],
-            'last_name' => [
-                '_empty' => 'This field cannot be left empty'
-            ],
-            'email' => [
-                '_empty' => 'This field cannot be left empty'
-            ],
-            'password' => [
-                '_empty' => 'This field cannot be left empty'
+            'has_accepted_terms' => [
+                '_required' => 'This field is required'
             ]
         ];
 
@@ -206,7 +208,8 @@ class UsersTableTest extends TestCase
             'first_name' => 'Bob',
             'last_name' => 'Geldof',
             'email' => 'bob@banditmatch.com',
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ];
         $this->Users->patchEntityAdd($user, $data);
 
@@ -224,7 +227,8 @@ class UsersTableTest extends TestCase
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
             'email' => 'christy@banditmatch.com',
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ];
         $this->Users->patchEntityAdd($user, $data);
 
@@ -244,7 +248,8 @@ class UsersTableTest extends TestCase
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
             'email' => 'christy@banditmatch.com',
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ];
         $this->Users->patchEntityAdd($user, $data);
 

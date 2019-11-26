@@ -15,6 +15,48 @@ class UsersControllerTest extends IntegrationTestCase
     /**
      * @return void
      */
+    public function testAcceptTermsUnauthorised()
+    {
+        $this->patch('/users/current/accept-terms.json');
+
+        $this->assertResponseCode(403);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAcceptTermsBadData()
+    {
+        $this->_setAuthSession(1);
+
+        $this->patch('/users/current/accept-terms.json');
+
+        $this->assertResponseCode(400);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAcceptTermsPatch()
+    {
+        $this->_table('Users')->updateAll(
+            ['has_accepted_terms' => false],
+            ['id' => 1]
+        );
+
+        $this->_setAuthSession(1);
+
+        $this->patch('/users/current/accept-terms.json', ['has_accepted_terms' => true]);
+
+        $this->assertResponseCode(200);
+
+        $user = $this->_table('Users')->get(1);
+        $this->assertTrue($user->has_accepted_terms);
+    }
+
+    /**
+     * @return void
+     */
     public function testAddBadData()
     {
         $this->post('/users.json');

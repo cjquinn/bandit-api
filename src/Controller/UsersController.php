@@ -25,6 +25,29 @@ class UsersController extends AppController
     /**
      * @return void
      */
+    public function acceptTerms()
+    {
+        $user = $this->Users->get($this->Auth->user('id'), ['contain' => 'Players']);
+
+        $this->Users->patchEntity(
+            $user,
+            $this->request->getData(),
+            ['validate' => 'acceptTerms']
+        );
+
+        if (!$this->Users->save($user)) {
+            $this->response->statusCode(400);
+        }
+
+        $this->set([
+            'errors' => $user->getErrors(),
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * @return void
+     */
     public function add()
     {
         $user = $this->Users->newEntity();

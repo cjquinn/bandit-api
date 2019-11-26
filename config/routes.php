@@ -125,6 +125,7 @@ Router::scope('/', function ($routes) {
     $routes->resources('Users', [
         'only' => [
             'current',
+            'current/accept-terms',
             'create',
             'login',
             'request-password-reset',
@@ -135,6 +136,10 @@ Router::scope('/', function ($routes) {
             'current' => [
                 'action' => 'current',
                 'method' => 'GET'
+            ],
+            'current/accept-terms' => [
+                'action' => 'acceptTerms',
+                'method' => 'PATCH'
             ],
             'login' => [
                 'action' => 'login',

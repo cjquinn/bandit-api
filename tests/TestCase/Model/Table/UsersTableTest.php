@@ -44,6 +44,62 @@ class UsersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testValidationAcceptTerms()
+    {
+        // Required
+        $data = [];
+        $errors = $this->Users->getValidator('acceptTerms')->errors($data);
+
+        $expected = [
+            'has_accepted_terms' => [
+                '_required' => 'This field is required'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        // Empty
+        $data = [
+            'has_accepted_terms' => ''
+        ];
+        $errors = $this->Users->getValidator('acceptTerms')->errors($data);
+
+        $expected = [
+            'has_accepted_terms' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        // Invalid
+        $data = [
+            'has_accepted_terms' => false
+        ];
+        $errors = $this->Users->getValidator('acceptTerms')->errors($data);
+
+        $expected = [
+            'has_accepted_terms' => [
+                'invalid' => 'You must accept the terms of service'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        // Valid
+        $data = [
+            'has_accepted_terms' => true
+        ];
+        $errors = $this->Users->getValidator('acceptTerms')->errors($data);
+
+        $expected = [];
+
+        $this->assertEquals($expected, $errors);
+    }
+
+    /**
+     * @return void
+     */
     public function testValidationAdd()
     {
         // Required

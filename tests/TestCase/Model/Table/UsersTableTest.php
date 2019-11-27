@@ -4,7 +4,7 @@ namespace App\Test\TestCase\Model\Table;
 
 use App\Model\Table\UsersTable;
 
-use Cake\Network\Exception\UnauthorizedException;
+use Cake\Http\Exception\UnauthorizedException;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
@@ -19,7 +19,7 @@ class UsersTableTest extends TestCase
     /**
      * @var array
      */
-    public $fixtures = ['app.users'];
+    public $fixtures = ['app.Users'];
 
     /**
      * @return void

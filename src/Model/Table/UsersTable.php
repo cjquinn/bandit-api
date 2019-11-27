@@ -9,7 +9,7 @@ use ArrayObject;
 use Cake\Auth\DefaultPasswordHasher;
 use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Network\Exception\UnauthorizedException;
+use Cake\Http\Exception\UnauthorizedException;
 use Cake\Event\Event;
 use Cake\I18n\Time;
 use Cake\Mailer\MailerAwareTrait;
@@ -52,7 +52,7 @@ class UsersTable extends Table
             ->notEmpty('has_accepted_terms')
             ->add('has_accepted_terms', 'invalid', [
                 'rule' => function ($value) {
-                    return $value === true;
+                    return (bool)$value === true;
                 },
                 'message' => 'You must accept the terms of service'
             ]);
@@ -307,7 +307,7 @@ class UsersTable extends Table
      * @param string|null $token
      * @return bool|\App\Model\Entity\User
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
-     * @throws \Cake\Network\Exception\UnauthorizedException
+     * @throws \Cake\Http\Exception\UnauthorizedException
      */
     public function getByToken($token)
     {
@@ -350,6 +350,6 @@ class UsersTable extends Table
         return JWT::encode([
             'sub' => $id,
             'exp' =>  time() + 604800
-        ], Security::salt());
+        ], Security::getSalt());
     }
 }

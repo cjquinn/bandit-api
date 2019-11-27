@@ -96,7 +96,7 @@ class ClubsTable extends Table
             'associated' => [
                 'Founders' => ['validate' => 'add']
             ],
-            'fieldList' => [
+            'fields' => [
                 'name',
                 $user ? 'founder_id' : 'founder'
             ],

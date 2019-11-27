@@ -10,12 +10,12 @@ class MatchesTableTest extends TestCase
 {
 
     public $fixtures = [
-        'app.challenges',
-        'app.clubs',
-        'app.players',
-        'app.matches',
-        'app.snapshots',
-        'app.users'
+        'app.Challenges',
+        'app.Clubs',
+        'app.Players',
+        'app.Matches',
+        'app.Snapshots',
+        'app.Users'
     ];
 
     /**

@@ -137,9 +137,9 @@ class ChallengesTable extends Table
             return false;
         }
 
-        $this->loadInto($challenge, ['PlayerAs']);
+        $this->loadInTo($challenge, ['PlayerAs']);
 
-        $this->connection()->transactional(function () use ($challenge) {
+        $this->getConnection()->transactional(function () use ($challenge) {
             if ($challenge->player_b_id &&
                ($challenge->match_datetime < Time::now() || $challenge->match_datetime->isWithinNext('24 hours'))
             ) {
@@ -177,9 +177,9 @@ class ChallengesTable extends Table
             ? ['table' => 'PlayerAs', 'property' => 'player_a']
             : ['table' => 'PlayerBs', 'property' => 'player_b'];
 
-        $this->loadInto($challenge, [$otherPlayer['table']]);
+        $this->loadInTo($challenge, [$otherPlayer['table']]);
 
-        $this->connection()->transactional(function () use ($challenge, $otherPlayer) {
+        $this->getConnection()->transactional(function () use ($challenge, $otherPlayer) {
             $this->{$otherPlayer['table']}->Users->updateReputation(
                 $challenge->{$otherPlayer['property']}->user_id,
                 -10
@@ -202,12 +202,12 @@ class ChallengesTable extends Table
             return false;
         }
 
-        $this->loadInto($challenge, ['PlayerBs']);
+        $this->loadInTo($challenge, ['PlayerBs']);
 
         // Save playerB for later!
         $playerB = $challenge->player_b;
 
-        $this->connection()->transactional(function () use ($challenge) {
+        $this->getConnection()->transactional(function () use ($challenge) {
             if ($challenge->match_datetime < Time::now() ||
                 $challenge->match_datetime->isWithinNext('24 hours')
             ) {

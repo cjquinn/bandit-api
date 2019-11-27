@@ -36,7 +36,7 @@ class UsersController extends AppController
         );
 
         if (!$this->Users->save($user)) {
-            $this->response->statusCode(400);
+            $this->response = $this->response->withStatus(400);
         }
 
         $this->set([
@@ -67,7 +67,7 @@ class UsersController extends AppController
             return;
         }
 
-        $this->Users->loadInto($user, ['Players']);
+        $this->Users->loadInTo($user, ['Players']);
 
         $this->set('jwt', $this->Users->generateJwt($user->id));
     }
@@ -133,7 +133,7 @@ class UsersController extends AppController
      */
     public function requestPasswordReset()
     {
-        $errors = $this->Users->validator('requestPasswordReset')->errors($this->request->getData());
+        $errors = $this->Users->getValidator('requestPasswordReset')->errors($this->request->getData());
 
         if (!empty($errors)) {
             $this->set('errors', $errors);
@@ -159,7 +159,7 @@ class UsersController extends AppController
     /**
      * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
-     * @throws \Cake\Network\Exception\UnauthorizedException
+     * @throws \Cake\Http\Exception\UnauthorizedException
      */
     public function resetPassword()
     {

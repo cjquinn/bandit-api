@@ -5,18 +5,20 @@
     "type": "project",
     "license": "MIT",
     "require": {
-        "php": ">=5.4.16",
-        "cakephp/cakephp": "3.5.*",
+        "php": ">=5.6",
+        "admad/cakephp-jwt-auth": "^2.3",
+        "cakephp/cakephp": "3.8.*",
+        "cakephp/migrations": "^2.0.0",
+        "cakephp/plugin-installer": "^1.0",
+        "dereuromark/cakephp-queue": "^4.2",
         "mobiledetect/mobiledetectlib": "2.*",
-        "cakephp/migrations": "~1.0",
-        "cakephp/plugin-installer": "*",
-        "admad/cakephp-jwt-auth": "2.2.*",
-        "josegonzalez/dotenv": "2.*"
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "require-dev": {
-        "cakephp/bake": "~1.1",
-        "phpunit/phpunit": "^5.6",
-        "squizlabs/php_codesniffer": "*"
+        "cakephp/bake": "^1.9.0",
+        "josegonzalez/dotenv": "3.*",
+        "phpunit/phpunit": "^5|^6",
+        "psy/psysh": "@stable"
     },
     "suggest": {},
     "autoload": {
@@ -33,7 +35,14 @@
     "scripts": {
         "post-install-cmd": "App\\Console\\Installer::postInstall",
         "post-create-project-cmd": "App\\Console\\Installer::postInstall",
-        "post-autoload-dump": "Cake\\Composer\\Installer\\PluginInstaller::postAutoloadDump"
+        "post-autoload-dump": "Cake\\Composer\\Installer\\PluginInstaller::postAutoloadDump",
+        "check": [
+            "@test",
+            "@cs-check"
+        ],
+        "cs-check": "phpcs --colors -p --standard=PSR2 src/ tests/",
+        "cs-fix": "phpcbf --colors --standard=PSR2 src/ tests/",
+        "test": "phpunit --colors=always"
     },
     "prefer-stable": true,
     "config": {

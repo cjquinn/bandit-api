@@ -16,15 +16,16 @@ class ChallengeMailer extends Mailer
      */
     public function playerAccepted(Challenge $challenge)
     {
-        TableRegistry::get('Challenges')->loadInto($challenge, ['PlayerAs.Users', 'PlayerBs.Users']);
+        TableRegistry::get('Challenges')->loadInTo($challenge, ['PlayerAs.Users', 'PlayerBs.Users']);
 
         $this
-            ->to($challenge->player_a->user->email)
-            ->subject('Game on!' . $challenge->player_b->user->full_name . 'has accepted your challenge')
-            ->from(Configure::read('Bandit.emails.referee'))
+            ->setTo($challenge->player_a->user->email)
+            ->setSubject('Game on!' . $challenge->player_b->user->full_name . 'has accepted your challenge')
+            ->setFrom(Configure::read('Bandit.emails.referee'))
             ->set(['challenge' => $challenge])
-            ->template('Challenge/player_accepted')
-            ->emailFormat('both');
+            ->setEmailFormat('both');
+
+        $this->viewBuilder()->setTemplate('Challenge/player_accepted');
     }
 
     /**
@@ -32,15 +33,16 @@ class ChallengeMailer extends Mailer
      */
     public function playerDeleted(Challenge $challenge)
     {
-        TableRegistry::get('Challenges')->loadInto($challenge, ['PlayerAs.Users', 'PlayerBs.Users']);
+        TableRegistry::get('Challenges')->loadInTo($challenge, ['PlayerAs.Users', 'PlayerBs.Users']);
 
         $this
-            ->to($challenge->player_b->user->email)
-            ->subject('Cancellation! ' . $challenge->player_a->user->full_name . ' has cancelled their challenge')
-            ->from(Configure::read('Bandit.emails.referee'))
+            ->setTo($challenge->player_b->user->email)
+            ->setSubject('Cancellation! ' . $challenge->player_a->user->full_name . ' has cancelled their challenge')
+            ->setFrom(Configure::read('Bandit.emails.referee'))
             ->set(['challenge' => $challenge])
-            ->template('Challenge/player_deleted')
-            ->emailFormat('both');
+            ->setEmailFormat('both');
+
+        $this->viewBuilder()->setTemplate('Challenge/player_deleted');
     }
 
     /**
@@ -48,17 +50,18 @@ class ChallengeMailer extends Mailer
      */
     public function playerWithdrew(Challenge $challenge, Player $playerB)
     {
-        TableRegistry::get('Challenges')->loadInto($challenge, ['PlayerAs.Users']);
-        TableRegistry::get('Players')->loadInto($playerB, ['Users']);
+        TableRegistry::get('Challenges')->loadInTo($challenge, ['PlayerAs.Users']);
+        TableRegistry::get('Players')->loadInTo($playerB, ['Users']);
 
         $challenge->set('player_b', $playerB);
 
         $this
-            ->to($challenge->player_a->user->email)
-            ->subject('Cancellation! ' . $challenge->player_b->user->full_name . ' withdrew from your challenge')
-            ->from(Configure::read('Bandit.emails.referee'))
+            ->setTo($challenge->player_a->user->email)
+            ->setSubject('Cancellation! ' . $challenge->player_b->user->full_name . ' withdrew from your challenge')
+            ->setFrom(Configure::read('Bandit.emails.referee'))
             ->set(['challenge' => $challenge])
-            ->template('Challenge/player_withdrew')
-            ->emailFormat('both');
+            ->setEmailFormat('both');
+
+        $this->viewBuilder()->setTemplate('Challenge/player_withdrew');
     }
 }

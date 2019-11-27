@@ -10,11 +10,11 @@ use Cake\TestSuite\TestCase;
 class ClubsTableTest extends TestCase
 {
     public $fixtures = [
-        'app.clubs',
-        'app.players',
-        'app.matches',
-        'app.snapshots',
-        'app.users'
+        'app.Clubs',
+        'app.Players',
+        'app.Matches',
+        'app.Snapshots',
+        'app.Users'
     ];
 
     /**

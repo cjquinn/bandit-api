@@ -184,7 +184,7 @@ class MatchesTable extends Table
             $snapshots = $this->Clubs->Players->snapshotPlayers($match);
 
             $this->patchEntity($match, $snapshots, [
-                'fieldList' => ['player_a_snapshot', 'player_b_snapshot']
+                'fields' => ['player_a_snapshot', 'player_b_snapshot']
             ]);
         }
     }
@@ -194,7 +194,7 @@ class MatchesTable extends Table
      */
     public function saveTree(Match $match)
     {
-        $this->connection()->transactional(function () use ($match) {
+        $this->getConnection()->transactional(function () use ($match) {
             // Find tree of affected matches
             $matches = $this
                 ->find('tree', ['match' => $match])
@@ -223,7 +223,7 @@ class MatchesTable extends Table
      */
     public function softDelete(Match $match)
     {
-        $this->connection()->transactional(function () use ($match) {
+        $this->getConnection()->transactional(function () use ($match) {
             $match->set('deleted', new Time());
             $this->save($match);
 

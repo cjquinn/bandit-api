@@ -16,11 +16,12 @@ class UserMailer extends Mailer
     public function resetPassword(User $user)
     {
         $this
-            ->to($user->email)
-            ->subject('Your old password needs to be substituted')
-            ->from(Configure::read('Bandit.emails.referee'))
+            ->setTo($user->email)
+            ->setSubject('Your old password needs to be substituted')
+            ->setFrom(Configure::read('Bandit.emails.referee'))
             ->set(['user' => $user])
-            ->template('User/reset_password')
-            ->emailFormat('both');
+            ->setEmailFormat('both');
+
+        $this->viewBuilder()->setTemplate('User/reset_password');
     }
 }

@@ -16,7 +16,7 @@ class SnapshotsTable extends Table
     {
         parent::initialize($config);
 
-        $this->primaryKey(['match_id', 'player_id']);
+        $this->setPrimaryKey(['match_id', 'player_id']);
 
         $this->addAssociations([
             'belongsTo' => ['Matches', 'Players']

@@ -15,15 +15,16 @@ class PlayerMailer extends Mailer
      */
     public function addedToClub(Player $player)
     {
-        TableRegistry::get('Players')->loadInto($player, ['Clubs', 'Users']);
+        TableRegistry::get('Players')->loadInTo($player, ['Clubs', 'Users']);
 
         $this
-            ->to($player->user->email)
-            ->subject('You\'ve been added to ' . $player->club->name)
-            ->from(Configure::read('Bandit.emails.referee'))
+            ->setTo($player->user->email)
+            ->setSubject('You\'ve been added to ' . $player->club->name)
+            ->setFrom(Configure::read('Bandit.emails.referee'))
             ->set(['player' => $player])
-            ->template('Player/added_to_club')
-            ->emailFormat('both');
+            ->setEmailFormat('both');
+
+        $this->viewBuilder()->setTemplate('Player/added_to_club');
     }
 
     /**
@@ -31,14 +32,15 @@ class PlayerMailer extends Mailer
      */
     public function invitedToClub(Player $player)
     {
-        TableRegistry::get('Players')->loadInto($player, ['Clubs', 'Users']);
+        TableRegistry::get('Players')->loadInTo($player, ['Clubs', 'Users']);
 
         $this
-            ->to($player->user->email)
-            ->subject('You\'ve been invited to join ' . $player->club->name . ' on Bandit Match')
-            ->from(Configure::read('Bandit.emails.referee'))
+            ->setTo($player->user->email)
+            ->setSubject('You\'ve been invited to join ' . $player->club->name . ' on Bandit Match')
+            ->setFrom(Configure::read('Bandit.emails.referee'))
             ->set(['player' => $player])
-            ->template('Player/invited_to_club')
-            ->emailFormat('both');
+            ->setEmailFormat('both');
+
+        $this->viewBuilder()->setTemplate('Player/invited_to_club');
     }
 }

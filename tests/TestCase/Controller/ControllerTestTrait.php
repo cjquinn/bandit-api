@@ -7,13 +7,13 @@ use Cake\ORM\TableRegistry;
 trait ControllerTestTrait
 {
     public $fixtures = [
-        'app.challenges',
-        'app.clubs',
-        'app.disputes',
-        'app.players',
-        'app.matches',
-        'app.snapshots',
-        'app.users'
+        'app.Challenges',
+        'app.Clubs',
+        'app.Disputes',
+        'app.Players',
+        'app.Matches',
+        'app.Snapshots',
+        'app.Users'
     ];
 
     /**

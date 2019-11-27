@@ -20,11 +20,11 @@ class ChallengesTableTest extends TestCase
      * @var array
      */
     public $fixtures = [
-        'app.challenges',
-        'app.clubs',
-        'app.matches',
-        'app.players',
-        'app.users'
+        'app.Challenges',
+        'app.Clubs',
+        'app.Matches',
+        'app.Players',
+        'app.Users'
     ];
 
     /**

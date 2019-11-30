@@ -80,6 +80,10 @@ if (file_exists(CONFIG . 'app_local.php')) {
     Configure::load('app_local', 'default');
 }
 
+if (TESTING) {
+    Configure::load('app_test', 'default');
+}
+
 /*
  * When debug = true the metadata cache should only last
  * for a short time.

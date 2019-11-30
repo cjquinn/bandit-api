@@ -22,6 +22,7 @@ class ChallengesFixture extends TestFixture
                 'player_b_id' => null,
                 'location' => 'Somewhere',
                 'match_datetime' => date('Y-m-d H:i:s', strtotime('+5 hour')),
+                'follow_up_sent' => null,
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
@@ -35,6 +36,7 @@ class ChallengesFixture extends TestFixture
                 'player_b_id' => null,
                 'location' => 'Somewhere',
                 'match_datetime' => date('Y-m-d H:i:s', strtotime('+4 hour')),
+                'follow_up_sent' => null,
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
@@ -48,6 +50,7 @@ class ChallengesFixture extends TestFixture
                 'player_b_id' => 3,
                 'location' => 'Somewhere',
                 'match_datetime' => date('Y-m-d H:i:s', strtotime('-3 hour')),
+                'follow_up_sent' => null,
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
@@ -61,6 +64,7 @@ class ChallengesFixture extends TestFixture
                 'player_b_id' => null,
                 'location' => 'Somewhere',
                 'match_datetime' => date('Y-m-d H:i:s', strtotime('-2 hour')),
+                'follow_up_sent' => null,
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
@@ -74,6 +78,7 @@ class ChallengesFixture extends TestFixture
                 'player_b_id' => 2,
                 'location' => 'Somewhere',
                 'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+                'follow_up_sent' => null,
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
@@ -87,6 +92,7 @@ class ChallengesFixture extends TestFixture
                 'player_b_id' => null,
                 'location' => 'Somewhere',
                 'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+                'follow_up_sent' => null,
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')
@@ -100,6 +106,7 @@ class ChallengesFixture extends TestFixture
                 'player_b_id' => 1,
                 'location' => 'Somewhere',
                 'match_datetime' => date('Y-m-d H:i:s', strtotime('+48 hour')),
+                'follow_up_sent' => null,
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => null,
                 'modified' => date('Y-m-d H:i:s')
@@ -113,6 +120,7 @@ class ChallengesFixture extends TestFixture
                 'player_b_id' => 1,
                 'location' => 'Somewhere',
                 'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour')),
+                'follow_up_sent' => null,
                 'created' => date('Y-m-d H:i:s'),
                 'deleted' => date('Y-m-d H:i:s'),
                 'modified' => date('Y-m-d H:i:s')

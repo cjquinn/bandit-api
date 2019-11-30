@@ -9,7 +9,7 @@ use Cake\Core\Configure;
             <tr>
                 <td cellpadding="0" style="padding: 0;">
                     <h1 style="<?= Configure::read('Bandit.emailStyles.h1') ?>">
-                        Your old password needs to be substituted, <?= $user->first_name ?>
+                        Your old password needs to be substituted, <?= $firstName ?>
                     </h1>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
@@ -32,7 +32,7 @@ use Cake\Core\Configure;
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 0px 35px;">
-                    <a href="https://banditmatch.com/reset-password?token=<?= $user->token ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                    <a href="<?= Configure::read('Bandit.appUrl') ?>/reset-password?token=<?= $token ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Set a new password
                         </span>

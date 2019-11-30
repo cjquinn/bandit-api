@@ -5,6 +5,7 @@ use Cake\Database\Connection;
 use Cake\Database\Driver\Mysql;
 use Cake\Error\ExceptionRenderer;
 use Cake\Log\Engine\FileLog;
+use Cake\Mailer\Transport\DebugTransport;
 use Cake\Mailer\Transport\MailTransport;
 
 return [
@@ -217,6 +218,13 @@ return [
             'client' => null,
             'tls' => false,
             'url' => env('EMAIL_TRANSPORT_DEFAULT_URL', null),
+        ],
+        'queue' => [
+            'className' => 'Queue.Queue',
+            'transport' => 'default'
+        ],
+        'test' => [
+            'className' => DebugTransport::class
         ]
     ],
 
@@ -229,10 +237,11 @@ return [
      * easier. Each profile accepts a number of keys. See `Cake\Mailer\Email`
      * for more information.
      */
+
     'Email' => [
         'default' => [
             'transport' => 'default',
-            'from' => 'you@localhost',
+            'from' => ['referee@banditmatch.com' => 'Referee (Bandit Match)'],
             /*
              * Will by default be set to config value of App.encoding, if that exists otherwise to UTF-8.
              */
@@ -240,7 +249,6 @@ return [
             //'headerCharset' => 'utf-8',
         ],
     ],
-
     /**
      * Connection information used by the ORM to connect
      * to your application's datastores.

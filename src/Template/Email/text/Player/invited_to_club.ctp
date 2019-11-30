@@ -1,10 +1,10 @@
 Play better matches at Bandit Match
 
-<?= $player->club->name ?> have invited you to join their club.
+<?= $clubName ?> have invited you to join their club.
 
 ------------------------------------------
 
-Join the club (https://banditmatch.com/sign-up?email=<?= urlencode($player->user->email) ?>)
+Join the club (https://banditmatch.com/sign-up?email=<?= $playerEmail ?>)
 
 ------------------------------------------
 

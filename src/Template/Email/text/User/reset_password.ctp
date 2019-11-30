@@ -1,4 +1,7 @@
-Your old password needs to be substituted, <?= $user->first_name ?>
+<?php
+use Cake\Core\Configure;
+?>
+Your old password needs to be substituted, <?= $firstName ?>
 
 One too many head-on tackles and you’ve forgotten your password. Not to worry.
 
@@ -10,7 +13,7 @@ Don't sit on the bench! This link will self-destruct in one hour...
 
 ------------------------------------------
 
-Set a new password (https://banditmatch.com/reset-password?token=<?= $user->token ?>)
+Set a new password (<?= Configure::read('Bandit.appUrl') ?>/reset-password?token=<?= $token ?>)
 
 ------------------------------------------
 

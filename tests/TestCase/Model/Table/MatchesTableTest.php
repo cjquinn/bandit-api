@@ -387,6 +387,89 @@ class MatchesTableTest extends TestCase
     /**
      * @return void
      */
+    public function testAfterSaveNew()
+    {
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_b_id' => 2,
+            'player_a_score' => 3,
+            'player_b_score' => 0
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $matchesTableMock = $this->getMockForModel(
+            'App\Model\Table\MatchesTable',
+            ['getMailer'],
+            ['alias' => 'MatchesTable', 'table' => 'matches']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\MatchMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['matchAdded'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->once())
+            ->method('matchAdded');
+
+        $matchesTableMock
+            ->expects($this->once())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        $matchesTableMock->save($match);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterSaveNewFalsePreferences()
+    {
+        TableRegistry::get('Users')->updateAll(
+            [
+                'email_preferences' => [
+                    'challenge_created' => true,
+                    'match_added' => false,
+                    'weekly_digest' => true
+                ]
+            ],
+            ['1 = 1']
+        );
+
+        $match = $this->Matches->newEntity();
+        $data = [
+            'player_b_id' => 2,
+            'player_a_score' => 3,
+            'player_b_score' => 0
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Matches->patchEntityAdd($match, $data, $clubId, $playerId);
+
+        $matchesTableMock = $this->getMockForModel(
+            'App\Model\Table\MatchesTable',
+            ['getMailer'],
+            ['alias' => 'MatchesTable', 'table' => 'matches']
+        );
+
+        $matchesTableMock
+            ->expects($this->never())
+            ->method('getMailer');
+
+        $matchesTableMock->save($match);
+    }
+
+    /**
+     * @return void
+     */
     public function testFindWithBreakdowns()
     {
         $match = $this->Matches

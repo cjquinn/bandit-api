@@ -21,7 +21,10 @@ class PlayerMailer extends Mailer
             ->setTo($player->user->email)
             ->setSubject('You\'ve been added to ' . $player->club->name)
             ->setFrom(Configure::read('Bandit.emails.referee'))
-            ->set(['player' => $player])
+            ->set([
+                'clubName' => $player->club->name,
+                'playerFullName' => $player->user->full_name
+            ])
             ->setEmailFormat('both');
 
         $this->viewBuilder()->setTemplate('Player/added_to_club');
@@ -38,7 +41,10 @@ class PlayerMailer extends Mailer
             ->setTo($player->user->email)
             ->setSubject('You\'ve been invited to join ' . $player->club->name . ' on Bandit Match')
             ->setFrom(Configure::read('Bandit.emails.referee'))
-            ->set(['player' => $player])
+            ->set([
+                'clubName' => $player->club->name,
+                'playerEmail' => urlencode($player->user->email)
+            ])
             ->setEmailFormat('both');
 
         $this->viewBuilder()->setTemplate('Player/invited_to_club');

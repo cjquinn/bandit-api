@@ -251,19 +251,6 @@ class ChallengesTableTest extends TestCase
             ['alias' => 'ChallengesTable', 'table' => 'challenges']
         );
 
-        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
-            ->setMethods(['send'])
-            ->getMock();
-
-        $mailerMock = $this->getMockBuilder('App\Mailer\ChallengeMailer')
-            ->setConstructorArgs([$emailMock])
-            ->setMethods(['playerDeleted'])
-            ->getMock();
-
-        $mailerMock
-            ->expects($this->never())
-            ->method('playerDeleted');
-
         $challengesTableMock
             ->expects($this->never())
             ->method('getMailer')
@@ -310,6 +297,88 @@ class ChallengesTableTest extends TestCase
         $playerA = $this->Challenges->PlayerAs->get($challenge->player_a_id, ['contain' => 'Users']);
 
         $this->assertEquals(-6, $playerA->user->reputation);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterSaveNew()
+    {
+        $challenge = $this->Challenges->newEntity();
+        $data = [
+            'location' => 'Somewhere',
+            'match_datetime' => date('Y-m-d H:i:s', strtotime('+1 hour'))
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Challenges->patchEntityAdd($challenge, $data, $clubId, $playerId);
+
+        $challengesTableMock = $this->getMockForModel(
+            'App\Model\Table\ChallengesTable',
+            ['getMailer'],
+            ['alias' => 'ChallengesTable', 'table' => 'challenges']
+        );
+
+        $emailMock = $this->getMockBuilder('Cake\Mailer\Email')
+            ->setMethods(['send'])
+            ->getMock();
+
+        $mailerMock = $this->getMockBuilder('App\Mailer\ChallengeMailer')
+            ->setConstructorArgs([$emailMock])
+            ->setMethods(['addMatchReminder'])
+            ->getMock();
+
+        $mailerMock
+            ->expects($this->exactly(7))
+            ->method('addMatchReminder');
+
+        $challengesTableMock
+            ->expects($this->once())
+            ->method('getMailer')
+            ->will($this->returnValue($mailerMock));
+
+        $challengesTableMock->save($challenge);
+    }
+
+    /**
+     * @return void
+     */
+    public function testAfterSaveNewFalsePreferences()
+    {
+        TableRegistry::get('Users')->updateAll(
+            [
+                'email_preferences' => [
+                    'challenge_created' => false,
+                    'match_added' => true,
+                    'weekly_digest' => true
+                ]
+            ],
+            ['1 = 1']
+        );
+
+        $challenge = $this->Challenges->newEntity();
+        $data = [
+            'player_b_id' => 2,
+            'player_a_score' => 3,
+            'player_b_score' => 0
+        ];
+        $clubId = 1;
+        $playerId = 1;
+
+        $this->Challenges->patchEntityAdd($challenge, $data, $clubId, $playerId);
+
+        $challengesTableMock = $this->getMockForModel(
+            'App\Model\Table\ChallengesTable',
+            ['getMailer'],
+            ['alias' => 'ChallengesTable', 'table' => 'challenges']
+        );
+
+        $challengesTableMock
+            ->expects($this->never())
+            ->method('getMailer');
+
+        $challengesTableMock->save($challenge);
     }
 
     /**

@@ -8,11 +8,11 @@ use Cake\Core\Configure;
             <tr>
                 <td cellpadding="0" style="padding: 0;">
                     <h1 style="<?= Configure::read('Bandit.emailStyles.h1') ?>">
-                        Cancellation! <?= $challenge->player_a->user->full_name ?> has cancelled their challenge
+                        Cancellation! <?= $opponentFullName ?> has cancelled their challenge
                     </h1>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        Sorry to hear it, but <?= $challenge->player_b->user->first_name ?>'s challenge for <?= $challenge->match_datetime->format('l jS F \a\t H:i') ?> was cancelled.
+                        Sorry to hear it, but <?= $opponentFirstName ?>'s challenge for <?= $matchDatetime ?> was cancelled.
                     </p>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
@@ -23,7 +23,7 @@ use Cake\Core\Configure;
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 0px 35px;">
-                    <a href="https://banditmatch.com/challenges" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                    <a href="<?= Configure::read('Bandit.appUrl') ?>/challenges" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Go to Challenges
                         </span>

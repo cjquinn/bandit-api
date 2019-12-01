@@ -2,10 +2,12 @@
 
 namespace App\Mailer;
 
+use App\Model\Entity\Club;
 use App\Model\Entity\Player;
 
 use Cake\Core\Configure;
 use Cake\Mailer\Mailer;
+use Cake\ORM\Query;
 use Cake\ORM\TableRegistry;
 
 class PlayerMailer extends Mailer
@@ -48,5 +50,24 @@ class PlayerMailer extends Mailer
             ->setEmailFormat('both');
 
         $this->viewBuilder()->setTemplate('Player/invited_to_club');
+    }
+
+    /**
+     * @return void
+     */
+    public function weeklyDigest(
+        Player $player,
+        Club $club,
+        Query $openChallenges,
+        Query $acceptedChallenges,
+        Query $newPlayers
+    ) {
+        $this
+            ->setTo($player->user->email)
+            ->setSubject($club->name . '\'s weekly digest on Bandit Match')
+            ->setFrom(Configure::read('Bandit.emails.referee'))
+            ->setEmailFormat('both');
+
+        $this->viewBuilder()->setTemplate('Player/weekly_digest');
     }
 }

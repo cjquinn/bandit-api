@@ -24,19 +24,30 @@ class SendWeeklyDigestCommand extends Command
 
         $playerMailer = $this->getMailer('Player');
 
-        $clubs = $this->Clubs->find();
+        $clubs = $this->Clubs
+            ->find()
+            ->contain('Players', function ($q) {
+                $q
+                    ->contain('Users')
+                    ->innerJoinWith('Users', function ($q) {
+                        $q->find('byEmailPreference', ['preference' => 'weekly_digest']);
+
+                        return $q;
+                    });
+
+                return $q;
+            });
 
         // For each club
         foreach ($clubs as $club) {
-            $clubsUsers = $club->users;
-            unset($club->users);
+            $clubsPlayers = $club->players;
+            unset($club->players);
 
-            if (empty($clubsUsers)) {
+            if (empty($clubsPlayers)) {
                 $io->out(sprintf(
-                    '%s: %d weekly digest email%s sent',
+                    '%s: %d weekly digest emails sent',
                     $club->name,
-                    0,
-                    's'
+                    0
                 ));
 
                 continue;
@@ -80,29 +91,25 @@ class SendWeeklyDigestCommand extends Command
                 $newPlayers->isEmpty()
             ) {
                 $io->out(sprintf(
-                    '%s: %d weekly digest email%s sent',
+                    '%s: %d weekly digest emails sent',
                     $club->name,
-                    0,
-                    's'
+                    0
                 ));
 
                 continue;
             }
 
-            foreach ($clubsUsers as $user) {
+            foreach ($clubsPlayers as $player) {
                 $playerMailer->send(
                     'weeklyDigest',
-                    [$user, $club, $openChallenges, $acceptedChallenges, $newPlayers, $weeklyLeaderboard]
+                    [$player, $club, $openChallenges, $acceptedChallenges, $newPlayers, $weeklyLeaderboard]
                 );
             }
 
-            $countUsers = count($users);
-
             $io->out(sprintf(
-                '%s: %d weekly digest email%s sent',
+                '%s: %d weekly digest emails sent',
                 $club->name,
-                $countUsers,
-                $countUsers === 1 ? '' : 's'
+                count($clubsPlayers)
             ));
         }
     }

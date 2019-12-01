@@ -341,6 +341,25 @@ class UsersTable extends Table
     }
 
     /**
+     * Finder used by email preferences
+     *
+     * @param \Cake\ORM\Query $query The query object
+     * @param array $options The options array
+     */
+    public function findByEmailPreference(Query $query, array $options)
+    {
+        $query->where([
+            sprintf(
+                'CAST(JSON_EXTRACT(email_preferences, "$.%s") AS UNSIGNED) = %b',
+                $options['preference'],
+                true
+            )
+        ]);
+
+        return $query;
+    }
+
+    /**
      * Generates a JWT
      *
      * @return string

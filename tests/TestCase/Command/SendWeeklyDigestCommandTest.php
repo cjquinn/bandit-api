@@ -40,7 +40,6 @@ class SendWeeklyDigestCommandTest extends TestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testExecuteNewClub()
     {
@@ -53,12 +52,11 @@ class SendWeeklyDigestCommandTest extends TestCase
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('Squelch: 7 weekly digest emails sent');
         $this->assertOutputContains('Ping Pong Game On: 2 weekly digest emails sent');
-        $this->assertOutputContains('Test Club: 1 weekly digest email sent');
+        $this->assertOutputContains('Test Club: 1 weekly digest emails sent');
     }
 
     /**
      * @return void
-     * @group testing
      */
     public function testExecuteNoActivity()
     {
@@ -69,7 +67,7 @@ class SendWeeklyDigestCommandTest extends TestCase
         $playersTable = TableRegistry::get('Players');
 
         $playersTable->updateAll(
-            ['created' => date('Y-m-d H:i:s', time('two weeks ago'))],
+            ['created' => date('Y-m-d H:i:s', strtotime('two weeks ago'))],
             ['club_id' => $club->id]
         );
 
@@ -84,7 +82,6 @@ class SendWeeklyDigestCommandTest extends TestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testExecuteNoActivityNoWeeklyDigestPreference()
     {
@@ -114,7 +111,6 @@ class SendWeeklyDigestCommandTest extends TestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testExecuteWithMatches()
     {
@@ -125,7 +121,7 @@ class SendWeeklyDigestCommandTest extends TestCase
         $player = $this->createPlayer($club);
 
         TableRegistry::get('Players')->updateAll(
-            ['created' => date('Y-m-d H:i:s', time('two weeks ago'))],
+            ['created' => date('Y-m-d H:i:s', strtotime('two weeks ago'))],
             ['club_id' => $club->id]
         );
 
@@ -146,7 +142,7 @@ class SendWeeklyDigestCommandTest extends TestCase
         $matchesTable->save($match);
 
         $matchesTable->updateAll(
-            ['created' => date('Y-m-d H:i:s', time('two weeks ago'))],
+            ['created' => date('Y-m-d H:i:s', strtotime('two weeks ago'))],
             ['club_id' => $club->id]
         );
 
@@ -175,7 +171,6 @@ class SendWeeklyDigestCommandTest extends TestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testExecuteWithOpenChallenges()
     {
@@ -203,12 +198,11 @@ class SendWeeklyDigestCommandTest extends TestCase
         $this->assertExitCode(Command::CODE_SUCCESS);
         $this->assertOutputContains('Squelch: 7 weekly digest emails sent');
         $this->assertOutputContains('Ping Pong Game On: 2 weekly digest emails sent');
-        $this->assertOutputContains('Test Club: 2 weekly digest emails sent');
+        $this->assertOutputContains('Test Club: 1 weekly digest emails sent');
     }
 
     /**
      * @return void
-     * @group testing
      */
     public function testExecuteWithUpcomingChallenges()
     {
@@ -245,7 +239,6 @@ class SendWeeklyDigestCommandTest extends TestCase
 
     /**
      * @return void
-     * @group testing
      */
     public function testExecuteWithNewPlayers()
     {

@@ -29,6 +29,7 @@ class ClubsTable extends Table
                 'Founders' => ['className' => 'Users']
             ],
             'hasMany' => [
+                'Challenges',
                 'Players',
                 'Matches'
             ]

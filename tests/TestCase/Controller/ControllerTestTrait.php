@@ -6,6 +6,9 @@ use Cake\ORM\TableRegistry;
 
 trait ControllerTestTrait
 {
+    /**
+     * @var array
+     */
     public $fixtures = [
         'app.Challenges',
         'app.Clubs',

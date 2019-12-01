@@ -254,10 +254,6 @@ class ChallengesTable extends Table
         if (!isset($options['player_id']) ||
             $options['player_id'] === 'all'
         ) {
-            $query->where([
-                $this->aliasField('match_datetime') . ' >' => Time::now()
-            ]);
-
             return $query;
         }
 

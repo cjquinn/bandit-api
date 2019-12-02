@@ -8,6 +8,7 @@ use ArrayObject;
 
 use Cake\Event\Event;
 use Cake\I18n\Time;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -16,6 +17,7 @@ use Cake\Validation\Validator;
 
 class MatchesTable extends Table
 {
+    use MailerAwareTrait;
 
     /**
      * @return void
@@ -187,6 +189,27 @@ class MatchesTable extends Table
                 'fields' => ['player_a_snapshot', 'player_b_snapshot']
             ]);
         }
+    }
+
+    /**
+     * @return void
+     */
+    public function afterSave(Event $event, Match $match)
+    {
+        if (!$match->isNew()) {
+            return;
+        }
+
+        $playerB = $this->PlayerBs->get($match->player_b_id, ['contain' => 'Users']);
+
+        if (!$playerB->user->email_preferences['match_added']) {
+            return;
+        }
+
+        $this->getMailer('Player')->send(
+            'matchAdded',
+            [$playerB, $match]
+        );
     }
 
     /**

@@ -324,14 +324,15 @@ class ChallengesTableTest extends TestCase
             ->setMethods(['send'])
             ->getMock();
 
-        $mailerMock = $this->getMockBuilder('App\Mailer\ChallengeMailer')
+        $mailerMock = $this->getMockBuilder('App\Mailer\PlayerMailer')
             ->setConstructorArgs([$emailMock])
-            ->setMethods(['addMatchReminder'])
+            ->setMethods(['challengeCreated'])
             ->getMock();
 
         $mailerMock
-            ->expects($this->exactly(7))
-            ->method('addMatchReminder');
+            // Shouldn't include player who created the challenge
+            ->expects($this->exactly(6))
+            ->method('challengeCreated');
 
         $challengesTableMock
             ->expects($this->once())

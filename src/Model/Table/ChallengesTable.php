@@ -105,6 +105,47 @@ class ChallengesTable extends Table
     }
 
     /**
+     * @return void
+     */
+    public function afterSave(Event $event, Challenge $challenge)
+    {
+        if (!$challenge->isNew()) {
+            return;
+        }
+
+        $club = $this->Clubs->get($challenge->club_id, [
+            'contain' => [
+                'Players' => function ($q) use ($challenge) {
+                    $q
+                        ->contain('Users')
+                        ->innerJoinWith('Users', function ($q) {
+                            $q->find('byEmailPreference', ['preference' => 'challenge_created']);
+
+                            return $q;
+                        })
+                        ->where(['Players.id !=' => $challenge->player_a_id]);
+
+                    return $q;
+                }
+            ]
+        ]);
+
+        if (empty($club->players)) {
+            return;
+        }
+
+        $this->loadInto($challenge, ['PlayerAs.Users']);
+        $playerMailer = $this->getMailer('Player');
+
+        foreach ($club->players as $player) {
+            $playerMailer->send(
+                'challengeCreated',
+                [$player, $challenge, $club]
+            );
+        }
+    }
+
+    /**
      * @return bool
      */
     public function accept(Challenge $challenge, $playerId)
@@ -236,7 +277,9 @@ class ChallengesTable extends Table
             $query
                 ->where([
                     'OR' => [
+                        // Challenge has been accepted
                         $this->aliasField('player_b_id') . ' IS NOT' => null,
+                        // Open challenge match datetime hasn't passed
                         $this->aliasField('match_datetime') . ' >' => Time::now()
                     ],
                     $this->aliasField('match_id') . ' IS' => null,
@@ -254,6 +297,10 @@ class ChallengesTable extends Table
         if (!isset($options['player_id']) ||
             $options['player_id'] === 'all'
         ) {
+            $query->where([
+                $this->aliasField('match_datetime') . ' >' => Time::now()
+            ]);
+
             return $query;
         }
 

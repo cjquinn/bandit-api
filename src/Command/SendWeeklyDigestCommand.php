@@ -40,10 +40,7 @@ class SendWeeklyDigestCommand extends Command
 
         // For each club
         foreach ($clubs as $club) {
-            $clubsPlayers = $club->players;
-            unset($club->players);
-
-            if (empty($clubsPlayers)) {
+            if (empty($club->players)) {
                 $io->out(sprintf(
                     '%s: %d weekly digest emails sent',
                     $club->name,
@@ -99,7 +96,7 @@ class SendWeeklyDigestCommand extends Command
                 continue;
             }
 
-            foreach ($clubsPlayers as $player) {
+            foreach ($club->players as $player) {
                 $playerMailer->send(
                     'weeklyDigest',
                     [$player, $club, $openChallenges, $acceptedChallenges, $newPlayers, $weeklyLeaderboard]
@@ -109,7 +106,7 @@ class SendWeeklyDigestCommand extends Command
             $io->out(sprintf(
                 '%s: %d weekly digest emails sent',
                 $club->name,
-                count($clubsPlayers)
+                count($club->players)
             ));
         }
     }

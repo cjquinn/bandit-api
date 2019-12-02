@@ -410,7 +410,7 @@ class MatchesTableTest extends TestCase
             ->setMethods(['send'])
             ->getMock();
 
-        $mailerMock = $this->getMockBuilder('App\Mailer\MatchMailer')
+        $mailerMock = $this->getMockBuilder('App\Mailer\PlayerMailer')
             ->setConstructorArgs([$emailMock])
             ->setMethods(['matchAdded'])
             ->getMock();

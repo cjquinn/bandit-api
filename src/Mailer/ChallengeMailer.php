@@ -14,6 +14,20 @@ class ChallengeMailer extends Mailer
     /**
      * @return void
      */
+    public function followUp(Challenge $challenge, Player $player, Player $opponent)
+    {
+        $this
+            ->setTo($player->user->email)
+            ->setSubject('How was your match against ' . $opponent->user->full_name . '?')
+            ->setFrom(Configure::read('Bandit.emails.referee'))
+            ->setEmailFormat('both');
+
+        $this->viewBuilder()->setTemplate('Challenge/follow_up');
+    }
+
+    /**
+     * @return void
+     */
     public function playerAccepted(Challenge $challenge)
     {
         TableRegistry::get('Challenges')->loadInTo($challenge, ['PlayerAs.Users', 'PlayerBs.Users']);

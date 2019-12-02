@@ -12,6 +12,7 @@ use Cake\ORM\Entity;
  * @property int $player_b_id
  * @property string $location
  * @property \Cake\I18n\Time $match_datetime
+ * @property \Cake\I18n\Time $follow_up_sent
  * @property \Cake\I18n\Time $created
  * @property \Cake\I18n\Time $deleted
  * @property \Cake\I18n\Time $modified

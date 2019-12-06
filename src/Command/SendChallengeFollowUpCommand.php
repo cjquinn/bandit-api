@@ -31,6 +31,7 @@ class SendChallengeFollowUpCommand extends Command
             ]);
 
         $challengeMailer = $this->getMailer('Challenge');
+        $count = 0;
 
         foreach ($challenges as $challenge) {
             $challengeMailer->send(
@@ -46,11 +47,13 @@ class SendChallengeFollowUpCommand extends Command
             $challenge->set('follow_up_sent', Time::now());
 
             $this->Challenges->save($challenge);
+
+            $count += 2;
         }
 
         $io->out(sprintf(
             '%d challenge follow ups sent',
-            $challenges->count()
+            $count
         ));
     }
 }

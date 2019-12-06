@@ -43,6 +43,12 @@ class PlayerMailer extends Mailer
             ->setTo($player->user->email)
             ->setSubject($challenge->player_a->user->full_name . ' has posted a new challenge in ' . $club->name)
             ->setFrom(Configure::read('Bandit.emails.referee'))
+            ->set([
+                'challengeLocation' => $challenge->location,
+                'clubName' => $club->name,
+                'matchDatetime' => $challenge->match_datetime->format('l jS F \a\t g:ia'),
+                'playerFullName' => $challenge->player_a->user->full_name,
+            ])
             ->setEmailFormat('both');
 
         $this->viewBuilder()->setTemplate('Player/challenge_created');

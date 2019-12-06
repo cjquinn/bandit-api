@@ -80,7 +80,7 @@ if (file_exists(CONFIG . 'app_local.php')) {
     Configure::load('app_local', 'default');
 }
 
-if (TESTING) {
+if (defined('TESTING')) {
     Configure::load('app_test', 'default');
 }
 

@@ -25,11 +25,11 @@ class PlayerMailer extends Mailer
             ->setTo($player->user->email)
             ->setSubject('You\'ve been added to ' . $player->club->name)
             ->setFrom(Configure::read('Bandit.emails.referee'))
+            ->setEmailFormat('both')
             ->set([
                 'clubName' => $player->club->name,
                 'playerFullName' => $player->user->full_name
-            ])
-            ->setEmailFormat('both');
+            ]);
 
         $this->viewBuilder()->setTemplate('Player/added_to_club');
     }
@@ -43,13 +43,13 @@ class PlayerMailer extends Mailer
             ->setTo($player->user->email)
             ->setSubject($challenge->player_a->user->full_name . ' has posted a new challenge in ' . $club->name)
             ->setFrom(Configure::read('Bandit.emails.referee'))
+            ->setEmailFormat('both')
             ->set([
                 'challengeLocation' => $challenge->location,
                 'clubName' => $club->name,
                 'matchDatetime' => $challenge->match_datetime->format('l jS F \a\t g:ia'),
                 'playerFullName' => $challenge->player_a->user->full_name,
-            ])
-            ->setEmailFormat('both');
+            ]);
 
         $this->viewBuilder()->setTemplate('Player/challenge_created');
     }
@@ -65,11 +65,11 @@ class PlayerMailer extends Mailer
             ->setTo($player->user->email)
             ->setSubject('You\'ve been invited to join ' . $player->club->name . ' on Bandit Match')
             ->setFrom(Configure::read('Bandit.emails.referee'))
+            ->setEmailFormat('both')
             ->set([
                 'clubName' => $player->club->name,
                 'playerEmail' => urlencode($player->user->email)
-            ])
-            ->setEmailFormat('both');
+            ]);
 
         $this->viewBuilder()->setTemplate('Player/invited_to_club');
     }
@@ -83,9 +83,14 @@ class PlayerMailer extends Mailer
 
         $this
             ->setTo($player->user->email)
-            ->setSubject($match->player_a->user->full_name . ' has added a match against you')
+            ->setSubject($match->player_a->user->full_name . ' has added a match result against you')
             ->setFrom(Configure::read('Bandit.emails.referee'))
-            ->setEmailFormat('both');
+            ->setEmailFormat('both')
+            ->set([
+                'opponentFullName' => $match->player_a->user->full_name,
+                'opponentFirstName' => $match->player_a->user->first_name,
+                'matchId' => $match->id
+            ]);
 
         $this->viewBuilder()->setTemplate('Player/match_added');
     }

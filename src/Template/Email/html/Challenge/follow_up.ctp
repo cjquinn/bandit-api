@@ -30,6 +30,14 @@ use Cake\Core\Configure;
             <tr>
                 <td cellpadding="0" style="padding: 0px 0px 25px;">
                     <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">
+                        Match didn't happen?
+                    </h2>
+
+                    <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
+                        If your opponent didn't turn up let us know by <a href="<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challengeId ?>" style="<?= Configure::read('Bandit.emailStyles.a') ?>">reporting them</a>.
+                    </p>
+
+                    <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">
                         Getting the most out of Bandit Match
                     </h2>
 
@@ -39,14 +47,6 @@ use Cake\Core\Configure;
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
                         Once you have an accurate rating, finding a well matched opponent is as simple as selecting a player near your rating.
-                    </p>
-
-                    <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">
-                        Match didn't happen?
-                    </h2>
-
-                    <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        If your opponent didn't turn up let us know by <a href="<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challengeId ?>" style="<?= Configure::read('Bandit.emailStyles.a') ?>">reporting them</a>.
                     </p>
                 </td>
             </tr>

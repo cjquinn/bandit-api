@@ -17,7 +17,9 @@ class SendChallengeFollowUpCommandTest extends TestCase
      * @var array
      */
     public $fixtures = [
+        'app.Clubs',
         'app.Challenges',
+        'app.Matches',
         'app.Players',
         'app.Users'
     ];
@@ -39,7 +41,7 @@ class SendChallengeFollowUpCommandTest extends TestCase
     {
         $this->exec('send_challenge_follow_up');
         $this->assertExitCode(Command::CODE_SUCCESS);
-        $this->assertOutputContains('1 challenge follow ups sent');
+        $this->assertOutputContains('2 challenge follow ups sent');
 
         $challenge = TableRegistry::get('Challenges')->get(3);
         $this->assertNotNull($challenge);

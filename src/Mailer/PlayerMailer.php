@@ -45,6 +45,7 @@ class PlayerMailer extends Mailer
             ->setFrom(Configure::read('Bandit.emails.referee'))
             ->setEmailFormat('both')
             ->set([
+                'challengeId' => $challenge->id,
                 'challengeLocation' => $challenge->location,
                 'clubName' => $club->name,
                 'matchDatetime' => $challenge->match_datetime->format('l jS F \a\t g:ia'),
@@ -102,14 +103,69 @@ class PlayerMailer extends Mailer
         Player $player,
         Club $club,
         Query $openChallenges,
-        Query $acceptedChallenges,
-        Query $newPlayers
+        Query $newPlayers,
+        Query $weeklyLeaderboard,
+        Query $acceptedChallenges
     ) {
         $this
             ->setTo($player->user->email)
-            ->setSubject($club->name . '\'s weekly digest on Bandit Match')
+            ->setSubject($club->name . '\'s weekly digest')
             ->setFrom(Configure::read('Bandit.emails.referee'))
-            ->setEmailFormat('both');
+            ->setEmailFormat('both')
+            ->set([
+                'clubId' => $club->id,
+                'clubName' => $club->name,
+                'openChallenges' => $openChallenges
+                    ->map(function ($challenge) {
+                        return [
+                            'id' => $challenge->id,
+                            'time' => $challenge->match_datetime->format('l g:ia'),
+                            'date' => $challenge->match_datetime->format('jS F'),
+                            'player_a_name' => $challenge->player_a->user->display_name,
+                            'player_a_rating' => $challenge->player_a->display_rating
+                        ];
+                    })
+                    ->toArray(),
+                'newPlayers' => $newPlayers
+                    ->map(function ($player) {
+                        return [
+                            'id' => $player->id,
+                            'name' => $player->user->display_name,
+                            'rating' => $player->display_rating
+                        ];
+                    })
+                    ->toArray(),
+                'weeklyLeaderboard' => $weeklyLeaderboard
+                    ->map(function ($player) {
+                        return [
+                            'id' => $player->id,
+                            'name' => $player->user->display_name,
+                            'change' => sprintf(
+                                '%s%d %d win%s %d loss%s',
+                                (int)$player->rating_change >= 0 ? '+' : '',
+                                $player->rating_change,
+                                $player->wins_change,
+                                (int)$player->wins_change !== 1 ? 's' : '',
+                                $player->losses_change,
+                                (int)$player->losses_change !== 1 ? 'es' : ''
+                            )
+                        ];
+                    })
+                    ->toArray(),
+                'acceptedChallenges' => $acceptedChallenges
+                    ->map(function ($challenge) {
+                        return [
+                            'id' => $challenge->id,
+                            'time' => $challenge->match_datetime->format('l g:ia'),
+                            'date' => $challenge->match_datetime->format('jS F'),
+                            'player_a_name' => $challenge->player_a->user->display_name,
+                            'player_a_rating' => $challenge->player_a->display_rating,
+                            'player_b_name' => $challenge->player_b->user->display_name,
+                            'player_b_rating' => $challenge->player_b->display_rating
+                        ];
+                    })
+                    ->toArray(),
+            ]);
 
         $this->viewBuilder()->setTemplate('Player/weekly_digest');
     }

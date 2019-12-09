@@ -19,4 +19,4 @@ Set a new password (<?= Configure::read('Bandit.appUrl') ?>/reset-password?token
 
 Didn’t send a request?
 
-If you suspect foul play, please reply to me (referee@banditmatch.com?subject=Suspected Foul Play) and I’ll look into it for you.
+If you suspect foul play, please reply to me (referee@banditmatch.com) and I’ll look into it for you.

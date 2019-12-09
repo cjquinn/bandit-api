@@ -36,18 +36,6 @@ use Cake\Core\Configure;
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
                         Get in touch with the <a href="mailto:referee@banditmatch.com" style="<?= Configure::read('Bandit.emailStyles.a') ?>">ref</a> to resolve any foul play.
                     </p>
-
-                    <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">
-                        Getting the most out of Bandit Match
-                    </h2>
-
-                    <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        The more matches you play, the more accurate your rating becomes.
-                    </p>
-
-                    <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        Once you have an accurate rating, finding a well matched opponent is as simple as selecting a player near your rating.
-                    </p>
                 </td>
             </tr>
         </table>

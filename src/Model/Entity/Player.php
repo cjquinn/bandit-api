@@ -36,6 +36,14 @@ class Player extends Entity
     /**
      * @return int
      */
+    protected function _getDisplayRating()
+    {
+        return $this->games > 0 ? $this->rating : 'Unrated';
+    }
+
+    /**
+     * @return int
+     */
     protected function _getGames()
     {
         return $this->wins + $this->losses;

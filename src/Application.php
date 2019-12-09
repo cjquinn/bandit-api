@@ -25,7 +25,7 @@ class Application extends BaseApplication
         }
 
         $this->addPlugin('ADmad/JwtAuth');
-        $this->addPlugin('Queue');
+        $this->addPlugin('Queue', ['bootstrap' => true]);
     }
 
     /**

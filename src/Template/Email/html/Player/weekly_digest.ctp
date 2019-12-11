@@ -11,45 +11,57 @@ use Cake\Core\Configure;
                         <?= $clubName ?>'s weekly digest
                     </h1>
 
-                    <?php if (!empty($openChallenges)) : ?>
-                        <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">Open challenges</h2>
+                    <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">Open challenges</h2>
 
-                        <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                            The easiest way to get back on to the court.
+                    <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
+                        The easiest way to get back on to the court.
+                    </p>
+
+                    <?php foreach ($openChallenges as $challenge) : ?>
+                        <p>
+                            <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 14px; padding: 18px 12px; background-color: #151828; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+
+                                <span style="float: left; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 14px; line-height: 1; color: #fff; text-decoration: none;">
+                                    <?= $challenge['time'] ?>
+                                </span>
+
+                                <span style="float: right; margin-left: auto; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 14px; line-height: 1; color: #fff; text-decoration: none;">
+                                    <?= $challenge['date'] ?>
+                                </span>
+                            </a>
+
+                            <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 40px; padding: 12px 12px; background-color: #181d31; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                                <span style="float: left;">
+                                    <span style="display: block; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 15px; line-height: 21px; color: #dce4f7; text-decoration: none;">
+                                        <?= $challenge['player_a_name'] ?>
+                                    </span>
+
+                                    <span style="display: block; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 300; font-size: 12px; line-height: 21px; color: #dce4f7; text-decoration: none; opacity: .8;">
+                                        <?= $challenge['player_a_rating'] ?>
+                                    </span>
+                                </span>
+
+                                <span style="float: right; margin-top: 5px; background: #ff7048; border-radius: 6px; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 700; font-size: 14px; padding: 6px 9px; color: #000207; text-shadow: 0 2px 0 #f29e44;">
+                                    View
+                                </span>
+                            </a>
                         </p>
+                    <?php endforeach; ?>
+                </td>
+            </tr>
 
-                        <?php foreach ($openChallenges as $challenge) : ?>
-                            <p>
-                                <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 14px; padding: 18px 12px; background-color: #151828; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+            <tr>
+                <td cellpadding="0" style="padding: 48px 0px 35px;">
+                    <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/create" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                        <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
+                            Create a challenge
+                        </span>
+                    </a>
+                </td>
+            </tr>
 
-                                    <span style="float: left; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 14px; line-height: 1; color: #fff; text-decoration: none;">
-                                        <?= $challenge['time'] ?>
-                                    </span>
-
-                                    <span style="float: right; margin-left: auto; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 14px; line-height: 1; color: #fff; text-decoration: none;">
-                                        <?= $challenge['date'] ?>
-                                    </span>
-                                </a>
-
-                                <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 40px; padding: 12px 12px; background-color: #181d31; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
-                                    <span style="float: left;">
-                                        <span style="display: block; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 15px; line-height: 21px; color: #dce4f7; text-decoration: none;">
-                                            <?= $challenge['player_a_name'] ?>
-                                        </span>
-
-                                        <span style="display: block; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 300; font-size: 12px; line-height: 21px; color: #dce4f7; text-decoration: none; opacity: .8;">
-                                            <?= $challenge['player_a_rating'] ?>
-                                        </span>
-                                    </span>
-
-                                    <span style="float: right; margin-top: 5px; background: #ff7048; border-radius: 6px; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 700; font-size: 14px; padding: 6px 9px; color: #000207; text-shadow: 0 2px 0 #f29e44;">
-                                        View
-                                    </span>
-                                </a>
-                            </p>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-
+            <tr>
+                <td cellpadding="0" style="padding: 0;">
                     <?php if (!empty($newPlayers)) : ?>
                         <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">New players</h2>
 
@@ -155,7 +167,7 @@ use Cake\Core\Configure;
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 0px 35px;">
-                    <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/clubs/<?= $clubId ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                    <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Go to your club
                         </span>

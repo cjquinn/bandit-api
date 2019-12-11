@@ -16,6 +16,12 @@ View (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?
 <?php endif; ?>
 <?php if (!empty($newPlayers)) : ?>
 
+------------------------------------------
+
+Create a challenge (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/create)
+
+------------------------------------------
+
 New players
 
 There's no better way to welcome your new club mates then with a match.
@@ -51,7 +57,7 @@ View (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?
 
 ------------------------------------------
 
-Go to your club (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/clubs/<?= $clubId ?>)
+Go to your club (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>)
 
 ------------------------------------------
 

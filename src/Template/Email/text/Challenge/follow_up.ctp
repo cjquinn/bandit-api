@@ -7,13 +7,13 @@ We hope that you found <?= $opponentFirstName ?> to be a well matched opponent.
 
 ------------------------------------------
 
-Add match result (<?= Configure::read('Bandit.appUrl') ?>/matches/add/challenges/<?= $challengeId ?>)
+Add match result (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/matches/add/challenges/<?= $challengeId ?>)
 
 ------------------------------------------
 
 Match didn't happen?
 
-If your opponent didn't turn up let us know by reporting them (<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challengeId ?>).
+If your opponent didn't turn up let us know by reporting them (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challengeId ?>).
 
 Getting the most out of Bandit Match
 

@@ -19,7 +19,7 @@ use Cake\Core\Configure;
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 0px 35px;">
-                    <a href="<?= Configure::read('Bandit.appUrl') ?>/sign-up?email=<?= $playerEmail ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                    <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/sign-up?email=<?= $playerEmail ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Join the club
                         </span>

@@ -20,7 +20,7 @@ use Cake\Core\Configure;
 
                         <?php foreach ($openChallenges as $challenge) : ?>
                             <p>
-                                <a href="<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 14px; padding: 18px 12px; background-color: #151828; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                                <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 14px; padding: 18px 12px; background-color: #151828; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
 
                                     <span style="float: left; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 14px; line-height: 1; color: #fff; text-decoration: none;">
                                         <?= $challenge['time'] ?>
@@ -31,7 +31,7 @@ use Cake\Core\Configure;
                                     </span>
                                 </a>
 
-                                <a href="<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 40px; padding: 12px 12px; background-color: #181d31; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                                <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 40px; padding: 12px 12px; background-color: #181d31; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
                                     <span style="float: left;">
                                         <span style="display: block; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 15px; line-height: 21px; color: #dce4f7; text-decoration: none;">
                                             <?= $challenge['player_a_name'] ?>
@@ -59,7 +59,7 @@ use Cake\Core\Configure;
 
                         <?php foreach ($newPlayers as $player) : ?>
                             <p>
-                                <a href="<?= Configure::read('Bandit.appUrl') ?>/players/<?= $player['id'] ?>" style="display: block; height: 40px; padding: 12px 12px; background-color: #181d31; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                                <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/players/<?= $player['id'] ?>" style="display: block; height: 40px; padding: 12px 12px; background-color: #181d31; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
                                     <span style="float: left;">
                                         <span style="display: block; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 15px; line-height: 21px; color: #dce4f7; text-decoration: none;">
                                             <?= $player['name'] ?>
@@ -87,7 +87,7 @@ use Cake\Core\Configure;
 
                         <?php foreach ($weeklyLeaderboard as $i => $player) : ?>
                             <p>
-                                <a href="<?= Configure::read('Bandit.appUrl') ?>/players/<?= $player['id'] ?>" style="display: block; height: 40px; padding: 12px 12px; background-color: #181d31; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                                <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/players/<?= $player['id'] ?>" style="display: block; height: 40px; padding: 12px 12px; background-color: #181d31; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
                                     <span style="float: left;">
                                         <span style="display: block; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 15px; line-height: 21px; color: #dce4f7; text-decoration: none;">
                                             <?= $player['name'] ?>
@@ -115,7 +115,7 @@ use Cake\Core\Configure;
 
                         <?php foreach ($acceptedChallenges as $challenge) : ?>
                             <p>
-                                <a href="<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 14px; padding: 18px 12px; background-color: #151828; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                                <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 14px; padding: 18px 12px; background-color: #151828; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
 
                                     <span style="float: left; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 14px; line-height: 1; color: #fff; text-decoration: none;">
                                         <?= $challenge['time'] ?>
@@ -126,7 +126,7 @@ use Cake\Core\Configure;
                                     </span>
                                 </a>
 
-                                <a href="<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 40px; padding: 12px 12px; background-color: #181d31; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+                                <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challenge['id'] ?>" style="display: block; height: 40px; padding: 12px 12px; background-color: #181d31; text-decoration: none; border-top-left-radius: 4px; border-top-right-radius: 4px;">
                                     <span style="float: left;">
                                         <span style="display: block; font-family: Helvetica Neue, Helvetica, sans-serif; font-weight: 500; font-size: 15px; line-height: 21px; color: #dce4f7; text-decoration: none;">
                                             <?= $challenge['player_a_name'] ?>
@@ -155,7 +155,7 @@ use Cake\Core\Configure;
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 0px 35px;">
-                    <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                    <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/clubs/<?= $clubId ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Go to your club
                         </span>

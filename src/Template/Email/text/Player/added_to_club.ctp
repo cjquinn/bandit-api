@@ -7,7 +7,7 @@ A new player has entered the arena
 
 ------------------------------------------
 
-Go to your club (<?= Configure::read('Bandit.appUrl') ?>/clubs)
+Go to your club (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/clubs)
 
 ------------------------------------------
 

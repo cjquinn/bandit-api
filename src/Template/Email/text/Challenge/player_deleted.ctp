@@ -9,4 +9,4 @@ Make sure to check for any new Open Challenges, or find an opponent by adding a 
 
 ------------------------------------------
 
-Go to Challenges (<?= Configure::read('Bandit.appUrl') ?>/challenges)
+Go to Challenges (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges)

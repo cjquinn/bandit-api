@@ -7,4 +7,4 @@ You're set to play on <?= $matchDatetime ?>. We look forward to seeing the match
 
 ------------------------------------------
 
-Go to this challenge (<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challengeId ?>)
+Go to this challenge (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challengeId ?>)

@@ -15,4 +15,4 @@ Where
 
 ------------------------------------------
 
-Go to this challenge (<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challengeId ?>)
+Go to this challenge (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challengeId ?>)

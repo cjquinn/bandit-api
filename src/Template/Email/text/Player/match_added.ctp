@@ -8,7 +8,7 @@ We hope that you found <?= $opponentFirstName ?> to be a well matched opponent.
 
 ------------------------------------------
 
-Go to this match (<?= Configure::read('Bandit.appUrl') ?>/matches/<?= $matchId ?>)
+Go to this match (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/matches/<?= $matchId ?>)
 
 ------------------------------------------
 

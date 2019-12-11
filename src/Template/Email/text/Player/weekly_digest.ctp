@@ -11,7 +11,7 @@ The easiest way to get back on to the court.
 
 <?= $challenge['time'] ?> <?= $challenge['date'] ?><?= "\n" ?>
 <?= $challenge['player_a_name'] ?> <?= $challenge['player_a_rating'] ?><?= "\n" ?>
-View (<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challenge['id'] ?>)
+View (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challenge['id'] ?>)
 <?php endforeach; ?>
 <?php endif; ?>
 <?php if (!empty($newPlayers)) : ?>
@@ -22,7 +22,7 @@ There's no better way to welcome your new club mates then with a match.
 <?php foreach ($newPlayers as $player) : ?>
 
 <?= $player['name'] ?> <?= $player['rating'] ?><?= "\n" ?>
-Challenge (<?= Configure::read('Bandit.appUrl') ?>/players/<?= $player['id'] ?>)
+Challenge (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/players/<?= $player['id'] ?>)
 <?php endforeach; ?>
 <?php endif; ?>
 <?php if (!empty($weeklyLeaderboard)) : ?>
@@ -33,7 +33,7 @@ Who's been hitting and who's hitting back.
 <?php foreach ($weeklyLeaderboard as $i => $player) : ?>
 
 #<?= $i + 1 ?> <?= $player['name'] ?> <?= $player['change'] ?><?= "\n" ?>
-View (<?= Configure::read('Bandit.appUrl') ?>/player/<?= $player['id'] ?>)
+View (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/player/<?= $player['id'] ?>)
 <?php endforeach; ?>
 <?php endif; ?>
 <?php if (!empty($acceptedChallenges)) : ?>
@@ -45,13 +45,13 @@ Keep an eye on the matches feed for the results to these showdowns.
 
 <?= $challenge['time'] ?> <?= $challenge['date'] ?><?= "\n" ?>
 <?= $challenge['player_a_name'] ?> <?= $challenge['player_a_rating'] ?> vs <?= $challenge['player_b_name'] ?> <?= $challenge['player_b_rating'] ?><?= "\n" ?>
-View (<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challenge['id'] ?>)
+View (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challenge['id'] ?>)
 <?php endforeach; ?>
 <?php endif; ?>
 
 ------------------------------------------
 
-Go to your club (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>)
+Go to your club (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/clubs/<?= $clubId ?>)
 
 ------------------------------------------
 

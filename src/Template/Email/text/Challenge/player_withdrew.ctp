@@ -7,4 +7,4 @@ Sorry to hear it, but <?= $opponentFirstName ?> has withdrawn from your challeng
 
 ------------------------------------------
 
-Check in on your challenge (<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challengeId ?>)
+Check in on your challenge (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challengeId ?>)

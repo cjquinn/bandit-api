@@ -19,7 +19,7 @@ use Cake\Core\Configure;
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 0px 35px;">
-                    <a href="<?= Configure::read('Bandit.appUrl') ?>/matches/add/challenges/<?= $challengeId ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                    <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/matches/add/challenges/<?= $challengeId ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Add match result
                         </span>
@@ -34,7 +34,7 @@ use Cake\Core\Configure;
                     </h2>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        If your opponent didn't turn up let us know by <a href="<?= Configure::read('Bandit.appUrl') ?>/challenges/<?= $challengeId ?>" style="<?= Configure::read('Bandit.emailStyles.a') ?>">reporting them</a>.
+                        If your opponent didn't turn up let us know by <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challengeId ?>" style="<?= Configure::read('Bandit.emailStyles.a') ?>">reporting them</a>.
                     </p>
 
                     <h2 style="<?= Configure::read('Bandit.emailStyles.h2') ?>">

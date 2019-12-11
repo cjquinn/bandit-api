@@ -23,6 +23,7 @@ class ChallengeMailer extends Mailer
             ->setEmailFormat('both')
             ->set([
                 'challengeId' => $challenge->id,
+                'clubId' => $challenge->club_id,
                 'opponentFullName' => $opponent->user->full_name,
                 'opponentFirstName' => $opponent->user->first_name
             ]);
@@ -44,6 +45,7 @@ class ChallengeMailer extends Mailer
             ->setEmailFormat('both')
             ->set([
                 'challengeId' => $challenge->id,
+                'clubId' => $challenge->club_id,
                 'matchDatetime' => $challenge->match_datetime->format('l jS F \a\t g:ia'),
                 'opponentFullName' => $challenge->player_b->user->full_name
             ]);
@@ -64,6 +66,7 @@ class ChallengeMailer extends Mailer
             ->setFrom(Configure::read('Bandit.emails.referee'))
             ->setEmailFormat('both')
             ->set([
+                'clubId' => $challenge->club_id,
                 'matchDatetime' => $challenge->match_datetime->format('l jS F \a\t g:ia'),
                 'opponentFullName' => $challenge->player_a->user->full_name,
                 'opponentFirstName' => $challenge->player_a->user->first_name
@@ -89,6 +92,7 @@ class ChallengeMailer extends Mailer
             ->setEmailFormat('both')
             ->set([
                 'challengeId' => $challenge->id,
+                'clubId' => $challenge->club_id,
                 'matchDatetime' => $challenge->match_datetime->format('l jS F \a\t g:ia'),
                 'opponentFullName' => $challenge->player_b->user->full_name,
                 'opponentFirstName' => $challenge->player_b->user->first_name

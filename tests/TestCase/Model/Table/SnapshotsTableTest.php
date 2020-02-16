@@ -11,8 +11,8 @@ class SnapshotsTableTest extends TestCase
 {
 
     public $fixtures = [
-        'app.matches',
-        'app.snapshots'
+        'app.Matches',
+        'app.Snapshots'
     ];
 
     /**

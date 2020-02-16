@@ -28,7 +28,7 @@ class PlayersController extends AppController
         $this->Players->patchEntityAdd($player, $this->request->getData(), $this->request->getParam('club_id'));
 
         if (!$this->Players->save($player)) {
-            $this->response->statusCode(400);
+            $this->response = $this->response->withStatus(400);
         }
 
         $this->set([
@@ -46,10 +46,7 @@ class PlayersController extends AppController
             ->findByClubId($this->request->getParam('club_id'))
             ->find('populated');
 
-        $this->set([
-            'players' => $players,
-            'total' => $this->request->paging['Players']['count']
-        ]);
+        $this->set('players', $players);
     }
 
     /**

@@ -1,12 +1,13 @@
 <?php
 
-use Cake\Core\Plugin;
+use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
+use Cake\Routing\Route\DashedRoute;
 
-Router::defaultRouteClass('DashedRoute');
+Router::defaultRouteClass(DashedRoute::class);
 
-Router::scope('/', function ($routes) {
-    $routes->extensions(['json']);
+Router::scope('/', function (RouteBuilder $routes) {
+    $routes->setExtensions(['json']);
 
     /**
      * Clubs
@@ -18,7 +19,7 @@ Router::scope('/', function ($routes) {
             'update',
             'view'
         ]
-    ], function ($routes) {
+    ], function (RouteBuilder $routes) {
         /**
          * Challenges
          */
@@ -82,7 +83,7 @@ Router::scope('/', function ($routes) {
                 'index',
                 'view'
             ]
-        ], function ($routes) {
+        ], function (RouteBuilder $routes) {
             /**
              * Disputes
              */
@@ -125,6 +126,7 @@ Router::scope('/', function ($routes) {
     $routes->resources('Users', [
         'only' => [
             'current',
+            'current/accept-terms',
             'create',
             'login',
             'request-password-reset',
@@ -135,6 +137,10 @@ Router::scope('/', function ($routes) {
             'current' => [
                 'action' => 'current',
                 'method' => 'GET'
+            ],
+            'current/accept-terms' => [
+                'action' => 'acceptTerms',
+                'method' => 'PATCH'
             ],
             'login' => [
                 'action' => 'login',
@@ -156,5 +162,3 @@ Router::scope('/', function ($routes) {
         ]
     ]);
 });
-
-Plugin::routes();

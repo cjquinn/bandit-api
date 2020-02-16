@@ -73,7 +73,7 @@ class PlayersTable extends Table
         $player->set('club_id', $clubId);
 
         $this->patchEntity($player, $data, [
-            'fieldList' => ['user'],
+            'fields' => ['user'],
             'validate' => 'add'
         ]);
 
@@ -132,7 +132,7 @@ class PlayersTable extends Table
     public function patchEntityStats(Player $player, array $data)
     {
         $this->patchEntity($player, $data, [
-            'fieldList' => [
+            'fields' => [
                 'rating',
                 'losses',
                 'wins'
@@ -212,7 +212,7 @@ class PlayersTable extends Table
      */
     public function revert(Match $match, $player)
     {
-        $this->connection()->transactional(function () use ($match, $player) {
+        $this->getConnection()->transactional(function () use ($match, $player) {
             $snapshot = $match->{$player . '_snapshot'}->stats;
             $wins = $match->{$player . '_score'};
             $losses = $player === 'player_a'
@@ -272,7 +272,7 @@ class PlayersTable extends Table
         $playerASnapshot = [];
         $playerBSnapshot = [];
 
-        $this->connection()->transactional(function () use ($match, &$playerASnapshot, &$playerBSnapshot) {
+        $this->getConnection()->transactional(function () use ($match, &$playerASnapshot, &$playerBSnapshot) {
             $playerA = $this->get($match->player_a_id);
             $playerB = $this->get($match->player_b_id);
 

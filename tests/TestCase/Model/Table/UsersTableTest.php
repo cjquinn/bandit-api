@@ -4,7 +4,7 @@ namespace App\Test\TestCase\Model\Table;
 
 use App\Model\Table\UsersTable;
 
-use Cake\Network\Exception\UnauthorizedException;
+use Cake\Http\Exception\UnauthorizedException;
 use Cake\ORM\TableRegistry;
 use Cake\TestSuite\TestCase;
 
@@ -19,7 +19,7 @@ class UsersTableTest extends TestCase
     /**
      * @var array
      */
-    public $fixtures = ['app.users'];
+    public $fixtures = ['app.Users'];
 
     /**
      * @return void
@@ -44,6 +44,62 @@ class UsersTableTest extends TestCase
     /**
      * @return void
      */
+    public function testValidationAcceptTerms()
+    {
+        // Required
+        $data = [];
+        $errors = $this->Users->getValidator('acceptTerms')->errors($data);
+
+        $expected = [
+            'has_accepted_terms' => [
+                '_required' => 'This field is required'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        // Empty
+        $data = [
+            'has_accepted_terms' => ''
+        ];
+        $errors = $this->Users->getValidator('acceptTerms')->errors($data);
+
+        $expected = [
+            'has_accepted_terms' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        // Invalid
+        $data = [
+            'has_accepted_terms' => false
+        ];
+        $errors = $this->Users->getValidator('acceptTerms')->errors($data);
+
+        $expected = [
+            'has_accepted_terms' => [
+                'invalid' => 'You must accept the terms of service'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        // Valid
+        $data = [
+            'has_accepted_terms' => true
+        ];
+        $errors = $this->Users->getValidator('acceptTerms')->errors($data);
+
+        $expected = [];
+
+        $this->assertEquals($expected, $errors);
+    }
+
+    /**
+     * @return void
+     */
     public function testValidationAdd()
     {
         // Required
@@ -62,6 +118,9 @@ class UsersTableTest extends TestCase
             ],
             'password' => [
                 '_required' => 'This field is required'
+            ],
+            'has_accepted_terms' => [
+                '_required' => 'This field is required'
             ]
         ];
 
@@ -72,7 +131,8 @@ class UsersTableTest extends TestCase
             'first_name' => '',
             'last_name' => '',
             'email' => '',
-            'password' => ''
+            'password' => '',
+            'has_accepted_terms' => ''
         ];
         $errors = $this->Users->getValidator('add')->errors($data);
 
@@ -88,6 +148,27 @@ class UsersTableTest extends TestCase
             ],
             'password' => [
                 '_empty' => 'This field cannot be left empty'
+            ],
+            'has_accepted_terms' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        $this->assertEquals($expected, $errors);
+
+        // Not accepted terms
+        $data = [
+            'first_name' => 'Christy',
+            'last_name' => 'Quinn',
+            'email' => 'christy@banditmatch.com',
+            'password' => 'password',
+            'has_accepted_terms' => false
+        ];
+        $errors = $this->Users->getValidator('add')->errors($data);
+
+        $expected = [
+            'has_accepted_terms' => [
+                'invalid' => 'You must accept the terms of service'
             ]
         ];
 
@@ -98,7 +179,8 @@ class UsersTableTest extends TestCase
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
             'email' => 'christy@banditmatch.com',
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ];
         $errors = $this->Users->getValidator('add')->errors($data);
 
@@ -150,7 +232,7 @@ class UsersTableTest extends TestCase
      */
     public function testPatchEntityAdd()
     {
-        // Required
+        // Validation
         $user = $this->Users->newEntity();
         $data = [];
 
@@ -168,33 +250,9 @@ class UsersTableTest extends TestCase
             ],
             'password' => [
                 '_required' => 'This field is required'
-            ]
-        ];
-
-        $this->assertEquals($expected, $user->getErrors());
-
-        // Empty
-        $user = $this->Users->newEntity();
-        $data = [
-            'first_name' => '',
-            'last_name' => '',
-            'email' => '',
-            'password' => ''
-        ];
-        $this->Users->patchEntityAdd($user, $data);
-
-        $expected = [
-            'first_name' => [
-                '_empty' => 'This field cannot be left empty'
             ],
-            'last_name' => [
-                '_empty' => 'This field cannot be left empty'
-            ],
-            'email' => [
-                '_empty' => 'This field cannot be left empty'
-            ],
-            'password' => [
-                '_empty' => 'This field cannot be left empty'
+            'has_accepted_terms' => [
+                '_required' => 'This field is required'
             ]
         ];
 
@@ -206,12 +264,18 @@ class UsersTableTest extends TestCase
             'first_name' => 'Bob',
             'last_name' => 'Geldof',
             'email' => 'bob@banditmatch.com',
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ];
         $this->Users->patchEntityAdd($user, $data);
 
         $this->assertEmpty($user->getErrors());
         $this->assertNull($user->id);
+        $this->assertEquals($user->email_preferences, [
+            'challenge_created' => true,
+            'match_added' => true,
+            'weekly_digest' => true
+        ]);
 
         // Valid existing activated
         $user = $this->Users->newEntity();
@@ -219,12 +283,18 @@ class UsersTableTest extends TestCase
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
             'email' => 'christy@banditmatch.com',
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ];
         $this->Users->patchEntityAdd($user, $data);
 
         $this->assertEmpty($user->getErrors());
         $this->assertNull($user->id);
+        $this->assertEquals($user->email_preferences, [
+            'challenge_created' => true,
+            'match_added' => true,
+            'weekly_digest' => true
+        ]);
 
         // Valid existing unactivated
         $this->Users->updateAll(['password' => null], ['email' => 'christy@banditmatch.com']);
@@ -234,12 +304,18 @@ class UsersTableTest extends TestCase
             'first_name' => 'Christy',
             'last_name' => 'Quinn',
             'email' => 'christy@banditmatch.com',
-            'password' => 'password'
+            'password' => 'password',
+            'has_accepted_terms' => true
         ];
         $this->Users->patchEntityAdd($user, $data);
 
         $this->assertEmpty($user->getErrors());
         $this->assertEquals(1, $user->id);
+        $this->assertEquals($user->email_preferences, [
+            'challenge_created' => true,
+            'match_added' => true,
+            'weekly_digest' => true
+        ]);
     }
 
     /**
@@ -281,6 +357,7 @@ class UsersTableTest extends TestCase
             'first_name' => '',
             'last_name' => '',
             'email' => '',
+            'email_preferences' => '',
             'current_password' => 'password'
         ];
 
@@ -294,6 +371,9 @@ class UsersTableTest extends TestCase
                 '_empty' => 'This field cannot be left empty'
             ],
             'email' => [
+                '_empty' => 'This field cannot be left empty'
+            ],
+            'email_preferences' => [
                 '_empty' => 'This field cannot be left empty'
             ],
             'new_password' => [
@@ -382,6 +462,67 @@ class UsersTableTest extends TestCase
 
         $this->assertEmpty($user->getErrors());
         $this->assertTrue($user->isDirty('password'));
+
+        // Email preferences required
+        $user = $this->Users->get(1);
+        $data = [
+            'email_preferences' => []
+        ];
+
+        $expected = [
+            'email_preferences' => [
+                '_empty' => 'This field cannot be left empty'
+            ]
+        ];
+
+        $this->Users->patchEntityEdit($user, $data);
+
+        $this->assertEquals($user->getErrors(), $expected);
+
+        // Email preferences bool
+        $user = $this->Users->get(1);
+        $data = [
+            'email_preferences' => [
+                'challenge_created' => 'true',
+                'match_added' => 'true',
+                'weekly_digest' => 'true'
+            ]
+        ];
+
+        $expected = [
+            'email_preferences' => [
+                'challenge_created' => [
+                    'boolean' => 'The provided value is invalid'
+                ],
+                'match_added' => [
+                    'boolean' => 'The provided value is invalid'
+                ],
+                'weekly_digest' => [
+                    'boolean' => 'The provided value is invalid'
+                ]
+            ]
+        ];
+
+        $this->Users->patchEntityEdit($user, $data);
+
+        $this->assertEquals($user->getErrors(), $expected);
+
+        // Email preferences valid
+        $user = $this->Users->get(1);
+        $data = [
+            'email_preferences' => [
+                'challenge_created' => false,
+                'match_added' => false,
+                'weekly_digest' => false
+            ]
+        ];
+
+        $this->Users->patchEntityEdit($user, $data);
+
+        $this->assertEmpty($user->getErrors());
+        $this->assertFalse($user->email_preferences['challenge_created']);
+        $this->assertFalse($user->email_preferences['match_added']);
+        $this->assertFalse($user->email_preferences['weekly_digest']);
     }
 
     /**

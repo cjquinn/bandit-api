@@ -56,7 +56,7 @@ class ClubsController extends AppController
         ]);
 
         if (!$success) {
-            $this->response->statusCode(400);
+            $this->response = $this->response->withStatus(400);
             return;
         }
 
@@ -76,7 +76,7 @@ class ClubsController extends AppController
         $this->Clubs->patchEntityEdit($club, $this->request->getData());
 
         if (!$this->Clubs->save($club)) {
-            $this->response->statusCode(400);
+            $this->response = $this->response->withStatus(400);
         }
 
         $this->set([

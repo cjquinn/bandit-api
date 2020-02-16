@@ -26,7 +26,7 @@ class DisputesTable extends Table
             ]
         ]);
 
-        $this->primaryKey('match_id');
+        $this->setPrimaryKey('match_id');
 
         $this->addBehavior('Timestamp');
     }
@@ -39,7 +39,7 @@ class DisputesTable extends Table
         $dispute->set('match_id', $matchId);
 
         $this->patchEntity($dispute, $data, [
-            'fieldList' => [
+            'fields' => [
                 'player_a_score',
                 'player_b_score',
                 'message'
@@ -54,7 +54,7 @@ class DisputesTable extends Table
     public function patchEntityEdit(Dispute $dispute, array $data)
     {
         $this->patchEntity($dispute, $data, [
-            'fieldList' => ['is_resolved'],
+            'fields' => ['is_resolved'],
             'validate' => 'edit'
         ]);
     }
@@ -111,7 +111,7 @@ class DisputesTable extends Table
             return false;
         }
 
-        $this->connection()->transactional(function () use ($dispute) {
+        $this->getConnection()->transactional(function () use ($dispute) {
             $match = $this->Matches->get($dispute->match_id, [
                 'finder' => 'populated'
             ]);

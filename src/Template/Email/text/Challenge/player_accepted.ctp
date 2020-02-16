@@ -1,7 +1,10 @@
-Game on! <?= $challenge->player_b->user->full_name ?> has accepted your challenge
+<?php
+use Cake\Core\Configure;
+?>
+Game on! <?= $opponentFullName ?> has accepted your challenge
 
-You're set to play on <?= $challenge->match_datetime->format('l jS F \a\t H:i') ?>. We look forward to seeing the match result!
+You're set to play on <?= $matchDatetime ?>. We look forward to seeing the match result!
 
 ------------------------------------------
 
-Go to this challenge (https://banditmatch.com/challenges/<?= $challenge->id ?>)
+Go to this challenge (<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/challenges/<?= $challengeId ?>)

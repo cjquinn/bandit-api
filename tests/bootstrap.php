@@ -7,6 +7,9 @@
  */
 require dirname(__DIR__) . '/vendor/autoload.php';
 
+define('TESTING', true);
+
 require dirname(__DIR__) . '/config/bootstrap.php';
+
 
 $_SERVER['PHP_SELF'] = '/';

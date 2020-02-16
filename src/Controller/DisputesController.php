@@ -79,7 +79,7 @@ class DisputesController extends AppController
         );
 
         if (!$this->Disputes->save($dispute)) {
-            $this->response->statusCode(400);
+            $this->response = $this->response->withStatus(400);
         }
 
         $this->set([
@@ -106,7 +106,7 @@ class DisputesController extends AppController
         ]);
 
         if (!$success) {
-            $this->response->statusCode(400);
+            $this->response = $this->response->withStatus(400);
             return;
         }
 

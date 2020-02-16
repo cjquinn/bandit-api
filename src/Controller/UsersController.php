@@ -25,6 +25,29 @@ class UsersController extends AppController
     /**
      * @return void
      */
+    public function acceptTerms()
+    {
+        $user = $this->Users->get($this->Auth->user('id'), ['contain' => 'Players']);
+
+        $this->Users->patchEntity(
+            $user,
+            $this->request->getData(),
+            ['validate' => 'acceptTerms']
+        );
+
+        if (!$this->Users->save($user)) {
+            $this->response = $this->response->withStatus(400);
+        }
+
+        $this->set([
+            'errors' => $user->getErrors(),
+            'user' => $user
+        ]);
+    }
+
+    /**
+     * @return void
+     */
     public function add()
     {
         $user = $this->Users->newEntity();
@@ -44,7 +67,7 @@ class UsersController extends AppController
             return;
         }
 
-        $this->Users->loadInto($user, ['Players']);
+        $this->Users->loadInTo($user, ['Players']);
 
         $this->set('jwt', $this->Users->generateJwt($user->id));
     }
@@ -110,7 +133,7 @@ class UsersController extends AppController
      */
     public function requestPasswordReset()
     {
-        $errors = $this->Users->validator('requestPasswordReset')->errors($this->request->getData());
+        $errors = $this->Users->getValidator('requestPasswordReset')->errors($this->request->getData());
 
         if (!empty($errors)) {
             $this->set('errors', $errors);
@@ -136,7 +159,7 @@ class UsersController extends AppController
     /**
      * @return void
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
-     * @throws \Cake\Network\Exception\UnauthorizedException
+     * @throws \Cake\Http\Exception\UnauthorizedException
      */
     public function resetPassword()
     {

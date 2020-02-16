@@ -10,11 +10,11 @@ use Cake\TestSuite\TestCase;
 class ClubsTableTest extends TestCase
 {
     public $fixtures = [
-        'app.clubs',
-        'app.players',
-        'app.matches',
-        'app.snapshots',
-        'app.users'
+        'app.Clubs',
+        'app.Players',
+        'app.Matches',
+        'app.Snapshots',
+        'app.Users'
     ];
 
     /**
@@ -91,7 +91,8 @@ class ClubsTableTest extends TestCase
                 'first_name' => 'Alex',
                 'last_name' => 'Farthing',
                 'email' => 'alex@gmail.com',
-                'password' => 'password'
+                'password' => 'password',
+                'has_accepted_terms' => true
             ]
         ];
         $user = null;
@@ -171,7 +172,8 @@ class ClubsTableTest extends TestCase
                 'first_name' => 'Alex',
                 'last_name' => 'Farthing',
                 'email' => 'alex@gmail.com',
-                'password' => 'password'
+                'password' => 'password',
+                'has_accepted_terms' => true
             ]
         ];
 

@@ -8,6 +8,7 @@ use ArrayObject;
 
 use Cake\Event\Event;
 use Cake\I18n\Time;
+use Cake\Mailer\MailerAwareTrait;
 use Cake\ORM\Query;
 use Cake\ORM\RulesChecker;
 use Cake\ORM\Table;
@@ -16,6 +17,7 @@ use Cake\Validation\Validator;
 
 class MatchesTable extends Table
 {
+    use MailerAwareTrait;
 
     /**
      * @return void
@@ -184,7 +186,7 @@ class MatchesTable extends Table
             $snapshots = $this->Clubs->Players->snapshotPlayers($match);
 
             $this->patchEntity($match, $snapshots, [
-                'fieldList' => ['player_a_snapshot', 'player_b_snapshot']
+                'fields' => ['player_a_snapshot', 'player_b_snapshot']
             ]);
         }
     }
@@ -192,9 +194,30 @@ class MatchesTable extends Table
     /**
      * @return void
      */
+    public function afterSave(Event $event, Match $match)
+    {
+        if (!$match->isNew()) {
+            return;
+        }
+
+        $playerB = $this->PlayerBs->get($match->player_b_id, ['contain' => 'Users']);
+
+        if (!$playerB->user->email_preferences['match_added']) {
+            return;
+        }
+
+        $this->getMailer('Player')->send(
+            'matchAdded',
+            [$playerB, $match]
+        );
+    }
+
+    /**
+     * @return void
+     */
     public function saveTree(Match $match)
     {
-        $this->connection()->transactional(function () use ($match) {
+        $this->getConnection()->transactional(function () use ($match) {
             // Find tree of affected matches
             $matches = $this
                 ->find('tree', ['match' => $match])
@@ -223,7 +246,7 @@ class MatchesTable extends Table
      */
     public function softDelete(Match $match)
     {
-        $this->connection()->transactional(function () use ($match) {
+        $this->getConnection()->transactional(function () use ($match) {
             $match->set('deleted', new Time());
             $this->save($match);
 
@@ -370,6 +393,22 @@ class MatchesTable extends Table
             ->first();
 
         return [$match->id => $match->id] + $this->idTree($left) + $this->idTree($right);
+    }
+
+    /**
+     * @return bool
+     */
+    public function exists($conditions)
+    {
+        return (bool)count(
+            $this
+                ->find('all', ['ignoreBeforeFind' => true])
+                ->select(['existing' => 1])
+                ->where($conditions)
+                ->limit(1)
+                ->enableHydration(false)
+                ->toArray()
+        );
     }
 
     /**

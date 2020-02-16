@@ -12,14 +12,14 @@ use Cake\Core\Configure;
                     </h1>
 
                     <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
-                        <?= $player->club->name ?> have invited you to join their club.
+                        <?= $clubName ?> have invited you to join their club.
                     </p>
                 </td>
             </tr>
 
             <tr>
                 <td cellpadding="0" style="padding: 48px 0px 35px;">
-                    <a href="https://banditmatch.com/sign-up?email=<?= urlencode($player->user->email) ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
+                    <a href="<?= Configure::read('Bandit.appUrl') ?>/clubs/<?= $clubId ?>/sign-up?email=<?= $playerEmail ?>" style="<?= Configure::read('Bandit.emailStyles.button') ?>">
                         <span style="<?= Configure::read('Bandit.emailStyles.buttonText') ?>">
                             Join the club
                         </span>

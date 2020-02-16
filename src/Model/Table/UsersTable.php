@@ -7,8 +7,9 @@ use App\Model\Entity\User;
 use ArrayObject;
 
 use Cake\Auth\DefaultPasswordHasher;
+use Cake\Core\Configure;
 use Cake\Datasource\Exception\RecordNotFoundException;
-use Cake\Network\Exception\UnauthorizedException;
+use Cake\Http\Exception\UnauthorizedException;
 use Cake\Event\Event;
 use Cake\I18n\Time;
 use Cake\Mailer\MailerAwareTrait;
@@ -44,6 +45,24 @@ class UsersTable extends Table
     /**
      * @return \Cake\Validation\Validator
      */
+    public function validationAcceptTerms(Validator $validator)
+    {
+        $validator
+            ->requirePresence('has_accepted_terms')
+            ->notEmpty('has_accepted_terms')
+            ->add('has_accepted_terms', 'invalid', [
+                'rule' => function ($value) {
+                    return (bool)$value === true;
+                },
+                'message' => 'You must accept the terms of service'
+            ]);
+
+        return $validator;
+    }
+
+    /**
+     * @return \Cake\Validation\Validator
+     */
     public function validationAdd(Validator $validator)
     {
         $validator
@@ -63,6 +82,8 @@ class UsersTable extends Table
             ->requirePresence('password')
             ->notEmpty('password');
 
+        $validator = $this->validationAcceptTerms($validator);
+
         return $validator;
     }
 
@@ -80,6 +101,26 @@ class UsersTable extends Table
         $validator
             ->notEmpty('email')
             ->email('email');
+
+        $emailPreferencesValidator = new Validator();
+        $emailPreferencesValidator
+            ->requirePresence('challenge_created')
+            ->notEmpty('challenge_created')
+            ->boolean('challenge_created');
+
+        $emailPreferencesValidator
+            ->requirePresence('match_added')
+            ->notEmpty('match_added')
+            ->boolean('match_added');
+
+        $emailPreferencesValidator
+            ->requirePresence('weekly_digest')
+            ->notEmpty('weekly_digest')
+            ->boolean('weekly_digest');
+
+        $validator
+            ->notEmpty('email_preferences')
+            ->addNested('email_preferences', $emailPreferencesValidator);
 
         $validator
             ->requirePresence('current_password', function ($context) {
@@ -166,6 +207,8 @@ class UsersTable extends Table
         if (!empty($user->getErrors())) {
             return;
         }
+
+        $user->set('email_preferences', Configure::read('Bandit.email_preferences'));
 
         $existingUser = $this
             ->findByEmail($user->email)
@@ -264,7 +307,7 @@ class UsersTable extends Table
      * @param string|null $token
      * @return bool|\App\Model\Entity\User
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
-     * @throws \Cake\Network\Exception\UnauthorizedException
+     * @throws \Cake\Http\Exception\UnauthorizedException
      */
     public function getByToken($token)
     {
@@ -298,6 +341,25 @@ class UsersTable extends Table
     }
 
     /**
+     * Finder used by email preferences
+     *
+     * @param \Cake\ORM\Query $query The query object
+     * @param array $options The options array
+     */
+    public function findByEmailPreference(Query $query, array $options)
+    {
+        $query->where([
+            sprintf(
+                'CAST(JSON_EXTRACT(email_preferences, "$.%s") AS UNSIGNED) = %b',
+                $options['preference'],
+                true
+            )
+        ]);
+
+        return $query;
+    }
+
+    /**
      * Generates a JWT
      *
      * @return string
@@ -307,6 +369,6 @@ class UsersTable extends Table
         return JWT::encode([
             'sub' => $id,
             'exp' =>  time() + 604800
-        ], Security::salt());
+        ], Security::getSalt());
     }
 }

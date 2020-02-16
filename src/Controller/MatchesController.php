@@ -84,7 +84,7 @@ class MatchesController extends AppController
         ]);
 
         if (!$success) {
-            $this->response->statusCode(400);
+            $this->response = $this->response->withStatus(400);
             return;
         }
 
@@ -132,7 +132,7 @@ class MatchesController extends AppController
 
         $this->set([
             'matches' => $matches,
-            'total' => $this->request->paging['Matches']['count']
+            'total' => $this->request->getParam('paging')['Matches']['count']
         ]);
     }
 
@@ -143,10 +143,11 @@ class MatchesController extends AppController
     public function view($id)
     {
         $match = $this->Matches
-            ->findById($id, ['ignoreBeforeFind' => true])
+            ->find('all', ['ignoreBeforeFind' => true])
             ->find('populated')
             ->find('withBreakdowns')
             ->contain(['Disputes'])
+            ->where([$this->Matches->aliasField('id') => $id])
             ->firstOrFail();
 
         $this->set('match', $match);

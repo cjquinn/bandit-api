@@ -39,7 +39,7 @@ class ChallengesController extends AppController
                 $this->Auth->user('id')
             )
         )) {
-            $this->response->statusCode(403);
+            $this->response = $this->response->withStatus(403);
             return;
         }
 
@@ -64,7 +64,7 @@ class ChallengesController extends AppController
         );
 
         if (!$this->Challenges->save($challenge)) {
-            $this->response->statusCode(400);
+            $this->response = $this->response->withStatus(400);
         }
 
         $this->set([
@@ -88,7 +88,7 @@ class ChallengesController extends AppController
                 $this->Auth->user('id')
             )
         )) {
-            $this->response->statusCode(403);
+            $this->response = $this->response->withStatus(403);
             return;
         }
 
@@ -130,7 +130,7 @@ class ChallengesController extends AppController
                 $this->Auth->user('id')
             )
         )) {
-            $this->response->statusCode(403);
+            $this->response = $this->response->withStatus(403);
             return;
         }
 
@@ -163,7 +163,7 @@ class ChallengesController extends AppController
                 $this->Auth->user('id')
             )
         )) {
-            $this->response->statusCode(403);
+            $this->response = $this->response->withStatus(403);
             return;
         }
 

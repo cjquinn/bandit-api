@@ -38,6 +38,14 @@ use Cake\Core\Configure;
                     </p>
                 </td>
             </tr>
+
+            <tr>
+                <td cellpadding="0" style="padding: 25px 0px">
+                    <p style="<?= Configure::read('Bandit.emailStyles.p') ?>">
+                        <a href="<?= Configure::read('Bandit.appUrl') ?>/settings" style="<?= Configure::read('Bandit.emailStyles.a') ?>">Update email preferences</a>
+                    </p>
+                </td>
+            </tr>
         </table>
     </td>
 </tr>

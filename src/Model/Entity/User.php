@@ -7,6 +7,7 @@ use Cake\ORM\Entity;
 
 /**
  * @property int $id
+ * @property int $racketware_session_id
  * @property string $first_name
  * @property string $last_name
  * @property int $reputation
@@ -25,6 +26,7 @@ class User extends Entity
      * @var array
      */
     protected $_accessible = [
+        'racketware_session_id' => true,
         'first_name' => true,
         'last_name' => true,
         'email' => true,

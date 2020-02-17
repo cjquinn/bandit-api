@@ -15,6 +15,7 @@ trait ControllerTestTrait
         'app.Disputes',
         'app.Players',
         'app.Matches',
+        'app.RacketwareSessions',
         'app.Snapshots',
         'app.Users'
     ];

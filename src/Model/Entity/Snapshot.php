@@ -6,6 +6,7 @@ use Cake\ORM\Entity;
 /**
  * @property int $match_id
  * @property int $player_id
+ * @property int $racketware_session_id
  * @property int $rating
  * @property int $difference
  * @property int $wins

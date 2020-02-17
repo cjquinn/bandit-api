@@ -19,7 +19,7 @@ class SnapshotsTable extends Table
         $this->setPrimaryKey(['match_id', 'player_id']);
 
         $this->addAssociations([
-            'belongsTo' => ['Matches', 'Players']
+            'belongsTo' => ['Matches', 'Players', 'RacketwareSessions']
         ]);
 
         $this->addBehavior('Timestamp');

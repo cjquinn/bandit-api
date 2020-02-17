@@ -18,6 +18,7 @@ class UsersFixture extends TestFixture
         $this->records = [
             [
                 'id' => 1,
+                'racketware_player_id' => null,
                 'first_name' => 'Christy',
                 'last_name' => 'C',
                 'reputation' => 3,
@@ -30,6 +31,7 @@ class UsersFixture extends TestFixture
             ],
             [
                 'id' => 2,
+                'racketware_player_id' => null,
                 'first_name' => 'Russell',
                 'last_name' => 'R',
                 'reputation' => 4,
@@ -42,6 +44,7 @@ class UsersFixture extends TestFixture
             ],
             [
                 'id' => 3,
+                'racketware_player_id' => null,
                 'first_name' => 'Nathan',
                 'last_name' => 'N',
                 'reputation' => 1,
@@ -54,6 +57,7 @@ class UsersFixture extends TestFixture
             ],
             [
                 'id' => 4,
+                'racketware_player_id' => null,
                 'first_name' => 'Tom',
                 'last_name' => 'T',
                 'reputation' => 2,
@@ -66,6 +70,7 @@ class UsersFixture extends TestFixture
             ],
             [
                 'id' => 5,
+                'racketware_player_id' => null,
                 'first_name' => 'Alex',
                 'last_name' => 'A',
                 'reputation' => 1,
@@ -78,6 +83,7 @@ class UsersFixture extends TestFixture
             ],
             [
                 'id' => 6,
+                'racketware_player_id' => null,
                 'first_name' => 'Sam',
                 'last_name' => 'S',
                 'reputation' => 2,
@@ -90,6 +96,7 @@ class UsersFixture extends TestFixture
             ],
             [
                 'id' => 7,
+                'racketware_player_id' => null,
                 'first_name' => 'Dom',
                 'last_name' => 'D',
                 'reputation' => 2,
@@ -102,6 +109,7 @@ class UsersFixture extends TestFixture
             ],
             [
                 'id' => 8,
+                'racketware_player_id' => null,
                 'first_name' => 'Gareth',
                 'last_name' => 'G',
                 'reputation' => 0,

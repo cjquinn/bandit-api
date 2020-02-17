@@ -102,6 +102,8 @@ class UsersTable extends Table
             ->notEmpty('email')
             ->email('email');
 
+        $validator->allowEmpty('racketware_player_id');
+
         $emailPreferencesValidator = new Validator();
         $emailPreferencesValidator
             ->requirePresence('challenge_created')
@@ -180,6 +182,7 @@ class UsersTable extends Table
      */
     public function buildRules(RulesChecker $rules)
     {
+        $rules->add($rules->isUnique(['racketware_player_id']));
         $rules->add($rules->isUnique(['email']));
         $rules->add($rules->isUnique(['token']));
 

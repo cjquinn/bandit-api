@@ -17,6 +17,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 1,
                 'player_id' => 1,
+                'racketware_session_id' => null,
                 'rating' => 1220,
                 'difference' => 20,
                 'wins' => 1,
@@ -27,6 +28,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 1,
                 'player_id' => 2,
+                'racketware_session_id' => null,
                 'rating' => 1180,
                 'difference' => -20,
                 'wins' => 0,
@@ -37,6 +39,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 2,
                 'player_id' => 1,
+                'racketware_session_id' => null,
                 'rating' => 1238,
                 'difference' => 18,
                 'wins' => 2,
@@ -47,6 +50,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 2,
                 'player_id' => 2,
+                'racketware_session_id' => null,
                 'rating' => 1162,
                 'difference' => -18,
                 'wins' => 0,
@@ -57,6 +61,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 3,
                 'player_id' => 2,
+                'racketware_session_id' => null,
                 'rating' => 1184,
                 'difference' => 22,
                 'wins' => 1,
@@ -67,6 +72,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 3,
                 'player_id' => 3,
+                'racketware_session_id' => null,
                 'rating' => 1178,
                 'difference' => -22,
                 'wins' => 0,
@@ -77,6 +83,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 4,
                 'player_id' => 4,
+                'racketware_session_id' => null,
                 'rating' => 1220,
                 'difference' => 20,
                 'wins' => 1,
@@ -87,6 +94,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 4,
                 'player_id' => 5,
+                'racketware_session_id' => null,
                 'rating' => 1180,
                 'difference' => -20,
                 'wins' => 0,
@@ -97,6 +105,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 5,
                 'player_id' => 5,
+                'racketware_session_id' => null,
                 'rating' => 1203,
                 'difference' => 23,
                 'wins' => 1,
@@ -107,6 +116,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 5,
                 'player_id' => 1,
+                'racketware_session_id' => null,
                 'rating' => 1215,
                 'difference' => -23,
                 'wins' => 2,
@@ -117,6 +127,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 6,
                 'player_id' => 6,
+                'racketware_session_id' => null,
                 'rating' => 1220,
                 'difference' => 20,
                 'wins' => 1,
@@ -127,6 +138,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 6,
                 'player_id' => 7,
+                'racketware_session_id' => null,
                 'rating' => 1180,
                 'difference' => -20,
                 'wins' => 0,
@@ -137,6 +149,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 7,
                 'player_id' => 4,
+                'racketware_session_id' => null,
                 'rating' => 1238,
                 'difference' => 18,
                 'wins' => 2,
@@ -147,6 +160,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 7,
                 'player_id' => 2,
+                'racketware_session_id' => null,
                 'rating' => 1166,
                 'difference' => -18,
                 'wins' => 1,
@@ -157,6 +171,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 8,
                 'player_id' => 6,
+                'racketware_session_id' => null,
                 'rating' => 1238,
                 'difference' => 18,
                 'wins' => 2,
@@ -167,6 +182,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 8,
                 'player_id' => 7,
+                'racketware_session_id' => null,
                 'rating' => 1162,
                 'difference' => -18,
                 'wins' => 0,
@@ -177,6 +193,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 9,
                 'player_id' => 8,
+                'racketware_session_id' => null,
                 'rating' => 1220,
                 'difference' => 20,
                 'wins' => 1,
@@ -187,6 +204,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 9,
                 'player_id' => 9,
+                'racketware_session_id' => null,
                 'rating' => 1180,
                 'difference' => -20,
                 'wins' => 0,
@@ -197,6 +215,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 10,
                 'player_id' => 8,
+                'racketware_session_id' => null,
                 'rating' => 1200,
                 'difference' => -20,
                 'wins' => 1,
@@ -207,6 +226,7 @@ class SnapshotsFixture extends TestFixture
             [
                 'match_id' => 10,
                 'player_id' => 9,
+                'racketware_session_id' => null,
                 'rating' => 1200,
                 'difference' => 20,
                 'wins' => 1,

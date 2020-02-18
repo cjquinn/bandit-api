@@ -16,12 +16,6 @@ class CreateRacketwareSessions extends AbstractMigration
             'null' => false
         ]);
 
-        $table->addColumn('action', 'string', [
-            'default' => null,
-            'limit' => 255,
-            'null' => false
-        ]);
-
         $table->addColumn('data', 'json', [
             'default' => null,
             'null' => false

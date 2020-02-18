@@ -4,9 +4,10 @@ use Cake\Routing\RouteBuilder;
 use Cake\Routing\Router;
 use Cake\Routing\Route\DashedRoute;
 
-Router::defaultRouteClass(DashedRoute::class);
 
 Router::scope('/', function (RouteBuilder $routes) {
+    $routes->setRouteClass(DashedRoute::class);
+
     $routes->setExtensions(['json']);
 
     /**
@@ -119,6 +120,17 @@ Router::scope('/', function (RouteBuilder $routes) {
             ]
         ]);
     });
+
+    $routes->resources('RacketwareSessions', [
+        'inflect' => 'dasherize',
+        'only' => ['webhook'],
+        'map' => [
+            'webhook' => [
+                'action' => 'webhook',
+                'method' => 'POST'
+            ],
+        ]
+    ]);
 
     /**
      * Users

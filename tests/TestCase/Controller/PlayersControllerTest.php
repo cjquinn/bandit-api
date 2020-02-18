@@ -4,7 +4,6 @@ namespace App\Test\TestCase\Controller;
 
 use App\Test\TestCase\Controller\ControllerTestTrait;
 
-use Cake\ORM\TableRegistry;
 use Cake\TestSuite\IntegrationTestCase;
 
 class PlayersControllerTest extends IntegrationTestCase

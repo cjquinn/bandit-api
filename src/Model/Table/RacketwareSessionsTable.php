@@ -2,7 +2,8 @@
 
 namespace App\Model\Table;
 
-use Cake\ORM\RulesChecker;
+use App\Model\Entity\RacketwareSession;
+
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
 
@@ -23,7 +24,7 @@ class RacketwareSessionsTable extends Table
     /**
      * @return \Cake\Validation\Validator
      */
-    public function validationAdd(Validator $validator)
+    public function validationDefault(Validator $validator)
     {
         $validator
             ->requirePresence('player')
@@ -43,12 +44,13 @@ class RacketwareSessionsTable extends Table
     }
 
     /**
-     * @return \Cake\ORM\RulesChecker
+     * @return void
      */
-    public function buildRules(RulesChecker $rules)
+    public function patchEntityAdd(RacketwareSession $racketwareSession, array $data)
     {
-        $rules->add($rules->existsIn(['racketware_player_id'], 'RacketwarePlayers'));
-
-        return $rules;
+        $racketwareSession->set([
+            'racketware_player_id' => $data['player'],
+            'data' => $data['data']
+        ], ['guard' => false]);
     }
 }

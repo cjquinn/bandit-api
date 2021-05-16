@@ -40,7 +40,7 @@ class ChallengeMailer extends Mailer
 
         $this
             ->setTo($challenge->player_a->user->email)
-            ->setSubject('Game on!' . $challenge->player_b->user->full_name . 'has accepted your challenge')
+            ->setSubject('Game on! ' . $challenge->player_b->user->full_name . ' has accepted your challenge')
             ->setFrom(Configure::read('Bandit.emails.referee'))
             ->setEmailFormat('both')
             ->set([

@@ -50,7 +50,7 @@ class PlayerMailer extends Mailer
                 'challengeLocation' => $challenge->location,
                 'clubId' => $player->club_id,
                 'clubName' => $club->name,
-                'matchDatetime' => $challenge->match_datetime->format('l jS F \a\t g:ia'),
+                'matchDatetime' => $challenge->match_datetime->format('l jS F'),
                 'playerFullName' => $challenge->player_a->user->full_name,
             ]);
 

@@ -46,7 +46,7 @@ class ChallengeMailer extends Mailer
             ->set([
                 'challengeId' => $challenge->id,
                 'clubId' => $challenge->club_id,
-                'matchDatetime' => $challenge->match_datetime->format('l jS F \a\t g:ia'),
+                'matchDatetime' => $challenge->match_datetime->format('l jS F'),
                 'opponentFullName' => $challenge->player_b->user->full_name
             ]);
 
@@ -67,7 +67,7 @@ class ChallengeMailer extends Mailer
             ->setEmailFormat('both')
             ->set([
                 'clubId' => $challenge->club_id,
-                'matchDatetime' => $challenge->match_datetime->format('l jS F \a\t g:ia'),
+                'matchDatetime' => $challenge->match_datetime->format('l jS F'),
                 'opponentFullName' => $challenge->player_a->user->full_name,
                 'opponentFirstName' => $challenge->player_a->user->first_name
             ]);
@@ -93,7 +93,7 @@ class ChallengeMailer extends Mailer
             ->set([
                 'challengeId' => $challenge->id,
                 'clubId' => $challenge->club_id,
-                'matchDatetime' => $challenge->match_datetime->format('l jS F \a\t g:ia'),
+                'matchDatetime' => $challenge->match_datetime->format('l jS F'),
                 'opponentFullName' => $challenge->player_b->user->full_name,
                 'opponentFirstName' => $challenge->player_b->user->first_name
             ]);

@@ -27,7 +27,6 @@ class PlayerMailer extends Mailer
             ->setFrom(Configure::read('Bandit.emails.referee'))
             ->setEmailFormat('both')
             ->set([
-                'clubId' => $player->club_id,
                 'clubName' => $player->club->name,
                 'playerFullName' => $player->user->full_name
             ]);
